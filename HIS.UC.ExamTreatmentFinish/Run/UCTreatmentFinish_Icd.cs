@@ -1,4 +1,21 @@
-﻿using DevExpress.XtraEditors;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
 using DevExpress.XtraEditors.DXErrorProvider;
 using HIS.UC.ExamTreatmentFinish.Run.Validate;
@@ -36,7 +53,7 @@ namespace HIS.UC.ExamTreatmentFinish.Run
         {
             try
             {
-                DataToComboChuanDoanTD(cboIcds, this.currentIcds.Where(o => o.IS_TRADITIONAL.HasValue && o.IS_TRADITIONAL.Value == 1 ? false : true).ToList());
+                DataToComboChuanDoanTD(cboIcds, this.currentIcds);
                 DataToComboChuanDoanTD(cboTraditionalIcds, this.currentTraditionalIcds);
                 chkEditIcd.Enabled = (this.autoCheckIcd != 2);
                 chkTraditionalIcd.Enabled = (this.autoCheckIcd != 2);
@@ -649,23 +666,15 @@ namespace HIS.UC.ExamTreatmentFinish.Run
             try
             {
                 SecondaryIcdDataADO outPut = new SecondaryIcdDataADO();
-                if (ucSecondaryIcdYhct != null)
+
+                if (!String.IsNullOrEmpty(txtIcdSubCode.Text))
                 {
-                    var subIcd = subIcdYhctProcessor.GetValue(ucSecondaryIcdYhct);
-                    if (subIcd != null && subIcd is SecondaryIcdDataADO)
-                    {
-                        outPut.ICD_SUB_CODE = ((SecondaryIcdDataADO)subIcd).ICD_SUB_CODE;
-                        outPut.ICD_TEXT = ((SecondaryIcdDataADO)subIcd).ICD_TEXT;
-                    }
+                    outPut.ICD_SUB_CODE = txtIcdSubCode.Text;
                 }
-                //if (!String.IsNullOrEmpty(txtIcdSubCode.Text))
-                //{
-                //    outPut.ICD_SUB_CODE = txtIcdSubCode.Text;
-                //}
-                //if (!String.IsNullOrEmpty(txtIcdText.Text))
-                //{
-                //    outPut.ICD_TEXT = txtIcdText.Text;
-                //}
+                if (!String.IsNullOrEmpty(txtIcdText.Text))
+                {
+                    outPut.ICD_TEXT = txtIcdText.Text;
+                }
                 result = outPut;
             }
             catch (Exception ex)
@@ -1052,45 +1061,6 @@ namespace HIS.UC.ExamTreatmentFinish.Run
                     txtIcdCode.ErrorText = "";
                     dxValidationProvider1.RemoveControlError(txtIcdCode);
                     dxValidationProvider1.SetValidationRule(txtIcdCode, null);
-                }
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Warn(ex);
-            }
-        }
-
-        public void ValidationICDYhct(int? maxLengthCode, int? maxLengthText, bool isRequired)
-        {
-            try
-            {
-                if (isRequired)
-                {
-                    layoutControlItem3.AppearanceItemCaption.ForeColor = Color.Maroon;
-
-                    IcdYhctValidationRuleControl icdMainRule = new IcdYhctValidationRuleControl();
-                    icdMainRule.txtIcdYhctCode = txtTraditionalIcdCode;
-                    icdMainRule.txtYhctMainText = txtTraditionalIcdMainText;
-                    icdMainRule.maxLengthCode = maxLengthCode;
-                    icdMainRule.maxLengthText = maxLengthText;
-                    icdMainRule.ErrorText = "Trường dữ liệu bắt buộc nhập";
-                    icdMainRule.ErrorType = ErrorType.Warning;
-                    icdMainRule.icdYhcts = currentTraditionalIcds;
-                    dxValidationProvider1.SetValidationRule(txtTraditionalIcdCode, icdMainRule);
-                }
-                else
-                {
-                    layoutControlItem3.AppearanceItemCaption.ForeColor = new System.Drawing.Color();
-                    IcdYhctValidationRuleControl icdMainRule = new IcdYhctValidationRuleControl();
-                    icdMainRule.txtIcdYhctCode = txtTraditionalIcdCode;
-                    icdMainRule.txtYhctMainText = txtTraditionalIcdMainText;
-                    icdMainRule.maxLengthCode = maxLengthCode;
-                    icdMainRule.maxLengthText = maxLengthText;
-                    //icdMainRule.ErrorText = "Trường dữ liệu bắt buộc nhập";
-                    icdMainRule.ErrorType = ErrorType.Warning;
-                    icdMainRule.IsRequired = false;
-                    icdMainRule.icdYhcts = currentTraditionalIcds;
-                    dxValidationProvider1.SetValidationRule(txtTraditionalIcdCode, icdMainRule);
                 }
             }
             catch (Exception ex)
