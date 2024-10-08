@@ -1,4 +1,21 @@
-﻿using ACS.EFMODEL.DataModels;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using ACS.EFMODEL.DataModels;
 using ACS.Filter;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
@@ -7,6 +24,7 @@ using HIS.Desktop.ApiConsumer;
 using HIS.Desktop.Controls.Session;
 using HIS.Desktop.LocalStorage.BackendData;
 using HIS.Desktop.LocalStorage.HisConfig;
+using HIS.Desktop.Plugins.ServiceReqUpdateInstruction.Config;
 using HIS.Desktop.Plugins.ServiceReqUpdateInstruction.Resources;
 using HIS.Desktop.Plugins.ServiceReqUpdateInstruction.Validation;
 using HIS.Desktop.Plugins.ServiceReqUpdateInstruction.Validtion;
@@ -16,12 +34,14 @@ using HIS.UC.SecondaryIcd;
 using HIS.UC.SecondaryIcd.ADO;
 using Inventec.Common.Adapter;
 using Inventec.Common.Controls.EditorLoader;
+using Inventec.Common.Logging;
 using Inventec.Core;
 using Inventec.Desktop.Common.LanguageManager;
 using Inventec.Desktop.Common.LocalStorage.Location;
 using Inventec.Desktop.Common.Message;
 using MOS.EFMODEL.DataModels;
 using MOS.Filter;
+using MOS.SDO;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -44,9 +64,13 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
         private List<MOS.EFMODEL.DataModels.HIS_ICD> listIcd;
         internal List<HIS_USER_ROOM> _UserRoom { get; set; }
         private IcdProcessor icdProcessor;
+        private IcdProcessor icdProcessorYHCT;
         private UserControl ucIcd;
+        private UserControl ucIcdYHCT;
         private SecondaryIcdProcessor subIcdProcessor;
+        private SecondaryIcdProcessor subIcdProcessorYHCT;
         private UserControl ucSecondaryIcd;
+        private UserControl ucSecondaryIcdYHCT;
         private int positionHandleControl = -1;
         private string LoggingName = "";
         internal string CheckIcdWhenSave = HIS.Desktop.LocalStorage.HisConfig.HisConfigs.Get<String>("HIS.Desktop.Plugins.CheckIcdWhenSave");
@@ -66,16 +90,19 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
             SetCaptionByLanguageKey();
             listIcd = BackendDataWorker.Get<HIS_ICD>().OrderBy(o => o.ICD_CODE).ToList();
         }
-
+        private bool isLoading = true;
         private void frmServiceReqUpdateInstruction_Load(object sender, EventArgs e)
         {
             WaitingManager.Show();
+            dtTime.EditValueChanged -= dtTime_EditValueChanged;
             InitUcCauseIcd();
             GetData();
             GetTreatment();
             VisibleLayout();
             InitUcIcd();
             InitUcSecondaryIcd();
+            InitUcIcdYhct();
+            InitUcSecondaryIcdYhct();
             FillDataCommandToControl(this.currentServiceReq);
             LoadUser();
             ValidControlInform();
@@ -85,6 +112,8 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
             InitEnabledControl();
             services = HIS.Desktop.LocalStorage.BackendData.BackendDataWorker.Get<V_HIS_SERVICE>();
             WaitingManager.Hide();
+            dtTime.EditValueChanged += dtTime_EditValueChanged;
+            isLoading = false;
         }
 
         private void VisibleLayout()
@@ -93,6 +122,27 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
             {
                 VisibleResultApprover();
                 VisibleAppointmentTimeAndDes();
+                VisibleAssignTimeTo();
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+        }
+
+        private void VisibleAssignTimeTo()
+        {
+            try
+            {
+                if (currentServiceReq != null && currentServiceReq.SERVICE_REQ_TYPE_ID == 15 && currentServiceReq.REMEDY_COUNT != null)
+                {
+                    ControlDtAssignTimeTo.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                }
+                else
+                {
+                    ControlDtAssignTimeTo.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                }
+
             }
             catch (Exception ex)
             {
@@ -175,7 +225,35 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                 Inventec.Common.Logging.LogSystem.Error(ex);
             }
         }
+        private void InitUcIcdYhct()
+        {
+            try
+            {
+                long autoCheckIcd = HIS.Desktop.LocalStorage.HisConfig.HisConfigs.Get<long>("HIS.Desktop.Plugins.AutoCheckIcd");
+                icdProcessorYHCT = new HIS.UC.Icd.IcdProcessor();
+                HIS.UC.Icd.ADO.IcdInitADO ado = new HIS.UC.Icd.ADO.IcdInitADO();
+                ado.LblIcdMain = "CĐ YHCT:";
+                ado.ToolTipsIcdMain = "Chẩn đoán y học cổ truyền";
+                ado.Width = 440;
+                ado.Height = 30;
+                ado.IsYHCT = true;
+                //ado.IsColor = true;
+                ado.DataIcds = listIcd.Where(s=>s.IS_TRADITIONAL == 1 && s.IS_ACTIVE == 1).ToList();
+                ado.AutoCheckIcd = autoCheckIcd == 1 ? true : false;
+                ado.hisTreatment = currentTreatment;
+                ucIcdYHCT = (UserControl)icdProcessorYHCT.Run(ado);
 
+                if (ucIcdYHCT != null)
+                {
+                    this.panelControlCDYHCT.Controls.Add(ucIcdYHCT);
+                    ucIcdYHCT.Dock = DockStyle.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+        }
         private void LoadSubIcd(string icdCodes, string icdNames)
         {
             try
@@ -415,8 +493,10 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
             try
             {
                 subIcdProcessor = new SecondaryIcdProcessor(new CommonParam(), listIcd);
+
                 HIS.UC.SecondaryIcd.ADO.SecondaryIcdInitADO ado = new UC.SecondaryIcd.ADO.SecondaryIcdInitADO();
                 ado.DelegateNextFocus = NextForcusOut;
+                ado.DelegateGetIcdMain = DelegateCheckICDMain;
                 ado.Width = 440;
                 ado.Height = 24;
                 ado.TextLblIcd = Inventec.Common.Resource.Get.Value("frmInstructionUpdate.layoutControlItem2.Text", Resources.ResourceLanguageManager.LanguageResource, LanguageManager.GetCulture());
@@ -436,7 +516,74 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                 Inventec.Common.Logging.LogSystem.Error(ex);
             }
         }
+        private void InitUcSecondaryIcdYhct()
+        {
+            try
+            {
+                subIcdProcessorYHCT = new SecondaryIcdProcessor(new CommonParam(), listIcd.Where(s=>s.IS_TRADITIONAL == 1).ToList());
+                HIS.UC.SecondaryIcd.ADO.SecondaryIcdInitADO ado = new UC.SecondaryIcd.ADO.SecondaryIcdInitADO();
+                ado.DelegateNextFocus = NextForcusOut;
+                //ado.DelegateGetIcdMain = DelegateCheckICDSub;
+                ado.Width = 440;
+                ado.Height = 30;
+                ado.TextLblIcd = "CĐ YHCT Phụ:";
+                ado.TootiplciIcdSubCode = "Chẩn đoán y học cổ truyền phụ";
+                ado.TextNullValue = Inventec.Common.Resource.Get.Value("frmInstructionUpdate.cboSub.Properties.NullValuePrompt", Resources.ResourceLanguageManager.LanguageResource, LanguageManager.GetCulture());
+                ado.limitDataSource = (int)HIS.Desktop.LocalStorage.ConfigApplication.ConfigApplications.NumPageSize;
+                ado.hisTreatment = currentTreatment;
+                ucSecondaryIcdYHCT = (UserControl)subIcdProcessorYHCT.Run(ado);
 
+                if (ucSecondaryIcdYHCT != null)
+                {
+                    this.panelControlICDSubYHCT.Controls.Add(ucSecondaryIcdYHCT);
+                    ucSecondaryIcdYHCT.Dock = DockStyle.Fill;
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+        }
+
+        private string DelegateCheckICDSub()
+        {
+            string result = "";
+            try
+            {
+                var rs = icdProcessorYHCT.GetValue(ucIcdYHCT);
+                if(ucIcdYHCT != null && rs is IcdInputADO)
+                {
+                    result = ((IcdInputADO)rs).ICD_CODE;
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+            return result;
+        }
+
+        private string DelegateCheckICDMain()
+        {
+            string result = "";
+            try
+            {
+                var rs = icdProcessor.GetValue(ucIcd);
+                if (ucIcd != null && rs is IcdInputADO)
+                {
+                    result = ((IcdInputADO)rs).ICD_CODE;
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+            return result;
+        }
         private void SetDefaultValue()
         {
             try
@@ -602,7 +749,24 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                     {
                         subIcdProcessor.Reload(ucSecondaryIcd, subIcd);
                     }
+                    //yhct
+                    IcdInputADO icdYHCT = new IcdInputADO();
+                    icdYHCT.ICD_CODE = serviceReq.TRADITIONAL_ICD_CODE;
+                    icdYHCT.ICD_NAME = serviceReq.TRADITIONAL_ICD_NAME;
 
+                    if (ucIcdYHCT != null)
+                    {
+                        icdProcessorYHCT.Reload(ucIcdYHCT, icdYHCT);
+                    }
+
+                    SecondaryIcdDataADO subIcdYHCT = new SecondaryIcdDataADO();
+                    subIcdYHCT.ICD_SUB_CODE = serviceReq.TRADITIONAL_ICD_SUB_CODE;
+                    subIcdYHCT.ICD_TEXT = serviceReq.TRADITIONAL_ICD_TEXT;
+                    if (ucSecondaryIcdYHCT != null)
+                    {
+                        subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, subIcdYHCT);
+                    }
+                    //
                     txtLoginname.Text = serviceReq.EXECUTE_LOGINNAME;
                     cboEndServiceReq.EditValue = serviceReq.EXECUTE_LOGINNAME;
 
@@ -676,6 +840,14 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                     {
                         txtAppointmentDes.Text = serviceReq.APPOINTMENT_DESC;
                     }
+                    if (serviceReq.ASSIGN_TIME_TO != null && serviceReq.ASSIGN_TIME_TO > 0)
+                    {
+                        dtAssignTimeTo.DateTime = (DateTime)Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(serviceReq.ASSIGN_TIME_TO ?? 0);
+                    }
+                    else
+                    {
+                        dtAssignTimeTo.EditValue = null;
+                    }
                 }
             }
             catch (Exception ex)
@@ -735,6 +907,25 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                     }
                 }
 
+                //yhct
+                if (ucIcdYHCT != null)
+                {
+                    var subIcd = icdProcessorYHCT.GetValue(ucIcdYHCT);
+                    if (subIcd != null && subIcd is IcdInputADO)
+                    {
+                        currentServiceReq.TRADITIONAL_ICD_CODE = ((IcdInputADO)subIcd).ICD_CODE;
+                        currentServiceReq.TRADITIONAL_ICD_NAME = ((IcdInputADO)subIcd).ICD_NAME;
+                    }
+                }
+                if (ucSecondaryIcdYHCT != null)
+                {
+                    var subIcd = subIcdProcessorYHCT.GetValue(ucSecondaryIcdYHCT);
+                    if (subIcd != null && subIcd is SecondaryIcdDataADO)
+                    {
+                        currentServiceReq.TRADITIONAL_ICD_SUB_CODE = ((SecondaryIcdDataADO)subIcd).ICD_SUB_CODE;
+                        currentServiceReq.TRADITIONAL_ICD_TEXT = ((SecondaryIcdDataADO)subIcd).ICD_TEXT;
+                    }
+                }
                 if (this.ucIcdCause != null)
                 {
                     var icdCauseValue = this.IcdCauseProcessor.GetValue(this.ucIcdCause);
@@ -826,12 +1017,21 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                 currentServiceReq.IS_NOT_REQUIRE_FEE = (short)(chkIsNotRequireFee.Checked ? 1 : 0);
                 currentServiceReq.IS_NOT_USE_BHYT = (short)(chkIsNotUseBHYT.Checked ? 1 : 0);
                 currentServiceReq.USE_TIME = dtUseTime.EditValue != null && dtUseTime.DateTime != DateTime.MinValue ? Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtUseTime.DateTime) : null;
-
+                if (dtAssignTimeTo.DateTime != null && dtAssignTimeTo.DateTime != DateTime.MinValue && dtAssignTimeTo.DateTime != DateTime.MaxValue)
+                {
+                    currentServiceReq.ASSIGN_TIME_TO = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtAssignTimeTo.DateTime);
+                }
+                else
+                {
+                    currentServiceReq.ASSIGN_TIME_TO = null;
+                }
+                //currentServiceReq.ASSIGN_TIME_TO = dtAssignTimeTo.EditValue != null && dtAssignTimeTo.DateTime != DateTime.MinValue ? Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtAssignTimeTo.DateTime) : null;
                 if (lciAppointmentTime.Visibility == DevExpress.XtraLayout.Utils.LayoutVisibility.Always && lciAppointmentDes.Visibility == DevExpress.XtraLayout.Utils.LayoutVisibility.Always)
                 {
                     currentServiceReq.APPOINTMENT_TIME = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtAppointmentTime.DateTime);
                     currentServiceReq.APPOINTMENT_DESC = txtAppointmentDes.Text;
                 }
+                
 
             }
             catch (Exception ex)
@@ -854,7 +1054,6 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                     if ((XtraMessageBox.Show("Bạn có chắc không cho bệnh nhân hưởng bhyt các chi phí phát sinh tại phòng khám ", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No))
                         return;
                 }
-
                 if (!CheckUseTime())
                 {
                     XtraMessageBox.Show("Thời gian dự trù không được nhỏ hơn thời gian y lệnh.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -862,60 +1061,32 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                     return;
                 }
 
-                if (CheckBedService(this.currentServiceReq))
-                {
-                    return;
-                }
-
                 this.positionHandleControl = -1;
                 bool vali = true;
                 CommonParam param = new CommonParam();
                 bool succes = false;
-                vali = (IsValiICDCause() || (panelControlUcIcd.Enabled == false)) && ((bool)subIcdProcessor.GetValidate(ucSecondaryIcd) || (panelControlUcIcd.Enabled == false)) && ((bool)icdProcessor.ValidationIcd(ucIcd) || (panelControlUcIcd.Enabled == false));
+                vali = (IsValiICDCause() || (panelControlUcIcd.Enabled == false));
+
+                vali = vali && ((bool)subIcdProcessor.GetValidate(ucSecondaryIcd) || (panelControlUcIcd.Enabled == false));
+                vali = vali && ((bool)icdProcessor.ValidationIcd(ucIcd) || (panelControlUcIcd.Enabled == false));
+                vali = vali && ((bool)icdProcessorYHCT.ValidationIcd(ucIcdYHCT) || (panelControlCDYHCT.Enabled == false));
+                vali = vali && (bool)subIcdProcessorYHCT.GetValidate(ucSecondaryIcdYHCT) || (panelControlICDSubYHCT.Enabled == false);
                 if (!vali || !dxValidationProvider1.Validate())
                     return;
-
-                //if (!string.IsNullOrEmpty(currentServiceReq.TDL_SERVICE_IDS))
-                //{
-                //    var spltService = services.Where(o => currentServiceReq.TDL_SERVICE_IDS.Split(';').ToList().Exists(p => p.Trim() == o.ID.ToString())).ToList();
-
-                //    //currentServiceReq.TDL_SERVICE_IDS.Split(',').ToList().Where(o => services.Exists(p=>p.ID.ToString() == o.Trim())).ToList();
-                //    if (spltService != null && spltService.Count > 0)
-                //    {
-                //        var checkService = spltService.Where(o => o.MAX_TOTAL_PROCESS_TIME != null && o.MAX_TOTAL_PROCESS_TIME > 0).ToList();
-                //        if (checkService != null && checkService.Count() > 0)
-                //        {
-                //            var timeMin = checkService.Min(o => o.MAX_TOTAL_PROCESS_TIME);
-                //            var currentServiceMin = checkService.OrderBy(o => o.MAX_TOTAL_PROCESS_TIME).First();
-                //            TimeSpan diff = (TimeSpan)(dtEndTime.DateTime - Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(Int64.Parse(currentServiceReq.INTRUCTION_TIME.ToString().Substring(0, currentServiceReq.INTRUCTION_TIME.ToString().Length - 2) + "00")));
-                //            Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => diff.TotalMinutes), diff.TotalMinutes));
-
-                //            if ((int)diff.TotalMinutes > timeMin)
-                //            {
-                //                if (HisConfigs.Get<string>("HIS.Desktop.Plugins.ProcessTimeMustBeLessThanMaxTotalProcessTime") == "1")
-                //                {
-                //                    DevExpress.XtraEditors.XtraMessageBox.Show(String.Format("Không cho phép sửa thời gian kết thúc dịch vụ {0} sau {1} phút tính từ thời điểm ra y lệnh {2}", currentServiceMin.SERVICE_NAME, timeMin, Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(currentServiceReq.INTRUCTION_TIME)),
-                //               "Thông báo",
-                //               MessageBoxButtons.OK);
-                //                    return;
-                //                }
-                //                else if (HisConfigs.Get<string>("HIS.Desktop.Plugins.ProcessTimeMustBeLessThanMaxTotalProcessTime") == "2")
-                //                {
-                //                    if (DevExpress.XtraEditors.XtraMessageBox.Show(String.Format("Thời gian kết thúc dịch vụ  {0} vượt quá {1} phút tính từ thời điểm ra y lệnh {2}.Bạn có muốn tiếp tục không?", currentServiceMin.SERVICE_NAME, timeMin, Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(currentServiceReq.INTRUCTION_TIME)),
-                //                "Thông báo",
-                //               MessageBoxButtons.YesNo) == DialogResult.No)
-                //                        return;
-                //                }
-                //            }
-                //        }
-                //    }
-                //}
                 vali = vali & CheckIntructionTimeWithInTime() & CheckMinDuration() & CheckHIS_DEPARTMENT_TRAN();
+                vali = vali && CheckStartTimeMainExam();
                 if (vali)
                 {
                     WaitingManager.Show();
                     UpdateData();
 
+                    if (currentServiceReq != null && currentServiceReq.ASSIGN_TIME_TO != null && currentServiceReq.INTRUCTION_TIME > (currentServiceReq.ASSIGN_TIME_TO ?? 0))
+                    {
+                        if (DevExpress.XtraEditors.XtraMessageBox.Show(String.Format("Chỉ định đến không được nhỏ hơn thời gian y lệnh"),
+                           "Thông báo",
+                          MessageBoxButtons.OK) == DialogResult.OK)
+                            return;
+                    }
                     HIS.Desktop.Plugins.Library.CheckIcd.CheckIcdManager check = new Desktop.Plugins.Library.CheckIcd.CheckIcdManager(null, currentTreatment);
                     string message = null;
                     if (CheckIcdWhenSave == "1" || CheckIcdWhenSave == "2")
@@ -936,9 +1107,38 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                             }
                         }
                     }
+                    if (!string.IsNullOrEmpty(HisConfigCFG.InstructionTimeServiceMustBeGreaterThanStartTimeExam))
+                    {
+                        if (this.currentServiceReq != null && this.currentServiceReq.SERVICE_REQ_TYPE_ID == IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_TYPE.ID__KH)
+                        {
+                            HisServiceReqViewFilter filter = new HisServiceReqViewFilter();
+                            filter.PARENT_ID = this.currentServiceReq.ID;
+                            V_HIS_SERVICE_REQ vServiceReq = new BackendAdapter(param)
+                                    .Get<List<MOS.EFMODEL.DataModels.V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", ApiConsumers.MosConsumer, filter, param).FirstOrDefault();
+                            if (vServiceReq != null && this.currentServiceReq.START_TIME.HasValue && Inventec.Common.DateTime.Calculation.DifferenceTime(this.currentServiceReq.START_TIME.Value, vServiceReq.INTRUCTION_TIME, Inventec.Common.DateTime.Calculation.UnitDifferenceTime.SECOND) < Int32.Parse(HisConfigCFG.InstructionTimeServiceMustBeGreaterThanStartTimeExam))
+                            {
+                                WaitingManager.Hide();
+                                DevExpress.XtraEditors.XtraMessageBox.Show(string.Format("Thời gian chỉ định {0} trong y lệnh {1} phải cách thời gian bắt đầu khám {2} là {3} giây mới được phép chỉ định", Inventec.Common.DateTime.Convert.TimeNumberToTimeString(vServiceReq.INTRUCTION_TIME), vServiceReq.SERVICE_REQ_CODE, Inventec.Common.DateTime.Convert.TimeNumberToTimeString(this.currentServiceReq.START_TIME.Value), HisConfigCFG.InstructionTimeServiceMustBeGreaterThanStartTimeExam), HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaThongBao));
+                                return;
+                            }
+                        }
+                        if (this.currentServiceReq != null && this.currentServiceReq.PARENT_ID.HasValue)
+                        {
+                            HisServiceReqViewFilter filter = new HisServiceReqViewFilter();
+                            filter.ID = this.currentServiceReq.PARENT_ID;
+                            filter.SERVICE_REQ_TYPE_ID = IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_TYPE.ID__KH;
+                            V_HIS_SERVICE_REQ vServiceReq1 = new BackendAdapter(param)
+                                    .Get<List<MOS.EFMODEL.DataModels.V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", ApiConsumers.MosConsumer, filter, param).FirstOrDefault();
+                            if (vServiceReq1 != null && vServiceReq1.START_TIME.HasValue && Inventec.Common.DateTime.Calculation.DifferenceTime(vServiceReq1.START_TIME.Value, this.currentServiceReq.INTRUCTION_TIME, Inventec.Common.DateTime.Calculation.UnitDifferenceTime.SECOND) < Int32.Parse(HisConfigCFG.InstructionTimeServiceMustBeGreaterThanStartTimeExam))
+                            {
+                                WaitingManager.Hide();
+                                DevExpress.XtraEditors.XtraMessageBox.Show(string.Format("Thời gian chỉ định {0} trong y lệnh {1} phải cách thời gian bắt đầu khám {2} là {3} giây mới được phép chỉ định", Inventec.Common.DateTime.Convert.TimeNumberToTimeString(this.currentServiceReq.INTRUCTION_TIME), this.currentServiceReq.SERVICE_REQ_CODE, Inventec.Common.DateTime.Convert.TimeNumberToTimeString(vServiceReq1.START_TIME.Value), HisConfigCFG.InstructionTimeServiceMustBeGreaterThanStartTimeExam), HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaThongBao));
+                                return;
+                            }
+                        }
+                    }
                     var update = new HIS_SERVICE_REQ();
                     Inventec.Common.Mapper.DataObjectMapper.Map<HIS_SERVICE_REQ>(update, this.currentServiceReq);
-
                     Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => update), update));
                     var serviceReqUpdate = new BackendAdapter(param)
                         .Post<HIS_SERVICE_REQ>("api/HisServiceReq/UpdateCommonInfo", ApiConsumers.MosConsumer, update, HIS.Desktop.Controls.Session.SessionManager.ActionLostToken, param);
@@ -989,37 +1189,6 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                 Inventec.Common.Logging.LogSystem.Warn(ex);
             }
             return rs;
-        }
-
-        private bool CheckBedService(MOS.EFMODEL.DataModels.V_HIS_SERVICE_REQ serviceReq)
-        {
-            bool valid = true;
-            if (serviceReq.SERVICE_REQ_TYPE_ID != IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_TYPE.ID__G)
-                return valid;
-
-            try
-            {
-                MOS.Filter.HisBedLogViewFilter filter = new HisBedLogViewFilter();
-                filter.ID = serviceReq.BED_LOG_ID;
-                var bedlogs = new BackendAdapter(new CommonParam()).Get<List<V_HIS_BED_LOG>>("api/HisBedLog/GetView", ApiConsumer.ApiConsumers.MosConsumer, filter, null);
-                long dt = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtTime.DateTime) ?? 0;
-
-                foreach (var item in bedlogs)
-                {
-                    if (item.FINISH_TIME.HasValue && item.FINISH_TIME.Value > 0 && item.FINISH_TIME <= dt)
-                    {
-                        valid = false;
-                        MessageBox.Show(String.Format("Thời gian chỉ định {0} lớn hơn thời gian kết thúc giường {1}", Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(dt), Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(item.FINISH_TIME.Value)), "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Error(ex);
-                valid = false;
-            }
-            return valid;
         }
 
         bool checkTime()
@@ -1084,6 +1253,59 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                     {
                         MessageManager.Show(String.Format(ResourceMessage.KhongChoNhapThoiGianNhoHonThoiGianVaoVien));
                         result = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                result = false;
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+            return result;
+        }
+        private bool CheckStartTimeMainExam()
+        {
+            bool result = true;
+            try
+            {
+                if (currentServiceReq != null && currentServiceReq.SERVICE_REQ_TYPE_ID == IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_TYPE.ID__KH && dtStartTime.EditValue != null)
+                {
+                    var patientType = BackendDataWorker.Get<HIS_PATIENT_TYPE>().FirstOrDefault(o => o.ID == currentServiceReq.TDL_PATIENT_TYPE_ID);
+                    if (patientType != null && patientType.PATIENT_TYPE_CODE == Config.HisConfigCFG.MOS_PATIENT_TYPE_CODE__BHYT)
+                    {
+                        long startTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtStartTime.DateTime) ?? 0;
+                        CommonParam param = new CommonParam();
+                        HisServiceReqViewFilter filter = new HisServiceReqViewFilter();
+                        filter.TREATMENT_ID = currentServiceReq.TREATMENT_ID;
+                        filter.SERVICE_REQ_TYPE_ID = IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_TYPE.ID__KH;
+                        filter.SERVICE_REQ_STT_IDs = new List<long> { IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_STT.ID__DXL, IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_STT.ID__HT };
+                        var serviceReqs = new BackendAdapter(param)
+                            .Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", ApiConsumers.MosConsumer, filter, HIS.Desktop.Controls.Session.SessionManager.ActionLostToken, param);
+
+                        if (serviceReqs != null)
+                        {
+                            if (currentServiceReq.IS_MAIN_EXAM == 1)
+                            {
+                                var serviceReqErrs = serviceReqs.Where(o => o.ID != currentServiceReq.ID && o.START_TIME < startTime).ToList();
+                                if (serviceReqErrs != null && serviceReqErrs.Count > 0)
+                                {
+                                    MessageManager.Show(String.Format("Thời gian bắt đầu của khám chính {0} không được lớn hơn thời gian bắt đầu của khám phụ {1} có mã y lệnh là {2}", Inventec.Common.DateTime.Convert.TimeNumberToTimeString(startTime), String.Join(", ", serviceReqErrs.Select(o => Inventec.Common.DateTime.Convert.TimeNumberToTimeString(o.START_TIME ?? 0))), String.Join(", ", serviceReqErrs.Select(o => o.SERVICE_REQ_CODE))));
+                                    result = false;
+                                    dtStartTime.Focus();
+                                }
+
+                            }
+                            else
+                            {
+                                var serviceReqMainExam = serviceReqs.FirstOrDefault(o => o.IS_MAIN_EXAM == 1);
+                                if (serviceReqMainExam != null && serviceReqMainExam.START_TIME > startTime)
+                                {
+                                    MessageManager.Show(String.Format("Thời gian bắt đầu của khám phụ {0} không được nhỏ hơn thời gian bắt đầu của khám chính {1} có mã y lệnh là {2}", Inventec.Common.DateTime.Convert.TimeNumberToTimeString(startTime), Inventec.Common.DateTime.Convert.TimeNumberToTimeString(serviceReqMainExam.START_TIME ?? 0), serviceReqMainExam.SERVICE_REQ_CODE));
+                                    result = false;
+                                    dtStartTime.Focus();
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -1507,6 +1729,7 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                 if (e.KeyCode == Keys.Enter)
                 {
                     LoadPayFormComboRequest(txtRequestUser.Text);
+                    CheckTimeSereServ();
                 }
             }
             catch (Exception ex)
@@ -1529,8 +1752,10 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
                             txtRequestUser.Text = commune.LOGINNAME;
                             this.icdProcessor.FocusControl(this.ucIcd);
                         }
+                        
                     }
                 }
+                CheckTimeSereServ();
             }
             catch (Exception ex)
             {
@@ -1903,5 +2128,64 @@ namespace HIS.Desktop.Plugins.ServiceReqUpdateInstruction
             }
         }
 
+        private void dtTime_EditValueChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                if (isLoading)
+                    return;
+                CheckTimeSereServ();
+            }
+            catch (Exception ex)
+            {
+
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+        private void CheckTimeSereServ()
+        {
+
+            try
+            {
+               
+                if (dtTime.EditValue == null && cboRequestUser.EditValue == null || cboRequestUser.EditValue == null) return;
+                Inventec.Common.Logging.LogSystem.Debug("Check Sere Serv Time____Start");
+                var config = BackendDataWorker.Get<HIS_CONFIG>().Where(s => s.KEY == "MOS.HIS_SERVICE_REQ.ASSIGN_SERVICE_SIMULTANEITY_OPTION").FirstOrDefault();
+                CommonParam param = new CommonParam();
+                if (config != null)
+                {
+                    if (config.VALUE == "1" || config.VALUE == "2")
+                    {
+                        HisServiceReqCheckSereTimesSDO sdo = new HisServiceReqCheckSereTimesSDO();
+                        sdo.TreatmentId = currentTreatment.ID;
+                        var username = BackendDataWorker.Get<ACS.EFMODEL.DataModels.ACS_USER>().Where(p => p.IS_ACTIVE == IMSys.DbConfig.HIS_RS.COMMON.IS_ACTIVE__TRUE && cboRequestUser.EditValue.ToString() == p.LOGINNAME).FirstOrDefault();
+                        if(username != null)sdo.Loginnames = new List<string>() { username.LOGINNAME };
+                        long sereTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtTime.DateTime) ?? 0;
+                        sdo.SereTimes = new List<long> { sereTime };
+                        Inventec.Common.Logging.LogSystem.Debug("HisServiceReqCheckSereTimesSDO:" + LogUtil.TraceData("HisServiceReqCheckSereTimesSDO", sdo));
+                        bool rs = new BackendAdapter(param).Post<bool>("/api/HisServiceReq/CheckSereTimes", ApiConsumers.MosConsumer, sdo, param);
+                        if (!rs)
+                        {
+                            if (config.VALUE == "1")
+                            {
+                                MessageManager.Show(this, param, rs);
+                                btnSave.Enabled = false;
+                            }
+                            else
+                            {
+                                btnSave.Enabled = MessageBox.Show(this, param.GetMessage() + "Bạn có muốn tiếp tục?", "Thông Báo", MessageBoxButtons.YesNo) == DialogResult.Yes;
+
+                            }
+                        }
+                        else btnSave.Enabled = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
     }
 }
