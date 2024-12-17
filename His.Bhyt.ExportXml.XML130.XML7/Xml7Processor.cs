@@ -104,7 +104,8 @@ namespace His.Bhyt.ExportXml.XML130.XML7
                     IMSys.DbConfig.HIS_RS.HIS_TREATMENT_TYPE.ID__DTNGOAITRU,
                     IMSys.DbConfig.HIS_RS.HIS_TREATMENT_TYPE.ID__DTBANNGAY
                 };
-                if (listTreatmentType.Contains(data.Treatment.TDL_TREATMENT_TYPE_ID ?? -1))
+                if (listTreatmentType.Contains(data.Treatment.TDL_TREATMENT_TYPE_ID ?? -1)
+                    && treatment.TREATMENT_END_TYPE_ID != IMSys.DbConfig.HIS_RS.HIS_TREATMENT_END_TYPE.ID__TRON)
                 {
                     string maLienKet = "";
                     string soLuuTru = "";
@@ -149,10 +150,13 @@ namespace His.Bhyt.ExportXml.XML130.XML7
                         chanDoanRV += ";";
                     }
                     chanDoanRV += treatment.ICD_TEXT ?? "";
-                    //viec 181191
-                    ppDieuTri = Inventec.Common.String.CountVi.Count(treatment.TREATMENT_METHOD) > 1500 ? Inventec.Common.String.CountVi.SubStringVi(treatment.TREATMENT_METHOD,1500) : (treatment.TREATMENT_METHOD ?? "");
 
-                    ghiChu = Inventec.Common.String.CountVi.Count(treatment.ADVISE) > 1500 ? Inventec.Common.String.CountVi.SubStringVi(treatment.ADVISE,1500): (treatment.ADVISE ?? "");
+                    ppDieuTri = !string.IsNullOrWhiteSpace(treatment.TREATMENT_METHOD) ? treatment.TREATMENT_METHOD : ".";
+                    if (!string.IsNullOrEmpty(ppDieuTri) && Encoding.UTF8.GetByteCount(ppDieuTri) > 1500)
+                    {
+                        ppDieuTri = SubStringWithSeparate(ppDieuTri, 1500);
+                    }
+                    ghiChu = treatment.END_TYPE_EXT_NOTE ?? "";
                     maTTDV = treatment.REPRESENTATIVE_HEIN_CODE ?? "";
                     var bacSi = GetBacSi(treatment.END_HEAD_LOGINNAME, data.Employees);
                     maBS = bacSi != null ? bacSi.SOCIAL_INSURANCE_NUMBER ?? "" : "";
@@ -219,12 +223,36 @@ namespace His.Bhyt.ExportXml.XML130.XML7
                     result.ngoaiTruTuNgay = ngoaiTruTuNgay;
                     result.ngoaiTruDenNgay = ngoaiTruDenNgay;
                     result.duPhong = DuPhong;
-                    if (data.IS_3176)
+                }
+            }
+            catch (Exception ex)
+            {
+                result = null;
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+            return result;
+        }
+
+        private string SubStringWithSeparate(string multiCharString, decimal limit)
+        {
+            string result = "";
+            try
+            {
+                Encoding utf8 = Encoding.UTF8;
+                int leng = utf8.GetByteCount(multiCharString);
+                if (leng > limit)
+                {
+                    int index = multiCharString.LastIndexOf(";");
+                    while (utf8.GetByteCount(multiCharString) > limit)
                     {
-                        result.ppDieuTri = data.Treatment.TREATMENT_METHOD;
-                        result.maTTDV = GetMaBacSi(data.Treatment.HOSP_SUBS_DIRECTOR_LOGINNAME ?? data.Treatment.HOSPITAL_DIRECTOR_LOGINNAME, data.Employees);
-                        result.maBS = GetMaBacSi(data.Treatment.END_DEPT_SUBS_HEAD_LOGINNAME ?? data.Treatment.END_DEPARTMENT_HEAD_LOGINNAME ?? data.Treatment.END_HEAD_LOGINNAME, data.Employees);
+                        index = multiCharString.LastIndexOf(";");
+                        multiCharString = multiCharString.Substring(0, index);
+                        result = multiCharString;
                     }
+                }
+                else
+                {
+                    result = multiCharString;
                 }
             }
             catch (Exception ex)
@@ -247,7 +275,7 @@ namespace His.Bhyt.ExportXml.XML130.XML7
                     var dataEmployee = listEmployees.FirstOrDefault(p => p.LOGINNAME == loginName);
                     if (dataEmployee != null)
                     {
-                        result = dataEmployee.DIPLOMA ?? "";
+                        result = dataEmployee.SOCIAL_INSURANCE_NUMBER;
                     }
                 }
                 else
