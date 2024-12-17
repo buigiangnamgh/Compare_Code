@@ -1,21 +1,4 @@
-/* IVT
- * @Project : hisnguonmo
- * Copyright (C) 2017 INVENTEC
- *  
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *  
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
- * GNU General Public License for more details.
- *  
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-using DevExpress.Utils.Menu;
+﻿using DevExpress.Utils.Menu;
 using HIS.Desktop.ApiConsumer;
 using HIS.Desktop.LocalStorage.ConfigSystem;
 using HIS.Desktop.LocalStorage.LocalData;
@@ -158,9 +141,6 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                     Mps000478Item.Tag = PrintType.TOM_TAT_Y_LENH_PTTT_VA_DON_THUOC;
                     menu.Items.Add(Mps000478Item);
 
-                    DXMenuItem Mps000178Item = new DXMenuItem("In thẻ bệnh nhân", new EventHandler(clickInTheBn));
-                    Mps000178Item.Tag = PrintType.IN_THE_BN;
-                    menu.Items.Add(Mps000178Item);
                     #endregion
                 }
                 else
@@ -230,17 +210,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                 Inventec.Common.Logging.LogSystem.Warn(ex);
             }
         }
-        private void clickInTheBn(object sender, EventArgs e)
-        {
-            try
-            {
-                PrintMps000178();
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Warn(ex);
-            }
-        }
+
         private void clickTomTatYLenhPTTTVaDonThuoc(object sender, EventArgs e)
         {
             try
@@ -395,6 +365,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
             IN_GIAY_RA_VIEN,
             IN_GIAY_BAO_TU,
             YEU_CAU_KHAM_THEM,
+            YEU_CAU_KHAM,
             BANG_KE_NGOAI_TRU_BHYT,
             BANG_KE_NGOAI_TRU_VIEN_PHI,
             KET_QUA_XET_NGHIEM_TONG_HOP,
@@ -420,8 +391,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
             IN_DON_THUOC,
             TOM_TAT_Y_LENH_PTTT_VA_DON_THUOC,
             PHIEU_THU_THANH_TOAN,
-            PHIEU_CHAN_DOAN_NGUYEN_NHAN_TU_VONG,
-            IN_THE_BN
+            PHIEU_CHAN_DOAN_NGUYEN_NHAN_TU_VONG
         }
 
         private void onClickInPhieuKhamBenh(object sender, EventArgs e)
@@ -501,9 +471,6 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                         break;
                     case PrintTypeCodeWorker.PRINT_TYPE_CODE__NGUYEN_NHAN_TU_VONG:
                         ProcessPrintMps000485(printTypeCode, fileName, ref result);
-                        break;
-                    case "Mps000178":
-                        ProcessPrintMps000178(printTypeCode, fileName, ref result);
                         break;
                     default:
                         break;
@@ -633,6 +600,9 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                     case PrintType.YEU_CAU_KHAM_THEM:
                         InPhieuYeuCauDichVu(PrintTypeCodeWorker.PRINT_TYPE_CODE__BIEUMAU__YEU_CAU_KHAM_THEM__MPS000071);
                         //richEditorMain.RunPrintTemplate(PrintTypeCodeWorker.PRINT_TYPE_CODE__BIEUMAU__YEU_CAU_KHAM_THEM__MPS000071, DelegateRunPrinter);
+                        break;
+                    case PrintType.YEU_CAU_KHAM:
+                        InPhieuYeuCauDichVu(PrintTypeCodeWorker.PRINT_TYPE_CODE__BIEUMAU__YEU_CAU_KHAM__MPS000001);
                         break;
                     case PrintType.IN_GIAY_CHUYEN_VIEN:
                         richEditorMain.RunPrintTemplate(PrintTypeCodeWorker.PRINT_TYPE_CODE__BIEUMAU__GIAY_CHUYEN_VIEN__MPS000011, DelegateRunPrinter);
