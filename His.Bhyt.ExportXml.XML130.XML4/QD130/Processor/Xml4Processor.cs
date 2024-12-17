@@ -47,20 +47,15 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
                     xml4.DonViDo = ssTein.TEST_INDEX_UNIT_NAME ?? "";
                     xml4.MoTa = this.SubMaxLength(ssTein.RESULT_DESCRIPTION ?? "");
                     xml4.KetLuan = this.SubMaxLength(ss.CONCLUDE ?? "");
-                    xml4.NgayKetQua = ss.FINISH_TIME.HasValue ? ss.FINISH_TIME.ToString().Substring(0, 12) : ss.START_TIME.HasValue ? ss.START_TIME.ToString().Substring(0, 12) : ss.INTRUCTION_TIME.ToString().Substring(0, 12);
+                    xml4.NgayKetQua = ss.FINISH_TIME.HasValue ? ss.FINISH_TIME.ToString().Substring(0, 12) : "";
                     xml4.MaBacSiDocKetQua = ss.EXECUTE_LOGINNAME ?? "";
-                    if (data.Employee != null && data.Employee.Count > 0 && (!string.IsNullOrEmpty(ss.SUBCLINICAL_RESULT_LOGINNAME) || !string.IsNullOrEmpty(ss.EXECUTE_LOGINNAME)))
+                    if (data.Employee != null && data.Employee.Count > 0)
                     {
-                        var lst = (ss.SUBCLINICAL_RESULT_LOGINNAME ?? ss.EXECUTE_LOGINNAME).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                        foreach (var item in lst)
-                        {
-                            var loginName = data.Employee.FirstOrDefault(o => o.LOGINNAME == item);
-                            if (loginName != null && !string.IsNullOrEmpty(loginName.DIPLOMA))
-                            {
-                                xml4.MaBacSiDocKetQua = loginName.DIPLOMA;
-                                break;
-                            }
-                        }
+                        var loginName = data.Employee.FirstOrDefault(o => o.LOGINNAME.Equals(ss.SUBCLINICAL_RESULT_LOGINNAME ?? ss.EXECUTE_LOGINNAME));
+                        if (loginName != null)
+                            xml4.MaBacSiDocKetQua = loginName.SOCIAL_INSURANCE_NUMBER ?? "";
+                        else
+                            xml4.MaBacSiDocKetQua = ss.EXECUTE_LOGINNAME ?? "";
                     }
                     xml4.DuPhong = "";
                     listXml4Ado.Add(xml4);
@@ -70,8 +65,7 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
                 List<long> listHeinServiceTypeCLS = new List<long>()
                     {
                         IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__CDHA,
-                        IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__TDCN,
-                        IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__XN
+                        IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__TDCN
                     };
 
                 List<long> sereServHasTein = new List<long>();
@@ -82,7 +76,7 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
 
 
                 //lấy các dịch vụ là CDHA, TDCN không có chỉ số
-                var hisSereServs = data.vSereServ.Where(o => listHeinServiceTypeCLS.Contains(o.TDL_HEIN_SERVICE_TYPE_ID.Value) && !sereServHasTein.Contains(o.ID) && !data.vSereServSuin.Exists(p => p.SERE_SERV_ID == o.ID)).OrderBy(t => t.INTRUCTION_TIME).ToList();
+                var hisSereServs = data.vSereServ.Where(o => listHeinServiceTypeCLS.Contains(o.TDL_HEIN_SERVICE_TYPE_ID.Value) && !sereServHasTein.Contains(o.ID) && !data.vSereServSuin.Exists(p=>p.SERE_SERV_ID == o.ID)).OrderBy(t => t.INTRUCTION_TIME).ToList();
                 if (hisSereServs == null) hisSereServs = new List<V_HIS_SERE_SERV_2>();
                 foreach (var hisSereServ in hisSereServs)
                 {
@@ -97,8 +91,8 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
                     }
                     if (service != null)
                     {
-                        xml4.MaChiSo = service.SUIM_INDEX_CODE ?? "";
-                        xml4.TenChiSo = service.SUIM_INDEX_NAME ?? "";
+                        xml4.MaChiSo = service.SERVICE_CODE ?? "";
+                        xml4.TenChiSo = service.HEIN_SERVICE_BHYT_NAME ?? "";
                     }
                     else
                     {
@@ -109,20 +103,15 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
                     xml4.DonViDo = "";
                     xml4.MoTa = this.SubMaxLength(hisSereServ.DESCRIPTION ?? "");
                     xml4.KetLuan = this.SubMaxLength(hisSereServ.CONCLUDE ?? "");
-                    xml4.NgayKetQua = hisSereServ.END_TIME.HasValue ? hisSereServ.END_TIME.ToString().Substring(0, 12) : hisSereServ.START_TIME.HasValue ? hisSereServ.START_TIME.ToString().Substring(0, 12) : hisSereServ.INTRUCTION_TIME.ToString().Substring(0, 12);
+                    xml4.NgayKetQua = hisSereServ.END_TIME.HasValue ? hisSereServ.END_TIME.ToString().Substring(0, 12) : "";
                     xml4.MaBacSiDocKetQua = hisSereServ.EXECUTE_LOGINNAME ?? "";
-                    if (data.Employee != null && data.Employee.Count > 0 && (!string.IsNullOrEmpty(hisSereServ.SUBCLINICAL_RESULT_LOGINNAME) || !string.IsNullOrEmpty(hisSereServ.EXECUTE_LOGINNAME)))
+                    if (data.Employee != null && data.Employee.Count > 0)
                     {
-                        var lst = (hisSereServ.SUBCLINICAL_RESULT_LOGINNAME ?? hisSereServ.EXECUTE_LOGINNAME).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                        foreach (var item in lst)
-                        {
-                            var loginName = data.Employee.FirstOrDefault(o => o.LOGINNAME == item);
-                            if (loginName != null && !string.IsNullOrEmpty(loginName.DIPLOMA))
-                            {
-                                xml4.MaBacSiDocKetQua = loginName.DIPLOMA;
-                                break;
-                            }
-                        }
+                        var loginName = data.Employee.FirstOrDefault(o => o.LOGINNAME.Equals(hisSereServ.SUBCLINICAL_RESULT_LOGINNAME ?? hisSereServ.EXECUTE_LOGINNAME));
+                        if (loginName != null)
+                            xml4.MaBacSiDocKetQua = loginName.SOCIAL_INSURANCE_NUMBER ?? "";
+                        else
+                            xml4.MaBacSiDocKetQua = hisSereServ.EXECUTE_LOGINNAME ?? "";
                     }
                     xml4.DuPhong = "";
                     listXml4Ado.Add(xml4);
@@ -167,20 +156,15 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
                                 xml4.DonViDo = ssSuin.SUIM_INDEX_UNIT_NAME ?? "";
                                 xml4.MoTa = this.SubMaxLength(ssSuin.DESCRIPTION ?? "");
                                 xml4.KetLuan = this.SubMaxLength(item.CONCLUDE ?? "");
-                                xml4.NgayKetQua = item.FINISH_TIME.HasValue ? item.FINISH_TIME.ToString().Substring(0, 12) : item.START_TIME.HasValue ? item.START_TIME.ToString().Substring(0, 12) : item.INTRUCTION_TIME.ToString().Substring(0, 12);
+                                xml4.NgayKetQua = item.FINISH_TIME.HasValue ? item.FINISH_TIME.ToString().Substring(0, 12) : "";
                                 xml4.MaBacSiDocKetQua = item.EXECUTE_LOGINNAME ?? "";
-                                if (data.Employee != null && data.Employee.Count > 0 && (!string.IsNullOrEmpty(item.SUBCLINICAL_RESULT_LOGINNAME) || !string.IsNullOrEmpty(item.EXECUTE_LOGINNAME)))
+                                if (data.Employee != null && data.Employee.Count > 0)
                                 {
-                                    var lst = (item.SUBCLINICAL_RESULT_LOGINNAME ?? item.EXECUTE_LOGINNAME).Split(new string[] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList();
-                                    foreach (var itemL in lst)
-                                    {
-                                        var loginName = data.Employee.FirstOrDefault(o => o.LOGINNAME == itemL);
-                                        if (loginName != null && !string.IsNullOrEmpty(loginName.DIPLOMA))
-                                        {
-                                            xml4.MaBacSiDocKetQua = loginName.DIPLOMA;
-                                            break;
-                                        }
-                                    }
+                                    var loginName = data.Employee.FirstOrDefault(o => o.LOGINNAME.Equals(item.SUBCLINICAL_RESULT_LOGINNAME ?? item.EXECUTE_LOGINNAME));
+                                    if (loginName != null)
+                                        xml4.MaBacSiDocKetQua = loginName.SOCIAL_INSURANCE_NUMBER ?? "";
+                                    else
+                                        xml4.MaBacSiDocKetQua = item.EXECUTE_LOGINNAME ?? "";
                                 }
                                 xml4.DuPhong = "";
                                 count++;
