@@ -1,21 +1,4 @@
-/* IVT
- * @Project : hisnguonmo
- * Copyright (C) 2017 INVENTEC
- *  
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *  
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
- * GNU General Public License for more details.
- *  
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-using ACS.SDO;
+﻿using ACS.SDO;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.ViewInfo;
 using HIS.Desktop.ADO;
@@ -35,7 +18,6 @@ using HIS.UC.HisExamServiceAdd.ADO;
 using MOS.SDO;
 using MOS.Filter;
 using DevExpress.XtraEditors.Controls;
-using System.Globalization;
 
 namespace HIS.UC.ExamServiceAdd.Run
 {
@@ -115,39 +97,19 @@ namespace HIS.UC.ExamServiceAdd.Run
                 hisPatientType = new List<HIS_PATIENT_TYPE>();
 
                 HisConfig.LoadConfig();
-
-                CommonParam param = new CommonParam();
-                TimerSDO timeSync = new BackendAdapter(param).Get<TimerSDO>(AcsRequestUriStore.ACS_TIMER__SYNC, ApiConsumers.AcsConsumer, 1, param);
-                
+                dtIntructionTime.DateTime = DateTime.Now;
                 if (HisConfig.IsUsingServerTime)
                 {
                     dtIntructionTime.Enabled = false;
 
                     //Lay gio server
+                    TimerSDO timeSync = new BackendAdapter(new CommonParam()).Get<TimerSDO>(AcsRequestUriStore.ACS_TIMER__SYNC, ApiConsumers.AcsConsumer, 1, new CommonParam());
                     Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => timeSync), timeSync));
-                    
                     ;
                     if (timeSync != null)
                     {
                         dtIntructionTime.DateTime = timeSync.DateNow;
                     }
-                }
-                long istime = HIS.Desktop.LocalStorage.HisConfig.HisConfigs.Get<long>("HIS.Desktop.ShowServerTimeByDefault");
-                if (istime == 1)
-                {
-                    try
-                    {
-                        dtIntructionTime.DateTime = timeSync.DateNow;
-                        
-                        }
-                    catch (Exception ex)
-                    {
-                        Inventec.Common.Logging.LogSystem.Error(ex);
-                    }
-                }
-                else
-                {
-                    dtIntructionTime.DateTime = DateTime.Now;
                 }
                 ValidateForm();
                 LoadTreatment();
