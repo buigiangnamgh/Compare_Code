@@ -1,5 +1,4 @@
 ﻿
-using MOS.EFMODEL.DataModels;
 namespace His.Bhyt.ExportXml.XML130.XML3
 {
     public class XML3ADO
