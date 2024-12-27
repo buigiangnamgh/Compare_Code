@@ -94,13 +94,11 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute.Config
         private const string KEY__HospitalizationReasonRequiredByPatientCode = "HIS.Desktop.Plugins.ExamServiceReqExecute.HospitalizationReasonRequiredByPatientCode";
         internal static string HospitalizationReasonRequiredByPatientCode;
         private const string KEY__AutoCreatePaymentTransactions = "HIS.Desktop.Plugins.ExamServiceReqExecute.AutoCreatePaymentTransactions";
-        private const string KEY_ShowLastestDHST = "HIS.Desktop.Plugins.Tracking.ShowLastestDhst";
         internal static string AutoCreatePaymentTransactions;
         internal static bool IsRequiredTemperatureOption;
         internal static bool RequiredAddressOption;
         internal static string RequiredTreatmentMethodOption;
         internal static string AutoCheckIcd;
-        internal static bool IsShowLatestDHST;
         internal static void LoadConfig()
         {
             try
@@ -131,7 +129,6 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute.Config
                 terminalSystemSecureKey = GetValue(TERMINAL_SYTEM_SECURE_KEY);
                 RequiredTreatmentMethodOption = GetValue(CONFIG_KEY__IS_REQUIRED_TREATMENT_METHOD_OPTION);
                 AutoCheckIcd = GetValue(CONFIG_KEY__ICD_GENERA_KEY);
-                IsShowLatestDHST = GetValue(KEY_ShowLastestDHST) == GlobalVariables.CommonStringTrue;
             }
             catch (Exception ex)
             {

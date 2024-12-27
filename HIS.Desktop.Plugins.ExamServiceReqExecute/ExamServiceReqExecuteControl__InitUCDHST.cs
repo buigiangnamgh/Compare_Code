@@ -153,7 +153,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                 {
                     isThan16YearOld = true;
                 }
-                if (IsThan16YearOldByTreatment())
+                if(IsThan16YearOldByTreatment())
                 {
                     lessthan16YearOld = true;
                 }
@@ -230,7 +230,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
             return valid;
         }
 
-        private void ValidateControlSpinEditWeight(DevExpress.XtraEditors.SpinEdit control, bool Option, bool IsRequired)
+        private void ValidateControlSpinEditWeight(DevExpress.XtraEditors.SpinEdit control, bool Option,bool IsRequired)
         {
             try
             {
@@ -385,7 +385,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                 {
                     spinHeight.EditValue = dhst.HEIGHT;
                     spinWeight.EditValue = dhst.WEIGHT;
-
+                   
                     LoadMLCT();
                 }
             }

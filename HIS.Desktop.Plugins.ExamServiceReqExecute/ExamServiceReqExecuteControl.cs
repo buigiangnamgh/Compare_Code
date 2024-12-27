@@ -5000,7 +5000,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                                 {
                                     if (testIndex.CONVERT_RATIO_MLCT.HasValue)
                                         chiso *= (testIndex.CONVERT_RATIO_MLCT ?? 0);
-                                    decimal mlct = Math.Round(Inventec.Common.Calculate.Calculation.MucLocCauThan(this.HisServiceReqView.TDL_PATIENT_DOB, (decimal)spinWeight.Value, (decimal)spinHeight.Value, chiso, this.HisServiceReqView.TDL_PATIENT_GENDER_ID == IMSys.DbConfig.HIS_RS.HIS_GENDER.ID__MALE), 1);
+                                    decimal mlct = Inventec.Common.Calculate.Calculation.MucLocCauThan(this.HisServiceReqView.TDL_PATIENT_DOB, (decimal)spinWeight.Value, (decimal)spinHeight.Value, chiso, this.HisServiceReqView.TDL_PATIENT_GENDER_ID == IMSys.DbConfig.HIS_RS.HIS_GENDER.ID__MALE);
                                     strIsToCalculateEgfr = mlct != 0 ? mlct.ToString() : "";
                                 }
                             }
