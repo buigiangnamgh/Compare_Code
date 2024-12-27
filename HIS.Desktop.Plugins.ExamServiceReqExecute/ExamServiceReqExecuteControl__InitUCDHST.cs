@@ -1,4 +1,21 @@
-﻿using DevExpress.XtraEditors.DXErrorProvider;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using DevExpress.XtraEditors.DXErrorProvider;
 using HIS.Desktop.ADO;
 using HIS.Desktop.ApiConsumer;
 using HIS.Desktop.Plugins.ExamServiceReqExecute.Base;
@@ -136,7 +153,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                 {
                     isThan16YearOld = true;
                 }
-                if(IsThan16YearOldByTreatment())
+                if (IsThan16YearOldByTreatment())
                 {
                     lessthan16YearOld = true;
                 }
@@ -213,7 +230,7 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
             return valid;
         }
 
-        private void ValidateControlSpinEditWeight(DevExpress.XtraEditors.SpinEdit control, bool Option,bool IsRequired)
+        private void ValidateControlSpinEditWeight(DevExpress.XtraEditors.SpinEdit control, bool Option, bool IsRequired)
         {
             try
             {
@@ -327,13 +344,13 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
             }
         }
 
-        private void DHSTSetValue(HIS_DHST dhst, bool isDefault)
+        private void DHSTSetValue(HIS_DHST dhst)
         {
             try
             {
                 if (dhst != null)
                 {
-                    if (dhst.EXECUTE_TIME != null && !isDefault)
+                    if (dhst.EXECUTE_TIME != null)
                         dtExecuteTime.DateTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(dhst.EXECUTE_TIME ?? 0) ?? DateTime.Now;
                     else
                         dtExecuteTime.EditValue = DateTime.Now;
@@ -360,7 +377,23 @@ namespace HIS.Desktop.Plugins.ExamServiceReqExecute
                 Inventec.Common.Logging.LogSystem.Warn(ex);
             }
         }
+        private void DHSTSetValueHeightWeight(HIS_DHST dhst)
+        {
+            try
+            {
+                if (dhst != null)
+                {
+                    spinHeight.EditValue = dhst.HEIGHT;
+                    spinWeight.EditValue = dhst.WEIGHT;
 
+                    LoadMLCT();
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
         private void DHSTFillDataToBmiAndLeatherArea()
         {
             try
