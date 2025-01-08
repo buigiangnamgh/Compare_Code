@@ -1,4 +1,4 @@
-﻿/* IVT
+/* IVT
  * @Project : hisnguonmo
  * Copyright (C) 2017 INVENTEC
  *  
@@ -520,14 +520,9 @@ namespace HIS.Desktop.Plugins.Library.ElectronicBill.ProviderBehavior.VNPT
                     throw new Exception("Sai định dạng cấu hình hệ thống.");
                 if (String.IsNullOrEmpty(accountConfig))
                     throw new Exception("Không có cấu hình tài khoản");
-                string treatmentCode = ""; // nambg them
 
                 Invoice invoice = new Invoice();
                 string key = "";
-                if (electronicBillDataInput.Treatment != null)
-                {
-                    treatmentCode = electronicBillDataInput.Treatment.TREATMENT_CODE;
-                }
                 if (electronicBillDataInput.Transaction != null && !String.IsNullOrWhiteSpace(electronicBillDataInput.Transaction.TRANSACTION_CODE))
                 {
                     key = electronicBillDataInput.Transaction.TRANSACTION_CODE;
@@ -549,7 +544,7 @@ namespace HIS.Desktop.Plugins.Library.ElectronicBill.ProviderBehavior.VNPT
                 invoice.InvoiceDetail = new Inventec.Common.ElectronicBill.MD.InvoiceDetail();
                 invoice.InvoiceDetail.Extra = invoice.Key;
                 //invoice.InvoiceDetail.PaymentMethod = electronicBillDataInput.PaymentMethod ?? "";
-                invoice.InvoiceDetail.CusCode = adoInfo.BuyerCode + "/" + treatmentCode ?? (Inventec.Common.DateTime.Get.Now() ?? 0).ToString() ;
+                invoice.InvoiceDetail.CusCode = adoInfo.BuyerCode ?? (Inventec.Common.DateTime.Get.Now() ?? 0).ToString();
                 invoice.InvoiceDetail.CusAddress = adoInfo.BuyerAddress ?? " ";
                 invoice.InvoiceDetail.CusPhone = adoInfo.BuyerPhone ?? "";
                 invoice.InvoiceDetail.CusTaxCode = adoInfo.BuyerTaxCode ?? "";
@@ -935,8 +930,7 @@ namespace HIS.Desktop.Plugins.Library.ElectronicBill.ProviderBehavior.VNPT
 
 
                 int count = 1;
-                if (listProductVAT != null)
-                {
+                if (listProductVAT != null) {
                     List<ProductBasePlus> listProductBasePlus = (List<ProductBasePlus>)listProductVAT;
 
                     if (listProductBasePlus == null || listProductBasePlus.Count == 0)
