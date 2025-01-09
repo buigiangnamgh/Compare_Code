@@ -54,8 +54,7 @@ namespace HIS.UC.UCPatientRaw
 				if (code.Length > 12 && code.Contains("|") && this.typeCodeFind == ResourceMessage.typeCodeFind__MaCMCC)
 				{
 					return GetDataQrCodeCccdCard(code);
-				}
-                else if (code.Trim().Length == 12 && !string.IsNullOrEmpty(txtPatientName.Text) && (!string.IsNullOrEmpty(txtPatientDob.Text) || dtPatientDob.EditValue != null) && this.typeCodeFind == ResourceMessage.typeCodeFind__MaCMCC)
+				}else if (code.Trim().Length == 12 && !string.IsNullOrEmpty(txtPatientName.Text) && (!string.IsNullOrEmpty(txtPatientDob.Text) || dtPatientDob.EditValue != null) && this.typeCodeFind == ResourceMessage.typeCodeFind__MaCMCC)
 				{
 					CccdCardData cccd = new CccdCardData();
 					cccd.CardData = code.Trim();
@@ -231,11 +230,11 @@ namespace HIS.UC.UCPatientRaw
 				patientByCard.Paid6Month = cardSDO.Paid6Month;
 				patientByCard.RightRouteCode = cardSDO.RightRouteCode;
 				patientByCard.WORK_PLACE = cardSDO.WorkPlace;
-                //patientByCard.HT_COMMUNE_CODE = cardSDO.HtCommuneCode;
+				patientByCard.HT_COMMUNE_CODE = cardSDO.HtCommuneCode;
                 patientByCard.HT_COMMUNE_NAME = cardSDO.HtCommuneName;
-                //patientByCard.HT_DISTRICT_CODE = cardSDO.HtDistrictCode;
+                patientByCard.HT_DISTRICT_CODE = cardSDO.HtDistrictCode;
                 patientByCard.HT_DISTRICT_NAME = cardSDO.HtDistrictName;
-                //patientByCard.HT_PROVINCE_CODE = cardSDO.HtProvinceCode;
+                patientByCard.HT_PROVINCE_CODE = cardSDO.HtProvinceCode;
                 patientByCard.HT_PROVINCE_NAME = cardSDO.HtProvinceName;
             }
 			catch (Exception ex)
@@ -289,18 +288,16 @@ namespace HIS.UC.UCPatientRaw
 					this.cboGender.EditValue = gioitinh.ID;
 				}
 				if (!String.IsNullOrEmpty(patientDTO.CAREER_CODE) && patientDTO.CAREER_ID != null && patientDTO.CAREER_ID > 0)
-                {
+				{
 					this.txtCareerCode.Text = patientDTO.CAREER_CODE;
                     this.cboCareer.EditValue = patientDTO.CAREER_ID;
-                    Inventec.Common.Logging.LogSystem.Info("FillDataPatientToControl:" + this.txtCareerCode.Text);
                 }
 				else
 				{
 					MOS.EFMODEL.DataModels.HIS_CAREER career = BackendDataWorker.Get<MOS.EFMODEL.DataModels.HIS_CAREER>().Where(o => o.IS_ACTIVE == IMSys.DbConfig.HIS_RS.COMMON.IS_ACTIVE__TRUE).SingleOrDefault(o => o.ID == patientDTO.CAREER_ID);
 					if (career != null)
-                    {
+					{
 						this.txtCareerCode.Text = career.CAREER_CODE;
-                        Inventec.Common.Logging.LogSystem.Info("FillDataPatientToControl1:" + this.txtCareerCode.Text);
                         this.cboCareer.EditValue = patientDTO.CAREER_ID;
                     }
 					else if (!String.IsNullOrEmpty(patientDTO.HeinCardNumber))
@@ -308,10 +305,8 @@ namespace HIS.UC.UCPatientRaw
 						this.FillDataCareerUnder6AgeByHeinCardNumber(patientDTO.HeinCardNumber);
 					}
 				}
-                txtCCCD_Number.Text = patientDTO.CCCD_NUMBER;
 
-
-                if (HIS.Desktop.Plugins.Library.RegisterConfig.AppConfigs.ChangeEthnic != 0 && lciFortxtEthnicCode.Visibility == DevExpress.XtraLayout.Utils.LayoutVisibility.Always)
+				if (HIS.Desktop.Plugins.Library.RegisterConfig.AppConfigs.ChangeEthnic != 0 && lciFortxtEthnicCode.Visibility == DevExpress.XtraLayout.Utils.LayoutVisibility.Always)
 				{
 					this.cboEthnic.EditValue = patientDTO.ETHNIC_CODE;
 					this.txtEthnicCode.Text = patientDTO.ETHNIC_CODE;

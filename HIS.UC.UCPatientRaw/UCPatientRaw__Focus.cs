@@ -111,19 +111,6 @@ namespace HIS.UC.UCPatientRaw
             }
         }
 
-        public void FocusToCccdNumber()
-        {
-            try
-            {
-                this.txtCCCD_Number.Focus();
-                this.txtCCCD_Number.SelectAll();
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Warn(ex);
-            }
-        }
-
         public void FocusToPatientType()
         {
             try
@@ -295,12 +282,10 @@ namespace HIS.UC.UCPatientRaw
                 this.cardSearch = null;
                 this.txtCareerCode.Text = null;
                 this.cboCareer.EditValue = null;
-                this.txtCCCD_Number.Text = "";
                 HIS_CAREER career = HIS.Desktop.Plugins.Library.RegisterConfig.HisConfigCFG.CareerBase;
                 if(career != null && (cboCareer.Properties.DataSource as List<HIS_CAREER>).Exists(o=>o.ID == career.ID))
                 {
                     this.txtCareerCode.Text = career.CAREER_CODE;
-                    Inventec.Common.Logging.LogSystem.Info("RefreshUserControl:" + this.txtCareerCode.Text);
                     this.cboCareer.EditValue = career.ID;
                 }
                 lciWorkPlaceNameNew.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
@@ -354,7 +339,6 @@ namespace HIS.UC.UCPatientRaw
                 if (careerDefault != null && BackendDataWorker.Get<MOS.EFMODEL.DataModels.HIS_CAREER>().Where(o => o.IS_ACTIVE == IMSys.DbConfig.HIS_RS.COMMON.IS_ACTIVE__TRUE).SingleOrDefault(o => o.ID == careerDefault.ID) != null)
                 {
                     this.txtCareerCode.Text = careerDefault.CAREER_CODE;
-                    Inventec.Common.Logging.LogSystem.Info("FillDefaultData_Carrer_Gender_PatientType:" + this.txtCareerCode.Text);
                     this.cboCareer.EditValue = careerDefault.ID;
                 }
 

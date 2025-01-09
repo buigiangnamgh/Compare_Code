@@ -63,6 +63,5 @@ namespace HIS.UC.UCPatientRaw.ADO
         public string CardServiceCode { get; set; }
         public string BankCardCode { get; set; }
         public string SocialInsuranceNumberPatient { get; set; }
-        public string CCCD_NUMBER { get; set; }
     }
 }

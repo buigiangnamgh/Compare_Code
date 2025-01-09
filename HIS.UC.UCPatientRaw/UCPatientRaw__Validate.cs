@@ -27,7 +27,6 @@ using System.Windows.Forms;
 using HIS.UC.UCPatientRaw.Valid;
 using DevExpress.XtraEditors.DXErrorProvider;
 using HIS.Desktop.LocalStorage.HisConfig;
-using HIS.UC.UCPatientRaw.Config;
 
 namespace HIS.UC.UCPatientRaw
 {
@@ -145,7 +144,6 @@ namespace HIS.UC.UCPatientRaw
 				}
 				this.ValidateGender();
 				this.ValidatePatientDob();
-                this.ValidatePatientCCCD();
 				this.ValidatePatientName();
 				this.ValidatePatientType();
 				this.ValidatePatientClassify(txtPatientClassify);
@@ -259,17 +257,7 @@ namespace HIS.UC.UCPatientRaw
 			dxValidationProviderControl.SetValidationRule(txtPatientDob, icdMainRule);
 		}
 
-        private void ValidatePatientCCCD()
-        {
-            Valid_CCCD_Control icdMainRule = new Valid_CCCD_Control();
-            icdMainRule.txtCCCD = this.txtCCCD_Number;
-            icdMainRule.isRequied = HisConfigCFG.IsRequired_Cccd_Number;
-            icdMainRule.ErrorText = MessageUtil.GetMessage(His.UC.LibraryMessage.Message.Enum.TruongDuLieuBatBuoc);
-            icdMainRule.ErrorType = ErrorType.Warning;
-            dxValidationProviderControl.SetValidationRule(txtCCCD_Number, icdMainRule);
-        }
-
-        private void ValidatePatientName()
+		private void ValidatePatientName()
 		{
 			Valid_PatientName_Control icdMainRule = new Valid_PatientName_Control();
 			icdMainRule.txtPatientName = this.txtPatientName;

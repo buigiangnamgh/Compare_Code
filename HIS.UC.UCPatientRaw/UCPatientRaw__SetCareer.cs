@@ -59,12 +59,11 @@ namespace HIS.UC.UCPatientRaw
                         career = HIS.Desktop.Plugins.Library.RegisterConfig.HisConfigCFG.CareerBase;
                     }
                 }
-                //if (career != null && career.ID > 0)
-                //{
-                //    Inventec.Common.Logging.LogSystem.Info("SetCareerByCardNumber:" + this.txtCareerCode.Text);
-                //    this.txtCareerCode.Text = career.CAREER_CODE;
-                //    this.cboCareer.EditValue = career.ID;
-                //}
+                if (career != null && career.ID > 0)
+                {            
+                    this.txtCareerCode.Text = career.CAREER_CODE;
+                    this.cboCareer.EditValue = career.ID;
+                }
             }
             catch (Exception ex)
             {
