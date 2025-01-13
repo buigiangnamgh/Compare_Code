@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -17,6 +34,9 @@ using Inventec.Core;
 using His.Bhyt.InsuranceExpertise;
 using HIS.UC.UCPatientRaw.ADO;
 using HIS.Desktop.Plugins.Library.CheckHeinGOV;
+using CHC.WCFClient.CheckHeinCardService;
+using SDA.EFMODEL.DataModels;
+using HeinCardData = Inventec.Common.QrCodeBHYT.HeinCardData;
 
 namespace HIS.Desktop.Plugins.RegisterV2.Run2
 {
@@ -164,11 +184,22 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                         Inventec.Common.Logging.LogSystem.Debug("Ket thuc gan du lieu cho benh nhan khi doc the va khong co han den");
                     }
 
-                    if (this.ucPatientRaw1.ResultDataADO.IsAddress)
+                    if (this.ucPatientRaw1.ResultDataADO.IsAddress || this.ucPatientRaw1.ResultDataADO.IsThongTinNguoiDungThayDoiSoVoiCong__Choose)
                     {
                         if (AppConfigs.CheDoTuDongFillDuLieuDiaChiGhiTrenTheVaoODiaChiBenhNhanHayKhong == 1)
                         {
                             dataAddressPatient = this.ucAddressCombo1.GetValue() ?? new HIS.UC.AddressCombo.ADO.UCAddressADO();
+                            Inventec.Common.Address.AddressProcessor adProc = new Inventec.Common.Address.AddressProcessor(BackendDataWorker.Get<V_SDA_PROVINCE>(), BackendDataWorker.Get<V_SDA_DISTRICT>(), BackendDataWorker.Get<V_SDA_COMMUNE>());
+                            var data = adProc.SplitFromFullAddress(this.ucPatientRaw1.ResultDataADO.ResultHistoryLDO.diaChi);
+                            if (data != null)
+                            {
+                                dataAddressPatient.Province_Code = data.ProvinceCode;
+                                dataAddressPatient.Province_Name = data.ProvinceName;
+                                dataAddressPatient.District_Code = data.DistrictCode;
+                                dataAddressPatient.District_Name = data.DistrictName;
+                                dataAddressPatient.Commune_Code = data.CommuneCode;
+                                dataAddressPatient.Commune_Name = data.CommuneName;
+                            }
                             dataAddressPatient.Address = this.ucPatientRaw1.ResultDataADO.ResultHistoryLDO.diaChi;
                             this.ucAddressCombo1.SetValue(dataAddressPatient);
                         }
@@ -194,13 +225,6 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 
                         data.DOB = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtPatientDob) ?? 0;
                         this.ucPatientRaw1.UpdateValueAfterCheckTT(data);
-
-                        if (AppConfigs.CheDoTuDongFillDuLieuDiaChiGhiTrenTheVaoODiaChiBenhNhanHayKhong == 1)
-                        {
-                            dataAddressPatient = this.ucAddressCombo1.GetValue() ?? new HIS.UC.AddressCombo.ADO.UCAddressADO();
-                            dataAddressPatient.Address = this.ucPatientRaw1.ResultDataADO.ResultHistoryLDO.diaChi;
-                            this.ucAddressCombo1.SetValue(dataAddressPatient);
-                        }
 
                         if (IsPatientTypeUsingHeinInfo())
                             this.ucHeinInfo1.FillDataByHeinCardData(this.ucPatientRaw1.ResultDataADO.HeinCardData);

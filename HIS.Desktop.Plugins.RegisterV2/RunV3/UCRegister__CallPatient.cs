@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -327,7 +344,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 					{
 						if (HIS.Desktop.Plugins.Library.RegisterConfig.HisConfigCFG.CallCpaOption == 2)
 						{
-							int[] nums = await this.clienttManager.AsyncCallNumOrderPlus(int.Parse(txtGate), int.Parse(this.txtStepNumber.Text));
+							int[] nums = await this.clienttManager.AsyncCallNumOrderPlusString(txtGate, int.Parse(this.txtStepNumber.Text));
 							if (nums != null && nums.Length > 0)
 							{
 								await this.CallModuleCallPatientNumOrder(nums.LastOrDefault().ToString());
@@ -335,7 +352,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 						}
 						else
 						{
-							this.clienttManager.CallNumOrder(int.Parse(txtGate), int.Parse(this.txtStepNumber.Text));
+							this.clienttManager.CallNumOrderString(txtGate, int.Parse(this.txtStepNumber.Text));
 
 						}
 
@@ -346,7 +363,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 						if (Int64.Parse(numSttNow) < Int64.Parse(numTotal))
 						{
 							var numSend = Int64.Parse(numTotal) - Int64.Parse(numSttNow);
-							this.clienttManager.CallNumOrder(int.Parse(txtGate), (int)numSend);
+							this.clienttManager.CallNumOrderString(txtGate, (int)numSend);
 
 							CeateThreadGetPatient();
 						}
@@ -608,7 +625,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 					if (HIS.Desktop.Plugins.Library.RegisterConfig.HisConfigCFG.CallCpaOption == 2)
 					{
 
-						int[] nums = await this.clienttManager.AsyncRecallNumOrderPlus(int.Parse(txtGate), int.Parse(txtStepNumber.Text));
+						int[] nums = await this.clienttManager.AsyncRecallNumOrderPlusString(txtGate, int.Parse(txtStepNumber.Text));
 						if (nums != null && nums.Length > 0)
 						{
 							await this.CallModuleCallPatientNumOrder(nums.LastOrDefault().ToString());
@@ -616,7 +633,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 					}
 					else
 					{
-						this.clienttManager.RecallNumOrder(int.Parse(txtGate), int.Parse(txtStepNumber.Text));
+						this.clienttManager.RecallNumOrderString(txtGate, int.Parse(txtStepNumber.Text));
 					}
 
 					CeateThreadGetPatient();

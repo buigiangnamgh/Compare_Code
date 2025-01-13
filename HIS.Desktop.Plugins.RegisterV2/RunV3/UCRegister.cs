@@ -1,4 +1,21 @@
-﻿using CHC.WCFClient.CheckHeinCardService;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using CHC.WCFClient.CheckHeinCardService;
 using DevExpress.Utils.Menu;
 using DevExpress.XtraEditors;
 using DevExpress.XtraEditors.Controls;
@@ -59,6 +76,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 		HisPatientProfileSDO resultHisPatientProfileSDO = null;
         Inventec.Common.QrCodeBHYT.HeinCardData _HeinCardData { get; set; }
 		ResultDataADO ResultDataADO { get; set; }
+		public bool isCheckSS { get; set; }
 		internal bool isNotPatientDayDob = false;
 		int actionType = 0;
 		bool isPrintNow;
@@ -483,6 +501,23 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 					this.ucServiceRoomInfo1.RefreshUserControl();
 
 					this.ReloadExamServiceRoom();
+					if(this.ucPatientRaw1.GetValue().DOB != null && patientTypeId == HIS.Desktop.Plugins.Library.RegisterConfig.HisConfigCFG.PatientTypeId__BHYT)
+                    {
+						DateTime dateofbirth = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(this.ucPatientRaw1.GetValue().DOB)??DateTime.MinValue;
+						if(dateofbirth != DateTime.MinValue)
+                        {
+							if(DateTime.Now.Year - dateofbirth.Year < 6)
+                            {
+								this.ucHeinInfo1.SetEnableChkSS(true);
+
+							}
+                            else
+                            {
+								this.ucHeinInfo1.SetEnableChkSS(false);
+							}
+                        }
+
+                    }
 					if (HisConfigCFG.AutoCheckPrintExam__PatientTypeIds != null && HisConfigCFG.AutoCheckPrintExam__PatientTypeIds.Count > 0 && HisConfigCFG.AutoCheckPrintExam__PatientTypeIds.Contains(patientTypeId))
 					{
 						chkPrintExam.Checked = true;
@@ -738,11 +773,22 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 			{
 				if (data != null)
 				{
+					this.IsReadCardTheViet = false;
 					string heinCardNumber = "";
                     Inventec.Common.QrCodeBHYT.HeinCardData dataCheck = new Inventec.Common.QrCodeBHYT.HeinCardData();
 					DataResultADO dataResult = (DataResultADO)data;
 					this.SetValueVariableUCAddressCombo(dataResult);
-					if (dataResult.OldPatient == false && dataResult.UCRelativeADO != null)
+                    if (dataResult.SearchTypePatient == 4)//Thẻ việt
+                    {
+						IsReadCardTheViet = true;
+                        HtProvinceCode = dataResult.HisPatientSDO != null ? dataResult.HisPatientSDO.HT_PROVINCE_CODE : null;
+                        HtDistrictCode = dataResult.HisPatientSDO != null ? dataResult.HisPatientSDO.HT_DISTRICT_CODE : null;
+                        HtCommuneCode = dataResult.HisPatientSDO != null ? dataResult.HisPatientSDO.HT_COMMUNE_CODE : null;
+                        HtProvinceName = dataResult.HisPatientSDO != null ? dataResult.HisPatientSDO.HT_PROVINCE_NAME : null;
+                        HtDistrictName = dataResult.HisPatientSDO != null ? dataResult.HisPatientSDO.HT_DISTRICT_NAME : null;
+                        HtCommuneName = dataResult.HisPatientSDO != null ? dataResult.HisPatientSDO.HT_COMMUNE_NAME : null;
+                    }
+                    if (dataResult.OldPatient == false && dataResult.UCRelativeADO != null)
 						FillDataIntoUCRelativeInfo(dataResult.UCRelativeADO);
 					else if (dataResult.OldPatient == false && dataResult.HeinCardData != null)
 					{
@@ -757,7 +803,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 							this.appointmentCode = dataResult.AppointmentCode;
 						this._TreatmnetIdByAppointmentCode = (dataResult.TreatmnetIdByAppointmentCode == null ? 0 : dataResult.TreatmnetIdByAppointmentCode);
 						this.currentPatientSDO = dataResult.HisPatientSDO;
-						FillDataIntoUCPlusInfo(currentPatientSDO, dataResult.IsReadQr);
+						FillDataIntoUCPlusInfo(currentPatientSDO, dataResult.IsReadQr);	
 						FillDataIntoUCRelativeInfo(currentPatientSDO);
 						FillDataIntoUCAddressInfo(currentPatientSDO);
 						if (dataResult.SearchTypePatient == 4 && dataResult.OldPatient == false)
@@ -783,6 +829,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 						dataCheck.FromDate = Inventec.Common.DateTime.Convert.TimeNumberToDateString(currentPatientSDO.HeinCardFromTime ?? 0);
 						dataCheck.MediOrgCode = currentPatientSDO.HeinMediOrgCode;
 						dataCheck.Address = currentPatientSDO.HeinAddress;
+						dataCheck.LiveAreaCode = currentPatientSDO.LiveAreaCode;
 						dataCheck.ToDate = Inventec.Common.DateTime.Convert.TimeNumberToDateString(currentPatientSDO.HeinCardToTime ?? 0);
 					}
 
@@ -887,7 +934,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 							career = HisConfigCFG.CareerBase;
 						}
 					}
-                    if (career != null && career.ID > 0 && patientRawObj.CARRER_ID == null)
+					if (career != null && career.ID > 0)
 					{
 						patientRawObj.CARRER_ID = career.ID;
 						patientRawObj.CARRER_CODE = career.CAREER_CODE;
@@ -909,9 +956,11 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 		{
 			try
 			{
-				var heindata = this.ucHeinInfo1.GetValue();
+				var heindata = this.ucHeinInfo1.GetValuePatientTypeAlter();
+				
 				var patientRaw = this.ucPatientRaw1.GetValue();
 				if (heindata != null && patientRaw != null)
+					this.ucHeinInfo1.ShowCheckSS(DateTime.Now.Year - (Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(patientRaw.DOB)??DateTime.MinValue).Year <6);
 					this.ucOtherServiceReqInfo1.AutoCheckPriorityByPriorityType(patientRaw.DOB, heindata.HisPatientTypeAlter.HEIN_CARD_NUMBER);
 			}
 			catch (Exception ex)
@@ -1000,6 +1049,8 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 			try
 			{
 				this.isResetForm = true;
+				this.IsReadCardTheViet = false;
+				this.isCheckSS = false;
 				this.RefreshUserControl();
 				var patientTypeDefault = HIS.Desktop.Plugins.Library.RegisterConfig.AppConfigs.PatientTypeDefault;
 				if (!(patientTypeDefault != null && patientTypeDefault.ID > 0) && !HIS.Desktop.Plugins.Library.RegisterConfig.HisConfigCFG.UsingPatientTypeOfPreviousPatient)
@@ -1194,7 +1245,6 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 				this.dataPatientRaw.CARRER_ID = null;
 				this.dataPatientRaw.PATIENT_CODE = "";
                 this.dataPatientRaw.ReceptionForm = null;
-                this.dataPatientRaw.CCCD_NUMBER = "";
 				Inventec.Common.Logging.LogSystem.Error("btnPatientNew_Click");
 				this.ucPatientRaw1.SetValue(dataPatientRaw);
 				this.SetPatientSearchPanel(false);

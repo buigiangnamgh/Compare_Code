@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -39,17 +56,17 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                         dataPatient.CMND_DATE = _currentPatientSDO.CMND_DATE;
                     }
                 }
-                if (_currentPatientSDO == null || _currentPatientSDO.ID == 0)
+
+                this.ucPlusInfo1.RefreshUserControl();
+                if(_currentPatientSDO == null)
                 {
-                    this.ucPlusInfo1.RefreshUserControl();
                     var dt = this.ucPlusInfo1.GetValue();
                     dt.NATIONAL_NAME = dataPatient.NATIONAL_NAME;
                     dt.NATIONAL_CODE = dataPatient.NATIONAL_CODE;
-                    dt.CCCD_NUMBER = _currentPatientSDO != null ?  _currentPatientSDO.CCCD_NUMBER : null;
-                    dt.CMND_DATE = _currentPatientSDO != null ? _currentPatientSDO.CMND_DATE : null;
                     this.ucPlusInfo1.SetValue(dt);
                     return;
                 }
+
                 dataPatient.ETHNIC_NAME = _currentPatientSDO.ETHNIC_NAME;
                 dataPatient.ETHNIC_CODE = _currentPatientSDO.ETHNIC_CODE;
                 dataPatient.MILITARYRANK_ID = _currentPatientSDO.MILITARY_RANK_ID;
@@ -72,6 +89,9 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                 dataPatient.HT_COMMUNE_NAME = _currentPatientSDO.HT_COMMUNE_NAME;
                 dataPatient.HT_DISTRICT_NAME = _currentPatientSDO.HT_DISTRICT_NAME;
                 dataPatient.HT_PROVINCE_NAME = _currentPatientSDO.HT_PROVINCE_NAME;
+                dataPatient.HT_COMMUNE_CODE = _currentPatientSDO.HT_COMMUNE_CODE;
+                dataPatient.HT_DISTRICT_CODE = _currentPatientSDO.HT_DISTRICT_CODE;
+                dataPatient.HT_PROVINCE_CODE = _currentPatientSDO.HT_PROVINCE_CODE;
                 dataPatient.HT_ADDRESS = _currentPatientSDO.HT_ADDRESS;
                 dataPatient.BLOOD_ABO_CODE = _currentPatientSDO.BLOOD_ABO_CODE;
                 dataPatient.BLOOD_RH_CODE = _currentPatientSDO.BLOOD_RH_CODE;

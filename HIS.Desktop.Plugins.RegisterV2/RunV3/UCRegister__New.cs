@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -11,9 +28,6 @@ using HIS.Desktop.Utility;
 using HIS.Desktop.LocalStorage.LocalData;
 using HIS.Desktop.Plugins.Library.RegisterConfig;
 using MOS.EFMODEL.DataModels;
-using Inventec.Common.Adapter;
-using HIS.Desktop.ApiConsumer;
-using Inventec.Core;
 
 namespace HIS.Desktop.Plugins.RegisterV2.Run2
 {
@@ -104,7 +118,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
         {
             try
             {
-                this.btnSave.Enabled = this.btnSaveAndPrint.Enabled = this.btnTTChuyenTuyen.Enabled = _isEnable;
+                this.btnSave.Enabled = this.btnSaveAndPrint.Enabled = this.btnTTChuyenTuyen.Enabled  = _isEnable;
                 this.dropDownButton__Other.Enabled = this.btnDepositDetail.Enabled = this.btnDepositRequest.Enabled = btnGiayTo.Enabled = this.btnPrint.Enabled = this.btnSaveAndAssain.Enabled = !_isEnable;
                 HIS_PATIENT_TYPE_ALTER hisPatientTypeAlter = null;
 
@@ -135,46 +149,6 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                     this.btnTreatmentBedRoom.Enabled = false;
                 }
 
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Warn(ex);
-            }
-        }
-
-        private void CreateDhst()
-        {
-            try
-            {
-                Inventec.Common.Logging.LogSystem.Debug("CreateDhst.1");
-                if (resultHisPatientProfileSDO != null && resultHisPatientProfileSDO.HisTreatment != null)
-                {
-                    Inventec.Common.Logging.LogSystem.Debug("CreateDhst.2");
-                    var otherServiceReq = ucOtherServiceReqInfo1.GetValue();
-                    if (otherServiceReq != null && otherServiceReq.Weight > 0 && otherServiceReq.Height > 0)
-                    {
-                        Inventec.Common.Logging.LogSystem.Debug("CreateDhst.3");
-                        CommonParam param = new CommonParam();
-                        MOS.EFMODEL.DataModels.HIS_DHST create = new MOS.EFMODEL.DataModels.HIS_DHST();
-                        create.TREATMENT_ID = resultHisPatientProfileSDO.HisTreatment.ID;
-                        create.HEIGHT = otherServiceReq.Height;
-                        create.WEIGHT = otherServiceReq.Weight; 
-                        string loginName = Inventec.UC.Login.Base.ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-                        create.EXECUTE_LOGINNAME = loginName;
-                        create.EXECUTE_ROOM_ID = this.currentModule.RoomId;
-                        if (otherServiceReq.IntructionTime != null)
-                        {
-                            create.EXECUTE_TIME = otherServiceReq.IntructionTime;
-
-                        }
-                        else
-                        {
-                            create.EXECUTE_TIME = null;
-                        }
-                        var resultData = new BackendAdapter(param).Post<MOS.EFMODEL.DataModels.HIS_DHST>(HisRequestUriStore.HIS_DHST_CREATE, ApiConsumers.MosConsumer, create, param);
-                        Inventec.Common.Logging.LogSystem.Debug("CreateDhst.4");
-                    }
-                }
             }
             catch (Exception ex)
             {

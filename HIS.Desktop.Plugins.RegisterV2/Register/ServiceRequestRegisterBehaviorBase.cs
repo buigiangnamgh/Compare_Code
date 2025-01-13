@@ -1,4 +1,21 @@
-﻿using HIS.UC.UCHeniInfo;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using HIS.UC.UCHeniInfo;
 using HIS.Desktop.ApiConsumer;
 using HIS.Desktop.Plugins.RegisterV2.ADO;
 using HIS.Desktop.Plugins.RegisterV2.Run2;
@@ -158,7 +175,6 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
         protected string HospitalizeReasonCode { get; set; }
         protected string HospitalizeReasonName { get; set; }
         protected string HospitalizationReason { get; set; }
-
         public string GUARANTEE_LOGINNAME { get; set; }
         public string GUARANTEE_USERNAME { get; set; }
         public string GUARANTEE_REASON { get; set; }
@@ -218,6 +234,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
         protected HIS.UC.PlusInfo.ADO.UCPatientExtendADO patientInformationADO { get; set; }
         protected HisPatientSDO patientData { get; set; }
         protected HisPatientProfileSDO patientProfile { get; set; }
+        public bool isCheckSS { get; set; }
         protected Module currentModule { get; set; }
         protected UCRegister ucRequestService;
         protected HisPatientProfileSDO heinInfoValue { get; set; }
@@ -262,10 +279,8 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
                 if (this.patientRawInfoValue.GENDER_ID > 0)
                     this.GenderId = this.patientRawInfoValue.GENDER_ID;
                 this.dob = this.patientRawInfoValue.DOB;
-                if (!String.IsNullOrEmpty(this.patientRawInfoValue.CCCD_NUMBER))
-                    this.cCCDNumber = this.patientRawInfoValue.CCCD_NUMBER;
                 this.patientTypeId = this.patientRawInfoValue.PATIENTTYPE_ID;
-                if (this.patientRawInfoValue.CARRER_ID != null && this.patientRawInfoValue.CARRER_ID > 0)
+                if (this.patientRawInfoValue.CARRER_ID != null && this.patientRawInfoValue.CARRER_ID>0)
                     this.careerId = (this.patientRawInfoValue.CARRER_ID);
                 this.careerCode = this.patientRawInfoValue.CARRER_CODE;
                 this.careerName = this.patientRawInfoValue.CARRER_NAME;
@@ -357,7 +372,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
                 {
                     this.isBhytHolded = this.heinInfoValue.HisTreatment.IS_BHYT_HOLDED;
                 }
-
+                this.isCheckSS = ucServiceRequestRegiter.isCheckSS;
                 // UCPlusInfo
                 this.born_provinceCode = patientPlusInformationInfoValue.PROVINCE_OfBIRTH_CODE;
                 this.born_provinceName = patientPlusInformationInfoValue.PROVINCE_OfBIRTH_NAME;
@@ -367,12 +382,12 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
                 this.communeNameKS = patientPlusInformationInfoValue.COMMUNE_OfBIRTH_NAME;
                 this.addressKS = patientPlusInformationInfoValue.ADDRESS_OfBIRTH;
 
-                this.communeNowCode = patientPlusInformationInfoValue.HT_COMMUNE_CODE;
-                this.communeNowName = patientPlusInformationInfoValue.HT_COMMUNE_NAME;
-                this.provinceNowCode = patientPlusInformationInfoValue.HT_PROVINCE_CODE;
-                this.provinceNowName = patientPlusInformationInfoValue.HT_PROVINCE_NAME;
-                this.districtNowCode = patientPlusInformationInfoValue.HT_DISTRICT_CODE;
-                this.districtNowName = patientPlusInformationInfoValue.HT_DISTRICT_NAME;
+                this.communeNowCode = ucRequestService.IsReadCardTheViet ? ucRequestService.HtCommuneCode : patientPlusInformationInfoValue.HT_COMMUNE_CODE;
+                this.communeNowName = ucRequestService.IsReadCardTheViet ? ucRequestService.HtCommuneName : patientPlusInformationInfoValue.HT_COMMUNE_NAME;
+                this.provinceNowCode = ucRequestService.IsReadCardTheViet ? ucRequestService.HtProvinceCode : patientPlusInformationInfoValue.HT_PROVINCE_CODE;
+                this.provinceNowName = ucRequestService.IsReadCardTheViet ? ucRequestService.HtProvinceName : patientPlusInformationInfoValue.HT_PROVINCE_NAME;
+                this.districtNowCode = ucRequestService.IsReadCardTheViet ? ucRequestService.HtDistrictCode : patientPlusInformationInfoValue.HT_DISTRICT_CODE;
+                this.districtNowName = ucRequestService.IsReadCardTheViet ? ucRequestService.HtDistrictName : patientPlusInformationInfoValue.HT_DISTRICT_NAME;
                 this.addressNow = patientPlusInformationInfoValue.HT_ADDRESS;
 
                 if (HIS.Desktop.Plugins.Library.RegisterConfig.AppConfigs.ChangeEthnic != 0)
@@ -630,12 +645,13 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
                 this.patientProfile.HisPatient.HOUSEHOLD_CODE = this.houseHold_Code;
                 this.patientProfile.HisPatient.HOUSEHOLD_RELATION_NAME = this.hoseHold_Relative;
                 this.patientProfile.HisPatient.IS_HIV = this.IsHiv ? (short?)1 : null;
+                this.patientProfile.HisPatient.BRANCH_ID = WorkPlace.GetBranchId();
                 //Kiểm tra số ký tự nhập vào trường CMND để phân biệt là nhập theo CMND hay theo thẻ căn cước công dân. Nhập 9 ký tự số => CMND, nhập 12 ký tự số => căn cước
                 if (!String.IsNullOrEmpty(this.cMNDNumber))
-                {
-                    this.patientProfile.HisPatient.CMND_DATE = this.cMNDDate;
-                    this.patientProfile.HisPatient.CMND_NUMBER = this.cMNDNumber;
-                    this.patientProfile.HisPatient.CMND_PLACE = this.cMNDPlace;
+               {                   
+                        this.patientProfile.HisPatient.CMND_DATE = this.cMNDDate;
+                        this.patientProfile.HisPatient.CMND_NUMBER = this.cMNDNumber;
+                        this.patientProfile.HisPatient.CMND_PLACE = this.cMNDPlace;
                 }
                 else if (!String.IsNullOrEmpty(this.cCCDNumber))
                 {
@@ -654,6 +670,9 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
                 this.patientProfile.HisPatient.HT_COMMUNE_NAME = this.communeNowName;
                 this.patientProfile.HisPatient.HT_DISTRICT_NAME = this.districtNowName;
                 this.patientProfile.HisPatient.HT_PROVINCE_NAME = this.provinceNowName;
+                this.patientProfile.HisPatient.HT_COMMUNE_CODE = this.communeNowCode;
+                this.patientProfile.HisPatient.HT_DISTRICT_CODE = this.districtNowCode;
+                this.patientProfile.HisPatient.HT_PROVINCE_CODE = this.provinceNowCode;
                 this.patientProfile.HisPatient.RELATIVE_MOBILE = this.phone;
 
                 this.patientProfile.HisPatient.BLOOD_ABO_CODE = this.blood_ABO_Code;
@@ -901,6 +920,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Register
                     patientProfile.HisPatientTypeAlter.GUARANTEE_LOGINNAME = this.GUARANTEE_LOGINNAME;
                     patientProfile.HisPatientTypeAlter.GUARANTEE_USERNAME = this.GUARANTEE_USERNAME;
                     patientProfile.HisPatientTypeAlter.GUARANTEE_REASON = this.GUARANTEE_REASON;
+                    patientProfile.HisPatientTypeAlter.IS_NEWBORN = (short)(isCheckSS ? 1 : 0);
                 }
                 else
                 {

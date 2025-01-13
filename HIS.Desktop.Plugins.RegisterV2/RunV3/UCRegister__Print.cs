@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -732,7 +749,8 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                     if (treatments != null && treatments.Count > 0)
                     {
                         treatment4 = treatments.First();
-                    } 
+                    }
+
                     MOS.Filter.HisDepartmentTranViewFilter defilter = new HisDepartmentTranViewFilter();
                     defilter.ID = this.resultHisPatientProfileSDO.HisTreatment.ID;
                     var departmentTrans = new BackendAdapter(new CommonParam()).Get<List<V_HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/GetView", ApiConsumer.ApiConsumers.MosConsumer, defilter, null);
@@ -824,8 +842,9 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                     {
                         treatment4 = treatments.First();
                     }
+
                     MOS.Filter.HisDepartmentTranViewFilter defilter = new HisDepartmentTranViewFilter();
-                    defilter.ID = this.resultHisPatientProfileSDO.HisTreatment.ID;
+                    defilter.TREATMENT_ID = this.resultHisPatientProfileSDO.HisTreatment.ID;
                     var departmentTrans = new BackendAdapter(new CommonParam()).Get<List<V_HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/GetView", ApiConsumer.ApiConsumers.MosConsumer, defilter, null);
                     if (departmentTrans != null && departmentTrans.Count > 0)
                     {

@@ -1,4 +1,21 @@
-﻿using System;
+﻿/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -68,7 +85,13 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 
             return success;
         }
-
+        public bool IsReadCardTheViet = false;
+        public string HtCommuneCode = null;
+        public string HtDistrictCode = null;
+        public string HtProvinceCode = null;
+        public string HtCommuneName = null;
+        public string HtDistrictName = null;
+        public string HtProvinceName = null;
         void SearchAndFillDataCardInfo(string serviceCode)
         {
             try
@@ -79,9 +102,12 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                 CommonParam param = new CommonParam();
                 var patientInRegisterSearchByCard = new BackendAdapter(param).Get<HisCardSDO>(RequestUriStore.HIS_CARD_GETVIEWBYSERVICECODE, ApiConsumers.MosConsumer, serviceCode, HIS.Desktop.Controls.Session.SessionManager.ActionLostToken, param);
                 Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => patientInRegisterSearchByCard), patientInRegisterSearchByCard));
+                IsReadCardTheViet = false;
                 if (patientInRegisterSearchByCard != null)
                 { 
                     var data = this.SearchByCode(patientInRegisterSearchByCard.PatientCode);
+                    //Kiểm tra nếu táp thẻ việt thì lấy thông tin THX HT 
+                    IsReadCardTheViet = true;
                     if (data != null && data.Result != null && data.Result is HisPatientSDO)
                     {
                         //xuandv --- ThongBaoCu
@@ -90,9 +116,12 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                         //this.SetPatientSearchPanel(true);
                         HisPatientSDO patientSDO = (HisPatientSDO)(data.Result);
                         patientSDO.HT_ADDRESS = patientInRegisterSearchByCard.HtAddress;
-                        patientSDO.HT_COMMUNE_NAME = patientInRegisterSearchByCard.HtCommuneName;
-                        patientSDO.HT_DISTRICT_NAME = patientInRegisterSearchByCard.HtDistrictName;
-                        patientSDO.HT_PROVINCE_NAME = patientInRegisterSearchByCard.HtProvinceName;
+                        patientSDO.HT_COMMUNE_NAME = HtCommuneName = patientInRegisterSearchByCard.HtCommuneName;
+                        patientSDO.HT_DISTRICT_NAME = HtDistrictName = patientInRegisterSearchByCard.HtDistrictName;
+                        patientSDO.HT_PROVINCE_NAME = HtProvinceName = patientInRegisterSearchByCard.HtProvinceName;
+                        patientSDO.HT_COMMUNE_CODE = HtCommuneCode = patientInRegisterSearchByCard.HtCommuneCode;
+                        patientSDO.HT_DISTRICT_CODE = HtDistrictCode = patientInRegisterSearchByCard.HtDistrictCode;
+                        patientSDO.HT_PROVINCE_CODE = HtProvinceCode = patientInRegisterSearchByCard.HtProvinceCode;
                         if (ucAddressCombo1 != null)
                             ucAddressCombo1.GetPatientSdo(patientSDO);
                         this.Invoke(new MethodInvoker(delegate()

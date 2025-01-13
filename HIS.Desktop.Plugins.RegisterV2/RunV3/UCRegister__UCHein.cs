@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -24,6 +41,7 @@ using HIS.Desktop.DelegateRegister;
 using HIS.UC.UCOtherServiceReqInfo.ADO;
 using MOS.EFMODEL.DataModels;
 using MOS.LibraryHein.Bhyt;
+using SDA.EFMODEL.DataModels;
 
 namespace HIS.Desktop.Plugins.RegisterV2.Run2
 {
@@ -66,6 +84,17 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                     dataAddressPatient = this.ucAddressCombo1.GetValue() ?? new HIS.UC.AddressCombo.ADO.UCAddressADO();
 
                     Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => dataAddressPatient), dataAddressPatient));
+                    Inventec.Common.Address.AddressProcessor adProc = new Inventec.Common.Address.AddressProcessor(BackendDataWorker.Get<V_SDA_PROVINCE>(), BackendDataWorker.Get<V_SDA_DISTRICT>(), BackendDataWorker.Get<V_SDA_COMMUNE>());
+                    var data = adProc.SplitFromFullAddress(heinCardData.Address);
+                    if (data != null)
+                    {
+                        dataAddressPatient.Province_Code = data.ProvinceCode;
+                        dataAddressPatient.Province_Name = data.ProvinceName;
+                        dataAddressPatient.District_Code = data.DistrictCode;
+                        dataAddressPatient.District_Name = data.DistrictName;
+                        dataAddressPatient.Commune_Code = data.CommuneCode;
+                        dataAddressPatient.Commune_Name = data.CommuneName;
+                    }
                     dataAddressPatient.Address = heinCardData.Address;
                     this.ucAddressCombo1.SetValue(dataAddressPatient);
                     Inventec.Common.Logging.LogSystem.Debug("FillDataAfterSaerchPatientInUCPatientRaw.6");
@@ -127,10 +156,24 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                 dataInitUCHeniInfo.dlgCheckExamHistory = this.CheckHeinCardByServerBhxh;
                 dataInitUCHeniInfo.dlgProcessFillDataCareerUnder6AgeByHeinCardNumber = null;// this.FillDataCareerUnder6AgeByHeinCardNumberUCHeinInfo;
                 dataInitUCHeniInfo.UpdateTranPatiDataByPatientOld = UpdateTranPatiDataByPatientOld;
+                dataInitUCHeniInfo.dlgCheckSS = UpdateCheckSS;
                 this.ucHeinInfo1.InitInputData(dataInitUCHeniInfo);
             }
             catch (Exception ex)
             {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+        
+        private void UpdateCheckSS(bool isCheck)
+        {
+            try
+            {
+                this.isCheckSS = isCheck;
+            }
+            catch (Exception ex)
+            {
+
                 Inventec.Common.Logging.LogSystem.Warn(ex);
             }
         }

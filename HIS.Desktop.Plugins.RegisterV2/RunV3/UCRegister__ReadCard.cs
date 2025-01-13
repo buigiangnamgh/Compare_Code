@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -63,6 +80,12 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
                 patientByCard.WORK_PLACE = cardSDO.WorkPlace;
                 patientByCard.VIR_ADDRESS = cardSDO.VirAddress;
                 patientByCard.PERSON_CODE = cardSDO.PersonCode;
+                patientByCard.HT_COMMUNE_NAME = HtCommuneName = cardSDO.HtCommuneName;
+                patientByCard.HT_DISTRICT_NAME = HtDistrictName = cardSDO.HtDistrictName;
+                patientByCard.HT_PROVINCE_NAME = HtProvinceName = cardSDO.HtProvinceName;
+                patientByCard.HT_COMMUNE_CODE = HtCommuneCode = cardSDO.HtCommuneCode;
+                patientByCard.HT_DISTRICT_CODE = HtDistrictCode = cardSDO.HtDistrictCode;
+                patientByCard.HT_PROVINCE_CODE = HtProvinceCode = cardSDO.HtProvinceCode;
             }
             catch (Exception ex)
             {

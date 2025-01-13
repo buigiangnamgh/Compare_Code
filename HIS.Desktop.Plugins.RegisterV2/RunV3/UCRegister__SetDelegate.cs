@@ -1,4 +1,21 @@
-﻿using System;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -35,13 +52,14 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 				this.ucPatientRaw1.SetDelegateSendPatientName(this.SendPatientName);
 				this.ucPatientRaw1.SetDelegateSendPatientSDO(this.SendPatientSDO);
 				this.ucPatientRaw1.SetDelegateShowCheckWorkingLetter(this.ucHeinInfo1.ShowCheckWorkingLetter);
-                this.ucPatientRaw1.SetDelegateCheckSS(this.ucHeinInfo1.ShowCheckSS);
-                this.ucPatientRaw1.SetDelegateShowOrtherPaySource(this.ucOtherServiceReqInfo1.ShowOrtherPay);
-                this.ucPatientRaw1.SetDelegateSendTypeFind(ChangeFindTypeInPatientRaw);
-                this.ucPatientRaw1.SetDelegateCheckboxExamOnline(this.ucOtherServiceReqInfo1.CheckExamOnline);
+				this.ucPatientRaw1.SetDelegateCheckSS(this.ucHeinInfo1.ShowCheckSS);
+				this.ucPatientRaw1.SetDelegateShowOrtherPaySource(this.ucOtherServiceReqInfo1.ShowOrtherPay);
+				this.ucPatientRaw1.SetDelegateSendTypeFind(ChangeFindTypeInPatientRaw);
+				this.ucPatientRaw1.SetDelegateCheckboxExamOnline(this.ucOtherServiceReqInfo1.CheckExamOnline);
                 this.ucOtherServiceReqInfo1.SetDelegateHeinRightRouteType(this.SetRightRouteEmergencyWhenRegisterOutTime);
 				this.ucOtherServiceReqInfo1.SetDelegatePriorityNumberChanged(this.SetServuceRoomAddButtonWhenRegisterHasPriorityNumber);
 				this.ucOtherServiceReqInfo1.FillDataOweTypeDefault();
+				
 				if (HisConfigCFG.IsAutoFocusToSavePrintAfterChoosingExam)
 				{
 					this.ucServiceRoomInfo1.FocusNextUserControl(focusToBtnSaveAndPrint);
@@ -381,7 +399,7 @@ namespace HIS.Desktop.Plugins.RegisterV2.Run2
 			}
 		}
 
-		private void SetDelegateEnableButtonSave()
+        private void SetDelegateEnableButtonSave()
 		{
 			try
 			{
