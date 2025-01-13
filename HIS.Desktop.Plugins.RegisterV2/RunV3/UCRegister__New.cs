@@ -1,0 +1,185 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using HIS.Desktop.Utility;
+using HIS.Desktop.LocalStorage.LocalData;
+using HIS.Desktop.Plugins.Library.RegisterConfig;
+using MOS.EFMODEL.DataModels;
+using Inventec.Common.Adapter;
+using HIS.Desktop.ApiConsumer;
+using Inventec.Core;
+
+namespace HIS.Desktop.Plugins.RegisterV2.Run2
+{
+    public partial class UCRegister : UserControlBase
+    {
+        private void RefreshUserControl()
+        {
+            try
+            {
+                this.currentHisExamServiceReqResultSDO = null;
+                this.serviceReqDetailSDOs = null;
+                this.resultHisPatientProfileSDO = null;
+                this.dataAddressPatient = new UC.AddressCombo.ADO.UCAddressADO();
+                this.ucHeinInfo1.RefreshUserControl();
+                this.ucPatientRaw1.RefreshUserControl();
+                this.ucAddressCombo1.RefreshUserControl();
+                this.ucImageInfo1.RefreshUserControl();
+                this.ucOtherServiceReqInfo1.RefreshUserControl();
+                this.ucRelativeInfo1.RefreshUserControl();
+                this.ucPlusInfo1.RefreshUserControl();
+                this.SetPatientSearchPanel(false);
+                this.EnableControl(true);
+                this.ucCheckTT1.ResetData();
+                this.ucServiceRoomInfo1.RefreshUserControl();
+                this.transPatiADO = null;
+                this.actionType = GlobalVariables.ActionAdd;
+                this.frm = null;
+                this.ValidatedTTCT = false;
+                this.ResetVariableUCAddress(false);
+                this._TreatmnetIdByAppointmentCode = 0;
+                this.cardSearch = null;
+
+                this.ucHeinInfo1.RefreshUserControl();
+                this.ucPatientRaw1.FocusUserControl();
+
+                if (this.ucPatientRaw1 != null && this.ucPatientRaw1.GetValue().PATIENTTYPE_ID > 0)
+                {
+                    //if (AppConfigs.PatientIdIsNotRequireExamFee != null
+                    //    && AppConfigs.PatientIdIsNotRequireExamFee.Count > 0
+                    //    && AppConfigs.PatientIdIsNotRequireExamFee.Contains(this.ucPatientRaw1.GetValue().PATIENTTYPE_ID))
+                    //{
+                    //    this.AutoSetDataForOtherServiceReqInfo(true, this.ucPatientRaw1.GetValue().PATIENTTYPE_ID);
+                    //}
+                    this.ucOtherServiceReqInfo1.ChangePatientType(this.ucPatientRaw1.GetValue().PATIENTTYPE_ID);
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+
+        private void ResetVariableUCAddress(bool isTrue)
+        {
+            try
+            {
+                this.ucAddressCombo1.isReadCard = isTrue;
+                this.ucAddressCombo1.isPatientBHYT = isTrue;
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+
+        private void SetPatientSearchPanel(bool isFinded)
+        {
+            try
+            {
+                if (isFinded)
+                {
+                    this.lcibtnPatientNewInfo.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Always;
+                }
+                else
+                {
+                    this.currentPatientSDO = null;
+                    this.lcibtnPatientNewInfo.Visibility = DevExpress.XtraLayout.Utils.LayoutVisibility.Never;
+                }
+                Inventec.Common.Logging.LogSystem.Debug("SetPatientSearchPanel");
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+
+        private void EnableControl(bool _isEnable)
+        {
+            try
+            {
+                this.btnSave.Enabled = this.btnSaveAndPrint.Enabled = this.btnTTChuyenTuyen.Enabled = _isEnable;
+                this.dropDownButton__Other.Enabled = this.btnDepositDetail.Enabled = this.btnDepositRequest.Enabled = btnGiayTo.Enabled = this.btnPrint.Enabled = this.btnSaveAndAssain.Enabled = !_isEnable;
+                HIS_PATIENT_TYPE_ALTER hisPatientTypeAlter = null;
+
+                //resultHisPatientProfileSDO,currentHisExamServiceReqResultSDO = null khi bam nut. Va chi ton tai 1 bien co gia tri. Yen tam di
+                if (currentHisExamServiceReqResultSDO != null && currentHisExamServiceReqResultSDO.HisPatientProfile != null && currentHisExamServiceReqResultSDO.HisPatientProfile.HisPatientTypeAlter != null)
+                {
+                    hisPatientTypeAlter = currentHisExamServiceReqResultSDO.HisPatientProfile.HisPatientTypeAlter;
+                }
+
+                if (resultHisPatientProfileSDO != null && resultHisPatientProfileSDO.HisPatientTypeAlter != null)
+                {
+                    hisPatientTypeAlter = resultHisPatientProfileSDO.HisPatientTypeAlter;
+                }
+
+                if (hisPatientTypeAlter != null)
+                {
+                    if (hisPatientTypeAlter.TREATMENT_TYPE_ID != IMSys.DbConfig.HIS_RS.HIS_TREATMENT_TYPE.ID__KHAM)
+                    {
+                        this.btnTreatmentBedRoom.Enabled = !_isEnable;
+                    }
+                    else
+                    {
+                        this.btnTreatmentBedRoom.Enabled = false;
+                    }
+                }
+                else
+                {
+                    this.btnTreatmentBedRoom.Enabled = false;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+
+        private void CreateDhst()
+        {
+            try
+            {
+                Inventec.Common.Logging.LogSystem.Debug("CreateDhst.1");
+                if (resultHisPatientProfileSDO != null && resultHisPatientProfileSDO.HisTreatment != null)
+                {
+                    Inventec.Common.Logging.LogSystem.Debug("CreateDhst.2");
+                    var otherServiceReq = ucOtherServiceReqInfo1.GetValue();
+                    if (otherServiceReq != null && otherServiceReq.Weight > 0 && otherServiceReq.Height > 0)
+                    {
+                        Inventec.Common.Logging.LogSystem.Debug("CreateDhst.3");
+                        CommonParam param = new CommonParam();
+                        MOS.EFMODEL.DataModels.HIS_DHST create = new MOS.EFMODEL.DataModels.HIS_DHST();
+                        create.TREATMENT_ID = resultHisPatientProfileSDO.HisTreatment.ID;
+                        create.HEIGHT = otherServiceReq.Height;
+                        create.WEIGHT = otherServiceReq.Weight; 
+                        string loginName = Inventec.UC.Login.Base.ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+                        create.EXECUTE_LOGINNAME = loginName;
+                        create.EXECUTE_ROOM_ID = this.currentModule.RoomId;
+                        if (otherServiceReq.IntructionTime != null)
+                        {
+                            create.EXECUTE_TIME = otherServiceReq.IntructionTime;
+
+                        }
+                        else
+                        {
+                            create.EXECUTE_TIME = null;
+                        }
+                        var resultData = new BackendAdapter(param).Post<MOS.EFMODEL.DataModels.HIS_DHST>(HisRequestUriStore.HIS_DHST_CREATE, ApiConsumers.MosConsumer, create, param);
+                        Inventec.Common.Logging.LogSystem.Debug("CreateDhst.4");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+        }
+    }
+}
