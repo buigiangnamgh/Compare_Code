@@ -1,4 +1,21 @@
-﻿using HIS.Desktop.LocalStorage.BackendData;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using HIS.Desktop.LocalStorage.BackendData;
 using HIS.Desktop.LocalStorage.HisConfig;
 using HIS.Desktop.LocalStorage.LocalData;
 using Inventec.Common.Logging;
@@ -121,8 +138,20 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.Config
         private const string KEY__MustChooseSeviceExam = "HIS.Desktop.Plugins.TreatmentFinish.MustChooseSeviceExam.Option";
         private const string KEY__EXECUTE_ROOM_PAYMENT_OPTION = "MOS.EPAYMENT.EXECUTE_ROOM_PAYMENT_OPTION";
         private const string KEY__RequiredTreatmentMethodOption = "HIS.Desktop.Plugins.TreatmentFinish.RequiredTreatmentMethodOption";
-        private const string KEY_ShowLastestDHST = "HIS.Desktop.Plugins.Tracking.ShowLastestDhst";
-
+        private const string KEY__InstructionTimeServiceMustBeGreaterThanStartTimeExam = "HIS.Desktop.Plugins.InstructionTimeServiceMustBeGreaterThanStartTimeExam";
+        private const string KEY_TreatmentEndTypeIsTransfer = "HIS.Desktop.Plugins.TreatmentFinish.TreatmentEndTypeIsTransfer";
+        private const string KEY_TuberculosisOption = "HIS.Desktop.Plugins.AssignPrescriptionPK.TuberculosisOption";
+        private const string KEY_ASSIGN_SERVICE_SIMULTANEITY_OPTION = "MOS.HIS_SERVICE_REQ.ASSIGN_SERVICE_SIMULTANEITY_OPTION";
+        private const string KEY_CheckSoNgay = "His.Desktop.Plugins.AssignPrescriptionPK.CheckSoNgay";
+        private const string KEY_IsCheckSubIcdExceedLimit = "HIS.Desktop.Plugins.IsCheckSubIcdExceedLimit";
+        private const string KEY_IsRequiredHtu = "HIS.Desktop.Plugins.AssignPrescription.IsRequiredHtu";
+        internal static string IsRequiredHtu;
+        internal static string IsCheckSubIcdExceedLimit;
+        internal static bool CheckSoNgay;
+        internal static string ASSIGN_SERVICE_SIMULTANEITY_OPTION;
+        internal static string TuberculosisOption;
+        internal static string OptionTreatmentEndTypeIsTransfer;
+        internal static string InstructionTimeServiceMustBeGreaterThanStartTimeExam;
         internal static string RequiredTreatmentMethodOption;
         internal static string ExecuteRoomPaymentOption;
         internal static string MustChooseSeviceExamOption;
@@ -131,7 +160,6 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.Config
         internal static string AcinInteractiveOption;
         internal static string OptionSubIcdWhenFinish;
         internal static bool IsServiceReqIcdOption;
-        internal static bool IsShowLatestDHST;
         internal static string ModuleLinkApply;
         /// <summary>
         /// :Có tự động focus vào ô lời dặn không. 1-có, 0-không
@@ -409,8 +437,14 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.Config
         {
             try
             {
+                IsRequiredHtu = GetValue(KEY_IsRequiredHtu);
+                IsCheckSubIcdExceedLimit = GetValue(KEY_IsCheckSubIcdExceedLimit);
+                CheckSoNgay = GetValue(KEY_CheckSoNgay) == GlobalVariables.CommonStringTrue;
+                ASSIGN_SERVICE_SIMULTANEITY_OPTION = HIS.Desktop.LocalStorage.HisConfig.HisConfigs.Get<string>(KEY_ASSIGN_SERVICE_SIMULTANEITY_OPTION);
+                TuberculosisOption = HIS.Desktop.LocalStorage.HisConfig.HisConfigs.Get<string>(KEY_TuberculosisOption);
+                OptionTreatmentEndTypeIsTransfer = HIS.Desktop.LocalStorage.HisConfig.HisConfigs.Get<string>(KEY_TreatmentEndTypeIsTransfer);
+                InstructionTimeServiceMustBeGreaterThanStartTimeExam = GetValue(KEY__InstructionTimeServiceMustBeGreaterThanStartTimeExam);
                 RequiredTreatmentMethodOption = GetValue(KEY__RequiredTreatmentMethodOption);
-                IsShowLatestDHST = GetValue(KEY_ShowLastestDHST) == GlobalVariables.CommonStringTrue;
                 ExecuteRoomPaymentOption = GetValue(KEY__EXECUTE_ROOM_PAYMENT_OPTION);
                 MustChooseSeviceExamOption = GetValue(KEY__MustChooseSeviceExam);
                 CheckIcdWhenSave = GetValue(CHECK_ICD_WHEN_SAVE);

@@ -1,4 +1,21 @@
-﻿using DevExpress.Utils.Menu;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using DevExpress.Utils.Menu;
 using DevExpress.XtraEditors;
 using HIS.Desktop.ApplicationFont;
 using HIS.Desktop.LocalStorage.BackendData;
@@ -19,6 +36,10 @@ using HIS.Desktop.ApiConsumer;
 using Inventec.Common.Adapter;
 using Inventec.Core;
 using HIS.Desktop.Plugins.AssignPrescriptionPK.ADO;
+using MPS.ProcessorBase;
+using HIS.Desktop.LocalStorage.ConfigApplication;
+using Inventec.Desktop.Common.Message;
+using HIS.Desktop.Plugins.Library.EmrGenerate;
 
 namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
 {
@@ -32,6 +53,13 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                 Inventec.Common.Logging.LogSystem.Debug("InitMenuToButtonPrint .1");
                 HIS.UC.MenuPrint.MenuPrintProcessor menuPrintProcessor = new HIS.UC.MenuPrint.MenuPrintProcessor();
                 menuPrintADOs = new List<HIS.UC.MenuPrint.ADO.MenuPrintADO>();
+
+                HIS.UC.MenuPrint.ADO.MenuPrintADO vttsd = new HIS.UC.MenuPrint.ADO.MenuPrintADO();
+                vttsd.Caption = "In tem vật tư tái sử dụng";
+                vttsd.EventHandler = new EventHandler(OnClickPrintWithPrintTypeCfg);
+                vttsd.PrintTypeCode = PrintTypeCodeStore.PRINT_TYPE_CODE__IN_TEM_VTTSD__MPS000494;
+                vttsd.Tag = PrintTypeCodeStore.PRINT_TYPE_CODE__IN_TEM_VTTSD__MPS000494;
+                menuPrintADOs.Add(vttsd);
 
                 HIS.UC.MenuPrint.ADO.MenuPrintADO menuPrintADO__ThuocTongHop = new HIS.UC.MenuPrint.ADO.MenuPrintADO();
                 menuPrintADO__ThuocTongHop.EventHandler = new EventHandler(OnClickPrintWithPrintTypeCfg);
@@ -408,6 +436,7 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                 }
                 else
                 {
+                    this.lstMatePrintMps494 = new List<HIS_EXP_MEST_MATERIAL>();
                     HIS.Desktop.Plugins.Library.PrintPrescription.PrintPrescriptionProcessor printPrescriptionProcessor;
                     if (GlobalStore.IsTreatmentIn && !GlobalStore.IsCabinet)
                     {
@@ -417,7 +446,11 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                         List<InPatientPresResultSDO> InPatientPresResultSDOForPrints = new List<InPatientPresResultSDO>();
                         InPatientPresResultSDO inPatientPresResultSDO = new InPatientPresResultSDO();
                         if (inPrescriptionResultSDOs != null)
+                        {
+                            if(inPrescriptionResultSDOs.Materials != null && inPrescriptionResultSDOs.Materials.Count > 0)
+                                lstMatePrintMps494.AddRange(inPrescriptionResultSDOs.Materials);
                             InPatientPresResultSDOForPrints.Add(inPrescriptionResultSDOs);
+                        }
                         else if (this.oldServiceReq != null)
                         {
                             if (this.oldExpMest != null && this.oldExpMest.EXP_MEST_TYPE_ID != IMSys.DbConfig.HIS_RS.HIS_EXP_MEST_TYPE.ID__DTT)
@@ -442,6 +475,7 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                             {
                                 AutoMapper.Mapper.CreateMap<V_HIS_EXP_MEST_MATERIAL, HIS_EXP_MEST_MATERIAL>();
                                 inPatientPresResultSDO.Materials = AutoMapper.Mapper.Map<List<HIS_EXP_MEST_MATERIAL>>(this.expMestMaterialEditPrints);
+                                lstMatePrintMps494.AddRange(inPatientPresResultSDO.Materials);
                             }
                             if (this.serviceReqMetys != null && this.serviceReqMetys.Count > 0)
                             {
@@ -456,7 +490,6 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                         }
 
                         Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => InPatientPresResultSDOForPrints), InPatientPresResultSDOForPrints));
-
                         printPrescriptionProcessor = new Library.PrintPrescription.PrintPrescriptionProcessor(InPatientPresResultSDOForPrints, IsNotShow, this.currentModule, true);
                         printPrescriptionProcessor.SetOutHospital((currentMediStockNhaThuocSelecteds != null && currentMediStockNhaThuocSelecteds.Count > 0));
                     }
@@ -558,13 +591,19 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                             OutPatientPresResultSDO.ExpMests = expMestPrintPlus;
                             OutPatientPresResultSDO.Medicines = expMestMedicinePrintPlus;
                             OutPatientPresResultSDO.Materials = expMestMaterialPrintPlus;
+                            if (OutPatientPresResultSDO.Materials != null && OutPatientPresResultSDO.Materials.Count > 0)
+                                lstMatePrintMps494.AddRange(OutPatientPresResultSDO.Materials);
                             OutPatientPresResultSDO.ServiceReqs = serviceReqPrintPlus;
                             OutPatientPresResultSDOForPrints.Add(OutPatientPresResultSDO);
                         }
                         else
                         {
                             if (outPrescriptionResultSDOs != null)
+                            {
+                                if (outPrescriptionResultSDOs.Materials != null && outPrescriptionResultSDOs.Materials.Count > 0)
+                                    lstMatePrintMps494.AddRange(outPrescriptionResultSDOs.Materials);
                                 OutPatientPresResultSDOForPrints.Add(outPrescriptionResultSDOs);
+                            }
                             else if (this.oldServiceReq != null)
                             {
                                 if (this.oldExpMest != null)
@@ -589,6 +628,8 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                                 {
                                     AutoMapper.Mapper.CreateMap<V_HIS_EXP_MEST_MATERIAL, HIS_EXP_MEST_MATERIAL>();
                                     OutPatientPresResultSDO.Materials = AutoMapper.Mapper.Map<List<HIS_EXP_MEST_MATERIAL>>(this.expMestMaterialEditPrints);
+                                    if (OutPatientPresResultSDO.Materials != null && OutPatientPresResultSDO.Materials.Count > 0)
+                                        lstMatePrintMps494.AddRange(OutPatientPresResultSDO.Materials);
                                 }
                                 if (this.serviceReqMetys != null && this.serviceReqMetys.Count > 0)
                                 {
@@ -608,7 +649,13 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
                         printPrescriptionProcessor = new Library.PrintPrescription.PrintPrescriptionProcessor(OutPatientPresResultSDOForPrints, IsNotShow, this.currentModule, true);
                         printPrescriptionProcessor.SetOutHospital((currentMediStockNhaThuocSelecteds != null && currentMediStockNhaThuocSelecteds.Count > 0));
                     }
-                    if (isPrintNow)
+                    this.isPrintNow = isPrintNow;
+                    if (printTypeCode == "Mps000494")
+                    {
+                        Inventec.Common.RichEditor.RichEditorStore richEditorMain = new Inventec.Common.RichEditor.RichEditorStore(ApiConsumer.ApiConsumers.SarConsumer, HIS.Desktop.LocalStorage.ConfigSystem.ConfigSystems.URI_API_SAR, Inventec.Desktop.Common.LanguageManager.LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.ROOT_PATH);
+                        richEditorMain.RunPrintTemplate("Mps000494", DelegateRunPrinter);
+                    }
+                    else if (isPrintNow)
                         printPrescriptionProcessor.Print(previewType);
                     else
                         printPrescriptionProcessor.Print(printTypeCode, isPrintNow, previewType);
@@ -619,6 +666,126 @@ namespace HIS.Desktop.Plugins.AssignPrescriptionPK.AssignPrescription
             {
                 Inventec.Common.Logging.LogSystem.Warn(ex);
             }
+        }
+        bool isPrintNow = false;
+        List<HIS_EXP_MEST_MATERIAL> lstMatePrintMps494 = new List<HIS_EXP_MEST_MATERIAL>();
+        private bool DelegateRunPrinter(string printCode, string fileName)
+        {
+            bool result = false;
+            try
+            {
+                switch (printCode)
+                {
+                    case "Mps000494":
+                        return PrintMps494(printCode, fileName, ref result, isPrintNow, currentModule.RoomId);
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+            return result;
+        }
+
+        private bool PrintMps494(string printCode, string fileName, ref bool result, bool printNow, long roomId)
+        {
+            try
+            {
+                if (lstMatePrintMps494 == null || lstMatePrintMps494.Count == 0)
+                {
+                    XtraMessageBox.Show("Không có vật tư tái sử dụng hoặc vật tư tái sử dụng đã hết số lần tái sử dụng.");
+                    return false;
+                }
+                var expmestMate = lstMatePrintMps494.Where(o => !string.IsNullOrEmpty(o.SERIAL_NUMBER) && o.REMAIN_REUSE_COUNT != null).ToList();
+                if (expmestMate == null || expmestMate.Count == 0)
+                {
+                    XtraMessageBox.Show("Không có vật tư tái sử dụng hoặc vật tư tái sử dụng đã hết số lần tái sử dụng.");
+                    return false;
+                }
+                List<HIS_MATERIAL> mate = new List<HIS_MATERIAL>();
+                var materialIdList = expmestMate.Select(p => p.MATERIAL_ID ?? 0).ToList();
+                if (materialIdList != null && materialIdList.Count > 0)
+                {
+                    MOS.Filter.HisMaterialFilter materialFilter = new HisMaterialFilter();
+                    materialFilter.IDs = materialIdList;
+                    mate = new BackendAdapter(new CommonParam()).Get<List<HIS_MATERIAL>>("api/HisMaterial/Get", ApiConsumer.ApiConsumers.MosConsumer, materialFilter, null);
+                }
+                List<MPS.Processor.Mps000494.PDO.SerialADO> lstSend = new List<MPS.Processor.Mps000494.PDO.SerialADO>();
+                foreach (var m in expmestMate)
+                {
+                    MPS.Processor.Mps000494.PDO.SerialADO ado = new MPS.Processor.Mps000494.PDO.SerialADO();
+                    var te = mate.FirstOrDefault(o => o.ID == m.MATERIAL_ID);
+                    if (te != null)
+                    {
+                        ado.NEXT_REUSABLE_NUMBER = ((te.MAX_REUSE_COUNT ?? 0) - (m.REMAIN_REUSE_COUNT ?? 0)+ 2).ToString();
+                        ado.SIZE = te.MATERIAL_SIZE;
+                        if (Int32.Parse(ado.NEXT_REUSABLE_NUMBER) > (te.MAX_REUSE_COUNT ?? 0))
+                            continue;
+                    }
+                    else
+                        continue;
+                    ado.SERIAL_NUMBER = m.SERIAL_NUMBER;
+                    lstSend.Add(ado);
+                }
+
+                Inventec.Common.Logging.LogSystem.Debug(Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => lstSend), lstSend));
+                if (lstSend == null || lstSend.Count == 0)
+                {
+                    XtraMessageBox.Show("Không có vật tư tái sử dụng hoặc vật tư tái sử dụng đã hết số lần tái sử dụng.");
+                    return false;
+                }
+                MPS.Processor.Mps000494.PDO.Mps000494PDO rdo = new MPS.Processor.Mps000494.PDO.Mps000494PDO(lstSend);
+
+                result = RunPrint(printCode, fileName, rdo, (Inventec.Common.FlexCelPrint.DelegateEventLog)EventLogPrint, result, printNow, roomId);
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Error(ex);
+            }
+            return result;
+        }
+        private void EventLogPrint()
+        {
+            try
+            {
+                string message = "In tem vật tư tái sử dụng. Mã in : Mps000494" + "  TREATMENT_CODE: " + currentTreatmentWithPatientType.TREATMENT_CODE + "  Thời gian in: " + Inventec.Common.DateTime.Convert.SystemDateTimeToTimeSeparateString(DateTime.Now) + "  Người in: " + Inventec.UC.Login.Base.ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+                His.EventLog.Logger.Log(GlobalVariables.APPLICATION_CODE, Inventec.UC.Login.Base.ClientTokenManagerStore.ClientTokenManager.GetLoginName(), message, Inventec.UC.Login.Base.ClientTokenManagerStore.ClientTokenManager.GetLoginAddress());
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+            }
+
+        }
+        bool RunPrint(string printTypeCode, string fileName, object data, Inventec.Common.FlexCelPrint.DelegateEventLog EventLogPrint, bool result, bool _printNow, long? roomId)
+        {
+            try
+            {
+                string printerName = "";
+                if (GlobalVariables.dicPrinter.ContainsKey(printTypeCode))
+                {
+                    printerName = GlobalVariables.dicPrinter[printTypeCode];
+                }
+                if (_printNow)
+                {
+                    result = MPS.MpsPrinter.Run(new MPS.ProcessorBase.Core.PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName, EventLogPrint));
+                }
+                else if (HIS.Desktop.LocalStorage.ConfigApplication.ConfigApplications.CheDoInChoCacChucNangTrongPhanMem == 2)
+                {
+                    result = MPS.MpsPrinter.Run(new MPS.ProcessorBase.Core.PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName, EventLogPrint));
+                }
+                else
+                {
+                    Inventec.Common.SignLibrary.ADO.InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode(currentTreatmentWithPatientType.TREATMENT_CODE, printTypeCode, roomId);
+                    result = MPS.MpsPrinter.Run(new MPS.ProcessorBase.Core.PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.ShowDialog, printerName, EventLogPrint) { EmrInputADO = inputADO });
+                }
+            }
+            catch (Exception ex)
+            {
+                Inventec.Common.Logging.LogSystem.Warn(ex);
+                return false;
+            }
+            return result;
         }
 
     }
