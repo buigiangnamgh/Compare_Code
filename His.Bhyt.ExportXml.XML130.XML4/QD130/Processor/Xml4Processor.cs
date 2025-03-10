@@ -65,7 +65,8 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
                 List<long> listHeinServiceTypeCLS = new List<long>()
                     {
                         IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__CDHA,
-                        IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__TDCN
+                        IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__TDCN,
+                        IMSys.DbConfig.HIS_RS.HIS_HEIN_SERVICE_TYPE.ID__XN
                     };
 
                 List<long> sereServHasTein = new List<long>();
@@ -76,7 +77,7 @@ namespace His.Bhyt.ExportXml.XML130.XML4.QD130.Processor
 
 
                 //lấy các dịch vụ là CDHA, TDCN không có chỉ số
-                var hisSereServs = data.vSereServ.Where(o => listHeinServiceTypeCLS.Contains(o.TDL_HEIN_SERVICE_TYPE_ID.Value) && !sereServHasTein.Contains(o.ID) && !data.vSereServSuin.Exists(p=>p.SERE_SERV_ID == o.ID)).OrderBy(t => t.INTRUCTION_TIME).ToList();
+                var hisSereServs = data.vSereServ.Where(o => listHeinServiceTypeCLS.Contains(o.TDL_HEIN_SERVICE_TYPE_ID.Value) && !sereServHasTein.Contains(o.ID) && !data.vSereServSuin.Exists(p => p.SERE_SERV_ID == o.ID)).OrderBy(t => t.INTRUCTION_TIME).ToList();
                 if (hisSereServs == null) hisSereServs = new List<V_HIS_SERE_SERV_2>();
                 foreach (var hisSereServ in hisSereServs)
                 {
