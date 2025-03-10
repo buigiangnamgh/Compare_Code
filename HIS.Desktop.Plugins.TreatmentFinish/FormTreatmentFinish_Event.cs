@@ -606,14 +606,6 @@ namespace HIS.Desktop.Plugins.TreatmentFinish
                 {
                     hisTreatmentFinishSDO.CareerId = (long)cboCareer.EditValue;
                 }
-
-                if (currentTreatmentFinishSDO != null)
-                {
-                    hisTreatmentFinishSDO.SurgeryName = currentTreatmentFinishSDO.SurgeryName;
-                    hisTreatmentFinishSDO.SurgeryBeginTime = currentTreatmentFinishSDO.SurgeryBeginTime;
-                    hisTreatmentFinishSDO.SurgeryEndTime = currentTreatmentFinishSDO.SurgeryEndTime;
-                    hisTreatmentFinishSDO.Valid1Year = currentTreatmentFinishSDO.Valid1Year;
-                }
             }
             catch (Exception ex)
             {
@@ -724,17 +716,6 @@ namespace HIS.Desktop.Plugins.TreatmentFinish
                 currentTreatmentFinishSDO.DeathCertIssuerUsername = data.DEATH_CERT_ISSUER_USERNAME;
                 currentTreatmentFinishSDO.DeathDocumentTypeCode = data.DEATH_DOCUMENT_TYPE_CODE;              
                 currentTreatmentFinishSDO.DeathStatus = data.DEATH_STATUS;
-                currentTreatmentFinishSDO.SurgeryName = data.SURGERY_NAME;
-                currentTreatmentFinishSDO.SurgeryBeginTime = data.SURGERY_BEGIN_TIME;
-                currentTreatmentFinishSDO.SurgeryEndTime = data.SURGERY_END_TIME;
-                if (data.VALID_1_YEAR == 1)
-                {
-                    currentTreatmentFinishSDO.Valid1Year = true;
-                }
-                else
-                {
-                    currentTreatmentFinishSDO.Valid1Year = false;
-                }
             }
             catch (Exception ex)
             {
