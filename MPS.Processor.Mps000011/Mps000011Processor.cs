@@ -1,20 +1,4 @@
-/* IVT
- * @Project : hisnguonmo
- * Copyright (C) 2017 INVENTEC
- *  
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *  
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
- * GNU General Public License for more details.
- *  
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
+﻿using HIS.Desktop.ApiConsumer;
 using Inventec.Core;
 using MOS.EFMODEL.DataModels;
 using MPS.Processor.Mps000011.PDO;
@@ -155,6 +139,24 @@ namespace MPS.Processor.Mps000011
                     }
                     //Dia chi the
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.HEIN_CARD_ADDRESS, rdo.PatyAlterBhyt.ADDRESS));
+                    if (rdo.currentTreatment.OUT_TIME.HasValue && rdo.PatyAlterBhyt.HEIN_CARD_TO_TIME.HasValue)
+                    {
+                        if (rdo.currentTreatment.OUT_TIME.Value > rdo.PatyAlterBhyt.HEIN_CARD_TO_TIME.Value)
+                        {
+                            SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.EXPIRED_HEIN_CARD, "X"));
+                            SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.UNDETERMINED_HEIN_CARD, ""));
+                        }
+                        else
+                        {
+                            SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.EXPIRED_HEIN_CARD, ""));
+                            SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.UNDETERMINED_HEIN_CARD, ""));
+                        }
+                    }
+                    else
+                    {
+                        SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.EXPIRED_HEIN_CARD, ""));
+                        SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.UNDETERMINED_HEIN_CARD, "X"));
+                    }
                 }
                 else
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.IS_NOT_HEIN, "X"));
@@ -164,10 +166,18 @@ namespace MPS.Processor.Mps000011
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.OPEN_TIME_SEPARATE_STR, Inventec.Common.DateTime.Convert.TimeNumberToTimeString(rdo.currentTreatment.IN_TIME)));
                     if (rdo.currentTreatment.OUT_TIME.HasValue)
                         SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.CLOSE_TIME_SEPARATE_STR, Inventec.Common.DateTime.Convert.TimeNumberToTimeString(rdo.currentTreatment.OUT_TIME.Value)));
+                    MOS.EFMODEL.DataModels.HIS_TREATMENT_EXT treatmentEx = new HIS_TREATMENT_EXT();
+                    MOS.Filter.HisTreatmentExtFilter filter = new MOS.Filter.HisTreatmentExtFilter();
+                    filter.TREATMENT_ID = rdo.currentTreatment.ID;
+                    var treatmentExList = new Inventec.Common.Adapter.BackendAdapter(new Inventec.Core.CommonParam()).Get<List<MOS.EFMODEL.DataModels.HIS_TREATMENT_EXT>>("api/HisTreatmentExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, null);
+                    if (treatmentExList != null && treatmentExList.Count > 0)
+                    {
+                        SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.DAU_HIEU_LAM_SANG, treatmentExList.FirstOrDefault().CLINICAL_NOTE));
+                        SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.XET_NGHIEM, treatmentExList.FirstOrDefault().SUBCLINICAL_RESULT));
+                    }
 
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.MEDI_ORG_TO_NAME, rdo.currentTreatment.MEDI_ORG_NAME));
-                    SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.DAU_HIEU_LAM_SANG, rdo._TreatmentExt != null ? rdo._TreatmentExt.CLINICAL_NOTE : ""));
-                    SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.XET_NGHIEM, rdo._TreatmentExt != null ? rdo._TreatmentExt.SUBCLINICAL_RESULT : ""));
+                   
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.THUOC_DA_DUNG, rdo.currentTreatment.TREATMENT_METHOD));
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.HUONG_DIEU_TRI, rdo.currentTreatment.TREATMENT_DIRECTION));
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.TINH_TRANG, rdo.currentTreatment.PATIENT_CONDITION));
@@ -238,14 +248,26 @@ namespace MPS.Processor.Mps000011
                     SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.ICD_TEXT_STR, rdo.currentTreatment.ICD_TEXT));
                 }
 
-
-
+                //MOS.Filter.HisServiceReqFilter filter = new MOS.Filter.HisServiceReqFilter();
+                //filter.TREATMENT_ID = this.rdo.currentTreatment.ID;
+                //filter.SERVICE_REQ_TYPE_ID = IMSys.DbConfig.HIS_RS.HIS_SERVICE_REQ_TYPE.ID__KH;
+                //CommonParam param = new CommonParam();
+                //HIS_SERVICE_REQ serviceReq = new Inventec.Common.Adapter.BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param).ToList().FirstOrDefault();
+                //if (serviceReq != null)
+                //{
+                //    SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.PATHOLOGICAL_HISTORY, serviceReq.PATHOLOGICAL_HISTORY));
+                //    SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.PATHOLOGICAL_HISTORY_FAMILY, serviceReq.PATHOLOGICAL_HISTORY_FAMILY));
+                //    SetSingleKey(new KeyValue(Mps000011ExtendSingleKey.PATHOLOGICAL_PROCESS, serviceReq.PATHOLOGICAL_PROCESS));
+                //}
+                //else
+                //{
+                //    Inventec.Common.Logging.LogSystem.Debug("rdo._ServiceReq IS null");
+                //}
                 AddObjectKeyIntoListkey<PatientADO>(rdo.PatientADO, false);
                 AddObjectKeyIntoListkey<HIS_TREATMENT>(rdo.currentTreatment, false);
                 AddObjectKeyIntoListkey<V_HIS_PATIENT_TYPE_ALTER>(rdo.PatyAlterBhyt, false);
                 AddObjectKeyIntoListkey<Mps000011ADO>(rdo.Mps000011ADO, false);
                 AddObjectKeyIntoListkey<HIS_TRAN_PATI_TECH>(rdo._TranPatiTech, false);
-                AddObjectKeyIntoListkey<HIS_DHST>(rdo._Dhst, false);
             }
             catch (Exception ex)
             {

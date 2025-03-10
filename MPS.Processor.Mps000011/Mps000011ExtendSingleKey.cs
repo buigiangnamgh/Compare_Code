@@ -1,21 +1,4 @@
-/* IVT
- * @Project : hisnguonmo
- * Copyright (C) 2017 INVENTEC
- *  
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *  
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
- * GNU General Public License for more details.
- *  
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-using MPS.ProcessorBase;
+﻿using MPS.ProcessorBase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,8 +72,10 @@ namespace MPS.Processor.Mps000011
         internal const string DOCTOR_USERNAME = "DOCTOR_USERNAME";
         internal const string TRAN_PATI_HOSPITAL_LOGINNAME = "TRAN_PATI_HOSPITAL_LOGINNAME";
         internal const string TRAN_PATI_HOSPITAL_USERNAME = "TRAN_PATI_HOSPITAL_USERNAME";
-        internal const string SURGERY_NAME = "SURGERY_NAME";
-        internal const string SURGERY_BEGIN_TIME = "SURGERY_BEGIN_TIME ";
-        internal const string SURGERY_END_TIME = "SURGERY_END_TIME ";
+        internal const string PATHOLOGICAL_HISTORY = "PATHOLOGICAL_HISTORY";
+        internal const string PATHOLOGICAL_HISTORY_FAMILY = "PATHOLOGICAL_HISTORY_FAMILY";
+        internal const string PATHOLOGICAL_PROCESS = "PATHOLOGICAL_PROCESS";
+        internal const string EXPIRED_HEIN_CARD = "EXPIRED_HEIN_CARD";
+        internal const string UNDETERMINED_HEIN_CARD = "UNDETERMINED_HEIN_CARD";
     }
 }
