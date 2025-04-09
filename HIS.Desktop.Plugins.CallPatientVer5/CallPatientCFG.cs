@@ -1,4 +1,21 @@
-﻿using Inventec.Common.LocalStorage.SdaConfig;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using Inventec.Common.LocalStorage.SdaConfig;
 using Inventec.Common.Logging;
 using SDA.EFMODEL.DataModels;
 using System;
@@ -23,7 +40,6 @@ namespace HIS.Desktop.Plugins.CallPatientVer5
 
         private const string CALL_PATIENT_DEN = "EXE.CALL_PATIENT.DEN";
         private const string CALL_PATIENT_CO_STT = "EXE.CALL_PATIENT.CO_STT";
-        private const string CALL_PATIENT_THONG_BAO = "EXE.WAITING_SCREEN.THONG_BAO";
         private const string CALL_PATIENT_MOI_BENH_NHAN = "EXE.CALL_PATIENT.MOI_BENH_NHAN";
         private const string THIS = "EXE.WAITING_SCREEN.ORGANIZATION_NAME";
         private const string ROOM_NAM_COLOR_CODES = "EXE.WAITING_SCREEN.ROOM_NAME.COLOR_CODES";//Mã màu chữ phòng khám
@@ -228,19 +244,6 @@ namespace HIS.Desktop.Plugins.CallPatientVer5
                 callPatientCoStt = value;
             }
         }
-        private static string callPatientThongBao;
-        public static string CALL_PATIENT_THONG_BAO_STR
-        {
-            get
-            {
-                callPatientThongBao = GetName(CALL_PATIENT_THONG_BAO);
-                return callPatientThongBao;
-            }
-            set
-            {
-                callPatientThongBao = value;
-            }
-        }
         private static string organizationName;
         public static string ORGANIZATION_NAME
         {
@@ -384,9 +387,6 @@ namespace HIS.Desktop.Plugins.CallPatientVer5
                 timerForHightLightCallAPatient = value;
             }
         }
-
-
-
         private static List<int> parentBackColorCodes;
         public static List<int> PARENT_BACK_COLOR_CODES
         {

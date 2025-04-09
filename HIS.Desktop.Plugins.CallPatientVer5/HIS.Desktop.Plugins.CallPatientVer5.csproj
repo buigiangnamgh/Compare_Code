@@ -32,7 +32,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AutoMapper">
-      <HintPath>..\..\..\..\..\..\RELEASE\MOS\AutoMapper.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\MOS\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="AxInterop.WMPLib">
       <HintPath>..\..\ReferencedAssemblies\AxInterop.WMPLib.dll</HintPath>
@@ -45,109 +45,101 @@
     <Reference Include="DevExpress.XtraGrid.v15.2, Version=15.2.9.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v15.2, Version=15.2.9.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraPrinting.v15.2, Version=15.2.9.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
-    <Reference Include="HIS.Desktop.Library.CacheClient, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\TEST\HIS\x64\ReferencedAssemblies\HIS.Desktop.Library.CacheClient.dll</HintPath>
-    </Reference>
     <Reference Include="IMSys.DbConfig.HIS_RS">
-      <HintPath>..\..\..\..\..\..\RELEASE\IMSys.DbConfig\IMSys.DbConfig.HIS_RS\IMSys.DbConfig.HIS_RS.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\IMSys.DbConfig\IMSys.DbConfig.HIS_RS\IMSys.DbConfig.HIS_RS.dll</HintPath>
     </Reference>
     <Reference Include="Interop.WMPLib">
       <HintPath>..\..\ReferencedAssemblies\Interop.WMPLib.dll</HintPath>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Inventec.Backend.EFMODEL">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Backend\Inventec.Backend.EFMODEL\Inventec.Backend.EFMODEL.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Backend\Inventec.Backend.EFMODEL\Inventec.Backend.EFMODEL.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.Adapter">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.Adapter\Inventec.Common.Adapter.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.Adapter\Inventec.Common.Adapter.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.DateTime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.DateTime\Inventec.Common.DateTime.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.DateTime\Inventec.Common.DateTime.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.LocalStorage.SdaConfig, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.LocalStorage.SdaConfig\Inventec.Common.LocalStorage.SdaConfig.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.LocalStorage.SdaConfig\Inventec.Common.LocalStorage.SdaConfig.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.Logging">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.Logging\Inventec.Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.Logging\Inventec.Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.Resource">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.Resource\Inventec.Common.Resource.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.Resource\Inventec.Common.Resource.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.TypeConvert">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.TypeConvert\Inventec.Common.TypeConvert.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.TypeConvert\Inventec.Common.TypeConvert.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Common.WebApiClient">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Common\Inventec.Common.Adapter\Inventec.Common.WebApiClient.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Common\Inventec.Common.Adapter\Inventec.Common.WebApiClient.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Core">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Core\Inventec.Core.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Core\Inventec.Core.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Desktop.Common.LanguageManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Desktop\Inventec.Desktop.Common.LanguageManager\Inventec.Desktop.Common.LanguageManager.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Desktop\Inventec.Desktop.Common.LanguageManager\Inventec.Desktop.Common.LanguageManager.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Desktop.Common.LibraryMessage">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Desktop\Inventec.Desktop.Common.LibraryMessage\Inventec.Desktop.Common.LibraryMessage.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Desktop\Inventec.Desktop.Common.LibraryMessage\Inventec.Desktop.Common.LibraryMessage.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Desktop.Common.Message, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Desktop\Inventec.Desktop.Common.Message\Inventec.Desktop.Common.Message.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Desktop\Inventec.Desktop.Common.Message\Inventec.Desktop.Common.Message.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Desktop.Common.Modules">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Desktop\Inventec.Desktop.Common.Module\Inventec.Desktop.Common.Modules.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Desktop\Inventec.Desktop.Common.Module\Inventec.Desktop.Common.Modules.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Desktop.Core">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Desktop\Inventec.Desktop.Core\Inventec.Desktop.Core.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Desktop\Inventec.Desktop.Core\Inventec.Desktop.Core.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Speech">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Speech\Inventec.Speech.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Speech\Inventec.Speech.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Token.ClientSystem">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Token\Inventec.Token.ClientSystem\Inventec.Token.ClientSystem.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Token\Inventec.Token.ClientSystem\Inventec.Token.ClientSystem.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.Token.Core">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.Token\Inventec.Token.Core\Inventec.Token.Core.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.Token\Inventec.Token.Core\Inventec.Token.Core.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.UC.Login">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.UC\Inventec.UC.Login\Inventec.UC.Login.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.UC\Inventec.UC.Login\Inventec.UC.Login.dll</HintPath>
     </Reference>
     <Reference Include="Inventec.UC.Paging">
-      <HintPath>..\..\..\..\..\..\RELEASE\Inventec.UC\Inventec.UC.Paging\Inventec.UC.Paging.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\Inventec.UC\Inventec.UC.Paging\Inventec.UC.Paging.dll</HintPath>
     </Reference>
-    <Reference Include="MOS.EFMODEL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\DkNA\HIS\2.287.0\MOS.EFMODEL.dll</HintPath>
+    <Reference Include="MOS.EFMODEL">
+      <HintPath>..\..\..\..\LIB\MOS\MOS.EFMODEL.dll</HintPath>
     </Reference>
-    <Reference Include="MOS.Filter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\DkNA\HIS\2.287.0\MOS.Filter.dll</HintPath>
+    <Reference Include="MOS.Filter">
+      <HintPath>..\..\..\..\LIB\MOS\MOS.Filter.dll</HintPath>
     </Reference>
-    <Reference Include="MOS.SDO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\DkNA\HIS\2.287.0\MOS.SDO.dll</HintPath>
+    <Reference Include="MOS.SDO">
+      <HintPath>..\..\..\..\LIB\MOS\MOS.SDO.dll</HintPath>
     </Reference>
-    <Reference Include="MRS.SDO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\DkNA\HIS\2.287.0\MRS.SDO.dll</HintPath>
+    <Reference Include="MOS.TDO">
+      <HintPath>..\..\..\..\LIB\MOS\MOS.TDO.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\ReferencedAssemblies\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Library packages\Newtonsoft.Json.6.0.8\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="SDA.EFMODEL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\SDA\SDA.EFMODEL.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\SDA\SDA.EFMODEL.dll</HintPath>
     </Reference>
     <Reference Include="SDA.Filter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\SDA\SDA.Filter.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\SDA\SDA.Filter.dll</HintPath>
     </Reference>
     <Reference Include="SDA.SDO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\RELEASE\SDA\SDA.SDO.dll</HintPath>
+      <HintPath>..\..\..\..\LIB\SDA\SDA.SDO.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -168,13 +160,31 @@
     <Compile Include="CallPatient\CallPatienBehavior.cs" />
     <Compile Include="CallPatient\CallPatienFactory.cs" />
     <Compile Include="CallPatient\ICallPatien.cs" />
-    <Compile Include="CallPatient\WaitExam.cs" />
     <Compile Include="ChooseRoomForWaitingScreenProcess.cs" />
+<<<<<<< HEAD
+    <Compile Include="frmChooseRoomForWaitingScreen.cs" />
+    <Compile Include="frmChooseRoomForWaitingScreen.Designer.cs">
+      <DependentUpon>frmChooseRoomForWaitingScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWaitingScreen.cs" />
+    <Compile Include="frmWaitingScreen.Designer.cs">
+      <DependentUpon>frmWaitingScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmWaitingScreen_QY.cs" />
+=======
+    <Compile Include="Class\DisplayOptionADO.cs" />
+    <Compile Include="Class\ServiceReq1ADOWorker.cs" />
     <Compile Include="frmChooseRoomForWaitingScreen.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="frmChooseRoomForWaitingScreen.Designer.cs">
       <DependentUpon>frmChooseRoomForWaitingScreen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="frmDisplayOption.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDisplayOption.Designer.cs">
+      <DependentUpon>frmDisplayOption.cs</DependentUpon>
     </Compile>
     <Compile Include="frmWaitingScreen.cs">
       <SubType>Form</SubType>
@@ -182,22 +192,42 @@
     <Compile Include="frmWaitingScreen.Designer.cs">
       <DependentUpon>frmWaitingScreen.cs</DependentUpon>
     </Compile>
+    <Compile Include="frmWaitingScreen_QY_New.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmWaitingScreen_QY_New.Designer.cs">
+      <DependentUpon>frmWaitingScreen_QY_New.cs</DependentUpon>
+    </Compile>
     <Compile Include="frmWaitingScreen_QY.cs">
       <SubType>Form</SubType>
     </Compile>
+>>>>>>> remotes/origin/Develop
     <Compile Include="frmWaitingScreen_QY.Designer.cs">
       <DependentUpon>frmWaitingScreen_QY.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\ResourceLanguageManager.cs" />
     <Compile Include="RoomWaitingScreenValidation.cs" />
+    <Compile Include="Template\UcCallStt.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Template\UcCallStt.Designer.cs">
+      <DependentUpon>UcCallStt.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="frmChooseRoomForWaitingScreen.resx">
       <DependentUpon>frmChooseRoomForWaitingScreen.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="frmDisplayOption.resx">
+      <DependentUpon>frmDisplayOption.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="frmWaitingScreen.resx">
       <DependentUpon>frmWaitingScreen.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmWaitingScreen_QY_New.resx">
+      <DependentUpon>frmWaitingScreen_QY_New.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="frmWaitingScreen_QY.resx">
@@ -208,6 +238,9 @@
     <EmbeddedResource Include="Resources\Lang.en.resx" />
     <EmbeddedResource Include="Resources\Lang.vi.resx">
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\UcCallStt.resx">
+      <DependentUpon>UcCallStt.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -271,10 +304,12 @@
       <Project>{2aad22db-2166-4be8-ae52-335b21dc03fc}</Project>
       <Name>HIS.Desktop.Utilities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HIS.Desktop.Library.CacheClient\HIS.Desktop.Library.CacheClient.csproj">
+      <Project>{64837e01-803d-4f1e-9dfc-d34b38ea78f9}</Project>
+      <Name>HIS.Desktop.Library.CacheClient</Name>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Class\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>echo PREBUILDSTEP for $(ProjectName)

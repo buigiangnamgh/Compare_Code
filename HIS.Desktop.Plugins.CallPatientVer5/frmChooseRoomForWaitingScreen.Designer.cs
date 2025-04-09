@@ -1,4 +1,21 @@
-﻿namespace HIS.Desktop.Plugins.CallPatientVer5
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+namespace HIS.Desktop.Plugins.CallPatientVer5
 {
     partial class frmChooseRoomForWaitingScreen
     {
@@ -28,6 +45,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.chkIsNotInDebt = new DevExpress.XtraEditors.CheckEdit();
             this.layoutControl4 = new DevExpress.XtraLayout.LayoutControl();
@@ -53,8 +71,8 @@
             this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem3 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem5 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.dxErrorProvider1 = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider();
-            this.dxValidationProviderControl = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider();
+            this.dxErrorProvider1 = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider(this.components);
+            this.dxValidationProviderControl = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.chkIsNotInDebt.Properties)).BeginInit();
@@ -92,20 +110,18 @@
             this.layoutControl1.Controls.Add(this.layoutControl2);
             this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.layoutControl1.Location = new System.Drawing.Point(0, 0);
-            this.layoutControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.layoutControl1.Name = "layoutControl1";
             this.layoutControl1.Root = this.layoutControlGroup1;
-            this.layoutControl1.Size = new System.Drawing.Size(431, 257);
+            this.layoutControl1.Size = new System.Drawing.Size(323, 209);
             this.layoutControl1.TabIndex = 0;
             this.layoutControl1.Text = "layoutControl1";
             // 
             // chkIsNotInDebt
             // 
-            this.chkIsNotInDebt.Location = new System.Drawing.Point(16, 180);
-            this.chkIsNotInDebt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkIsNotInDebt.Location = new System.Drawing.Point(12, 146);
             this.chkIsNotInDebt.Name = "chkIsNotInDebt";
             this.chkIsNotInDebt.Properties.Caption = "Chỉ hiển thị bệnh nhân đã đóng tiền";
-            this.chkIsNotInDebt.Size = new System.Drawing.Size(399, 21);
+            this.chkIsNotInDebt.Size = new System.Drawing.Size(299, 19);
             this.chkIsNotInDebt.StyleController = this.layoutControl1;
             this.chkIsNotInDebt.TabIndex = 7;
             this.chkIsNotInDebt.CheckedChanged += new System.EventHandler(this.chkIsNotInDebt_CheckedChanged);
@@ -113,11 +129,10 @@
             // layoutControl4
             // 
             this.layoutControl4.Controls.Add(this.lbcRoom);
-            this.layoutControl4.Location = new System.Drawing.Point(16, 16);
-            this.layoutControl4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.layoutControl4.Location = new System.Drawing.Point(12, 12);
             this.layoutControl4.Name = "layoutControl4";
             this.layoutControl4.Root = this.layoutControlGroup3;
-            this.layoutControl4.Size = new System.Drawing.Size(399, 50);
+            this.layoutControl4.Size = new System.Drawing.Size(299, 42);
             this.layoutControl4.TabIndex = 6;
             this.layoutControl4.Text = "layoutControl4";
             // 
@@ -125,11 +140,10 @@
             // 
             this.lbcRoom.Appearance.Font = new System.Drawing.Font("Tahoma", 10F);
             this.lbcRoom.AutoSizeMode = DevExpress.XtraEditors.LabelAutoSizeMode.None;
-            this.lbcRoom.Location = new System.Drawing.Point(3, 3);
-            this.lbcRoom.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.lbcRoom.Location = new System.Drawing.Point(2, 2);
             this.lbcRoom.Name = "lbcRoom";
-            this.lbcRoom.Padding = new System.Windows.Forms.Padding(0, 6, 0, 0);
-            this.lbcRoom.Size = new System.Drawing.Size(393, 27);
+            this.lbcRoom.Padding = new System.Windows.Forms.Padding(0, 5, 0, 0);
+            this.lbcRoom.Size = new System.Drawing.Size(295, 21);
             this.lbcRoom.StyleController = this.layoutControl4;
             this.lbcRoom.TabIndex = 4;
             this.lbcRoom.Text = "labelControl1";
@@ -143,7 +157,7 @@
             this.layoutControlGroup3.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup3.Name = "layoutControlGroup3";
             this.layoutControlGroup3.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.layoutControlGroup3.Size = new System.Drawing.Size(399, 50);
+            this.layoutControlGroup3.Size = new System.Drawing.Size(299, 42);
             this.layoutControlGroup3.TextVisible = false;
             // 
             // layoutControlItem4
@@ -151,29 +165,27 @@
             this.layoutControlItem4.Control = this.lbcRoom;
             this.layoutControlItem4.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem4.Name = "layoutControlItem4";
-            this.layoutControlItem4.Size = new System.Drawing.Size(399, 50);
+            this.layoutControlItem4.Size = new System.Drawing.Size(299, 42);
             this.layoutControlItem4.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem4.TextVisible = false;
             // 
             // layoutControl3
             // 
             this.layoutControl3.Controls.Add(this.tgExtendMonitor);
-            this.layoutControl3.Location = new System.Drawing.Point(16, 207);
-            this.layoutControl3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.layoutControl3.Location = new System.Drawing.Point(12, 169);
             this.layoutControl3.Name = "layoutControl3";
             this.layoutControl3.Root = this.layoutControlGroup2;
-            this.layoutControl3.Size = new System.Drawing.Size(399, 34);
+            this.layoutControl3.Size = new System.Drawing.Size(299, 28);
             this.layoutControl3.TabIndex = 5;
             this.layoutControl3.Text = "layoutControl3";
             // 
             // tgExtendMonitor
             // 
-            this.tgExtendMonitor.Location = new System.Drawing.Point(160, 3);
-            this.tgExtendMonitor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tgExtendMonitor.Location = new System.Drawing.Point(120, 2);
             this.tgExtendMonitor.Name = "tgExtendMonitor";
             this.tgExtendMonitor.Properties.OffText = "Bật màn hình mở rộng";
             this.tgExtendMonitor.Properties.OnText = "Bật màn hình mở rộng";
-            this.tgExtendMonitor.Size = new System.Drawing.Size(236, 26);
+            this.tgExtendMonitor.Size = new System.Drawing.Size(177, 24);
             this.tgExtendMonitor.StyleController = this.layoutControl3;
             this.tgExtendMonitor.TabIndex = 4;
             this.tgExtendMonitor.Toggled += new System.EventHandler(this.tgExtendMonitor_Toggled);
@@ -188,15 +200,15 @@
             this.layoutControlGroup2.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup2.Name = "layoutControlGroup2";
             this.layoutControlGroup2.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.layoutControlGroup2.Size = new System.Drawing.Size(399, 34);
+            this.layoutControlGroup2.Size = new System.Drawing.Size(299, 28);
             this.layoutControlGroup2.TextVisible = false;
             // 
             // layoutControlItem6
             // 
             this.layoutControlItem6.Control = this.tgExtendMonitor;
-            this.layoutControlItem6.Location = new System.Drawing.Point(157, 0);
+            this.layoutControlItem6.Location = new System.Drawing.Point(118, 0);
             this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(242, 34);
+            this.layoutControlItem6.Size = new System.Drawing.Size(181, 28);
             this.layoutControlItem6.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem6.TextVisible = false;
             // 
@@ -205,30 +217,27 @@
             this.emptySpaceItem1.AllowHotTrack = false;
             this.emptySpaceItem1.Location = new System.Drawing.Point(0, 0);
             this.emptySpaceItem1.Name = "emptySpaceItem1";
-            this.emptySpaceItem1.Size = new System.Drawing.Size(157, 34);
+            this.emptySpaceItem1.Size = new System.Drawing.Size(118, 28);
             this.emptySpaceItem1.TextSize = new System.Drawing.Size(0, 0);
             // 
             // layoutControl2
             // 
             this.layoutControl2.Controls.Add(this.gridControlExecuteStatus);
-            this.layoutControl2.Location = new System.Drawing.Point(16, 72);
-            this.layoutControl2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.layoutControl2.Location = new System.Drawing.Point(12, 58);
             this.layoutControl2.Name = "layoutControl2";
             this.layoutControl2.Root = this.Root;
-            this.layoutControl2.Size = new System.Drawing.Size(399, 102);
+            this.layoutControl2.Size = new System.Drawing.Size(299, 84);
             this.layoutControl2.TabIndex = 4;
             this.layoutControl2.Text = "layoutControl2";
             // 
             // gridControlExecuteStatus
             // 
-            this.gridControlExecuteStatus.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.gridControlExecuteStatus.Location = new System.Drawing.Point(3, 3);
+            this.gridControlExecuteStatus.Location = new System.Drawing.Point(2, 2);
             this.gridControlExecuteStatus.MainView = this.gridViewExecuteStatus;
-            this.gridControlExecuteStatus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gridControlExecuteStatus.Name = "gridControlExecuteStatus";
             this.gridControlExecuteStatus.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.CheckEditStt});
-            this.gridControlExecuteStatus.Size = new System.Drawing.Size(393, 96);
+            this.gridControlExecuteStatus.Size = new System.Drawing.Size(295, 80);
             this.gridControlExecuteStatus.TabIndex = 4;
             this.gridControlExecuteStatus.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridViewExecuteStatus});
@@ -292,7 +301,7 @@
             this.Root.Location = new System.Drawing.Point(0, 0);
             this.Root.Name = "Root";
             this.Root.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-            this.Root.Size = new System.Drawing.Size(399, 102);
+            this.Root.Size = new System.Drawing.Size(299, 84);
             this.Root.TextVisible = false;
             // 
             // layoutControlItem7
@@ -300,7 +309,7 @@
             this.layoutControlItem7.Control = this.gridControlExecuteStatus;
             this.layoutControlItem7.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem7.Name = "layoutControlItem7";
-            this.layoutControlItem7.Size = new System.Drawing.Size(399, 102);
+            this.layoutControlItem7.Size = new System.Drawing.Size(299, 84);
             this.layoutControlItem7.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem7.TextVisible = false;
             // 
@@ -315,24 +324,24 @@
             this.layoutControlItem5});
             this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
             this.layoutControlGroup1.Name = "layoutControlGroup1";
-            this.layoutControlGroup1.Size = new System.Drawing.Size(431, 257);
+            this.layoutControlGroup1.Size = new System.Drawing.Size(323, 209);
             this.layoutControlGroup1.TextVisible = false;
             // 
             // layoutControlItem1
             // 
             this.layoutControlItem1.Control = this.layoutControl2;
-            this.layoutControlItem1.Location = new System.Drawing.Point(0, 56);
+            this.layoutControlItem1.Location = new System.Drawing.Point(0, 46);
             this.layoutControlItem1.Name = "layoutControlItem1";
-            this.layoutControlItem1.Size = new System.Drawing.Size(405, 108);
+            this.layoutControlItem1.Size = new System.Drawing.Size(303, 88);
             this.layoutControlItem1.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem1.TextVisible = false;
             // 
             // layoutControlItem2
             // 
             this.layoutControlItem2.Control = this.layoutControl3;
-            this.layoutControlItem2.Location = new System.Drawing.Point(0, 191);
+            this.layoutControlItem2.Location = new System.Drawing.Point(0, 157);
             this.layoutControlItem2.Name = "layoutControlItem2";
-            this.layoutControlItem2.Size = new System.Drawing.Size(405, 40);
+            this.layoutControlItem2.Size = new System.Drawing.Size(303, 32);
             this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem2.TextVisible = false;
             // 
@@ -341,16 +350,16 @@
             this.layoutControlItem3.Control = this.layoutControl4;
             this.layoutControlItem3.Location = new System.Drawing.Point(0, 0);
             this.layoutControlItem3.Name = "layoutControlItem3";
-            this.layoutControlItem3.Size = new System.Drawing.Size(405, 56);
+            this.layoutControlItem3.Size = new System.Drawing.Size(303, 46);
             this.layoutControlItem3.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem3.TextVisible = false;
             // 
             // layoutControlItem5
             // 
             this.layoutControlItem5.Control = this.chkIsNotInDebt;
-            this.layoutControlItem5.Location = new System.Drawing.Point(0, 164);
+            this.layoutControlItem5.Location = new System.Drawing.Point(0, 134);
             this.layoutControlItem5.Name = "layoutControlItem5";
-            this.layoutControlItem5.Size = new System.Drawing.Size(405, 27);
+            this.layoutControlItem5.Size = new System.Drawing.Size(303, 23);
             this.layoutControlItem5.TextSize = new System.Drawing.Size(0, 0);
             this.layoutControlItem5.TextVisible = false;
             // 
@@ -364,11 +373,10 @@
             // 
             // frmChooseRoomForWaitingScreen
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(431, 257);
+            this.ClientSize = new System.Drawing.Size(323, 209);
             this.Controls.Add(this.layoutControl1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "frmChooseRoomForWaitingScreen";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Màn hình chờ phòng xử lý";
