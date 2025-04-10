@@ -1,21 +1,4 @@
-/* IVT
- * @Project : hisnguonmo
- * Copyright (C) 2017 INVENTEC 1
- *  
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *  
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
- * GNU General Public License for more details.
- *  
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-using DevExpress.XtraEditors;
+﻿using DevExpress.XtraEditors;
 using HIS.Desktop.ApiConsumer;
 using HIS.Desktop.LocalStorage.BackendData;
 using HIS.Desktop.LocalStorage.HisConfig;
@@ -99,7 +82,6 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
                 Inventec.Common.Logging.LogSystem.Debug("InitComboUser.4");
                 string loginName = Inventec.UC.Login.Base.ClientTokenManagerStore.ClientTokenManager.GetLoginName();
                 var oneUser = (datas != null ? datas.Where(o => o.LOGINNAME.ToUpper().Equals(loginName.ToUpper())).FirstOrDefault() : null);
-
 
                 if (this.previusTreatmentId > 0 && this.currentHisTreatment != null)
                 {
@@ -585,11 +567,11 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
                 
                 List<ColumnInfo> columnInfos = new List<ColumnInfo>();
                 columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_CODE", "", 100, 1));
-                columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_NAME", "", 250, 2));
-                ControlEditorADO controlEditorADO = new ControlEditorADO("EXECUTE_ROOM_NAME", "ROOM_ID", columnInfos, false, 350);
+                columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_NAME", "", 400, 2));
+                ControlEditorADO controlEditorADO = new ControlEditorADO("EXECUTE_ROOM_NAME", "ROOM_ID", columnInfos, false, 500);
                 ControlEditorLoader.Load(this.repositoryItemcboExcuteRoom_TabService, executeRooms, controlEditorADO);
                 //executeRoomDefault = SetDefaultExcuteRoom(executeRooms);
-
+                //repositoryItemcboExcuteRoomPlus_TabService.BestFitWidth = 20;
                 ControlEditorLoader.Load(this.repositoryItemcboExcuteRoomPlus_TabService, executeRooms, controlEditorADO);
             }
             catch (Exception ex)
@@ -661,12 +643,12 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
             try
             {
                 List<MOS.EFMODEL.DataModels.V_HIS_EXECUTE_ROOM> executeRoomFilters = ProcessExecuteRoom();
-                data = (executeRoomFilters != null && executeRoomFilters.Count > 0 && data != null && data.Count > 0) ? data.Where(p => executeRoomFilters.Select(o => o.ID).Distinct().Contains(p.ID)
+                data = (executeRoomFilters != null && executeRoomFilters.Count > 0) ? data.Where(p => executeRoomFilters.Select(o => o.ID).Distinct().Contains(p.ID)
                     || p.ROOM_TYPE_ID == IMSys.DbConfig.HIS_RS.HIS_ROOM_TYPE.ID__BUONG).ToList() : null;
                 List<ColumnInfo> columnInfos = new List<ColumnInfo>();
-                columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_CODE", "", 100, 1));
-                columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_NAME", "", 250, 2));
-                ControlEditorADO controlEditorADO = new ControlEditorADO("EXECUTE_ROOM_NAME", "ROOM_ID", columnInfos, false, 350);
+                columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_CODE", "", 70, 1));
+                columnInfos.Add(new ColumnInfo("EXECUTE_ROOM_NAME", "", 400, 2));
+                ControlEditorADO controlEditorADO = new ControlEditorADO("EXECUTE_ROOM_NAME", "ROOM_ID", columnInfos, false, 470);
                 ControlEditorLoader.Load(excuteRoomCombo, data, controlEditorADO);
                 //executeRoomDefault = SetDefaultExcuteRoom(data);
             }

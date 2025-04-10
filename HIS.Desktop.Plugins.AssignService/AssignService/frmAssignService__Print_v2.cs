@@ -1,21 +1,4 @@
-/* IVT
- * @Project : hisnguonmo
- * Copyright (C) 2017 INVENTEC 
- *   
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *  
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
- * GNU General Public License for more details.
- *  
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <http://www.gnu.org/licenses/>.
- */
-using HIS.Desktop.LocalStorage.BackendData;
+﻿using HIS.Desktop.LocalStorage.BackendData;
 using HIS.Desktop.LocalStorage.ConfigApplication;
 using HIS.Desktop.LocalStorage.LocalData;
 using HIS.Desktop.Plugins.AssignService.Config;
@@ -24,7 +7,6 @@ using HIS.Desktop.Plugins.Library.PrintBordereau.ADO;
 using HIS.Desktop.Plugins.Library.PrintBordereau.Base;
 using HIS.Desktop.Print;
 using Inventec.Common.Adapter;
-using Inventec.Common.SignLibrary.DTO;
 using Inventec.Core;
 using Inventec.Desktop.Common.LanguageManager;
 using Inventec.Desktop.Common.Message;
@@ -38,7 +20,7 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
     public partial class frmAssignService : HIS.Desktop.Utility.FormBase
     {
         Library.PrintServiceReq.PrintServiceReqProcessor PrintServiceReqProcessor;
-        Dictionary<long, List<DocumentSignedUpdateIGSysResultDTO>> dSignedList = new Dictionary<long, List<DocumentSignedUpdateIGSysResultDTO>>();
+
         private void InitMenuToButtonPrint()
         {
             try
@@ -230,9 +212,7 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
         {
             try
             {
-                
                 var PrintServiceReqProcessor = new HIS.Desktop.Plugins.Library.PrintServiceReqTreatment.PrintServiceReqTreatmentProcessor(this.serviceReqComboResultSDO.ServiceReqs, currentModule != null ? this.currentModule.RoomId : 0);
-                PrintServiceReqProcessor.DlgSendResultSigned = GetDocmentSigned;
                 PrintServiceReqProcessor.Print("Mps000276", true);
             }
             catch (Exception ex)
@@ -244,36 +224,22 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
 
         bool IsSaveAndShowMps000102 = true;
         MPS.ProcessorBase.PrintConfig.PreviewType? PreviewTypeMps000102 = null;
-        bool isPrinted = false;
-        private void InTamUng(bool isSaveAndShow, MPS.ProcessorBase.PrintConfig.PreviewType? previewType)
+
+        private void InPhieuYeuCauDichVu(bool isSaveAndShow, MPS.ProcessorBase.PrintConfig.PreviewType? previewType = 0)
         {
             try
             {
-                var countPrintConfig = this.lstLoaiPhieu.Where(s => s.Check == true).Distinct().ToList().Count;
-                // điều kiện in : có ít nhất 1 cấu hình và có giao dịch tạm ứng /// nếu có tạm ứng thì in trước
-                if (serviceReqComboResultSDO.SereServDeposits != null && serviceReqComboResultSDO.SereServDeposits.Count > 0 && countPrintConfig > 0)
-                {
-                    this.IsSaveAndShowMps000102 = isSaveAndShow;
-                    this.PreviewTypeMps000102 = previewType;
-                    Inventec.Common.RichEditor.RichEditorStore richEditorMain = new Inventec.Common.RichEditor.RichEditorStore(ApiConsumer.ApiConsumers.SarConsumer, HIS.Desktop.LocalStorage.ConfigSystem.ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), LocalStorage.LocalData.GlobalVariables.TemnplatePathFolder);
-                    richEditorMain.RunPrintTemplate(PrintTypeCodeStore.PRINT_TYPE_CODE__MPS000102, ProcessPrintMps000102);
-                    isPrinted = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Warn(ex);
-            }
-        }
-        private void InPhieuYeuCauDichVu(bool isSaveAndShow, MPS.ProcessorBase.PrintConfig.PreviewType? previewType = null)
-        {
-            try
-            {
-                
                 if (serviceReqComboResultSDO != null)
                 {
                     CommonParam param = new CommonParam();
-                    
+                    // nếu có tạm ứng dịch vụ thì in trước.
+                    if (serviceReqComboResultSDO.SereServDeposits != null && serviceReqComboResultSDO.SereServDeposits.Count > 0)
+                    {
+                        this.IsSaveAndShowMps000102 = isSaveAndShow;
+                        this.PreviewTypeMps000102 = previewType;
+                        Inventec.Common.RichEditor.RichEditorStore richEditorMain = new Inventec.Common.RichEditor.RichEditorStore(ApiConsumer.ApiConsumers.SarConsumer, HIS.Desktop.LocalStorage.ConfigSystem.ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), LocalStorage.LocalData.GlobalVariables.TemnplatePathFolder);
+                        richEditorMain.RunPrintTemplate(PrintTypeCodeStore.PRINT_TYPE_CODE__MPS000102, ProcessPrintMps000102);
+                    }
 
                     List<V_HIS_BED_LOG> bedLogs = new List<V_HIS_BED_LOG>();
                     // get bedLog
@@ -284,13 +250,12 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
                         bedLogViewFilter.DEPARTMENT_IDs = this.serviceReqComboResultSDO.ServiceReqs.Select(o => o.REQUEST_DEPARTMENT_ID).Distinct().ToList();
                         bedLogs = new Inventec.Common.Adapter.BackendAdapter(param).Get<List<V_HIS_BED_LOG>>("api/HisBedLog/GetView", ApiConsumer.ApiConsumers.MosConsumer, bedLogViewFilter, param);
                     }
-                    var PrintServiceReqProcessor = previewType != null ? new Library.PrintServiceReq.PrintServiceReqProcessor(serviceReqComboResultSDO, currentHisTreatment, bedLogs, (currentModule != null ? currentModule.RoomId : 0), previewType.Value, GetDocmentSigned)
+                    var PrintServiceReqProcessor = previewType != null ? new Library.PrintServiceReq.PrintServiceReqProcessor(serviceReqComboResultSDO, currentHisTreatment, bedLogs, (currentModule != null ? currentModule.RoomId : 0), previewType.Value)
                         : new Library.PrintServiceReq.PrintServiceReqProcessor(serviceReqComboResultSDO, currentHisTreatment, bedLogs, (currentModule != null ? currentModule.RoomId : 0));
                     PrintServiceReqProcessor.SaveNPrint(isSaveAndShow);
 
                     if (this.serviceReqComboResultSDO.SereServs != null)
                     {
-                        ProcessOpenVoBenhAn(serviceReqComboResultSDO.SereServs);
                         Inventec.Common.Logging.LogSystem.Debug("PRINT NOW serviceReqComboResultSDO.SereServs: " + Inventec.Common.Logging.LogUtil.TraceData(Inventec.Common.Logging.LogUtil.GetMemberName(() => this.serviceReqComboResultSDO.SereServs), this.serviceReqComboResultSDO.SereServs));
                     }
                 }
@@ -300,21 +265,6 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
                 Inventec.Common.Logging.LogSystem.Warn(ex);
                 WaitingManager.Hide();
             }
-        }
-
-        private void GetDocmentSigned(DocumentSignedUpdateIGSysResultDTO dTO)
-        {
-            try
-            {
-                if (!dSignedList.ContainsKey(this.serviceReqComboResultSDO.ServiceReqs[0].TREATMENT_ID))
-                    dSignedList[this.serviceReqComboResultSDO.ServiceReqs[0].TREATMENT_ID] = new List<DocumentSignedUpdateIGSysResultDTO>();
-                dSignedList[this.serviceReqComboResultSDO.ServiceReqs[0].TREATMENT_ID].Add(dTO);
-            }
-            catch (Exception ex)
-            {
-                Inventec.Common.Logging.LogSystem.Error(ex);
-            }
-
         }
 
         private bool ProcessPrintMps000102(string printTypeCode, string fileName)
@@ -601,13 +551,11 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
         {
             try
             {
-                
                 if (serviceReqComboResultSDO != null || IsActionButtonPrintBill)
                 {
                     BordereauInitData data = new BordereauInitData();
-                    HIS.Desktop.Plugins.Library.PrintBordereau.PrintBordereauProcessor processor = new PrintBordereauProcessor(this.currentModule.RoomId, this.currentModule.RoomTypeId, treatmentId, patientPrint.ID, null, null, GetDocmentSigned);
-                    if (IsActionButtonPrintBill)
-                        processor.IsActionButtonPrintBill = true;
+                    IsActionButtonPrintBill = false;
+                    HIS.Desktop.Plugins.Library.PrintBordereau.PrintBordereauProcessor processor = new PrintBordereauProcessor(this.currentModule.RoomId, this.currentModule.RoomTypeId, treatmentId, patientPrint.ID, null, null);
                     if (printTH && !isSign)
                     {
                         Inventec.Common.Logging.LogSystem.Error("Mps000446_____ PRINT_NOW");
@@ -633,6 +581,7 @@ namespace HIS.Desktop.Plugins.AssignService.AssignService
                         Inventec.Common.Logging.LogSystem.Error("Mps000446_____ NULL");
                         processor.Print("Mps000446", null, null);
                     }
+
                 }
             }
             catch (Exception ex)
