@@ -44,15 +44,17 @@ using System.Windows.Forms;
 
 namespace HIS.UC.UCPatientRaw
 {
-	public partial class UCPatientRaw : UserControl
-	{
+	public partial class UCPatientRaw : HIS.Desktop.Utility.UserControlBase
+    {
 		public HisPatientSDO patientTD3;
 		DataResultADO dataResult = new DataResultADO();
 		string hrmEmployeeCode = "";
-		string oldValue = "";
-		async void SearchPatientByCodeOrQrCode(string strValue)
-		{
-			try
+        public string oldValue = "";
+		public string oldTypeFind = ResourceMessage.typeCodeFind__MaBN;
+        public async void SearchPatientByCodeOrQrCode(string strValue, string keyTypeFind = null)
+        {
+            oldTypeFind = this.typeCodeFind;
+            try
 			{
 				this.isAlertTreatmentEndInDay = false;
 				this.ResultDataADO = null;
@@ -60,12 +62,24 @@ namespace HIS.UC.UCPatientRaw
 				this.hrmEmployeeCode = "";
 				this.dataResult = new DataResultADO();
 				oldValue = strValue;
-				if (!String.IsNullOrEmpty(strValue))
+				if (!string.IsNullOrEmpty(keyTypeFind))
+					typeCodeFind = keyTypeFind;
+                if (!String.IsNullOrEmpty(strValue))
 				{
 					LogSystem.Debug("txtPatientCode_KeyDown");
 					CommonParam param = new CommonParam();
 					WaitingManager.Show();
+                    if (strValue.Contains("|")) {
+						var dataFirst = strValue.Split('|')[0];
+						if (dataFirst.Length == 10 || dataFirst.Length == 15)
+                        {
+                            this.typeCodeFind = ResourceMessage.typeCodeFind__MaBN;
 
+                        }else if(dataFirst.Length == 12)
+                        {
+                            this.typeCodeFind = ResourceMessage.typeCodeFind__MaCMCC;
+                        }	
+					}
 					#region --- Trường hợp tìm kiếm BN theo mã BN hoặc QRCode
 					if (this.typeCodeFind == ResourceMessage.typeCodeFind__MaBN)
 					{
@@ -354,7 +368,7 @@ namespace HIS.UC.UCPatientRaw
 					#region ---- CMND/CCCD
 					else if (this.typeCodeFind == ResourceMessage.typeCodeFind__MaCMCC)
 					{
-						if (!((strValue.Trim().Length > 12 && strValue.Trim().Contains("|")) || (strValue.Trim().Length == 12 && !string.IsNullOrEmpty(txtPatientName.Text) && (!string.IsNullOrEmpty(txtPatientDob.Text) || dtPatientDob.EditValue != null))))
+						if (!((strValue.Trim().Length > 12 && strValue.Trim().Contains("|")) || (strValue.Trim().Length == 12 && !string.IsNullOrEmpty(txtPatientName.Text) && (!string.IsNullOrEmpty(txtPatientDob.Text) || dtPatientDob.EditValue != null))) || ((strValue.Trim().Length == 12 || strValue.Trim().Length == 9) && !strValue.Trim().Contains("|")))
 						{
 								param = new CommonParam();
 								HisPatientAdvanceFilter filter = new HisPatientAdvanceFilter();
@@ -615,13 +629,46 @@ namespace HIS.UC.UCPatientRaw
 							return;
 						}
 					}
-					#endregion
+                    #endregion
 
+                    #region ---- MaBA
+                    else if (this.typeCodeFind == ResourceMessage.typeCodeFind__MaBA)
+					{
+                        WaitingManager.Hide();
+                        Inventec.Common.Logging.LogSystem.Debug("Ma BA________________________");
+                        this.typeReceptionForm = ReceptionForm.MaBA;
+                        var data = await (ProcessSearchByCode(strValue, 1));
+                        if (data != null)
+                        {
+                            if (data is HisPatientSDO)
+                            {
+                                dataResult.HisPatientSDO = (HisPatientSDO)data;
+                                dataResult.OldPatient = true;
+                                this.currentPatientSDO = (HisPatientSDO)data;
+                                this.dlgSendPatientSdo(currentPatientSDO);
+                                this.patientTD3 = (HisPatientSDO)data;
+                                hrmEmployeeCode = currentPatientSDO.HRM_EMPLOYEE_CODE;
+                            }
+                            else if (data is HeinCardData)
+                            {
+                                this.patientTD3 = null;
+                                dataResult.HeinCardData = (HeinCardData)data;
+                                dataResult.OldPatient = false;
+                            }
+                            dataResult.SearchTypePatient = 1;
+                        }
+                        else
+                        {
+                            dataResult = null;
+                            this.patientTD3 = null;
+                        }
+                    }
+                    #endregion
 
-					if (this.typeCodeFind != ResourceMessage.typeCodeFind__MaNV)
+                    if (this.typeCodeFind != ResourceMessage.typeCodeFind__MaNV)
 					{
 						this.dlgShowControlHrmKskCodeNotValid(false);
-						if (!string.IsNullOrEmpty(hrmEmployeeCode) && this.dlgShowControlHrmKskCodeNotValid != null)
+					if (!string.IsNullOrEmpty(hrmEmployeeCode) && this.dlgShowControlHrmKskCodeNotValid != null)
 							this.dlgShowControlHrmKskCodeNotValid(true);
 					}
 
@@ -720,6 +767,10 @@ namespace HIS.UC.UCPatientRaw
 			{
 				Inventec.Common.Logging.LogSystem.Warn(ex);
 			}
+			finally
+			{
+				typeCodeFind = oldTypeFind;
+			}
 		}
         private void MapHeinCardToPatientSDO()
         {
@@ -787,7 +838,7 @@ namespace HIS.UC.UCPatientRaw
 						this.FillDataPatientToControl(patientByCard, true);
 					}));
 				}
-				dataResult.SearchTypePatient = 4;
+				dataResult.SearchTypePatient = 5;
 				HeinCardData heinCardDataForCheckGOV = new HeinCardData();
 				heinCardDataForCheckGOV = ConvertFromPatientData(dataResult.HisPatientSDO);
 
