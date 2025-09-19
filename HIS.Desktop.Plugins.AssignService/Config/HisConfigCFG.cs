@@ -1,4 +1,21 @@
-﻿using HIS.Desktop.LocalStorage.BackendData;
+/* IVT
+ * @Project : hisnguonmo
+ * Copyright (C) 2017 INVENTEC
+ *  
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *  
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+ * GNU General Public License for more details.
+ *  
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
+using HIS.Desktop.LocalStorage.BackendData;
 using HIS.Desktop.LocalStorage.HisConfig;
 using HIS.Desktop.LocalStorage.LocalData;
 using Inventec.Common.Logging;
@@ -44,7 +61,6 @@ namespace HIS.Desktop.Plugins.AssignService.Config
         private const string CONFIG_KEY__SERVICE_REQ__IS_SERE_SERV_MIN_DURATION_ALERT = "HIS.Desktop.IsSereServMinDurationAlert";
         private const string CONFIG_KEY__IsUsingWarningHeinFee = "His.Desktop.IsUsingWarningHeinFee";
         private const string CONFIG_KEY__IsNotAutoLoadServiceOpenAssignService = "HIS.Desktop.Plugins.AssignService.IsNotAutoLoadAssignService";
-        private const string CONFIG_KEY__IsNotDisplayBedHein = "HIS.Desktop.Plugins.AssignService.IsNotDisplayBedHein";
         private const string CONFIG_KEY__IsloadIcdFromExamServiceExecute = "HIS.Desktop.Plugins.IsloadIcdFromExamServiceExecute";
         private const string CONFIG_KEY__IsAllowingChooseServiceWhichInAttachments = "HIS.Desktop.Plugins.AssignService.IsAllowingChooseServiceWhichInAttachments";
         private const string CONFIG_KEY__ReqUserMustHaveDiploma = "MOS.HIS_SERVICE_REQ.REQ_USER_MUST_HAVE_DIPLOMA";
@@ -74,6 +90,16 @@ namespace HIS.Desktop.Plugins.AssignService.Config
         private const string CONFIG_KEY__INTEGRATION_VERSION = "MOS.LIS.INTEGRATION_VERSION";
         internal const string CONFIG_KEY__INTEGRATE_OPTION = "MOS.LIS.INTEGRATE_OPTION";
         internal const string CONFIG_KEY__INTEGRATION_TYPE = "MOS.LIS.INTEGRATION_TYPE";
+        internal const string CONFIG_KEY__AutoDeleteEmrDocumentWhenEditReq = "HIS.Desktop.Plugins.ServiceReqList.AutoDeleteEmrDocumentWhenEditReq";
+        private const string KEY__InstructionTimeServiceMustBeGreaterThanStartTimeExam = "HIS.Desktop.Plugins.InstructionTimeServiceMustBeGreaterThanStartTimeExam";
+        private const string KEY_ASSIGN_SERVICE_SIMULTANEITY_OPTION = "MOS.HIS_SERVICE_REQ.ASSIGN_SERVICE_SIMULTANEITY_OPTION";
+        private const string KEY_ASSIGN_ROOM_BY_PATIENT_TYPE = "MOS.HIS_SERVICE_REQ.ASSIGN_ROOM_BY_PATIENT_TYPE";
+        private const string IS_ALLOW_SIGN_NATURE_PRINT = "HIS.Desktop.Plugins.IsAllowSignaturePrint.ModuleLinks";
+        internal const string CONFIG_KEY__SuggestAssignServicesInfo = "HIS.Desktop.AI.SuggestAssignServicesInfo";
+        internal static bool IsAssignRoomByPatientType;
+        internal static string ASSIGN_SERVICE_SIMULTANEITY_OPTION;
+        internal static string InstructionTimeServiceMustBeGreaterThanStartTimeExam;
+        internal static string AutoDeleteEmrDocumentWhenEditReq;
         internal static string IntegrationVersionValue;
         internal static string IntegrationOptionValue;
         internal static string IntegrationTypeValue;
@@ -91,9 +117,9 @@ namespace HIS.Desktop.Plugins.AssignService.Config
         internal static bool IsAllowingChooseServiceWhichInAttachments;
         internal static bool IsAutoCheckPriorityForPrioritizedExam;
         internal static bool IsNotAutoLoadServiceOpenAssignService;
-        internal static bool IsNotDisplayBedHein;
         internal static string IsUsingWarningHeinFee;
-        public static bool IsSereServMinDurationAlert { get; set; }
+        internal static string IsAllowSignaturePrint;
+        public static int IsSereServMinDurationAlert { get; set; }
         public static decimal WarningOverCeiling__Exam { get; set; }
         public static decimal WarningOverCeiling__Out { get; set; }
         public static decimal WarningOverCeiling__In { get; set; }
@@ -165,6 +191,8 @@ namespace HIS.Desktop.Plugins.AssignService.Config
 
         internal static bool AllowAssignOxygen;
 
+        internal static string SuggestAssignServicesInfo;
+
         static MOS.EFMODEL.DataModels.HIS_PATIENT_TYPE GetPatientTypeByCode(string code)
         {
             MOS.EFMODEL.DataModels.HIS_PATIENT_TYPE result = new MOS.EFMODEL.DataModels.HIS_PATIENT_TYPE();
@@ -184,10 +212,15 @@ namespace HIS.Desktop.Plugins.AssignService.Config
         {
             try
             {
+                IsAssignRoomByPatientType = GetValue(KEY_ASSIGN_ROOM_BY_PATIENT_TYPE) == GlobalVariables.CommonStringTrue;
+                ASSIGN_SERVICE_SIMULTANEITY_OPTION = GetValue(KEY_ASSIGN_SERVICE_SIMULTANEITY_OPTION);
+                InstructionTimeServiceMustBeGreaterThanStartTimeExam = GetValue(KEY__InstructionTimeServiceMustBeGreaterThanStartTimeExam);
+                AutoDeleteEmrDocumentWhenEditReq = GetValue(CONFIG_KEY__AutoDeleteEmrDocumentWhenEditReq);
                 IntegrationOptionValue = GetValue(CONFIG_KEY__INTEGRATE_OPTION);
                 IntegrationTypeValue = GetValue(CONFIG_KEY__INTEGRATION_TYPE);
                 IntegrationVersionValue = GetValue(CONFIG_KEY__INTEGRATION_VERSION);
                 CheckIcdWhenSave = GetValue(CHECK_ICD_WHEN_SAVE);
+                IsAllowSignaturePrint = GetValue(IS_ALLOW_SIGN_NATURE_PRINT);
                 IsShowServerTimeByDefault = GetValue(CONFIG__ShowServerTimeByDefault) == GlobalVariables.CommonStringTrue;
                 IsServiceReqIcdOption = GetValue(CONFIG_KEY__SERVICE_REQ_ICD_OPTION) == GlobalVariables.CommonStringTrue;
                 BedServiceType_NotAllow_For_OutPatient = GetValue(CONFIG_KEY__BedServiceType_NotAllow_For_OutPatient);
@@ -207,9 +240,9 @@ namespace HIS.Desktop.Plugins.AssignService.Config
                 IsloadIcdFromExamServiceExecute = GetValue(CONFIG_KEY__IsloadIcdFromExamServiceExecute) == GlobalVariables.CommonStringTrue;
                 IsAutoCheckPriorityForPrioritizedExam = GetValue(CONFIG_KEY__IsAutoCheckPriorityForPrioritizedExam) == GlobalVariables.CommonStringTrue;
                 IsNotAutoLoadServiceOpenAssignService = GetValue(CONFIG_KEY__IsNotAutoLoadServiceOpenAssignService) == GlobalVariables.CommonStringTrue;
-                IsNotDisplayBedHein = GetValue(CONFIG_KEY__IsNotDisplayBedHein) == GlobalVariables.CommonStringTrue;
                 IsUsingWarningHeinFee = GetValue(CONFIG_KEY__IsUsingWarningHeinFee);
-                IsSereServMinDurationAlert = (GetValue(CONFIG_KEY__SERVICE_REQ__IS_SERE_SERV_MIN_DURATION_ALERT) == GlobalVariables.CommonStringTrue);
+                //IsSereServMinDurationAlert = (GetValue(CONFIG_KEY__SERVICE_REQ__IS_SERE_SERV_MIN_DURATION_ALERT) == GlobalVariables.CommonStringTrue);
+                IsSereServMinDurationAlert = Convert.ToInt32(GetValue(CONFIG_KEY__SERVICE_REQ__IS_SERE_SERV_MIN_DURATION_ALERT));
                 ShowRequestUser = GetValue(CONFIG_KEY__ShowRequestUser);
                 IsSingleCheckservice = GetValue(CONFIG_KEY__IsSingleCheckservice);
                 IsSearchAll = (GetValue(CONFIG_KEY__IsSearchAll) == GlobalVariables.CommonStringTrue);
@@ -245,6 +278,7 @@ namespace HIS.Desktop.Plugins.AssignService.Config
                 contraindicated = HisConfigs.Get<long>(CONFIG_KEY_HIS_ICD_SERVICE_CONTRAINDICATED_WARNING_OPTION);
                 IsCheckDepartmentInTimeWhenPresOrAssign = GetValue(CONFIG_KEY_CheckDepartmentInTimeWhenPresOrAssign) == GlobalVariables.CommonStringTrue;
                 AllowAssignOxygen = GetValue(CONFIG_KEY_ALLOW_ASSIGN_OXYGEN) == GlobalVariables.CommonStringTrue;
+                SuggestAssignServicesInfo = GetValue(CONFIG_KEY__SuggestAssignServicesInfo);
             }
             catch (Exception ex)
             {
