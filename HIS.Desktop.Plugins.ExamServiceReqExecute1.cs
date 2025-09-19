@@ -1,3 +1,5 @@
+
+
 // HIS.Desktop.Plugins.ExamServiceReqExecute.ExamServiceReqExecuteControl
 using System;
 using System.Collections;
@@ -2442,8 +2444,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				orderby o.ICD_CODE
 				select o).ToList();
 			LogSystem.Debug("ExamServiceReqExecuteControl_Load .2");
-			long istime = HisConfigs.Get<long>("HIS.Desktop.ShowServerTimeByDefault");
-			if (istime == 1)
+			long num = HisConfigs.Get<long>("HIS.Desktop.ShowServerTimeByDefault");
+			if (num == 1)
 			{
 				isTimeServer = true;
 			}
@@ -2518,13 +2520,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (treatment != null)
 			{
-				List<HIS_TREATMENT_EXT> listTreatmentExt = null;
-				HisTreatmentExtFilter filter = new HisTreatmentExtFilter();
-				filter.TREATMENT_ID = treatment.ID;
-				listTreatmentExt = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT_EXT>>("api/HisTreatmentExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, null);
-				if (listTreatmentExt != null)
+				List<HIS_TREATMENT_EXT> list = null;
+				HisTreatmentExtFilter hisTreatmentExtFilter = new HisTreatmentExtFilter();
+				hisTreatmentExtFilter.TREATMENT_ID = treatment.ID;
+				list = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT_EXT>>("api/HisTreatmentExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentExtFilter, null);
+				if (list != null)
 				{
-					currentTreatmentExt = listTreatmentExt.FirstOrDefault();
+					currentTreatmentExt = list.FirstOrDefault();
 				}
 			}
 		}
@@ -2540,36 +2542,36 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (HisServiceReqView != null && !string.IsNullOrEmpty(HisServiceReqView.TRADITIONAL_ICD_CODE))
 			{
-				HIS.UC.Icd.ADO.IcdInputADO Icd = new HIS.UC.Icd.ADO.IcdInputADO();
-				Icd.ICD_CODE = HisServiceReqView.TRADITIONAL_ICD_CODE;
-				Icd.ICD_NAME = HisServiceReqView.TRADITIONAL_ICD_NAME;
+				HIS.UC.Icd.ADO.IcdInputADO icdInputADO = new HIS.UC.Icd.ADO.IcdInputADO();
+				icdInputADO.ICD_CODE = HisServiceReqView.TRADITIONAL_ICD_CODE;
+				icdInputADO.ICD_NAME = HisServiceReqView.TRADITIONAL_ICD_NAME;
 				if (ucIcdYHCT != null)
 				{
-					icdProcessorYHCT.Reload(ucIcdYHCT, Icd);
+					icdProcessorYHCT.Reload(ucIcdYHCT, icdInputADO);
 				}
-				SecondaryIcdDataADO subIcd2 = new SecondaryIcdDataADO();
-				subIcd2.ICD_SUB_CODE = HisServiceReqView.TRADITIONAL_ICD_SUB_CODE;
-				subIcd2.ICD_TEXT = HisServiceReqView.TRADITIONAL_ICD_TEXT;
+				SecondaryIcdDataADO secondaryIcdDataADO = new SecondaryIcdDataADO();
+				secondaryIcdDataADO.ICD_SUB_CODE = HisServiceReqView.TRADITIONAL_ICD_SUB_CODE;
+				secondaryIcdDataADO.ICD_TEXT = HisServiceReqView.TRADITIONAL_ICD_TEXT;
 				if (ucSecondaryIcdYHCT != null)
 				{
-					subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, subIcd2);
+					subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, secondaryIcdDataADO);
 				}
 			}
 			else if (treatment != null && !string.IsNullOrEmpty(treatment.TRADITIONAL_ICD_CODE))
 			{
-				HIS.UC.Icd.ADO.IcdInputADO Icd2 = new HIS.UC.Icd.ADO.IcdInputADO();
-				Icd2.ICD_CODE = treatment.TRADITIONAL_ICD_CODE;
-				Icd2.ICD_NAME = treatment.TRADITIONAL_ICD_NAME;
+				HIS.UC.Icd.ADO.IcdInputADO icdInputADO2 = new HIS.UC.Icd.ADO.IcdInputADO();
+				icdInputADO2.ICD_CODE = treatment.TRADITIONAL_ICD_CODE;
+				icdInputADO2.ICD_NAME = treatment.TRADITIONAL_ICD_NAME;
 				if (ucIcdYHCT != null)
 				{
-					icdProcessorYHCT.Reload(ucIcdYHCT, Icd2);
+					icdProcessorYHCT.Reload(ucIcdYHCT, icdInputADO2);
 				}
-				SecondaryIcdDataADO subIcd = new SecondaryIcdDataADO();
-				subIcd.ICD_SUB_CODE = treatment.TRADITIONAL_ICD_SUB_CODE;
-				subIcd.ICD_TEXT = treatment.TRADITIONAL_ICD_TEXT;
+				SecondaryIcdDataADO secondaryIcdDataADO2 = new SecondaryIcdDataADO();
+				secondaryIcdDataADO2.ICD_SUB_CODE = treatment.TRADITIONAL_ICD_SUB_CODE;
+				secondaryIcdDataADO2.ICD_TEXT = treatment.TRADITIONAL_ICD_TEXT;
 				if (ucSecondaryIcdYHCT != null)
 				{
-					subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, subIcd);
+					subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, secondaryIcdDataADO2);
 				}
 			}
 		}
@@ -2585,20 +2587,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (ucIcdYHCT != null)
 			{
-				object icdValue = icdProcessorYHCT.GetValue(ucIcdYHCT);
-				if (icdValue != null && icdValue is HIS.UC.Icd.ADO.IcdInputADO)
+				object value = icdProcessorYHCT.GetValue(ucIcdYHCT);
+				if (value != null && value is HIS.UC.Icd.ADO.IcdInputADO)
 				{
-					IcdCodeYHCT = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_CODE;
-					IcdNameYHCT = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_NAME;
+					IcdCodeYHCT = ((HIS.UC.Icd.ADO.IcdInputADO)value).ICD_CODE;
+					IcdNameYHCT = ((HIS.UC.Icd.ADO.IcdInputADO)value).ICD_NAME;
 				}
 			}
 			if (ucSecondaryIcdYHCT != null)
 			{
-				object subIcd = subIcdProcessorYHCT.GetValue(ucSecondaryIcdYHCT);
-				if (subIcd != null)
+				object value2 = subIcdProcessorYHCT.GetValue(ucSecondaryIcdYHCT);
+				if (value2 != null)
 				{
-					IcdSubCodeYHCT = ((SecondaryIcdDataADO)subIcd).ICD_SUB_CODE;
-					IcdTextYHCT = ((SecondaryIcdDataADO)subIcd).ICD_TEXT;
+					IcdSubCodeYHCT = ((SecondaryIcdDataADO)value2).ICD_SUB_CODE;
+					IcdTextYHCT = ((SecondaryIcdDataADO)value2).ICD_TEXT;
 				}
 			}
 		}
@@ -2619,11 +2621,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlEditValidationRule validate = new ControlEditValidationRule();
-			validate.editor = control;
-			validate.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
-			validate.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, validate);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = control;
+			controlEditValidationRule.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -2693,27 +2695,27 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			List<string> lstIcdCode = icdCodes.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-			List<string> lstIcdName = icdNames.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-			List<string> lstIcdCodeScreen = txtIcdSubCode.Text.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-			lstIcdCodeScreen.AddRange(lstIcdCode);
-			lstIcdCodeScreen = lstIcdCodeScreen.Distinct().ToList();
-			string icdCode = string.Join(";", lstIcdCodeScreen);
-			List<string> lstIcdNameScreen = txtIcdText.Text.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-			lstIcdNameScreen.AddRange(lstIcdName);
-			lstIcdNameScreen = lstIcdNameScreen.Distinct().ToList();
-			string icdName = string.Join(";", lstIcdNameScreen);
-			if (!string.IsNullOrEmpty(icdCode))
+			List<string> collection = icdCodes.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+			List<string> collection2 = icdNames.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+			List<string> list = txtIcdSubCode.Text.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+			list.AddRange(collection);
+			list = list.Distinct().ToList();
+			string value = string.Join(";", list);
+			List<string> list2 = txtIcdText.Text.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+			list2.AddRange(collection2);
+			list2 = list2.Distinct().ToList();
+			string value2 = string.Join(";", list2);
+			if (!string.IsNullOrEmpty(value))
 			{
-				txtIcdSubCode.Text = icdCode;
+				txtIcdSubCode.Text = value;
 			}
 			else
 			{
 				txtIcdSubCode.Text = "";
 			}
-			if (!string.IsNullOrEmpty(icdName))
+			if (!string.IsNullOrEmpty(value2))
 			{
-				txtIcdText.Text = icdName;
+				txtIcdText.Text = value2;
 			}
 			else
 			{
@@ -2735,9 +2737,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				timeClose.Stop();
 				PrintMps = null;
-				XtraTabControl main = SessionManager.GetTabControlMain();
-				XtraTabPage page = main.TabPages[GlobalVariables.SelectedTabPageIndex];
-				TabControlBaseProcess.CloseCurrentTabPage(page, main);
+				XtraTabControl tabControlMain = SessionManager.GetTabControlMain();
+				XtraTabPage page = tabControlMain.TabPages[GlobalVariables.SelectedTabPageIndex];
+				TabControlBaseProcess.CloseCurrentTabPage(page, tabControlMain);
 			}
 		}
 		catch (Exception ex)
@@ -2837,9 +2839,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisPatientFilter patientFilter = new HisPatientFilter();
-			patientFilter.ID = treatment.PATIENT_ID;
-			CurrentPatient = new BackendAdapter(param).Get<List<HIS_PATIENT>>("api/HisPatient/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientFilter, param).FirstOrDefault();
+			HisPatientFilter hisPatientFilter = new HisPatientFilter();
+			hisPatientFilter.ID = treatment.PATIENT_ID;
+			CurrentPatient = new BackendAdapter(param).Get<List<HIS_PATIENT>>("api/HisPatient/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientFilter, param).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
@@ -2851,8 +2853,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			long hospitalizationReasonRequired = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.HospitalizationReasonRequired"));
-			if (hospitalizationReasonRequired == 1)
+			long num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.HospitalizationReasonRequired"));
+			if (num == 1)
 			{
 				lblCaptionHospitalizationReason.AppearanceItemCaption.ForeColor = Color.Maroon;
 			}
@@ -2953,40 +2955,40 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				if (treatmentByPatients != null && treatmentByPatients.Count > 0)
 				{
 					oldContraindicationSelecteds = new List<long>();
-					L_HIS_TREATMENT_2 data = treatmentByPatients.FirstOrDefault();
-					if (!string.IsNullOrEmpty(data.CONTRAINDICATION_IDS))
+					L_HIS_TREATMENT_2 l_HIS_TREATMENT_ = treatmentByPatients.FirstOrDefault();
+					if (!string.IsNullOrEmpty(l_HIS_TREATMENT_.CONTRAINDICATION_IDS))
 					{
-						string[] str = data.CONTRAINDICATION_IDS.Split(',');
-						string[] array = str;
-						foreach (string item in array)
+						string[] array = l_HIS_TREATMENT_.CONTRAINDICATION_IDS.Split(',');
+						string[] array2 = array;
+						foreach (string s2 in array2)
 						{
-							long p = long.Parse(item);
-							oldContraindicationSelecteds.Add(p);
+							long item = long.Parse(s2);
+							oldContraindicationSelecteds.Add(item);
 						}
 					}
 				}
-				if (!(cboContraindication.Properties.Tag is GridCheckMarksSelection gridCheckMark))
+				if (!(cboContraindication.Properties.Tag is GridCheckMarksSelection gridCheckMarksSelection))
 				{
 					return;
 				}
-				gridCheckMark.ClearSelection(cboContraindication.Properties.View);
+				gridCheckMarksSelection.ClearSelection(cboContraindication.Properties.View);
 				if (oldContraindicationSelecteds != null && oldContraindicationSelecteds.Count > 0)
 				{
-					List<HIS_CONTRAINDICATION> seleceds = datas.Where((HIS_CONTRAINDICATION o) => oldContraindicationSelecteds.Contains(o.ID)).ToList();
-					gridCheckMark.SelectAll(seleceds);
-					string displayText = string.Join(", ", seleceds.Select((HIS_CONTRAINDICATION s) => s.CONTRAINDICATION_NAME).ToList());
-					cboContraindication.Text = displayText;
+					List<HIS_CONTRAINDICATION> list = datas.Where((HIS_CONTRAINDICATION o) => oldContraindicationSelecteds.Contains(o.ID)).ToList();
+					gridCheckMarksSelection.SelectAll(list);
+					string text = string.Join(", ", list.Select((HIS_CONTRAINDICATION s) => s.CONTRAINDICATION_NAME).ToList());
+					cboContraindication.Text = text;
 					LogSystem.Debug("this.oldContraindicationSelecteds.Count " + oldContraindicationSelecteds.Count);
 				}
 			}
-			catch (Exception ex2)
+			catch (Exception ex)
 			{
-				LogSystem.Error(ex2);
+				LogSystem.Error(ex);
 			}
 		}
-		catch (Exception ex)
+		catch (Exception ex2)
 		{
-			LogSystem.Warn(ex);
+			LogSystem.Warn(ex2);
 		}
 	}
 
@@ -3041,23 +3043,23 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisContraindicationFilter filter = new HisContraindicationFilter();
-			filter.IS_ACTIVE = 1;
-			datas = new BackendAdapter(new CommonParam()).Get<List<HIS_CONTRAINDICATION>>("api/HisContraindication/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, null);
+			HisContraindicationFilter hisContraindicationFilter = new HisContraindicationFilter();
+			hisContraindicationFilter.IS_ACTIVE = 1;
+			datas = new BackendAdapter(new CommonParam()).Get<List<HIS_CONTRAINDICATION>>("api/HisContraindication/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisContraindicationFilter, null);
 			cboContraindication.Properties.DataSource = datas;
 			cboContraindication.Properties.DisplayMember = "CONTRAINDICATION_NAME";
 			cboContraindication.Properties.ValueMember = "ID";
-			GridColumn col2 = cboContraindication.Properties.View.Columns.AddField("CONTRAINDICATION_NAME");
-			col2.VisibleIndex = 1;
-			col2.Width = 350;
-			col2.Caption = "Tất cả";
+			GridColumn gridColumn = cboContraindication.Properties.View.Columns.AddField("CONTRAINDICATION_NAME");
+			gridColumn.VisibleIndex = 1;
+			gridColumn.Width = 350;
+			gridColumn.Caption = "Tất cả";
 			cboContraindication.Properties.PopupFormWidth = 350;
 			cboContraindication.Properties.View.OptionsView.ShowColumnHeaders = true;
 			cboContraindication.Properties.View.OptionsSelection.MultiSelect = true;
 			cboContraindication.Properties.View.OptionsSelection.ShowCheckBoxSelectorInColumnHeader = DefaultBoolean.True;
-			if (cboContraindication.Properties.Tag is GridCheckMarksSelection gridCheckMark)
+			if (cboContraindication.Properties.Tag is GridCheckMarksSelection gridCheckMarksSelection)
 			{
-				gridCheckMark.SelectAll(cboContraindication.Properties.DataSource);
+				gridCheckMarksSelection.SelectAll(cboContraindication.Properties.DataSource);
 			}
 		}
 		catch (Exception ex)
@@ -3070,13 +3072,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			GridCheckMarksSelection gridCheck = new GridCheckMarksSelection(cboContraindication.Properties);
-			gridCheck.SelectionChanged += SelectionGrid__Contraindication;
-			cboContraindication.Properties.Tag = gridCheck;
+			GridCheckMarksSelection gridCheckMarksSelection = new GridCheckMarksSelection(cboContraindication.Properties);
+			gridCheckMarksSelection.SelectionChanged += SelectionGrid__Contraindication;
+			cboContraindication.Properties.Tag = gridCheckMarksSelection;
 			cboContraindication.Properties.View.OptionsSelection.MultiSelect = true;
-			if (cboContraindication.Properties.Tag is GridCheckMarksSelection gridCheckMark)
+			if (cboContraindication.Properties.Tag is GridCheckMarksSelection gridCheckMarksSelection2)
 			{
-				gridCheckMark.ClearSelection(cboContraindication.Properties.View);
+				gridCheckMarksSelection2.ClearSelection(cboContraindication.Properties.View);
 			}
 		}
 		catch (Exception ex)
@@ -3090,11 +3092,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			contraindicationSelecteds = new List<HIS_CONTRAINDICATION>();
-			foreach (HIS_CONTRAINDICATION rv in (sender as GridCheckMarksSelection).Selection)
+			foreach (HIS_CONTRAINDICATION item in (sender as GridCheckMarksSelection).Selection)
 			{
-				if (rv != null)
+				if (item != null)
 				{
-					contraindicationSelecteds.Add(rv);
+					contraindicationSelecteds.Add(item);
 				}
 			}
 		}
@@ -3109,15 +3111,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			e.DisplayText = "";
-			string display = "";
+			string text = "";
 			if (contraindicationSelecteds != null && contraindicationSelecteds.Count > 0)
 			{
-				foreach (HIS_CONTRAINDICATION item in contraindicationSelecteds)
+				foreach (HIS_CONTRAINDICATION contraindicationSelected in contraindicationSelecteds)
 				{
-					display = ((display.Trim().Length <= 0) ? item.CONTRAINDICATION_NAME : (display + ", " + item.CONTRAINDICATION_NAME));
+					text = ((text.Trim().Length <= 0) ? contraindicationSelected.CONTRAINDICATION_NAME : (text + ", " + contraindicationSelected.CONTRAINDICATION_NAME));
 				}
 			}
-			e.DisplayText = display;
+			e.DisplayText = text;
 		}
 		catch (Exception ex)
 		{
@@ -3327,12 +3329,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			DXMenuItem item = sender as DXMenuItem;
-			if (item.Tag is XtraTabPage)
+			DXMenuItem dXMenuItem = sender as DXMenuItem;
+			if (dXMenuItem.Tag is XtraTabPage)
 			{
-				XtraTabPage tab = item.Tag as XtraTabPage;
-				tab.PageVisible = true;
-				tabControlDetailData.SelectedTabPage = tab;
+				XtraTabPage xtraTabPage = dXMenuItem.Tag as XtraTabPage;
+				xtraTabPage.PageVisible = true;
+				tabControlDetailData.SelectedTabPage = xtraTabPage;
 			}
 		}
 		catch (Exception ex)
@@ -3347,28 +3349,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (e.Button.Kind == ButtonPredefines.Down)
 			{
-				DXPopupMenu _menu = new DXPopupMenu();
-				foreach (XtraTabPage item in tabControlDetailData.TabPages)
+				DXPopupMenu dXPopupMenu = new DXPopupMenu();
+				foreach (XtraTabPage tabPage in tabControlDetailData.TabPages)
 				{
-					if (!item.PageVisible)
+					if (!tabPage.PageVisible)
 					{
-						DXMenuItem itemTuanHoan = new DXMenuItem();
-						itemTuanHoan.Caption = item.Text.Trim();
-						itemTuanHoan.Click += item_click;
-						itemTuanHoan.Tag = item;
-						_menu.Items.Add(itemTuanHoan);
+						DXMenuItem dXMenuItem = new DXMenuItem();
+						dXMenuItem.Caption = tabPage.Text.Trim();
+						dXMenuItem.Click += item_click;
+						dXMenuItem.Tag = tabPage;
+						dXPopupMenu.Items.Add(dXMenuItem);
 					}
 				}
-				BarManager mobjBarMgr = new BarManager();
-				mobjBarMgr.Form = this;
-				MenuManagerHelper.ShowMenu(_menu, tabControlDetailData.LookAndFeel, mobjBarMgr, tabControlDetailData, tabControlDetailData.PointToClient(Control.MousePosition));
+				BarManager barManager = new BarManager();
+				barManager.Form = this;
+				MenuManagerHelper.ShowMenu(dXPopupMenu, tabControlDetailData.LookAndFeel, barManager, tabControlDetailData, tabControlDetailData.PointToClient(Control.MousePosition));
 			}
 			else if (e.Button.Kind == ButtonPredefines.Delete)
 			{
-				XtraTabPage selectedTab = tabControlDetailData.SelectedTabPage;
-				if (selectedTab != null)
+				XtraTabPage selectedTabPage = tabControlDetailData.SelectedTabPage;
+				if (selectedTabPage != null)
 				{
-					selectedTab.PageVisible = false;
+					selectedTabPage.PageVisible = false;
 				}
 			}
 		}
@@ -3387,17 +3389,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			bool isNum = true;
+			bool flag = true;
 			string text = txtNhanApPhai.Text.Trim();
-			foreach (char item in text)
+			foreach (char c in text)
 			{
-				if (!char.IsNumber(item))
+				if (!char.IsNumber(c))
 				{
-					isNum = false;
+					flag = false;
 					break;
 				}
 			}
-			if (isNum)
+			if (flag)
 			{
 				lblMatPhai.Text = "mmHg";
 			}
@@ -3417,17 +3419,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			bool isNum = true;
+			bool flag = true;
 			string text = txtThiLucKhongKinhPhai.Text.Trim();
-			foreach (char item in text)
+			foreach (char c in text)
 			{
-				if (!char.IsNumber(item))
+				if (!char.IsNumber(c))
 				{
-					isNum = false;
+					flag = false;
 					break;
 				}
 			}
-			if (isNum)
+			if (flag)
 			{
 				LblKoKinhPhai.Text = "/10";
 			}
@@ -3447,17 +3449,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			bool isNum = true;
+			bool flag = true;
 			string text = txtNhanApTrai.Text.Trim();
-			foreach (char item in text)
+			foreach (char c in text)
 			{
-				if (!char.IsNumber(item))
+				if (!char.IsNumber(c))
 				{
-					isNum = false;
+					flag = false;
 					break;
 				}
 			}
-			if (isNum)
+			if (flag)
 			{
 				LblMatTrai.Text = "mmHg";
 			}
@@ -3477,17 +3479,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			bool isNum = true;
+			bool flag = true;
 			string text = txtThiLucKhongKinhTrai.Text.Trim();
-			foreach (char item in text)
+			foreach (char c in text)
 			{
-				if (!char.IsNumber(item))
+				if (!char.IsNumber(c))
 				{
-					isNum = false;
+					flag = false;
 					break;
 				}
 			}
-			if (isNum)
+			if (flag)
 			{
 				LblKoKinhTrai.Text = "/10";
 			}
@@ -3531,15 +3533,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			cboContraindication.Text = "";
-			string display = "";
+			string text = "";
 			if (contraindicationSelecteds != null && contraindicationSelecteds.Count > 0)
 			{
-				foreach (HIS_CONTRAINDICATION item in contraindicationSelecteds)
+				foreach (HIS_CONTRAINDICATION contraindicationSelected in contraindicationSelecteds)
 				{
-					display = ((display.Trim().Length <= 0) ? item.CONTRAINDICATION_NAME : (display + ", " + item.CONTRAINDICATION_NAME));
+					text = ((text.Trim().Length <= 0) ? contraindicationSelected.CONTRAINDICATION_NAME : (text + ", " + contraindicationSelected.CONTRAINDICATION_NAME));
 				}
 			}
-			cboContraindication.Text = display;
+			cboContraindication.Text = text;
 		}
 		catch (Exception ex)
 		{
@@ -3870,41 +3872,41 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			dataSelectedToPTDT = new List<string>();
-			string contentShare = txtTreatmentInstruction.Text.Trim();
-			if (!string.IsNullOrEmpty(contentShare))
+			string text = txtTreatmentInstruction.Text.Trim();
+			if (!string.IsNullOrEmpty(text))
 			{
-				if (contentShare.Contains(";"))
+				if (text.Contains(";"))
 				{
-					string[] serviceName = contentShare.Split(';');
-					string[] array = serviceName;
-					foreach (string item in array)
+					string[] array = text.Split(';');
+					string[] array2 = array;
+					foreach (string text2 in array2)
 					{
-						dataSelectedToPTDT.Add(item.Trim());
+						dataSelectedToPTDT.Add(text2.Trim());
 					}
 				}
 				else
 				{
-					dataSelectedToPTDT.Add(contentShare);
+					dataSelectedToPTDT.Add(text);
 				}
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.InfomationExecute").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.InfomationExecute").FirstOrDefault();
+			if (module == null)
 			{
 				throw new NullReferenceException("Not found module by ModuleLink = 'HIS.Desktop.Plugins.InfomationExecute'");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(treatmentId);
-				listArgs.Add(dataSelectedToPTDT);
-				listArgs.Add(new DelegateSelectData(dataResult));
-				listArgs.Add(PluginInstance.GetModuleWithWorkingRoom(moduleData, currentModuleBase.RoomId, currentModuleBase.RoomTypeId));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, currentModuleBase.RoomId, currentModuleBase.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(treatmentId);
+				list.Add(dataSelectedToPTDT);
+				list.Add(new DelegateSelectData(dataResult));
+				list.Add(PluginInstance.GetModuleWithWorkingRoom(module, currentModuleBase.RoomId, currentModuleBase.RoomTypeId));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, currentModuleBase.RoomId, currentModuleBase.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("extenceInstance is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 			else
 			{
@@ -3923,8 +3925,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (data != null && data is string)
 			{
-				string dt = data as string;
-				if (!string.IsNullOrEmpty(dt))
+				string value = data as string;
+				if (!string.IsNullOrEmpty(value))
 				{
 					txtTreatmentInstruction.Text = string.Join("; ", data);
 				}
@@ -3989,26 +3991,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private string HistoryTimeFormat(long intime, long? outtime)
 	{
-		string strTime = "";
+		string text = "";
 		try
 		{
 			if (!outtime.HasValue)
 			{
-				strTime = Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(intime);
+				text = Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(intime);
 			}
 			else
 			{
-				string dateIn = intime.ToString().Substring(0, 8);
-				string dateOut = outtime.ToString().Substring(0, 8);
-				strTime = ((!(dateIn == dateOut)) ? (Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(intime) + " " + Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(outtime.Value)) : (intime.ToString().Substring(6, 2) + "/" + intime.ToString().Substring(4, 2) + "/" + intime.ToString().Substring(0, 4) + " " + intime.ToString().Substring(8, 2) + ":" + intime.ToString().Substring(10, 2) + " - " + outtime.Value.ToString().Substring(8, 2) + ":" + outtime.Value.ToString().Substring(10, 2)));
+				string text2 = intime.ToString().Substring(0, 8);
+				string text3 = outtime.ToString().Substring(0, 8);
+				text = ((!(text2 == text3)) ? (Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(intime) + " " + Inventec.Common.DateTime.Convert.TimeNumberToTimeStringWithoutSecond(outtime.Value)) : (intime.ToString().Substring(6, 2) + "/" + intime.ToString().Substring(4, 2) + "/" + intime.ToString().Substring(0, 4) + " " + intime.ToString().Substring(8, 2) + ":" + intime.ToString().Substring(10, 2) + " - " + outtime.Value.ToString().Substring(8, 2) + ":" + outtime.Value.ToString().Substring(10, 2)));
 			}
 		}
 		catch (Exception ex)
 		{
-			strTime = "";
+			text = "";
 			LogSystem.Warn(ex);
 		}
-		return strTime;
+		return text;
 	}
 
 	private void txtResultNote_Leave(object sender, EventArgs e)
@@ -4058,12 +4060,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisPatientTypeAlterViewAppliedFilter filter = new HisPatientTypeAlterViewAppliedFilter();
-			filter.TreatmentId = treatmentId;
-			filter.InstructionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
-			V_HIS_PATIENT_TYPE_ALTER currentHisPatientTypeAlter = new BackendAdapter(param).Get<V_HIS_PATIENT_TYPE_ALTER>("/api/HisPatientTypeAlter/GetApplied", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-			return param;
+			CommonParam commonParam = new CommonParam();
+			HisPatientTypeAlterViewAppliedFilter hisPatientTypeAlterViewAppliedFilter = new HisPatientTypeAlterViewAppliedFilter();
+			hisPatientTypeAlterViewAppliedFilter.TreatmentId = treatmentId;
+			hisPatientTypeAlterViewAppliedFilter.InstructionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
+			V_HIS_PATIENT_TYPE_ALTER v_HIS_PATIENT_TYPE_ALTER = new BackendAdapter(commonParam).Get<V_HIS_PATIENT_TYPE_ALTER>("/api/HisPatientTypeAlter/GetApplied", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewAppliedFilter, commonParam);
+			return commonParam;
 		}
 		catch (Exception ex)
 		{
@@ -4081,32 +4083,32 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				SetCheckExecute(set: true, chkExamServiceAdd, chkHospitalize, chkTreatmentFinish, chkExamFinish);
 				ResetPrintExecuteExt();
 				examServiceAddProcessor = new ExamServiceAddProcessor();
-				ExamServiceAddInitADO examServiceAddADO = new ExamServiceAddInitADO();
-				examServiceAddADO.ServiceReqId = HisServiceReqView.ID;
-				examServiceAddADO.treatmentId = HisServiceReqView.TREATMENT_ID;
-				examServiceAddADO.roomId = moduleData.RoomId;
-				examServiceAddADO.FinishTime = HisServiceReqView.FINISH_TIME;
-				examServiceAddADO.OutTime = treatment.OUT_TIME;
-				examServiceAddADO.InTime = treatment.IN_TIME;
-				examServiceAddADO.StartTime = HisServiceReqView.START_TIME;
-				examServiceAddADO.AppointmentDesc = HisServiceReqView.APPOINTMENT_DESC;
-				examServiceAddADO.AppointmentTime = HisServiceReqView.APPOINTMENT_TIME;
-				examServiceAddADO.IsMainExam = HisServiceReqView.IS_MAIN_EXAM == 1;
-				V_HIS_ROOM dataRoom = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == moduleData.RoomId);
-				examServiceAddADO.IsBlockNumOrder = dataRoom.IS_BLOCK_NUM_ORDER == 1;
-				examServiceAddADO.DefaultIdRoom = moduleData.RoomId;
-				examServiceAddADO.Note = CurrentPatient.NOTE;
-				CommonParam param = new CommonParam();
-				HisPatientTypeAlterViewAppliedFilter filter = new HisPatientTypeAlterViewAppliedFilter();
-				filter.TreatmentId = treatmentId;
-				filter.InstructionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
-				V_HIS_PATIENT_TYPE_ALTER currentHisPatientTypeAlter = new BackendAdapter(param).Get<V_HIS_PATIENT_TYPE_ALTER>("/api/HisPatientTypeAlter/GetApplied", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-				if (HisConfigCFG.IsNotRequiredFee && currentHisPatientTypeAlter.PATIENT_TYPE_ID != HisPatientTypeCFG.PATIENT_TYPE_ID__BHYT)
+				ExamServiceAddInitADO examServiceAddInitADO = new ExamServiceAddInitADO();
+				examServiceAddInitADO.ServiceReqId = HisServiceReqView.ID;
+				examServiceAddInitADO.treatmentId = HisServiceReqView.TREATMENT_ID;
+				examServiceAddInitADO.roomId = moduleData.RoomId;
+				examServiceAddInitADO.FinishTime = HisServiceReqView.FINISH_TIME;
+				examServiceAddInitADO.OutTime = treatment.OUT_TIME;
+				examServiceAddInitADO.InTime = treatment.IN_TIME;
+				examServiceAddInitADO.StartTime = HisServiceReqView.START_TIME;
+				examServiceAddInitADO.AppointmentDesc = HisServiceReqView.APPOINTMENT_DESC;
+				examServiceAddInitADO.AppointmentTime = HisServiceReqView.APPOINTMENT_TIME;
+				examServiceAddInitADO.IsMainExam = HisServiceReqView.IS_MAIN_EXAM == 1;
+				V_HIS_ROOM v_HIS_ROOM = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == moduleData.RoomId);
+				examServiceAddInitADO.IsBlockNumOrder = v_HIS_ROOM.IS_BLOCK_NUM_ORDER == 1;
+				examServiceAddInitADO.DefaultIdRoom = moduleData.RoomId;
+				examServiceAddInitADO.Note = CurrentPatient.NOTE;
+				CommonParam commonParam = new CommonParam();
+				HisPatientTypeAlterViewAppliedFilter hisPatientTypeAlterViewAppliedFilter = new HisPatientTypeAlterViewAppliedFilter();
+				hisPatientTypeAlterViewAppliedFilter.TreatmentId = treatmentId;
+				hisPatientTypeAlterViewAppliedFilter.InstructionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
+				V_HIS_PATIENT_TYPE_ALTER v_HIS_PATIENT_TYPE_ALTER = new BackendAdapter(commonParam).Get<V_HIS_PATIENT_TYPE_ALTER>("/api/HisPatientTypeAlter/GetApplied", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewAppliedFilter, commonParam);
+				if (HisConfigCFG.IsNotRequiredFee && v_HIS_PATIENT_TYPE_ALTER.PATIENT_TYPE_ID != HisPatientTypeCFG.PATIENT_TYPE_ID__BHYT)
 				{
-					examServiceAddADO.IsNotRequiredFee = true;
+					examServiceAddInitADO.IsNotRequiredFee = true;
 				}
-				LogSystem.Debug("examServiceAddADO.IsNotRequiredFee: " + examServiceAddADO.IsNotRequiredFee);
-				ucExamAddition = (UserControl)examServiceAddProcessor.Run(examServiceAddADO);
+				LogSystem.Debug("examServiceAddADO.IsNotRequiredFee: " + examServiceAddInitADO.IsNotRequiredFee);
+				ucExamAddition = (UserControl)examServiceAddProcessor.Run(examServiceAddInitADO);
 				LoadUCToPanelExecuteExt(ucExamAddition, chkExamServiceAdd);
 			}
 			else
@@ -4134,54 +4136,54 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				SetCheckExecute(set: true, chkHospitalize, chkExamServiceAdd, chkTreatmentFinish, chkExamFinish);
 				ResetPrintExecuteExt();
 				long departmentId = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).DepartmentId;
-				HospitalizeInitADO hospitalizeADO = new HospitalizeInitADO();
-				hospitalizeADO.DepartmentId = departmentId;
-				hospitalizeADO.dlgRefeshIcd = DlgIcdSubCode;
-				hospitalizeADO.dlgSendIcd = GetIcdSubCode;
-				hospitalizeADO.Treatment = treatment;
-				hospitalizeADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
-				hospitalizeADO.FinishTime = HisServiceReqView.FINISH_TIME;
-				hospitalizeADO.OutTime = treatment.OUT_TIME;
+				HospitalizeInitADO hospitalizeInitADO = new HospitalizeInitADO();
+				hospitalizeInitADO.DepartmentId = departmentId;
+				hospitalizeInitADO.dlgRefeshIcd = DlgIcdSubCode;
+				hospitalizeInitADO.dlgSendIcd = GetIcdSubCode;
+				hospitalizeInitADO.Treatment = treatment;
+				hospitalizeInitADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
+				hospitalizeInitADO.FinishTime = HisServiceReqView.FINISH_TIME;
+				hospitalizeInitADO.OutTime = treatment.OUT_TIME;
 				if (isTimeServer)
 				{
-					hospitalizeADO.InTime = loadParam().Now;
+					hospitalizeInitADO.InTime = loadParam().Now;
 				}
 				else
 				{
-					hospitalizeADO.InTime = treatment.IN_TIME;
+					hospitalizeInitADO.InTime = treatment.IN_TIME;
 				}
-				hospitalizeADO.StartTime = HisServiceReqView.START_TIME;
-				hospitalizeADO.ModuleLink = moduleData.ModuleLink;
-				hospitalizeADO.IcdCode = icdDefaultFinish.ICD_CODE;
-				hospitalizeADO.IcdName = icdDefaultFinish.ICD_NAME;
-				hospitalizeADO.TraditionalIcdCode = IcdCodeYHCT;
-				hospitalizeADO.TraditionalIcdName = IcdNameYHCT;
-				hospitalizeADO.TraditionalIcdSubCode = IcdSubCodeYHCT;
-				hospitalizeADO.TraditionalIcdText = IcdTextYHCT;
+				hospitalizeInitADO.StartTime = HisServiceReqView.START_TIME;
+				hospitalizeInitADO.ModuleLink = moduleData.ModuleLink;
+				hospitalizeInitADO.IcdCode = icdDefaultFinish.ICD_CODE;
+				hospitalizeInitADO.IcdName = icdDefaultFinish.ICD_NAME;
+				hospitalizeInitADO.TraditionalIcdCode = IcdCodeYHCT;
+				hospitalizeInitADO.TraditionalIcdName = IcdNameYHCT;
+				hospitalizeInitADO.TraditionalIcdSubCode = IcdSubCodeYHCT;
+				hospitalizeInitADO.TraditionalIcdText = IcdTextYHCT;
 				if (patient == null || patient.ID == 0)
 				{
 					LoadPatient();
 				}
 				if (patient != null)
 				{
-					hospitalizeADO.RelativeAddress = patient.RELATIVE_ADDRESS;
-					hospitalizeADO.RelativeName = patient.RELATIVE_NAME;
-					hospitalizeADO.RelativePhone = patient.RELATIVE_PHONE;
-					hospitalizeADO.CareerId = patient.CAREER_ID;
+					hospitalizeInitADO.RelativeAddress = patient.RELATIVE_ADDRESS;
+					hospitalizeInitADO.RelativeName = patient.RELATIVE_NAME;
+					hospitalizeInitADO.RelativePhone = patient.RELATIVE_PHONE;
+					hospitalizeInitADO.CareerId = patient.CAREER_ID;
 				}
 				else
 				{
-					hospitalizeADO.RelativeAddress = "";
-					hospitalizeADO.RelativeName = "";
-					hospitalizeADO.RelativePhone = "";
+					hospitalizeInitADO.RelativeAddress = "";
+					hospitalizeInitADO.RelativeName = "";
+					hospitalizeInitADO.RelativePhone = "";
 				}
-				hospitalizeADO.isEmergency = (treatment.IS_EMERGENCY.HasValue ? true : false);
-				hospitalizeADO.InHospitalizationReasonCode = treatment.HOSPITALIZE_REASON_CODE;
-				hospitalizeADO.InHospitalizationReasonName = treatment.HOSPITALIZE_REASON_NAME;
-				hospitalizeADO.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
-				hospitalizeADO.Note = CurrentPatient.NOTE;
+				hospitalizeInitADO.isEmergency = (treatment.IS_EMERGENCY.HasValue ? true : false);
+				hospitalizeInitADO.InHospitalizationReasonCode = treatment.HOSPITALIZE_REASON_CODE;
+				hospitalizeInitADO.InHospitalizationReasonName = treatment.HOSPITALIZE_REASON_NAME;
+				hospitalizeInitADO.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
+				hospitalizeInitADO.Note = CurrentPatient.NOTE;
 				hospitalizeProcessor = new HospitalizeProcessor();
-				ucHospitalize = (UserControl)hospitalizeProcessor.Run(hospitalizeADO);
+				ucHospitalize = (UserControl)hospitalizeProcessor.Run(hospitalizeInitADO);
 				LoadUCToPanelExecuteExt(ucHospitalize, chkHospitalize);
 			}
 			else
@@ -4197,16 +4199,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private string GetIcdSubCode()
 	{
-		string icdSubCode = null;
+		string result = null;
 		try
 		{
-			icdSubCode = null;
+			result = null;
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Warn(ex);
 		}
-		return icdSubCode;
+		return result;
 	}
 
 	private void checkSign_CheckChange(CheckState checkState)
@@ -4274,10 +4276,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (treatment != null && treatment.MEDI_RECORD_ID.HasValue)
 			{
-				HisMediRecordFilter mediRecordFilter = new HisMediRecordFilter();
-				mediRecordFilter.ID = treatment.MEDI_RECORD_ID.Value;
-				List<HIS_MEDI_RECORD> MediRecodes = new BackendAdapter(new CommonParam()).Get<List<HIS_MEDI_RECORD>>("api/HisMediRecord/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, mediRecordFilter, null);
-				MediRecode = ((MediRecodes != null && MediRecodes.Count > 0) ? MediRecodes.FirstOrDefault() : null);
+				HisMediRecordFilter hisMediRecordFilter = new HisMediRecordFilter();
+				hisMediRecordFilter.ID = treatment.MEDI_RECORD_ID.Value;
+				List<HIS_MEDI_RECORD> list = new BackendAdapter(new CommonParam()).Get<List<HIS_MEDI_RECORD>>("api/HisMediRecord/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisMediRecordFilter, null);
+				MediRecode = ((list != null && list.Count > 0) ? list.FirstOrDefault() : null);
 			}
 		}
 		catch (Exception ex)
@@ -4293,9 +4295,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (treatment != null)
 			{
 				LogSystem.Debug("LoadPatientProgram this.treatment.PATIENT_ID " + LogUtil.TraceData("", treatment.PATIENT_ID));
-				HisPatientProgramFilter patientProgramFilter = new HisPatientProgramFilter();
-				patientProgramFilter.PATIENT_ID = treatment.PATIENT_ID;
-				PatientProgramList = new BackendAdapter(new CommonParam()).Get<List<HIS_PATIENT_PROGRAM>>("api/HisPatientProgram/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientProgramFilter, null);
+				HisPatientProgramFilter hisPatientProgramFilter = new HisPatientProgramFilter();
+				hisPatientProgramFilter.PATIENT_ID = treatment.PATIENT_ID;
+				PatientProgramList = new BackendAdapter(new CommonParam()).Get<List<HIS_PATIENT_PROGRAM>>("api/HisPatientProgram/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientProgramFilter, null);
 			}
 			else
 			{
@@ -4314,10 +4316,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (moduleData != null)
 			{
-				V_HIS_ROOM currentRoom = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == moduleData.RoomId);
-				HisDataStoreViewFilter dataStoreFilter = new HisDataStoreViewFilter();
-				dataStoreFilter.BRANCH_ID = currentRoom.BRANCH_ID;
-				DataStoreList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_DATA_STORE>>("api/HisDataStore/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, dataStoreFilter, null);
+				V_HIS_ROOM v_HIS_ROOM = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == moduleData.RoomId);
+				HisDataStoreViewFilter hisDataStoreViewFilter = new HisDataStoreViewFilter();
+				hisDataStoreViewFilter.BRANCH_ID = v_HIS_ROOM.BRANCH_ID;
+				DataStoreList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_DATA_STORE>>("api/HisDataStore/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDataStoreViewFilter, null);
 			}
 			else
 			{
@@ -4390,10 +4392,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				GetTotalIcd();
 				if (dicIcd != null && dicIcd.Count > 0)
 				{
-					Dictionary<string, string> dicNotIcdMain = new Dictionary<string, string>();
-					dicNotIcdMain = ((!dicIcd.ContainsKey(icdDefaultFinish.ICD_CODE)) ? dicIcd : dicIcd.Where((KeyValuePair<string, string> o) => o.Key != icdDefaultFinish.ICD_CODE).ToDictionary((KeyValuePair<string, string> o) => o.Key, (KeyValuePair<string, string> o) => o.Value));
-					treatmentFinishInitADO.Treatment.ICD_SUB_CODE = string.Join(";", dicNotIcdMain.Keys);
-					treatmentFinishInitADO.Treatment.ICD_TEXT = string.Join(";", dicNotIcdMain.Values);
+					Dictionary<string, string> dictionary = new Dictionary<string, string>();
+					dictionary = ((!dicIcd.ContainsKey(icdDefaultFinish.ICD_CODE)) ? dicIcd : dicIcd.Where((KeyValuePair<string, string> o) => o.Key != icdDefaultFinish.ICD_CODE).ToDictionary((KeyValuePair<string, string> o) => o.Key, (KeyValuePair<string, string> o) => o.Value));
+					treatmentFinishInitADO.Treatment.ICD_SUB_CODE = string.Join(";", dictionary.Keys);
+					treatmentFinishInitADO.Treatment.ICD_TEXT = string.Join(";", dictionary.Values);
 				}
 				if (lstIcdText != null && lstIcdText.Count > 0)
 				{
@@ -4416,8 +4418,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				treatmentFinishInitADO.IcdCode = icdDefaultFinish.ICD_CODE;
 				treatmentFinishInitADO.IcdName = icdDefaultFinish.ICD_NAME;
 				treatmentFinishInitADO.moduleData = moduleData;
-				V_HIS_ROOM dataRoom = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == moduleData.RoomId);
-				treatmentFinishInitADO.IsBlockNumOrder = dataRoom.IS_BLOCK_NUM_ORDER == 1;
+				V_HIS_ROOM v_HIS_ROOM = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == moduleData.RoomId);
+				treatmentFinishInitADO.IsBlockNumOrder = v_HIS_ROOM.IS_BLOCK_NUM_ORDER == 1;
 				treatmentFinishInitADO.dlgGetIcdSubCode = GetIcdSubCode;
 				treatmentFinishInitADO.Note = CurrentPatient.NOTE;
 				if (HisConfigCFG.IsAutoSetIcdWhenFinishInOtherExam && HisServiceReqView.IS_MAIN_EXAM != 1)
@@ -4429,16 +4431,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					treatmentFinishInitADO.Advise = HisServiceReqView.ADVISE;
 					treatmentFinishInitADO.Conclusion = HisServiceReqView.CONCLUSION;
 				}
-				CommonParam param = new CommonParam();
-				HisSevereIllnessInfoFilter filter = new HisSevereIllnessInfoFilter();
-				filter.TREATMENT_ID = treatment.ID;
-				List<HIS_SEVERE_ILLNESS_INFO> dtSevere = new BackendAdapter(param).Get<List<HIS_SEVERE_ILLNESS_INFO>>("api/HisSevereIllnessInfo/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-				if (dtSevere != null && dtSevere.Count > 0)
+				CommonParam commonParam = new CommonParam();
+				HisSevereIllnessInfoFilter hisSevereIllnessInfoFilter = new HisSevereIllnessInfoFilter();
+				hisSevereIllnessInfoFilter.TREATMENT_ID = treatment.ID;
+				List<HIS_SEVERE_ILLNESS_INFO> list = new BackendAdapter(commonParam).Get<List<HIS_SEVERE_ILLNESS_INFO>>("api/HisSevereIllnessInfo/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSevereIllnessInfoFilter, commonParam);
+				if (list != null && list.Count > 0)
 				{
-					treatmentFinishInitADO.SevereIllNessInfo = dtSevere[0];
-					HisEventsCausesDeathFilter filterChild = new HisEventsCausesDeathFilter();
-					filterChild.SEVERE_ILLNESS_INFO_ID = dtSevere[0].ID;
-					List<HIS_EVENTS_CAUSES_DEATH> dtEventsCausesDeath = (treatmentFinishInitADO.ListEventsCausesDeath = new BackendAdapter(param).Get<List<HIS_EVENTS_CAUSES_DEATH>>("api/HisEventsCausesDeath/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filterChild, param));
+					treatmentFinishInitADO.SevereIllNessInfo = list[0];
+					HisEventsCausesDeathFilter hisEventsCausesDeathFilter = new HisEventsCausesDeathFilter();
+					hisEventsCausesDeathFilter.SEVERE_ILLNESS_INFO_ID = list[0].ID;
+					List<HIS_EVENTS_CAUSES_DEATH> list3 = (treatmentFinishInitADO.ListEventsCausesDeath = new BackendAdapter(commonParam).Get<List<HIS_EVENTS_CAUSES_DEATH>>("api/HisEventsCausesDeath/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisEventsCausesDeathFilter, commonParam));
 				}
 				if (isTimeServer)
 				{
@@ -4553,8 +4555,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			V_HIS_SERVICE_REQ dataRow = (V_HIS_SERVICE_REQ)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
-			if (dataRow == null)
+			V_HIS_SERVICE_REQ v_HIS_SERVICE_REQ = (V_HIS_SERVICE_REQ)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
+			if (v_HIS_SERVICE_REQ == null)
 			{
 				return;
 			}
@@ -4564,21 +4566,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (e.Column.FieldName == "INTRUCTION_TIME_STR")
 			{
-				e.Value = Inventec.Common.DateTime.Convert.TimeNumberToTimeString(dataRow.INTRUCTION_TIME);
+				e.Value = Inventec.Common.DateTime.Convert.TimeNumberToTimeString(v_HIS_SERVICE_REQ.INTRUCTION_TIME);
 			}
 			if (e.Column.FieldName == "ICD_CODE_ICD_NAME")
 			{
-				if (!string.IsNullOrEmpty(dataRow.ICD_CODE) && !string.IsNullOrEmpty(dataRow.ICD_NAME))
+				if (!string.IsNullOrEmpty(v_HIS_SERVICE_REQ.ICD_CODE) && !string.IsNullOrEmpty(v_HIS_SERVICE_REQ.ICD_NAME))
 				{
-					e.Value = System.Convert.ToString(dataRow.ICD_CODE + " - " + dataRow.ICD_NAME);
+					e.Value = System.Convert.ToString(v_HIS_SERVICE_REQ.ICD_CODE + " - " + v_HIS_SERVICE_REQ.ICD_NAME);
 				}
-				else if (!string.IsNullOrEmpty(dataRow.ICD_CODE))
+				else if (!string.IsNullOrEmpty(v_HIS_SERVICE_REQ.ICD_CODE))
 				{
-					e.Value = dataRow.ICD_CODE;
+					e.Value = v_HIS_SERVICE_REQ.ICD_CODE;
 				}
-				else if (!string.IsNullOrEmpty(dataRow.ICD_NAME))
+				else if (!string.IsNullOrEmpty(v_HIS_SERVICE_REQ.ICD_NAME))
 				{
-					e.Value = dataRow.ICD_NAME;
+					e.Value = v_HIS_SERVICE_REQ.ICD_NAME;
 				}
 			}
 		}
@@ -4596,16 +4598,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			V_HIS_ALLERGENIC data = (V_HIS_ALLERGENIC)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
-			if (data != null)
+			V_HIS_ALLERGENIC v_HIS_ALLERGENIC = (V_HIS_ALLERGENIC)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
+			if (v_HIS_ALLERGENIC != null)
 			{
 				if (e.Column.FieldName == "DOUBT")
 				{
-					e.Value = data.IS_DOUBT == 1;
+					e.Value = v_HIS_ALLERGENIC.IS_DOUBT == 1;
 				}
 				if (e.Column.FieldName == "SURE")
 				{
-					e.Value = data.IS_SURE == 1;
+					e.Value = v_HIS_ALLERGENIC.IS_SURE == 1;
 				}
 			}
 		}
@@ -4621,10 +4623,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (e.IsGetData && e.Column.UnboundType != 0)
 			{
-				TreatmentExamADO data = (TreatmentExamADO)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
-				if (data != null && e.Column.FieldName == "HISTORY_TIME_DISPLAY")
+				TreatmentExamADO treatmentExamADO = (TreatmentExamADO)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
+				if (treatmentExamADO != null && e.Column.FieldName == "HISTORY_TIME_DISPLAY")
 				{
-					e.Value = HistoryTimeFormat(data.IN_TIME, data.OUT_TIME);
+					e.Value = HistoryTimeFormat(treatmentExamADO.IN_TIME, treatmentExamADO.OUT_TIME);
 				}
 			}
 		}
@@ -4642,36 +4644,36 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			GridView view = sender as GridView;
-			GridHitInfo hi = view.CalcHitInfo(e.Location);
-			if (!hi.InRowCell || !(hi.Column.RealColumnEdit.GetType() == typeof(RepositoryItemCheckEdit)))
+			GridView gridView = sender as GridView;
+			GridHitInfo gridHitInfo = gridView.CalcHitInfo(e.Location);
+			if (!gridHitInfo.InRowCell || !(gridHitInfo.Column.RealColumnEdit.GetType() == typeof(RepositoryItemCheckEdit)))
 			{
 				return;
 			}
-			view.FocusedRowHandle = hi.RowHandle;
-			view.FocusedColumn = hi.Column;
-			view.ShowEditor();
-			CheckEdit checkEdit = view.ActiveEditor as CheckEdit;
-			CheckEditViewInfo checkInfo = (CheckEditViewInfo)checkEdit.GetViewInfo();
-			Rectangle glyphRect = checkInfo.CheckInfo.GlyphRect;
-			GridViewInfo viewInfo = view.GetViewInfo() as GridViewInfo;
-			Rectangle gridGlyphRect = new Rectangle(viewInfo.GetGridCellInfo(hi).Bounds.X + glyphRect.X, viewInfo.GetGridCellInfo(hi).Bounds.Y + glyphRect.Y, glyphRect.Width, glyphRect.Height);
-			if (!gridGlyphRect.Contains(e.Location))
+			gridView.FocusedRowHandle = gridHitInfo.RowHandle;
+			gridView.FocusedColumn = gridHitInfo.Column;
+			gridView.ShowEditor();
+			CheckEdit checkEdit = gridView.ActiveEditor as CheckEdit;
+			CheckEditViewInfo checkEditViewInfo = (CheckEditViewInfo)checkEdit.GetViewInfo();
+			Rectangle glyphRect = checkEditViewInfo.CheckInfo.GlyphRect;
+			GridViewInfo gridViewInfo = gridView.GetViewInfo() as GridViewInfo;
+			Rectangle rectangle = new Rectangle(gridViewInfo.GetGridCellInfo(gridHitInfo).Bounds.X + glyphRect.X, gridViewInfo.GetGridCellInfo(gridHitInfo).Bounds.Y + glyphRect.Y, glyphRect.Width, glyphRect.Height);
+			if (!rectangle.Contains(e.Location))
 			{
-				view.CloseEditor();
-				if (!view.IsCellSelected(hi.RowHandle, hi.Column))
+				gridView.CloseEditor();
+				if (!gridView.IsCellSelected(gridHitInfo.RowHandle, gridHitInfo.Column))
 				{
-					view.SelectCell(hi.RowHandle, hi.Column);
+					gridView.SelectCell(gridHitInfo.RowHandle, gridHitInfo.Column);
 				}
 				else
 				{
-					view.UnselectCell(hi.RowHandle, hi.Column);
+					gridView.UnselectCell(gridHitInfo.RowHandle, gridHitInfo.Column);
 				}
 			}
 			else
 			{
 				checkEdit.Checked = !checkEdit.Checked;
-				view.CloseEditor();
+				gridView.CloseEditor();
 			}
 			(e as DXMouseEventArgs).Handled = true;
 		}
@@ -4689,13 +4691,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			GridControl grid = sender as GridControl;
-			GridView view = grid.FocusedView as GridView;
-			if ((e.Modifiers == Keys.None && view.IsLastRow && view.FocusedColumn.VisibleIndex == view.VisibleColumns.Count - 1) || (e.Modifiers == Keys.Shift && view.IsFirstRow && view.FocusedColumn.VisibleIndex == 0))
+			GridControl gridControl = sender as GridControl;
+			GridView gridView = gridControl.FocusedView as GridView;
+			if ((e.Modifiers == Keys.None && gridView.IsLastRow && gridView.FocusedColumn.VisibleIndex == gridView.VisibleColumns.Count - 1) || (e.Modifiers == Keys.Shift && gridView.IsFirstRow && gridView.FocusedColumn.VisibleIndex == 0))
 			{
-				if (view.IsEditing)
+				if (gridView.IsEditing)
 				{
-					view.CloseEditor();
+					gridView.CloseEditor();
 				}
 				txtSubclinical.Focus();
 				txtSubclinical.SelectAll();
@@ -4712,26 +4714,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			if (!(e.InvalidControl is BaseEdit edit) || !(edit.GetViewInfo() is BaseEditViewInfo))
+			if (!(e.InvalidControl is BaseEdit baseEdit) || !(baseEdit.GetViewInfo() is BaseEditViewInfo))
 			{
 				return;
 			}
 			if (positionHandleControlLeft == -1)
 			{
-				positionHandleControlLeft = edit.TabIndex;
-				if (edit.Visible)
+				positionHandleControlLeft = baseEdit.TabIndex;
+				if (baseEdit.Visible)
 				{
-					edit.SelectAll();
-					edit.Focus();
+					baseEdit.SelectAll();
+					baseEdit.Focus();
 				}
 			}
-			if (positionHandleControlLeft > edit.TabIndex)
+			if (positionHandleControlLeft > baseEdit.TabIndex)
 			{
-				positionHandleControlLeft = edit.TabIndex;
-				if (edit.Visible)
+				positionHandleControlLeft = baseEdit.TabIndex;
+				if (baseEdit.Visible)
 				{
-					edit.SelectAll();
-					edit.Focus();
+					baseEdit.SelectAll();
+					baseEdit.Focus();
 				}
 			}
 		}
@@ -4764,28 +4766,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPaan").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPaan").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AssignPaan");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				HIS.UC.Icd.ADO.IcdInputADO icdADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-				SecondaryIcdDataADO icdSubADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
-				listArgs.Add(icdADO);
-				listArgs.Add(icdSubADO);
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				listArgs.Add(HisServiceReqView.ID);
-				listArgs.Add(HisServiceReqView);
-				listArgs.Add(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				HIS.UC.Icd.ADO.IcdInputADO item = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+				SecondaryIcdDataADO item2 = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+				list.Add(item);
+				list.Add(item2);
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				list.Add(HisServiceReqView.ID);
+				list.Add(HisServiceReqView);
+				list.Add(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -4815,29 +4817,29 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			WaitingManager.Show();
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisExamServiceTemp").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisExamServiceTemp").FirstOrDefault();
+			if (module == null)
 			{
 				throw new NullReferenceException("Not found module by ModuleLink = 'HIS.Desktop.Plugins.HisExamServiceTemp'");
 			}
-			if (!moduleData.IsPlugin || moduleData.ExtensionInfo == null)
+			if (!module.IsPlugin || module.ExtensionInfo == null)
 			{
 				throw new NullReferenceException("Module 'HIS.Desktop.Plugins.HisExamServiceTemp' is not plugins");
 			}
-			long intructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
-			ExamServiceTempADO examServiceTemp = new ExamServiceTempADO();
-			examServiceTemp.IsCreatorOrPublic = true;
-			examServiceTemp.DelegateSelectObjectData = DataSelectReuslt;
-			List<object> listArgs = new List<object>();
-			listArgs.Add(examServiceTemp);
-			listArgs.Add(SendexamServiceTemp());
-			object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-			if (extenceInstance == null)
+			long num = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
+			ExamServiceTempADO examServiceTempADO = new ExamServiceTempADO();
+			examServiceTempADO.IsCreatorOrPublic = true;
+			examServiceTempADO.DelegateSelectObjectData = DataSelectReuslt;
+			List<object> list = new List<object>();
+			list.Add(examServiceTempADO);
+			list.Add(SendexamServiceTemp());
+			object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+			if (pluginInstance == null)
 			{
 				throw new ArgumentNullException("Khoi tao moduleData that bai. extenceInstance = null");
 			}
 			WaitingManager.Hide();
-			((Form)extenceInstance).ShowDialog();
+			((Form)pluginInstance).ShowDialog();
 		}
 		catch (Exception ex)
 		{
@@ -4849,22 +4851,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisBedRoomIn").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisBedRoomIn").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.HisBedRoomIn");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
-				listArgs.Add(treatmentId);
-				object extenceInstance = PluginInstance.GetPluginInstance(moduleData, listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				Inventec.Desktop.Common.Modules.Module module2 = new Inventec.Desktop.Common.Modules.Module();
+				list.Add(treatmentId);
+				object pluginInstance = PluginInstance.GetPluginInstance(module, list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -4963,9 +4965,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 						hisServiceReqSDO.FinishTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now);
 					}
 				}
-				bool valid = true;
-				valid = (bool)icdProcessorYHCT.ValidationIcd(ucIcdYHCT) && valid;
-				if (!(subIcdProcessorYHCT.GetValidate(ucSecondaryIcdYHCT) && valid) || !CheckIcd(hisServiceReqSDO.TreatmentFinishSDO))
+				bool flag = true;
+				flag = (bool)icdProcessorYHCT.ValidationIcd(ucIcdYHCT) && flag;
+				if (!(subIcdProcessorYHCT.GetValidate(ucSecondaryIcdYHCT) && flag) || !CheckIcd(hisServiceReqSDO.TreatmentFinishSDO))
 				{
 					return;
 				}
@@ -4999,7 +5001,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool CheckIcd(HisTreatmentFinishSDO TreatmentFinishSDO = null)
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
 			GetUcIcdYHCT();
@@ -5007,131 +5009,131 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			totalSubIcd = new List<string>();
 			if (!string.IsNullOrEmpty(txtIcdCode.Text))
 			{
-				string[] stringArray3 = txtIcdCode.Text.Split(';');
-				totalIcd.AddRange(stringArray3.Where((string x) => !string.IsNullOrEmpty(x)));
+				string[] source = txtIcdCode.Text.Split(';');
+				totalIcd.AddRange(source.Where((string x) => !string.IsNullOrEmpty(x)));
 			}
 			if (!string.IsNullOrEmpty(txtIcdSubCode.Text))
 			{
-				string[] stringArray5 = txtIcdSubCode.Text.Split(';');
-				totalSubIcd.AddRange(stringArray5.Where((string x) => !string.IsNullOrEmpty(x)));
+				string[] source2 = txtIcdSubCode.Text.Split(';');
+				totalSubIcd.AddRange(source2.Where((string x) => !string.IsNullOrEmpty(x)));
 			}
 			if (!string.IsNullOrEmpty(IcdCodeYHCT))
 			{
-				string[] stringArray6 = IcdCodeYHCT.Split(';');
-				totalIcd.AddRange(stringArray6.Where((string x) => !string.IsNullOrEmpty(x)));
+				string[] source3 = IcdCodeYHCT.Split(';');
+				totalIcd.AddRange(source3.Where((string x) => !string.IsNullOrEmpty(x)));
 			}
 			if (!string.IsNullOrEmpty(IcdSubCodeYHCT))
 			{
-				string[] stringArray8 = IcdSubCodeYHCT.Split(';');
-				totalSubIcd.AddRange(stringArray8.Where((string x) => !string.IsNullOrEmpty(x)));
+				string[] source4 = IcdSubCodeYHCT.Split(';');
+				totalSubIcd.AddRange(source4.Where((string x) => !string.IsNullOrEmpty(x)));
 			}
 			if (HisServiceReqView != null && ucHospitalize != null)
 			{
 				if (!string.IsNullOrEmpty(HisServiceReqView.ICD_CODE))
 				{
-					string[] stringArray7 = HisServiceReqView.ICD_CODE.Split(';');
-					totalIcd.AddRange(stringArray7.Where((string x) => !string.IsNullOrEmpty(x)));
+					string[] source5 = HisServiceReqView.ICD_CODE.Split(';');
+					totalIcd.AddRange(source5.Where((string x) => !string.IsNullOrEmpty(x)));
 				}
 				if (!string.IsNullOrEmpty(HisServiceReqView.ICD_SUB_CODE))
 				{
-					string[] stringArray4 = HisServiceReqView.ICD_SUB_CODE.Split(';');
-					totalSubIcd.AddRange(stringArray4.Where((string x) => !string.IsNullOrEmpty(x)));
+					string[] source6 = HisServiceReqView.ICD_SUB_CODE.Split(';');
+					totalSubIcd.AddRange(source6.Where((string x) => !string.IsNullOrEmpty(x)));
 				}
 			}
 			if (TreatmentFinishSDO != null && ucExamFinish != null)
 			{
 				if (!string.IsNullOrEmpty(TreatmentFinishSDO.IcdCode))
 				{
-					string[] stringArray2 = TreatmentFinishSDO.IcdCode.Split(';');
-					totalIcd.AddRange(stringArray2.Where((string x) => !string.IsNullOrEmpty(x)));
+					string[] source7 = TreatmentFinishSDO.IcdCode.Split(';');
+					totalIcd.AddRange(source7.Where((string x) => !string.IsNullOrEmpty(x)));
 				}
 				if (!string.IsNullOrEmpty(TreatmentFinishSDO.IcdSubCode))
 				{
-					string[] stringArray = TreatmentFinishSDO.IcdSubCode.Split(';');
-					totalSubIcd.AddRange(stringArray.Where((string x) => !string.IsNullOrEmpty(x)));
+					string[] source8 = TreatmentFinishSDO.IcdSubCode.Split(';');
+					totalSubIcd.AddRange(source8.Where((string x) => !string.IsNullOrEmpty(x)));
 				}
 			}
-			string result = string.Join(";", totalIcd);
-			string resultSub = string.Join(";", totalSubIcd);
-			string messErr = null;
-			if ((HisConfigCFG.CheckIcdWhenSave == "1" || HisConfigCFG.CheckIcdWhenSave == "2") && !checkIcdManager.ProcessCheckIcd(result, resultSub, ref messErr, HisConfigCFG.CheckIcdWhenSave == "1" || HisConfigCFG.CheckIcdWhenSave == "2", IsSave: true))
+			string icdCodes = string.Join(";", totalIcd);
+			string icdSubCodes = string.Join(";", totalSubIcd);
+			string MessageError = null;
+			if ((HisConfigCFG.CheckIcdWhenSave == "1" || HisConfigCFG.CheckIcdWhenSave == "2") && !checkIcdManager.ProcessCheckIcd(icdCodes, icdSubCodes, ref MessageError, HisConfigCFG.CheckIcdWhenSave == "1" || HisConfigCFG.CheckIcdWhenSave == "2", IsSave: true))
 			{
 				if (HisConfigCFG.CheckIcdWhenSave == "1")
 				{
-					if (XtraMessageBox.Show(messErr + ". Bạn có muốn tiếp tục?", HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.YesNo) == DialogResult.No)
+					if (XtraMessageBox.Show(MessageError + ". Bạn có muốn tiếp tục?", HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.YesNo) == DialogResult.No)
 					{
-						valid = false;
+						result = false;
 					}
 				}
 				else
 				{
-					XtraMessageBox.Show(messErr, HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.OK);
-					valid = false;
+					XtraMessageBox.Show(MessageError, HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.OK);
+					result = false;
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			valid = false;
+			result = false;
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private bool CheckMustChooseSeviceExamOption()
 	{
-		bool rs = true;
+		bool result = true;
 		try
 		{
-			bool isTreatmentFinish = false;
-			string serviceReqCode = null;
+			bool flag = false;
+			string text = null;
 			if (((chkExamServiceAdd.Checked && examServiceAddProcessor != null && (examServiceAddProcessor.GetValueV2(ucExamAddition) as ExamServiceAddADO).IsFinishCurrent) || chkExamFinish.Checked) && string.IsNullOrEmpty(HisServiceReqView.TDL_SERVICE_IDS))
 			{
-				serviceReqCode = HisServiceReqView.SERVICE_REQ_CODE;
+				text = HisServiceReqView.SERVICE_REQ_CODE;
 			}
 			if (chkTreatmentFinish.Checked)
 			{
-				HisServiceReqFilter srFilter = new HisServiceReqFilter();
-				srFilter.IS_ACTIVE = 1;
-				srFilter.TREATMENT_ID = treatment.ID;
-				srFilter.SERVICE_REQ_TYPE_ID = 1L;
-				List<HIS_SERVICE_REQ> serviceReqs = new BackendAdapter(new CommonParam()).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, srFilter, null);
-				if (serviceReqs != null && serviceReqs.Count > 0)
+				HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+				hisServiceReqFilter.IS_ACTIVE = 1;
+				hisServiceReqFilter.TREATMENT_ID = treatment.ID;
+				hisServiceReqFilter.SERVICE_REQ_TYPE_ID = 1L;
+				List<HIS_SERVICE_REQ> list = new BackendAdapter(new CommonParam()).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, null);
+				if (list != null && list.Count > 0)
 				{
-					serviceReqs = serviceReqs.Where((HIS_SERVICE_REQ o) => o.IS_NO_EXECUTE != 1 && o.IS_DELETE != 1 && string.IsNullOrEmpty(o.TDL_SERVICE_IDS)).ToList();
-					if (serviceReqs != null && serviceReqs.Count > 0)
+					list = list.Where((HIS_SERVICE_REQ o) => o.IS_NO_EXECUTE != 1 && o.IS_DELETE != 1 && string.IsNullOrEmpty(o.TDL_SERVICE_IDS)).ToList();
+					if (list != null && list.Count > 0)
 					{
-						serviceReqCode = string.Join(", ", serviceReqs.Select((HIS_SERVICE_REQ o) => o.SERVICE_REQ_CODE));
-						isTreatmentFinish = true;
+						text = string.Join(", ", list.Select((HIS_SERVICE_REQ o) => o.SERVICE_REQ_CODE));
+						flag = true;
 					}
 				}
 			}
 			if (HisConfigCFG.MustChooseSeviceExamOption == "1")
 			{
-				if (!string.IsNullOrEmpty(serviceReqCode) && XtraMessageBox.Show($"Y lệnh {serviceReqCode} thiếu dịch vụ khám. Bạn có muốn tiếp tục?", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo) != DialogResult.Yes)
+				if (!string.IsNullOrEmpty(text) && XtraMessageBox.Show($"Y lệnh {text} thiếu dịch vụ khám. Bạn có muốn tiếp tục?", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo) != DialogResult.Yes)
 				{
-					rs = false;
+					result = false;
 				}
 			}
-			else if (HisConfigCFG.MustChooseSeviceExamOption == "2" && !string.IsNullOrEmpty(serviceReqCode))
+			else if (HisConfigCFG.MustChooseSeviceExamOption == "2" && !string.IsNullOrEmpty(text))
 			{
-				if (isTreatmentFinish)
+				if (flag)
 				{
-					XtraMessageBox.Show($"Y lệnh {serviceReqCode} thiếu dịch vụ khám. Không cho phép kết thúc điều trị.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao);
+					XtraMessageBox.Show($"Y lệnh {text} thiếu dịch vụ khám. Không cho phép kết thúc điều trị.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao);
 				}
 				else
 				{
-					XtraMessageBox.Show($"Y lệnh {serviceReqCode} thiếu dịch vụ khám. Bạn không thể kết thúc y lệnh khám.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao);
+					XtraMessageBox.Show($"Y lệnh {text} thiếu dịch vụ khám. Bạn không thể kết thúc y lệnh khám.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao);
 				}
-				rs = false;
+				result = false;
 			}
 		}
 		catch (Exception ex)
 		{
-			rs = false;
+			result = false;
 			LogSystem.Error(ex);
 		}
-		return rs;
+		return result;
 	}
 
 	private void btnContentSubclinical_Click(object sender, EventArgs e)
@@ -5159,22 +5161,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ContentSubclinical").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ContentSubclinical").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.ContentSubclinical");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				listArgs.Add(new DelegateSelectData(DelegateSelectDataContentSubclinical));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				list.Add(new DelegateSelectData(DelegateSelectDataContentSubclinical));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -5224,28 +5226,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					return;
 				}
-				HisServiceReqExamUpdateSDO hisServiceReqSDO = new HisServiceReqExamUpdateSDO();
-				ProcessExamServiceReqDTO(ref hisServiceReqSDO);
-				ProcessExamSereIcdDTO(ref hisServiceReqSDO);
-				ProcessExamSereNextTreatmentIntructionDTO(ref hisServiceReqSDO);
-				ProcessExamSereDHST(ref hisServiceReqSDO);
+				HisServiceReqExamUpdateSDO examServiceReqUpdateSDO = new HisServiceReqExamUpdateSDO();
+				ProcessExamServiceReqDTO(ref examServiceReqUpdateSDO);
+				ProcessExamSereIcdDTO(ref examServiceReqUpdateSDO);
+				ProcessExamSereNextTreatmentIntructionDTO(ref examServiceReqUpdateSDO);
+				ProcessExamSereDHST(ref examServiceReqUpdateSDO);
 				WaitingManager.Show();
-				hisServiceReqSDO.RequestRoomId = moduleData.RoomId;
-				HisServiceReqExamUpdateResultSDO HisServiceReqResult = new BackendAdapter(param).Post<HisServiceReqExamUpdateResultSDO>("api/HisServiceReq/ExamUpdate", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqSDO, param);
+				examServiceReqUpdateSDO.RequestRoomId = moduleData.RoomId;
+				HisServiceReqExamUpdateResultSDO hisServiceReqExamUpdateResultSDO = new BackendAdapter(param).Post<HisServiceReqExamUpdateResultSDO>("api/HisServiceReq/ExamUpdate", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, examServiceReqUpdateSDO, param);
 				WaitingManager.Hide();
-				if (HisServiceReqResult != null)
+				if (hisServiceReqExamUpdateResultSDO != null)
 				{
 					HisServiceReqView = new V_HIS_SERVICE_REQ();
-					DataObjectMapper.Map<V_HIS_SERVICE_REQ>(HisServiceReqView, HisServiceReqResult.ServiceReq);
-					EnableButtonByServiceReq(HisServiceReqResult.ServiceReq.SERVICE_REQ_STT_ID);
+					DataObjectMapper.Map<V_HIS_SERVICE_REQ>(HisServiceReqView, hisServiceReqExamUpdateResultSDO.ServiceReq);
+					EnableButtonByServiceReq(hisServiceReqExamUpdateResultSDO.ServiceReq.SERVICE_REQ_STT_ID);
 					BtnRefreshForFormOther();
 					if (reLoadServiceReq != null)
 					{
-						reLoadServiceReq(HisServiceReqResult.ServiceReq);
+						reLoadServiceReq(hisServiceReqExamUpdateResultSDO.ServiceReq);
 					}
 					btnPrint_ExamService.Enabled = true;
-					HIS_ROOM _hisRoom = BackendDataWorker.Get<HIS_ROOM>().FirstOrDefault((HIS_ROOM p) => p.ID == moduleData.RoomId);
-					if (HisConfigCFG.executeRoomPaymentOption == "2" && _hisRoom.DEFAULT_CASHIER_ROOM_ID.HasValue && _hisRoom.BILL_ACCOUNT_BOOK_ID.HasValue)
+					HIS_ROOM hIS_ROOM = BackendDataWorker.Get<HIS_ROOM>().FirstOrDefault((HIS_ROOM p) => p.ID == moduleData.RoomId);
+					if (HisConfigCFG.executeRoomPaymentOption == "2" && hIS_ROOM.DEFAULT_CASHIER_ROOM_ID.HasValue && hIS_ROOM.BILL_ACCOUNT_BOOK_ID.HasValue)
 					{
 						ProcessPayment(showMessage: false);
 					}
@@ -5262,68 +5264,68 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			V_HIS_TREATMENT_FEE_4 treatmentFee4 = GetTreatmentFee4();
-			if (treatmentFee4 == null)
+			V_HIS_TREATMENT_FEE_4 treatmentFee = GetTreatmentFee4();
+			if (treatmentFee == null)
 			{
 				return;
 			}
-			decimal unpaidAmout = treatmentFee4.TOTAL_PATIENT_PRICE.Value - treatmentFee4.TOTAL_BILL_AMOUNT.Value - treatmentFee4.TOTAL_DEPOSIT_AMOUNT.Value - treatmentFee4.TOTAL_DEBT_AMOUNT.Value + treatmentFee4.TOTAL_BILL_TRANSFER_AMOUNT.Value + treatmentFee4.TOTAL_REPAY_AMOUNT.Value;
-			if (!(unpaidAmout <= 0m))
+			decimal num = treatmentFee.TOTAL_PATIENT_PRICE.Value - treatmentFee.TOTAL_BILL_AMOUNT.Value - treatmentFee.TOTAL_DEPOSIT_AMOUNT.Value - treatmentFee.TOTAL_DEBT_AMOUNT.Value + treatmentFee.TOTAL_BILL_TRANSFER_AMOUNT.Value + treatmentFee.TOTAL_REPAY_AMOUNT.Value;
+			if (!(num <= 0m))
 			{
-				long? tDL_TREATMENT_TYPE_ID = treatmentFee4.TDL_TREATMENT_TYPE_ID;
-				long num = 1L;
-				if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num && tDL_TREATMENT_TYPE_ID.HasValue && treatmentFee4.CARD_SERVICE_CODE != null && treatmentFee4.CARD_IS_ACTIVE == 1)
+				long? tDL_TREATMENT_TYPE_ID = treatmentFee.TDL_TREATMENT_TYPE_ID;
+				long num2 = 1L;
+				if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num2 && tDL_TREATMENT_TYPE_ID.HasValue && treatmentFee.CARD_SERVICE_CODE != null && treatmentFee.CARD_IS_ACTIVE == 1)
 				{
-					decimal? balance = new BackendAdapter(new CommonParam()).Get<decimal?>("api/HisPatient/GetCardBalance", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, HisServiceReqView.TDL_PATIENT_ID, null);
-					if (balance.HasValue)
+					decimal? num3 = new BackendAdapter(new CommonParam()).Get<decimal?>("api/HisPatient/GetCardBalance", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, HisServiceReqView.TDL_PATIENT_ID, null);
+					if (num3.HasValue)
 					{
-						decimal? num2 = balance;
-						decimal num3 = unpaidAmout;
-						if (!(num2.GetValueOrDefault() < num3) || !num2.HasValue)
+						decimal? num4 = num3;
+						decimal num5 = num;
+						if (!(num4.GetValueOrDefault() < num5) || !num4.HasValue)
 						{
-							decimal paidAmount = treatmentFee4.TOTAL_BILL_AMOUNT.Value + treatmentFee4.TOTAL_DEPOSIT_AMOUNT.Value + treatmentFee4.TOTAL_DEBT_AMOUNT.Value - treatmentFee4.TOTAL_BILL_TRANSFER_AMOUNT.Value - treatmentFee4.TOTAL_REPAY_AMOUNT.Value;
-							frmPayment frm = new frmPayment(treatmentFee4.TOTAL_PATIENT_PRICE.Value, paidAmount, unpaidAmout, balance.Value, CheckPayment);
-							frm.ShowDialog();
+							decimal amountPaid = treatmentFee.TOTAL_BILL_AMOUNT.Value + treatmentFee.TOTAL_DEPOSIT_AMOUNT.Value + treatmentFee.TOTAL_DEBT_AMOUNT.Value - treatmentFee.TOTAL_BILL_TRANSFER_AMOUNT.Value - treatmentFee.TOTAL_REPAY_AMOUNT.Value;
+							frmPayment frmPayment = new frmPayment(treatmentFee.TOTAL_PATIENT_PRICE.Value, amountPaid, num, num3.Value, CheckPayment);
+							frmPayment.ShowDialog();
 							if (!isPayment)
 							{
 								return;
 							}
 							if (GlobalVariables.portComConnected == null || !GlobalVariables.portComConnected.IsConnected)
 							{
-								frmConnectCOM frmConnect = new frmConnectCOM();
-								frmConnect.ShowDialog();
+								frmConnectCOM frmConnectCOM = new frmConnectCOM();
+								frmConnectCOM.ShowDialog();
 							}
 							if (GlobalVariables.portComConnected == null)
 							{
 								return;
 							}
-							ResultDto rs = GlobalVariables.portComConnected.SendPos();
-							if (rs == null || !rs.IsSuccess || !rs.Data.Equals(treatmentFee4.CARD_SERVICE_CODE))
+							ResultDto resultDto = GlobalVariables.portComConnected.SendPos();
+							if (resultDto == null || !resultDto.IsSuccess || !resultDto.Data.Equals(treatmentFee.CARD_SERVICE_CODE))
 							{
 								XtraMessageBox.Show("Thẻ không hợp lệ hoặc thuộc bệnh nhân khác", "Thông báo");
 								return;
 							}
 							WaitingManager.Show();
-							bool success = false;
-							CommonParam param = new CommonParam();
-							EpaymentBillSDO sdo = new EpaymentBillSDO();
-							sdo.CardServiceCode = rs.Data;
-							sdo.RequestRoomId = moduleData.RoomId;
-							sdo.TreatmentId = treatmentId;
-							resultEPayment = new BackendAdapter(param).Post<EpaymentBillResultSDO>("api/HisTransaction/EpaymentBill", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sdo, param);
+							bool value = false;
+							CommonParam commonParam = new CommonParam();
+							EpaymentBillSDO epaymentBillSDO = new EpaymentBillSDO();
+							epaymentBillSDO.CardServiceCode = resultDto.Data;
+							epaymentBillSDO.RequestRoomId = moduleData.RoomId;
+							epaymentBillSDO.TreatmentId = treatmentId;
+							resultEPayment = new BackendAdapter(commonParam).Post<EpaymentBillResultSDO>("api/HisTransaction/EpaymentBill", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, epaymentBillSDO, commonParam);
 							if (resultEPayment != null)
 							{
-								success = true;
+								value = true;
 								PrintProcess(PrintType.PHIEU_THU_THANH_TOAN);
 							}
 							WaitingManager.Hide();
-							MessageManager.Show(base.ParentForm, param, success);
+							MessageManager.Show(base.ParentForm, commonParam, value);
 							return;
 						}
 					}
 					if (showMessage)
 					{
-						XtraMessageBox.Show($"Tài khoản thẻ của bệnh nhân không đủ số dư để thực hiện thanh toán (số dư: {balance}, chi phí cần thanh toán: {unpaidAmout})", "Thông báo");
+						XtraMessageBox.Show($"Tài khoản thẻ của bệnh nhân không đủ số dư để thực hiện thanh toán (số dư: {num3}, chi phí cần thanh toán: {num})", "Thông báo");
 					}
 					return;
 				}
@@ -5359,31 +5361,31 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (chkExamFinish.Checked)
 			{
-				V_HIS_ROOM _hisRoom = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM p) => p.ID == moduleData.RoomId);
-				if (_hisRoom != null && _hisRoom != null)
+				V_HIS_ROOM v_HIS_ROOM = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM p) => p.ID == moduleData.RoomId);
+				if (v_HIS_ROOM != null && v_HIS_ROOM != null)
 				{
-					HisDepartmentTranFilter filter = new HisDepartmentTranFilter();
-					filter.TREATMENT_ID = treatmentId;
-					filter.ORDER_FIELD = "MODIFY_TIME";
-					filter.ORDER_DIRECTION = "DESC";
-					List<HIS_DEPARTMENT_TRAN> datas = new BackendAdapter(null).Get<List<HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, null);
-					if (datas != null && datas.Count > 0)
+					HisDepartmentTranFilter hisDepartmentTranFilter = new HisDepartmentTranFilter();
+					hisDepartmentTranFilter.TREATMENT_ID = treatmentId;
+					hisDepartmentTranFilter.ORDER_FIELD = "MODIFY_TIME";
+					hisDepartmentTranFilter.ORDER_DIRECTION = "DESC";
+					List<HIS_DEPARTMENT_TRAN> list = new BackendAdapter(null).Get<List<HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDepartmentTranFilter, null);
+					if (list != null && list.Count > 0)
 					{
-						HIS_DEPARTMENT_TRAN dataaaa = (from p in datas
+						HIS_DEPARTMENT_TRAN hIS_DEPARTMENT_TRAN = (from p in list
 							where p.DEPARTMENT_IN_TIME.HasValue && p.DEPARTMENT_IN_TIME > 0
 							orderby p.DEPARTMENT_IN_TIME ?? 0 descending
 							select p).FirstOrDefault();
-						if (dataaaa != null && dataaaa.DEPARTMENT_ID == _hisRoom.DEPARTMENT_ID)
+						if (hIS_DEPARTMENT_TRAN != null && hIS_DEPARTMENT_TRAN.DEPARTMENT_ID == v_HIS_ROOM.DEPARTMENT_ID)
 						{
-							HisServiceReqFilter _reqFilter = new HisServiceReqFilter();
-							_reqFilter.IS_ACTIVE = 1;
-							_reqFilter.TREATMENT_ID = treatmentId;
-							_reqFilter.SERVICE_REQ_TYPE_ID = 1L;
-							List<HIS_SERVICE_REQ> dataReqs = new BackendAdapter(null).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, _reqFilter, null);
-							if (dataReqs != null && dataReqs.Count > 0)
+							HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+							hisServiceReqFilter.IS_ACTIVE = 1;
+							hisServiceReqFilter.TREATMENT_ID = treatmentId;
+							hisServiceReqFilter.SERVICE_REQ_TYPE_ID = 1L;
+							List<HIS_SERVICE_REQ> list2 = new BackendAdapter(null).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, null);
+							if (list2 != null && list2.Count > 0)
 							{
-								HIS_SERVICE_REQ dataCheck = dataReqs.FirstOrDefault((HIS_SERVICE_REQ p) => p.ID != HisServiceReqView.ID && !p.FINISH_TIME.HasValue);
-								if (dataCheck == null && XtraMessageBox.Show("Bệnh nhân chưa kết thúc điều trị, bạn có muốn kết thúc điều trị không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+								HIS_SERVICE_REQ hIS_SERVICE_REQ = list2.FirstOrDefault((HIS_SERVICE_REQ p) => p.ID != HisServiceReqView.ID && !p.FINISH_TIME.HasValue);
+								if (hIS_SERVICE_REQ == null && XtraMessageBox.Show("Bệnh nhân chưa kết thúc điều trị, bạn có muốn kết thúc điều trị không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 								{
 									chkTreatmentFinish.Focus();
 									chkTreatmentFinish.Checked = true;
@@ -5406,61 +5408,61 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool ValidIcdLen()
 	{
-		bool validICD = true;
+		bool flag = true;
 		try
 		{
-			string config = HisConfigs.Get<string>("HIS.Desktop.Plugins.IsCheckSubIcdExceedLimit");
-			if (config == "1")
+			string text = HisConfigs.Get<string>("HIS.Desktop.Plugins.IsCheckSubIcdExceedLimit");
+			if (text == "1")
 			{
-				string[] arrIcdExtraCodes = txtIcdSubCode.Text.Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
-				LogSystem.Debug("benh phu: " + arrIcdExtraCodes.Length);
-				if (arrIcdExtraCodes.Length > 12)
+				string[] array = txtIcdSubCode.Text.Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
+				LogSystem.Debug("benh phu: " + array.Length);
+				if (array.Length > 12)
 				{
 					MessageBox.Show(this, "Chẩn đoán phụ nhập quá 12 mã bệnh. Vui lòng kiểm tra lại", "Thông báo", MessageBoxButtons.OK);
-					validICD = false;
+					flag = false;
 				}
-				object sub_out2 = treatmentFinishProcessor.GetValue(ucTreatmentFinish);
-				LogSystem.Debug("benh phu ra vien: " + sub_out2);
-				if (sub_out2 != null && sub_out2 is ExamTreatmentFinishResult)
+				object value = treatmentFinishProcessor.GetValue(ucTreatmentFinish);
+				LogSystem.Debug("benh phu ra vien: " + value);
+				if (value != null && value is ExamTreatmentFinishResult)
 				{
-					string icd_sub_code2 = ((ExamTreatmentFinishResult)sub_out2).TreatmentFinishSDO.IcdSubCode;
-					string[] arrSubCode2 = (icd_sub_code2 ?? "").Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
-					LogSystem.Debug("benh phu ra vien len: " + arrSubCode2.Length);
-					if (validICD && arrSubCode2.Length > 12)
+					string icdSubCode = ((ExamTreatmentFinishResult)value).TreatmentFinishSDO.IcdSubCode;
+					string[] array2 = (icdSubCode ?? "").Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
+					LogSystem.Debug("benh phu ra vien len: " + array2.Length);
+					if (flag && array2.Length > 12)
 					{
 						MessageBox.Show(this, "Chẩn đoán phụ ra viện nhập quá 12 mã bệnh. Vui lòng kiểm tra lại", "Thông báo", MessageBoxButtons.OK);
-						validICD = false;
+						flag = false;
 					}
 				}
 			}
-			else if (config == "2")
+			else if (text == "2")
 			{
-				string[] arrIcdExtraCodes2 = txtIcdSubCode.Text.Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
-				LogSystem.Debug("benh phu: " + arrIcdExtraCodes2.Length);
-				if (arrIcdExtraCodes2.Length > 12 && MessageBox.Show(this, "Chẩn đoán phụ nhập quá 12 mã bệnh. Bạn có muốn tiếp tục?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.No)
+				string[] array3 = txtIcdSubCode.Text.Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
+				LogSystem.Debug("benh phu: " + array3.Length);
+				if (array3.Length > 12 && MessageBox.Show(this, "Chẩn đoán phụ nhập quá 12 mã bệnh. Bạn có muốn tiếp tục?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.No)
 				{
-					validICD = false;
+					flag = false;
 				}
-				object sub_out = treatmentFinishProcessor.GetValue(ucTreatmentFinish);
-				LogSystem.Debug("benh phu ra vien: " + sub_out);
-				if (sub_out != null && sub_out is ExamTreatmentFinishResult)
+				object value2 = treatmentFinishProcessor.GetValue(ucTreatmentFinish);
+				LogSystem.Debug("benh phu ra vien: " + value2);
+				if (value2 != null && value2 is ExamTreatmentFinishResult)
 				{
-					string icd_sub_code = ((ExamTreatmentFinishResult)sub_out).TreatmentFinishSDO.IcdSubCode;
-					string[] arrSubCode = (icd_sub_code ?? "").Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
-					LogSystem.Debug("benh phu ra vien len: " + arrSubCode.Length);
-					if (validICD && arrSubCode.Length > 12 && MessageBox.Show(this, "Chẩn đoán phụ ra viện nhập quá 12 mã bệnh. Bạn có muốn tiếp tục?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.No)
+					string icdSubCode2 = ((ExamTreatmentFinishResult)value2).TreatmentFinishSDO.IcdSubCode;
+					string[] array4 = (icdSubCode2 ?? "").Trim().Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries);
+					LogSystem.Debug("benh phu ra vien len: " + array4.Length);
+					if (flag && array4.Length > 12 && MessageBox.Show(this, "Chẩn đoán phụ ra viện nhập quá 12 mã bệnh. Bạn có muốn tiếp tục?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.No)
 					{
-						validICD = false;
+						flag = false;
 					}
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			validICD = false;
+			flag = false;
 			LogSystem.Error(ex);
 		}
-		return validICD;
+		return flag;
 	}
 
 	private void btnFinish_Click(object sender, EventArgs e)
@@ -5473,13 +5475,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			WaitingManager.Show();
-			CommonParam param = new CommonParam();
+			CommonParam commonParam = new CommonParam();
 			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
 			hisServiceReqFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-			long? finishTime = null;
-			List<HIS_SERVICE_REQ> hisServiceReqKT = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, param);
+			long? fINISH_TIME = null;
+			List<HIS_SERVICE_REQ> list = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, commonParam);
 			WaitingManager.Hide();
-			if (hisServiceReqKT == null)
+			if (list == null)
 			{
 				return;
 			}
@@ -5488,7 +5490,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			bool success = false;
+			bool value = false;
 			if (HisServiceReqView == null)
 			{
 				LogSystem.Warn("HisServiceReqWithOrderSDO is null");
@@ -5496,16 +5498,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (chkExamServiceAdd.Checked && ucExamAddition != null)
 			{
-				if (examServiceAddProcessor.GetValueV2(ucExamAddition) is ExamServiceAddADO hisServiceReqExamAdditionSDO)
+				if (examServiceAddProcessor.GetValueV2(ucExamAddition) is ExamServiceAddADO examServiceAddADO)
 				{
-					finishTime = hisServiceReqExamAdditionSDO.FinishTime;
+					fINISH_TIME = examServiceAddADO.FinishTime;
 				}
 			}
 			else if (chkHospitalize.Checked && ucHospitalize != null)
 			{
-				if (hospitalizeProcessor.GetValue(ucHospitalize) is HospitalizeExamADO hisDepartmentTranHospitalizeSDO)
+				if (hospitalizeProcessor.GetValue(ucHospitalize) is HospitalizeExamADO hospitalizeExamADO)
 				{
-					finishTime = hisDepartmentTranHospitalizeSDO.FinishTime;
+					fINISH_TIME = hospitalizeExamADO.FinishTime;
 				}
 			}
 			else if (chkExamFinish.Checked && ucExamFinish != null)
@@ -5516,28 +5518,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					LogSystem.Debug("examFinishADO null:" + LogUtil.TraceData(LogUtil.GetMemberName(() => examFinishADO), examFinishADO));
 					return;
 				}
-				finishTime = examFinishADO.FinishTime;
+				fINISH_TIME = examFinishADO.FinishTime;
 			}
 			else
 			{
 				LogSystem.Debug("Finish time is not set");
 			}
-			if (!finishTime.HasValue)
+			if (!fINISH_TIME.HasValue)
 			{
 				MessageBox.Show("Chưa nhập thời gian kết thúc khám", "Thông báo", MessageBoxButtons.OK);
 				return;
 			}
-			HisServiceReqView.FINISH_TIME = finishTime;
-			HIS_SERVICE_REQ result = new BackendAdapter(param).Post<HIS_SERVICE_REQ>("api/HisServiceReq/FinishWithTime", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, HisServiceReqView, param);
-			if (result != null)
+			HisServiceReqView.FINISH_TIME = fINISH_TIME;
+			HIS_SERVICE_REQ hIS_SERVICE_REQ = new BackendAdapter(commonParam).Post<HIS_SERVICE_REQ>("api/HisServiceReq/FinishWithTime", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, HisServiceReqView, commonParam);
+			if (hIS_SERVICE_REQ != null)
 			{
-				success = true;
-				HisServiceReqView.SERVICE_REQ_STT_ID = result.SERVICE_REQ_STT_ID;
+				value = true;
+				HisServiceReqView.SERVICE_REQ_STT_ID = hIS_SERVICE_REQ.SERVICE_REQ_STT_ID;
 				SuccessLog(HisServiceReqView);
 			}
 			WaitingManager.Hide();
-			MessageManager.Show(base.ParentForm, param, success);
-			SessionManager.ProcessTokenLost(param);
+			MessageManager.Show(base.ParentForm, commonParam, value);
+			SessionManager.ProcessTokenLost(commonParam);
 		}
 		catch (Exception ex)
 		{
@@ -5570,8 +5572,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			onClickSaveFormAsyncForOtherButtonClick();
 			LogSystem.Debug("ExamServiceReqExecute.btnAssignService_Click.2");
-			AlertHospitalFeeNotBHYTManager manager = new AlertHospitalFeeNotBHYTManager();
-			if (!manager.Run(HisServiceReqView.TREATMENT_ID, treatment.TDL_PATIENT_TYPE_ID ?? 0, this.moduleData.RoomId))
+			AlertHospitalFeeNotBHYTManager alertHospitalFeeNotBHYTManager = new AlertHospitalFeeNotBHYTManager();
+			if (!alertHospitalFeeNotBHYTManager.Run(HisServiceReqView.TREATMENT_ID, treatment.TDL_PATIENT_TYPE_ID ?? 0, this.moduleData.RoomId))
 			{
 				return;
 			}
@@ -5584,7 +5586,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			List<object> listArgs = new List<object>();
+			List<object> list = new List<object>();
 			long intructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
 			AssignServiceADO assignServiceADO = new AssignServiceADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
 			assignServiceADO.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
@@ -5597,36 +5599,36 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			assignServiceADO.IsNotUseBhyt = HisServiceReqView.IS_NOT_USE_BHYT == 1;
 			LogSystem.Warn("IS_NOT_USE_BHYT: " + HisServiceReqView.IS_NOT_USE_BHYT);
 			LogSystem.Debug("ExamServiceReqExecute.btnAssignService_Click.3");
-			DHSTADO dhstADO = UcDHSTGetValue() as DHSTADO;
+			DHSTADO source = UcDHSTGetValue() as DHSTADO;
 			Mapper.CreateMap<DHSTADO, HIS_DHST>();
-			HIS_DHST dhst = Mapper.Map<DHSTADO, HIS_DHST>(dhstADO);
-			assignServiceADO.Dhst = ((dhst != null) ? dhst : new HIS_DHST());
-			HIS.UC.Icd.ADO.IcdInputADO icdADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-			HIS.UC.Icd.ADO.IcdInputADO icdCauseADO = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-			SecondaryIcdDataADO icdSubADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+			HIS_DHST hIS_DHST = Mapper.Map<DHSTADO, HIS_DHST>(source);
+			assignServiceADO.Dhst = ((hIS_DHST != null) ? hIS_DHST : new HIS_DHST());
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO2 = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+			SecondaryIcdDataADO secondaryIcdDataADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
 			assignServiceADO.IcdExam = new HIS_SERVICE_REQ
 			{
-				ICD_CODE = ((icdADO != null) ? icdADO.ICD_CODE : ""),
-				ICD_NAME = ((icdADO != null) ? icdADO.ICD_NAME : ""),
-				ICD_CAUSE_CODE = ((icdCauseADO != null) ? icdCauseADO.ICD_CODE : ""),
-				ICD_CAUSE_NAME = ((icdCauseADO != null) ? icdCauseADO.ICD_NAME : ""),
-				ICD_SUB_CODE = ((icdSubADO != null) ? icdSubADO.ICD_SUB_CODE : ""),
-				ICD_TEXT = ((icdSubADO != null) ? icdSubADO.ICD_TEXT : ""),
+				ICD_CODE = ((icdInputADO != null) ? icdInputADO.ICD_CODE : ""),
+				ICD_NAME = ((icdInputADO != null) ? icdInputADO.ICD_NAME : ""),
+				ICD_CAUSE_CODE = ((icdInputADO2 != null) ? icdInputADO2.ICD_CODE : ""),
+				ICD_CAUSE_NAME = ((icdInputADO2 != null) ? icdInputADO2.ICD_NAME : ""),
+				ICD_SUB_CODE = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_SUB_CODE : ""),
+				ICD_TEXT = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_TEXT : ""),
 				TRADITIONAL_ICD_CODE = IcdCodeYHCT,
 				TRADITIONAL_ICD_NAME = IcdNameYHCT,
 				TRADITIONAL_ICD_SUB_CODE = IcdSubCodeYHCT,
 				TRADITIONAL_ICD_TEXT = IcdTextYHCT
 			};
-			listArgs.Add(assignServiceADO);
+			list.Add(assignServiceADO);
 			if (!IsApplyFormClosingOption(moduleData.ModuleLink))
 			{
 				LogSystem.Debug("ExamServiceReqExecute.btnAssignService_Click.4");
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 			else
 			{
@@ -5638,22 +5640,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					GlobalVariables.FormAssignService.WindowState = FormWindowState.Maximized;
 					GlobalVariables.FormAssignService.ShowInTaskbar = true;
-					Type classType2 = GlobalVariables.FormAssignService.GetType();
-					MethodInfo methodInfo2 = classType2.GetMethod("ReloadModuleByInputData");
-					methodInfo2.Invoke(GlobalVariables.FormAssignService, new object[2] { this.moduleData, assignServiceADO });
+					Type type = GlobalVariables.FormAssignService.GetType();
+					MethodInfo method = type.GetMethod("ReloadModuleByInputData");
+					method.Invoke(GlobalVariables.FormAssignService, new object[2] { this.moduleData, assignServiceADO });
 					GlobalVariables.FormAssignService.Activate();
 					return;
 				}
-				GlobalVariables.FormAssignService = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
+				GlobalVariables.FormAssignService = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), list);
 				GlobalVariables.FormAssignService.ShowInTaskbar = true;
 				if (GlobalVariables.FormAssignService == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
 				GlobalVariables.FormAssignService.Show();
-				Type classType = GlobalVariables.FormAssignService.GetType();
-				MethodInfo methodInfo = classType.GetMethod("ChangeIsUseApplyFormClosingOption");
-				methodInfo.Invoke(GlobalVariables.FormAssignService, new object[1] { true });
+				Type type2 = GlobalVariables.FormAssignService.GetType();
+				MethodInfo method2 = type2.GetMethod("ChangeIsUseApplyFormClosingOption");
+				method2.Invoke(GlobalVariables.FormAssignService, new object[1] { true });
 			}
 		}
 		catch (Exception ex)
@@ -5698,49 +5700,49 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			onClickSaveFormAsyncForOtherButtonClick();
 			LogSystem.Debug("ExamServiceReqExecute.btnAssignPre_Click.2");
 			LogSystem.Debug("HisPatient/GetPreviousPrescription input: " + treatment.PATIENT_ID);
-			List<HIS_SERVICE_REQ> serviceReqDons = new List<HIS_SERVICE_REQ>();
-			List<HisPreviousPrescriptionDetailSDO> previousPres = new BackendAdapter(param).Get<List<HisPreviousPrescriptionDetailSDO>>("api/HisPatient/GetPreviousPrescriptionDetail", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatment.PATIENT_ID, param);
-			LogSystem.Debug("api/HisPatient/GetPreviousPrescriptionDetail output: " + LogUtil.TraceData("", previousPres));
-			if (previousPres != null && previousPres.Count > 0)
+			List<HIS_SERVICE_REQ> list = new List<HIS_SERVICE_REQ>();
+			List<HisPreviousPrescriptionDetailSDO> list2 = new BackendAdapter(param).Get<List<HisPreviousPrescriptionDetailSDO>>("api/HisPatient/GetPreviousPrescriptionDetail", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatment.PATIENT_ID, param);
+			LogSystem.Debug("api/HisPatient/GetPreviousPrescriptionDetail output: " + LogUtil.TraceData("", list2));
+			if (list2 != null && list2.Count > 0)
 			{
-				string note = "";
-				var previousGroups = (from o in previousPres
+				string text = "";
+				var list3 = (from o in list2
 					group o by new { o.REQUEST_ROOM_NAME, o.SERVICE_REQ_CODE }).Distinct().ToList();
-				foreach (var previousGroup in previousGroups)
+				foreach (var item in list3)
 				{
-					string requestRoomNames = "";
-					string treatmentCode = "";
-					string serviceReqCode = "";
-					string userTimeTo = "";
-					List<string> medicines = new List<string>();
-					requestRoomNames = previousGroup.First().REQUEST_ROOM_NAME;
-					treatmentCode = previousGroup.First().TREATMENT_CODE;
-					serviceReqCode = previousGroup.First().SERVICE_REQ_CODE;
-					foreach (HisPreviousPrescriptionDetailSDO item in previousGroup)
+					string text2 = "";
+					string text3 = "";
+					string text4 = "";
+					string text5 = "";
+					List<string> list4 = new List<string>();
+					text2 = item.First().REQUEST_ROOM_NAME;
+					text3 = item.First().TREATMENT_CODE;
+					text4 = item.First().SERVICE_REQ_CODE;
+					foreach (HisPreviousPrescriptionDetailSDO item2 in item)
 					{
-						List<IGrouping<long?, PreviousPrescriptionMedicineSDO>> ExpMedicinesGroup = (from o in item.ExpMedicines
+						List<IGrouping<long?, PreviousPrescriptionMedicineSDO>> list5 = (from o in item2.ExpMedicines
 							group o by o.USE_TIME_TO).Distinct().ToList();
-						foreach (IGrouping<long?, PreviousPrescriptionMedicineSDO> expMedi in ExpMedicinesGroup)
+						foreach (IGrouping<long?, PreviousPrescriptionMedicineSDO> item3 in list5)
 						{
-							userTimeTo = (expMedi.FirstOrDefault().USE_TIME_TO.HasValue ? Inventec.Common.DateTime.Convert.TimeNumberToDateString(expMedi.FirstOrDefault().USE_TIME_TO.Value) : "null");
-							medicines.Add(string.Format("Thuốc {0} còn sử dụng tới ngày {1}", string.Join(", ", expMedi.Select((PreviousPrescriptionMedicineSDO o) => o.MEDICINE_TYPE_NAME).ToList()), userTimeTo));
+							text5 = (item3.FirstOrDefault().USE_TIME_TO.HasValue ? Inventec.Common.DateTime.Convert.TimeNumberToDateString(item3.FirstOrDefault().USE_TIME_TO.Value) : "null");
+							list4.Add(string.Format("Thuốc {0} còn sử dụng tới ngày {1}", string.Join(", ", item3.Select((PreviousPrescriptionMedicineSDO o) => o.MEDICINE_TYPE_NAME).ToList()), text5));
 						}
 					}
-					note += string.Format("Phòng yêu cầu: {0}, HSDT: {1}, Mã YC: {2}:\n {3} ", requestRoomNames, treatmentCode, serviceReqCode, string.Join(";\n", medicines));
+					text += string.Format("Phòng yêu cầu: {0}, HSDT: {1}, Mã YC: {2}:\n {3} ", text2, text3, text4, string.Join(";\n", list4));
 				}
-				DialogResult myResult2 = MessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DonThuocLanKhamTruoc, note), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-				if (myResult2 == DialogResult.Cancel)
+				DialogResult dialogResult = MessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DonThuocLanKhamTruoc, text), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+				if (dialogResult == DialogResult.Cancel)
 				{
 					return;
 				}
 			}
-			HisServiceReqFilter serviceReqFilter = new HisServiceReqFilter();
-			serviceReqFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-			serviceReqFilter.CREATOR = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-			serviceReqFilter.SERVICE_REQ_TYPE_IDs = new List<long> { 6L };
-			serviceReqDons = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqFilter, param)?.Where((HIS_SERVICE_REQ o) => o.PRESCRIPTION_TYPE_ID == 1).ToList();
-			long isAssignPrescriptionByCFG = ConfigApplicationWorker.Get<long>("CONFIG_KEY__ASSIGN_PRESCRIPTION_BY_TREATMENT");
-			if (isAssignPrescriptionByCFG == 1 && serviceReqDons != null && serviceReqDons.Count == 1)
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
+			hisServiceReqFilter.CREATOR = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+			hisServiceReqFilter.SERVICE_REQ_TYPE_IDs = new List<long> { 6L };
+			list = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, param)?.Where((HIS_SERVICE_REQ o) => o.PRESCRIPTION_TYPE_ID == 1).ToList();
+			long num = ConfigApplicationWorker.Get<long>("CONFIG_KEY__ASSIGN_PRESCRIPTION_BY_TREATMENT");
+			if (num == 1 && list != null && list.Count == 1)
 			{
 				Inventec.Desktop.Common.Modules.Module moduleData2 = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPrescriptionPK").FirstOrDefault();
 				if (moduleData2 == null)
@@ -5751,61 +5753,61 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					return;
 				}
-				List<object> listArgs2 = new List<object>();
-				AssignPrescriptionADO assignServiceADO = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, 0L, 0L);
-				if (serviceReqDons == null || serviceReqDons.Count != 1)
+				List<object> list6 = new List<object>();
+				AssignPrescriptionADO assignPrescriptionADO = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, 0L, 0L);
+				if (list == null || list.Count != 1)
 				{
 					return;
 				}
-				HIS_SERVICE_REQ pres = serviceReqDons[0];
-				assignServiceADO.TreatmentCode = pres.TDL_TREATMENT_CODE;
-				assignServiceADO.GenderName = pres.TDL_PATIENT_GENDER_NAME;
-				assignServiceADO.PatientDob = pres.TDL_PATIENT_DOB;
-				assignServiceADO.PatientName = pres.TDL_PATIENT_NAME;
-				assignServiceADO.ProvisionalDiagnosis = txtProvisionalDianosis.Text.Trim();
-				assignServiceADO.PatientId = pres.TDL_PATIENT_ID;
-				AssignPrescriptionEditADO assignEditADO = null;
-				HisExpMestFilter expfilter = new HisExpMestFilter();
-				expfilter.SERVICE_REQ_ID = pres.ID;
-				List<HIS_EXP_MEST> expMests = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expfilter, SessionManager.ActionLostToken, null);
-				if (expMests != null && expMests.Count == 1)
+				HIS_SERVICE_REQ hIS_SERVICE_REQ = list[0];
+				assignPrescriptionADO.TreatmentCode = hIS_SERVICE_REQ.TDL_TREATMENT_CODE;
+				assignPrescriptionADO.GenderName = hIS_SERVICE_REQ.TDL_PATIENT_GENDER_NAME;
+				assignPrescriptionADO.PatientDob = hIS_SERVICE_REQ.TDL_PATIENT_DOB;
+				assignPrescriptionADO.PatientName = hIS_SERVICE_REQ.TDL_PATIENT_NAME;
+				assignPrescriptionADO.ProvisionalDiagnosis = txtProvisionalDianosis.Text.Trim();
+				assignPrescriptionADO.PatientId = hIS_SERVICE_REQ.TDL_PATIENT_ID;
+				AssignPrescriptionEditADO assignPrescriptionEditADO = null;
+				HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+				hisExpMestFilter.SERVICE_REQ_ID = hIS_SERVICE_REQ.ID;
+				List<HIS_EXP_MEST> list7 = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, SessionManager.ActionLostToken, null);
+				if (list7 != null && list7.Count == 1)
 				{
-					HIS_EXP_MEST expMest = expMests.FirstOrDefault();
-					assignEditADO = new AssignPrescriptionEditADO(pres, expMest, null);
+					HIS_EXP_MEST expMest = list7.FirstOrDefault();
+					assignPrescriptionEditADO = new AssignPrescriptionEditADO(hIS_SERVICE_REQ, expMest, null);
 				}
 				else
 				{
-					assignEditADO = new AssignPrescriptionEditADO(pres, null, null);
+					assignPrescriptionEditADO = new AssignPrescriptionEditADO(hIS_SERVICE_REQ, null, null);
 				}
-				assignServiceADO.AssignPrescriptionEditADO = assignEditADO;
-				assignServiceADO.IcdExam = new HIS_SERVICE_REQ
+				assignPrescriptionADO.AssignPrescriptionEditADO = assignPrescriptionEditADO;
+				assignPrescriptionADO.IcdExam = new HIS_SERVICE_REQ
 				{
 					TRADITIONAL_ICD_CODE = IcdCodeYHCT,
 					TRADITIONAL_ICD_NAME = IcdNameYHCT,
 					TRADITIONAL_ICD_SUB_CODE = IcdSubCodeYHCT,
 					TRADITIONAL_ICD_TEXT = IcdTextYHCT
 				};
-				DHSTADO dhstADO2 = UcDHSTGetValue() as DHSTADO;
+				DHSTADO source = UcDHSTGetValue() as DHSTADO;
 				Mapper.CreateMap<DHSTADO, HIS_DHST>();
-				HIS_DHST dhst2 = Mapper.Map<DHSTADO, HIS_DHST>(dhstADO2);
-				assignServiceADO.Dhst = ((dhst2 != null) ? dhst2 : new HIS_DHST());
-				assignServiceADO.SereServsInTreatment = SereServsCurrentTreatment;
-				assignServiceADO.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
+				HIS_DHST hIS_DHST = Mapper.Map<DHSTADO, HIS_DHST>(source);
+				assignPrescriptionADO.Dhst = ((hIS_DHST != null) ? hIS_DHST : new HIS_DHST());
+				assignPrescriptionADO.SereServsInTreatment = SereServsCurrentTreatment;
+				assignPrescriptionADO.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
 				if (HisConfigCFG.IsAutoExitAfterFinish)
 				{
-					assignServiceADO.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
+					assignPrescriptionADO.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
 				}
-				listArgs2.Add(assignServiceADO);
+				list6.Add(assignPrescriptionADO);
 				LogSystem.Debug("ExamServiceReqExecute.btnAssignPre_Click.3");
 				if (!IsApplyFormClosingOption(moduleData2.ModuleLink))
 				{
 					LogSystem.Debug("ExamServiceReqExecute.btnAssignPre_Click.4");
-					object extenceInstance2 = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData2, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs2);
-					if (extenceInstance2 == null)
+					object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData2, this.moduleData.RoomId, this.moduleData.RoomTypeId), list6);
+					if (pluginInstance == null)
 					{
 						throw new ArgumentNullException("moduleData is null");
 					}
-					((Form)extenceInstance2).ShowDialog();
+					((Form)pluginInstance).ShowDialog();
 				}
 				else
 				{
@@ -5817,32 +5819,32 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					{
 						GlobalVariables.FormAssignPrescriptionPK.WindowState = FormWindowState.Maximized;
 						GlobalVariables.FormAssignPrescriptionPK.ShowInTaskbar = true;
-						Type classType4 = GlobalVariables.FormAssignPrescriptionPK.GetType();
-						MethodInfo methodInfo4 = classType4.GetMethod("ReloadModuleByInputData");
-						methodInfo4.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[3] { assignServiceADO, null, this.moduleData });
+						Type type = GlobalVariables.FormAssignPrescriptionPK.GetType();
+						MethodInfo method = type.GetMethod("ReloadModuleByInputData");
+						method.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[3] { assignPrescriptionADO, null, this.moduleData });
 						GlobalVariables.FormAssignPrescriptionPK.Activate();
 						return;
 					}
-					GlobalVariables.FormAssignPrescriptionPK = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData2, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs2);
+					GlobalVariables.FormAssignPrescriptionPK = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData2, this.moduleData.RoomId, this.moduleData.RoomTypeId), list6);
 					GlobalVariables.FormAssignPrescriptionPK.ShowInTaskbar = true;
 					if (GlobalVariables.FormAssignPrescriptionPK == null)
 					{
 						throw new ArgumentNullException("moduleData is null");
 					}
 					GlobalVariables.FormAssignPrescriptionPK.Show();
-					Type classType3 = GlobalVariables.FormAssignPrescriptionPK.GetType();
-					MethodInfo methodInfo3 = classType3.GetMethod("ChangeIsUseApplyFormClosingOption");
-					methodInfo3.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[1] { true });
+					Type type2 = GlobalVariables.FormAssignPrescriptionPK.GetType();
+					MethodInfo method2 = type2.GetMethod("ChangeIsUseApplyFormClosingOption");
+					method2.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[1] { true });
 				}
 				return;
 			}
-			if (serviceReqDons != null && serviceReqDons.Count > 1)
+			if (list != null && list.Count > 1)
 			{
-				List<HIS_SERVICE_REQ> serviceReqExamChild = serviceReqDons.Where((HIS_SERVICE_REQ o) => o.PARENT_ID.HasValue && o.PARENT_ID == HisServiceReqView.ID).ToList();
-				if (serviceReqExamChild != null && serviceReqExamChild.Count > 0)
+				List<HIS_SERVICE_REQ> list8 = list.Where((HIS_SERVICE_REQ o) => o.PARENT_ID.HasValue && o.PARENT_ID == HisServiceReqView.ID).ToList();
+				if (list8 != null && list8.Count > 0)
 				{
-					DialogResult myResult = MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DaCoDonThuocBanCoMuonTiepTucKhong, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-					if (myResult == DialogResult.Cancel)
+					DialogResult dialogResult2 = MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DaCoDonThuocBanCoMuonTiepTucKhong, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+					if (dialogResult2 == DialogResult.Cancel)
 					{
 						return;
 					}
@@ -5857,53 +5859,53 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			List<object> listArgs = new List<object>();
-			Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
+			List<object> list9 = new List<object>();
+			Inventec.Desktop.Common.Modules.Module module = new Inventec.Desktop.Common.Modules.Module();
 			long intructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
-			AssignPrescriptionADO assignPrescription = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
-			assignPrescription.TreatmentCode = HisServiceReqView.TDL_TREATMENT_CODE;
-			assignPrescription.TreatmentId = HisServiceReqView.TREATMENT_ID;
-			assignPrescription.HeinCardnumber = HisServiceReqView.TDL_HEIN_CARD_NUMBER;
-			assignPrescription.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
-			assignPrescription.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
-			assignPrescription.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
-			assignPrescription.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
-			assignPrescription.PatientId = HisServiceReqView.TDL_PATIENT_ID;
+			AssignPrescriptionADO assignPrescriptionADO2 = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
+			assignPrescriptionADO2.TreatmentCode = HisServiceReqView.TDL_TREATMENT_CODE;
+			assignPrescriptionADO2.TreatmentId = HisServiceReqView.TREATMENT_ID;
+			assignPrescriptionADO2.HeinCardnumber = HisServiceReqView.TDL_HEIN_CARD_NUMBER;
+			assignPrescriptionADO2.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
+			assignPrescriptionADO2.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
+			assignPrescriptionADO2.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
+			assignPrescriptionADO2.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
+			assignPrescriptionADO2.PatientId = HisServiceReqView.TDL_PATIENT_ID;
 			if (HisConfigCFG.IsAutoExitAfterFinish)
 			{
-				assignPrescription.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
+				assignPrescriptionADO2.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
 			}
-			assignPrescription.ProvisionalDiagnosis = txtProvisionalDianosis.Text.Trim();
-			HIS.UC.Icd.ADO.IcdInputADO icdADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-			HIS.UC.Icd.ADO.IcdInputADO icdCauseADO = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-			SecondaryIcdDataADO icdSubADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
-			assignPrescription.IcdExam = new HIS_SERVICE_REQ
+			assignPrescriptionADO2.ProvisionalDiagnosis = txtProvisionalDianosis.Text.Trim();
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO2 = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+			SecondaryIcdDataADO secondaryIcdDataADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+			assignPrescriptionADO2.IcdExam = new HIS_SERVICE_REQ
 			{
-				ICD_CODE = ((icdADO != null) ? icdADO.ICD_CODE : ""),
-				ICD_NAME = ((icdADO != null) ? icdADO.ICD_NAME : ""),
-				ICD_CAUSE_CODE = ((icdCauseADO != null) ? icdCauseADO.ICD_CODE : ""),
-				ICD_CAUSE_NAME = ((icdCauseADO != null) ? icdCauseADO.ICD_NAME : ""),
-				ICD_SUB_CODE = ((icdSubADO != null) ? icdSubADO.ICD_SUB_CODE : ""),
-				ICD_TEXT = ((icdSubADO != null) ? icdSubADO.ICD_TEXT : ""),
+				ICD_CODE = ((icdInputADO != null) ? icdInputADO.ICD_CODE : ""),
+				ICD_NAME = ((icdInputADO != null) ? icdInputADO.ICD_NAME : ""),
+				ICD_CAUSE_CODE = ((icdInputADO2 != null) ? icdInputADO2.ICD_CODE : ""),
+				ICD_CAUSE_NAME = ((icdInputADO2 != null) ? icdInputADO2.ICD_NAME : ""),
+				ICD_SUB_CODE = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_SUB_CODE : ""),
+				ICD_TEXT = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_TEXT : ""),
 				TRADITIONAL_ICD_CODE = IcdCodeYHCT,
 				TRADITIONAL_ICD_NAME = IcdNameYHCT,
 				TRADITIONAL_ICD_SUB_CODE = IcdSubCodeYHCT,
 				TRADITIONAL_ICD_TEXT = IcdTextYHCT
 			};
-			DHSTADO dhstADO = UcDHSTGetValue() as DHSTADO;
+			DHSTADO source2 = UcDHSTGetValue() as DHSTADO;
 			Mapper.CreateMap<DHSTADO, HIS_DHST>();
-			HIS_DHST dhst = Mapper.Map<DHSTADO, HIS_DHST>(dhstADO);
-			assignPrescription.Dhst = ((dhst != null) ? dhst : new HIS_DHST());
-			assignPrescription.SereServsInTreatment = SereServsCurrentTreatment;
-			listArgs.Add(assignPrescription);
+			HIS_DHST hIS_DHST2 = Mapper.Map<DHSTADO, HIS_DHST>(source2);
+			assignPrescriptionADO2.Dhst = ((hIS_DHST2 != null) ? hIS_DHST2 : new HIS_DHST());
+			assignPrescriptionADO2.SereServsInTreatment = SereServsCurrentTreatment;
+			list9.Add(assignPrescriptionADO2);
 			if (!IsApplyFormClosingOption(moduleData.ModuleLink))
 			{
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				object pluginInstance2 = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), list9);
+				if (pluginInstance2 == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance2).ShowDialog();
 			}
 			else
 			{
@@ -5915,22 +5917,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					GlobalVariables.FormAssignPrescriptionPK.WindowState = FormWindowState.Maximized;
 					GlobalVariables.FormAssignPrescriptionPK.ShowInTaskbar = true;
-					Type classType2 = GlobalVariables.FormAssignPrescriptionPK.GetType();
-					MethodInfo methodInfo2 = classType2.GetMethod("ReloadModuleByInputData");
-					methodInfo2.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[3] { assignPrescription, null, this.moduleData });
+					Type type3 = GlobalVariables.FormAssignPrescriptionPK.GetType();
+					MethodInfo method3 = type3.GetMethod("ReloadModuleByInputData");
+					method3.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[3] { assignPrescriptionADO2, null, this.moduleData });
 					GlobalVariables.FormAssignPrescriptionPK.Activate();
 					return;
 				}
-				GlobalVariables.FormAssignPrescriptionPK = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
+				GlobalVariables.FormAssignPrescriptionPK = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), list9);
 				GlobalVariables.FormAssignPrescriptionPK.ShowInTaskbar = true;
 				if (GlobalVariables.FormAssignPrescriptionPK == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
 				GlobalVariables.FormAssignPrescriptionPK.Show();
-				Type classType = GlobalVariables.FormAssignPrescriptionPK.GetType();
-				MethodInfo methodInfo = classType.GetMethod("ChangeIsUseApplyFormClosingOption");
-				methodInfo.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[1] { true });
+				Type type4 = GlobalVariables.FormAssignPrescriptionPK.GetType();
+				MethodInfo method4 = type4.GetMethod("ChangeIsUseApplyFormClosingOption");
+				method4.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[1] { true });
 			}
 		}
 		catch (Exception ex)
@@ -5948,23 +5950,23 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AccidentHurt").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AccidentHurt").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AccidentHurt");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				listArgs.Add(new DelegateRefeshTreatmentPartialData(refreshClick));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				Inventec.Desktop.Common.Modules.Module module2 = new Inventec.Desktop.Common.Modules.Module();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				list.Add(new DelegateRefeshTreatmentPartialData(refreshClick));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -5986,21 +5988,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisPatientProgram").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisPatientProgram").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.HisPatientProgram");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TDL_PATIENT_ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TDL_PATIENT_ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -6027,11 +6029,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (moduleData != null && treatment != null)
 			{
-				List<object> listObj = new List<object>();
-				V_HIS_TREATMENT_4 treatment4 = new V_HIS_TREATMENT_4();
-				DataObjectMapper.Map<V_HIS_TREATMENT_4>(treatment4, treatment);
-				listObj.Add(treatment4);
-				PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.ExpMestAggrExam", moduleData.RoomId, moduleData.RoomTypeId, listObj);
+				List<object> list = new List<object>();
+				V_HIS_TREATMENT_4 v_HIS_TREATMENT_ = new V_HIS_TREATMENT_4();
+				DataObjectMapper.Map<V_HIS_TREATMENT_4>(v_HIS_TREATMENT_, treatment);
+				list.Add(v_HIS_TREATMENT_);
+				PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.ExpMestAggrExam", moduleData.RoomId, moduleData.RoomTypeId, list);
 			}
 		}
 		catch (Exception ex)
@@ -6091,164 +6093,164 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			List<HIS_SERVICE_REQ> serviceReqDons = new List<HIS_SERVICE_REQ>();
-			List<HisPreviousPrescriptionSDO> previousPres = new BackendAdapter(param).Get<List<HisPreviousPrescriptionSDO>>("api/HisPatient/GetPreviousPrescription", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatment.PATIENT_ID, param);
-			if (previousPres != null && previousPres.Count > 0)
+			List<HIS_SERVICE_REQ> list = new List<HIS_SERVICE_REQ>();
+			List<HisPreviousPrescriptionSDO> list2 = new BackendAdapter(param).Get<List<HisPreviousPrescriptionSDO>>("api/HisPatient/GetPreviousPrescription", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatment.PATIENT_ID, param);
+			if (list2 != null && list2.Count > 0)
 			{
-				string requestRoomNames = "";
-				string treatmentCode = "";
-				string serviceReqCode = "";
-				string userTimeTo = "";
-				string note = "";
-				var previousGroups = (from o in previousPres
+				string text = "";
+				string text2 = "";
+				string text3 = "";
+				string text4 = "";
+				string text5 = "";
+				var list3 = (from o in list2
 					orderby o.USE_TIME_TO
 					group o by new { o.REQUEST_ROOM_NAME }).Distinct().ToList();
-				foreach (var previousGroup in previousGroups)
+				foreach (var item in list3)
 				{
-					requestRoomNames = previousGroup.First().REQUEST_ROOM_NAME;
-					treatmentCode = previousGroup.First().TREATMENT_CODE;
-					serviceReqCode = previousGroup.First().SERVICE_REQ_CODE;
-					foreach (HisPreviousPrescriptionSDO item in previousGroup)
+					text = item.First().REQUEST_ROOM_NAME;
+					text2 = item.First().TREATMENT_CODE;
+					text3 = item.First().SERVICE_REQ_CODE;
+					foreach (HisPreviousPrescriptionSDO item2 in item)
 					{
-						userTimeTo += (item.USE_TIME_TO.HasValue ? (Inventec.Common.DateTime.Convert.TimeNumberToTimeString(item.USE_TIME_TO.Value) + ", ") : "null");
+						text4 += (item2.USE_TIME_TO.HasValue ? (Inventec.Common.DateTime.Convert.TimeNumberToTimeString(item2.USE_TIME_TO.Value) + ", ") : "null");
 					}
-					note += $"Phòng yêu cầu: {requestRoomNames}, HSDT: {treatmentCode}, Mã YC: {serviceReqCode} ({userTimeTo}) ";
+					text5 += $"Phòng yêu cầu: {text}, HSDT: {text2}, Mã YC: {text3} ({text4}) ";
 				}
-				DialogResult myResult2 = MessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DonThuocLanKhamTruoc, note), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-				if (myResult2 == DialogResult.Cancel)
+				DialogResult dialogResult = MessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DonThuocLanKhamTruoc, text5), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+				if (dialogResult == DialogResult.Cancel)
 				{
 					return;
 				}
 			}
-			HisServiceReqFilter serviceReqFilter = new HisServiceReqFilter();
-			serviceReqFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-			serviceReqFilter.CREATOR = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-			serviceReqFilter.SERVICE_REQ_TYPE_IDs = new List<long> { 6L };
-			serviceReqDons = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqFilter, param)?.Where((HIS_SERVICE_REQ o) => o.PRESCRIPTION_TYPE_ID == 2).ToList();
-			long isAssignPrescriptionByCFG = ConfigApplicationWorker.Get<long>("CONFIG_KEY__ASSIGN_PRESCRIPTION_BY_TREATMENT");
-			if (isAssignPrescriptionByCFG == 1 && serviceReqDons != null && serviceReqDons.Count == 1)
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
+			hisServiceReqFilter.CREATOR = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+			hisServiceReqFilter.SERVICE_REQ_TYPE_IDs = new List<long> { 6L };
+			list = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, param)?.Where((HIS_SERVICE_REQ o) => o.PRESCRIPTION_TYPE_ID == 2).ToList();
+			long num = ConfigApplicationWorker.Get<long>("CONFIG_KEY__ASSIGN_PRESCRIPTION_BY_TREATMENT");
+			if (num == 1 && list != null && list.Count == 1)
 			{
-				Inventec.Desktop.Common.Modules.Module moduleData2 = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPrescriptionYHCT").FirstOrDefault();
-				if (moduleData2 == null)
+				Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPrescriptionYHCT").FirstOrDefault();
+				if (module == null)
 				{
 					LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AssignPrescriptionYHCT");
 				}
-				if (!moduleData2.IsPlugin || moduleData2.ExtensionInfo == null)
+				if (!module.IsPlugin || module.ExtensionInfo == null)
 				{
 					return;
 				}
-				List<object> listArgs2 = new List<object>();
-				AssignPrescriptionADO assignServiceADO = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, 0L, 0L);
-				if (serviceReqDons != null && serviceReqDons.Count == 1)
+				List<object> list4 = new List<object>();
+				AssignPrescriptionADO assignPrescriptionADO = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, 0L, 0L);
+				if (list != null && list.Count == 1)
 				{
-					HIS_SERVICE_REQ pres = serviceReqDons[0];
-					assignServiceADO.TreatmentCode = pres.TDL_TREATMENT_CODE;
-					assignServiceADO.GenderName = pres.TDL_PATIENT_GENDER_NAME;
-					assignServiceADO.PatientDob = pres.TDL_PATIENT_DOB;
-					assignServiceADO.PatientName = pres.TDL_PATIENT_NAME;
-					AssignPrescriptionEditADO assignEditADO = null;
-					HisExpMestFilter expfilter = new HisExpMestFilter();
-					expfilter.SERVICE_REQ_ID = pres.ID;
-					List<HIS_EXP_MEST> expMests = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expfilter, SessionManager.ActionLostToken, null);
-					if (expMests != null && expMests.Count == 1)
+					HIS_SERVICE_REQ hIS_SERVICE_REQ = list[0];
+					assignPrescriptionADO.TreatmentCode = hIS_SERVICE_REQ.TDL_TREATMENT_CODE;
+					assignPrescriptionADO.GenderName = hIS_SERVICE_REQ.TDL_PATIENT_GENDER_NAME;
+					assignPrescriptionADO.PatientDob = hIS_SERVICE_REQ.TDL_PATIENT_DOB;
+					assignPrescriptionADO.PatientName = hIS_SERVICE_REQ.TDL_PATIENT_NAME;
+					AssignPrescriptionEditADO assignPrescriptionEditADO = null;
+					HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+					hisExpMestFilter.SERVICE_REQ_ID = hIS_SERVICE_REQ.ID;
+					List<HIS_EXP_MEST> list5 = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, SessionManager.ActionLostToken, null);
+					if (list5 != null && list5.Count == 1)
 					{
-						HIS_EXP_MEST expMest = expMests.FirstOrDefault();
-						assignEditADO = new AssignPrescriptionEditADO(pres, expMest, null);
+						HIS_EXP_MEST expMest = list5.FirstOrDefault();
+						assignPrescriptionEditADO = new AssignPrescriptionEditADO(hIS_SERVICE_REQ, expMest, null);
 					}
 					else
 					{
-						assignEditADO = new AssignPrescriptionEditADO(pres, null, null);
+						assignPrescriptionEditADO = new AssignPrescriptionEditADO(hIS_SERVICE_REQ, null, null);
 					}
-					assignServiceADO.AssignPrescriptionEditADO = assignEditADO;
-					assignServiceADO.IcdExam = new HIS_SERVICE_REQ
+					assignPrescriptionADO.AssignPrescriptionEditADO = assignPrescriptionEditADO;
+					assignPrescriptionADO.IcdExam = new HIS_SERVICE_REQ
 					{
 						TRADITIONAL_ICD_CODE = IcdCodeYHCT,
 						TRADITIONAL_ICD_NAME = IcdNameYHCT,
 						TRADITIONAL_ICD_SUB_CODE = IcdSubCodeYHCT,
 						TRADITIONAL_ICD_TEXT = IcdTextYHCT
 					};
-					DHSTADO dhstADO2 = UcDHSTGetValue() as DHSTADO;
+					DHSTADO source = UcDHSTGetValue() as DHSTADO;
 					Mapper.CreateMap<DHSTADO, HIS_DHST>();
-					HIS_DHST dhst2 = Mapper.Map<DHSTADO, HIS_DHST>(dhstADO2);
-					assignServiceADO.Dhst = ((dhst2 != null) ? dhst2 : new HIS_DHST());
-					assignServiceADO.SereServsInTreatment = SereServsCurrentTreatment;
+					HIS_DHST hIS_DHST = Mapper.Map<DHSTADO, HIS_DHST>(source);
+					assignPrescriptionADO.Dhst = ((hIS_DHST != null) ? hIS_DHST : new HIS_DHST());
+					assignPrescriptionADO.SereServsInTreatment = SereServsCurrentTreatment;
 					if (HisConfigCFG.IsAutoExitAfterFinish)
 					{
-						assignServiceADO.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
+						assignPrescriptionADO.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
 					}
-					assignServiceADO.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
-					listArgs2.Add(assignServiceADO);
-					object extenceInstance2 = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData2, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs2);
-					if (extenceInstance2 == null)
+					assignPrescriptionADO.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
+					list4.Add(assignPrescriptionADO);
+					object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list4);
+					if (pluginInstance == null)
 					{
 						throw new ArgumentNullException("moduleData is null");
 					}
-					((Form)extenceInstance2).ShowDialog();
+					((Form)pluginInstance).ShowDialog();
 				}
 				return;
 			}
-			if (serviceReqDons != null && serviceReqDons.Count > 1)
+			if (list != null && list.Count > 1)
 			{
-				List<HIS_SERVICE_REQ> serviceReqExamChild = serviceReqDons.Where((HIS_SERVICE_REQ o) => o.PARENT_ID.HasValue && o.PARENT_ID == HisServiceReqView.ID).ToList();
-				if (serviceReqExamChild != null && serviceReqExamChild.Count > 0)
+				List<HIS_SERVICE_REQ> list6 = list.Where((HIS_SERVICE_REQ o) => o.PARENT_ID.HasValue && o.PARENT_ID == HisServiceReqView.ID).ToList();
+				if (list6 != null && list6.Count > 0)
 				{
-					DialogResult myResult = MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DaCoDonThuocBanCoMuonTiepTucKhong, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-					if (myResult == DialogResult.Cancel)
+					DialogResult dialogResult2 = MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.DaCoDonThuocBanCoMuonTiepTucKhong, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+					if (dialogResult2 == DialogResult.Cancel)
 					{
 						return;
 					}
 				}
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPrescriptionYHCT").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module2 = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPrescriptionYHCT").FirstOrDefault();
+			if (module2 == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AssignPrescriptionYHCT");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module2.IsPlugin && module2.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
+				List<object> list7 = new List<object>();
+				Inventec.Desktop.Common.Modules.Module module3 = new Inventec.Desktop.Common.Modules.Module();
 				long intructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
-				AssignPrescriptionADO assignPrescription = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
-				assignPrescription.TreatmentCode = HisServiceReqView.TDL_TREATMENT_CODE;
-				assignPrescription.TreatmentId = HisServiceReqView.TREATMENT_ID;
-				assignPrescription.HeinCardnumber = HisServiceReqView.TDL_HEIN_CARD_NUMBER;
-				assignPrescription.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
-				assignPrescription.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
-				assignPrescription.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
+				AssignPrescriptionADO assignPrescriptionADO2 = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
+				assignPrescriptionADO2.TreatmentCode = HisServiceReqView.TDL_TREATMENT_CODE;
+				assignPrescriptionADO2.TreatmentId = HisServiceReqView.TREATMENT_ID;
+				assignPrescriptionADO2.HeinCardnumber = HisServiceReqView.TDL_HEIN_CARD_NUMBER;
+				assignPrescriptionADO2.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
+				assignPrescriptionADO2.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
+				assignPrescriptionADO2.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
 				if (HisConfigCFG.IsAutoExitAfterFinish)
 				{
-					assignPrescription.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
+					assignPrescriptionADO2.DlgWhileAutoTreatmentEnd = WhileAutoTreatmentEnd;
 				}
-				assignPrescription.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
-				HIS.UC.Icd.ADO.IcdInputADO icdADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-				HIS.UC.Icd.ADO.IcdInputADO icdCauseADO = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-				SecondaryIcdDataADO icdSubADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
-				assignPrescription.IcdExam = new HIS_SERVICE_REQ
+				assignPrescriptionADO2.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
+				HIS.UC.Icd.ADO.IcdInputADO icdInputADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+				HIS.UC.Icd.ADO.IcdInputADO icdInputADO2 = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+				SecondaryIcdDataADO secondaryIcdDataADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+				assignPrescriptionADO2.IcdExam = new HIS_SERVICE_REQ
 				{
-					ICD_CODE = ((icdADO != null) ? icdADO.ICD_CODE : ""),
-					ICD_NAME = ((icdADO != null) ? icdADO.ICD_NAME : ""),
-					ICD_CAUSE_CODE = ((icdCauseADO != null) ? icdCauseADO.ICD_CODE : ""),
-					ICD_CAUSE_NAME = ((icdCauseADO != null) ? icdCauseADO.ICD_NAME : ""),
-					ICD_SUB_CODE = ((icdSubADO != null) ? icdSubADO.ICD_SUB_CODE : ""),
-					ICD_TEXT = ((icdSubADO != null) ? icdSubADO.ICD_TEXT : ""),
+					ICD_CODE = ((icdInputADO != null) ? icdInputADO.ICD_CODE : ""),
+					ICD_NAME = ((icdInputADO != null) ? icdInputADO.ICD_NAME : ""),
+					ICD_CAUSE_CODE = ((icdInputADO2 != null) ? icdInputADO2.ICD_CODE : ""),
+					ICD_CAUSE_NAME = ((icdInputADO2 != null) ? icdInputADO2.ICD_NAME : ""),
+					ICD_SUB_CODE = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_SUB_CODE : ""),
+					ICD_TEXT = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_TEXT : ""),
 					TRADITIONAL_ICD_CODE = IcdCodeYHCT,
 					TRADITIONAL_ICD_NAME = IcdNameYHCT,
 					TRADITIONAL_ICD_SUB_CODE = IcdSubCodeYHCT,
 					TRADITIONAL_ICD_TEXT = IcdTextYHCT
 				};
-				DHSTADO dhstADO = UcDHSTGetValue() as DHSTADO;
+				DHSTADO source2 = UcDHSTGetValue() as DHSTADO;
 				Mapper.CreateMap<DHSTADO, HIS_DHST>();
-				HIS_DHST dhst = Mapper.Map<DHSTADO, HIS_DHST>(dhstADO);
-				assignPrescription.Dhst = ((dhst != null) ? dhst : new HIS_DHST());
-				assignPrescription.SereServsInTreatment = SereServsCurrentTreatment;
-				listArgs.Add(assignPrescription);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				HIS_DHST hIS_DHST2 = Mapper.Map<DHSTADO, HIS_DHST>(source2);
+				assignPrescriptionADO2.Dhst = ((hIS_DHST2 != null) ? hIS_DHST2 : new HIS_DHST());
+				assignPrescriptionADO2.SereServsInTreatment = SereServsCurrentTreatment;
+				list7.Add(assignPrescriptionADO2);
+				object pluginInstance2 = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module2, moduleData.RoomId, moduleData.RoomTypeId), list7);
+				if (pluginInstance2 == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance2).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -6261,17 +6263,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			TreatmentExamADO row = (TreatmentExamADO)gridViewTreatmentHistory.GetFocusedRow();
-			if (moduleData != null && row != null)
+			TreatmentExamADO treatmentExamADO = (TreatmentExamADO)gridViewTreatmentHistory.GetFocusedRow();
+			if (moduleData != null && treatmentExamADO != null)
 			{
-				TreatmentHistoryADO ado = new TreatmentHistoryADO();
-				ado.treatment_code = row.TREATMENT_CODE;
-				ado.treatmentId = row.ID;
-				ado.patient_code = row.TDL_PATIENT_CODE;
-				ado.patientId = row.PATIENT_ID;
-				List<object> listObj = new List<object>();
-				listObj.Add(ado);
-				PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.TreatmentHistory", moduleData.RoomId, moduleData.RoomTypeId, listObj);
+				TreatmentHistoryADO treatmentHistoryADO = new TreatmentHistoryADO();
+				treatmentHistoryADO.treatment_code = treatmentExamADO.TREATMENT_CODE;
+				treatmentHistoryADO.treatmentId = treatmentExamADO.ID;
+				treatmentHistoryADO.patient_code = treatmentExamADO.TDL_PATIENT_CODE;
+				treatmentHistoryADO.patientId = treatmentExamADO.PATIENT_ID;
+				List<object> list = new List<object>();
+				list.Add(treatmentHistoryADO);
+				PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.TreatmentHistory", moduleData.RoomId, moduleData.RoomTypeId, list);
 			}
 		}
 		catch (Exception ex)
@@ -6284,12 +6286,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			TreatmentExamADO row = (TreatmentExamADO)gridViewTreatmentHistory.GetFocusedRow();
-			if (moduleData != null && row != null)
+			TreatmentExamADO treatmentExamADO = (TreatmentExamADO)gridViewTreatmentHistory.GetFocusedRow();
+			if (moduleData != null && treatmentExamADO != null)
 			{
-				List<object> listObj = new List<object>();
-				listObj.Add(row.ID);
-				PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.Bordereau", moduleData.RoomId, moduleData.RoomTypeId, listObj);
+				List<object> list = new List<object>();
+				list.Add(treatmentExamADO.ID);
+				PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.Bordereau", moduleData.RoomId, moduleData.RoomTypeId, list);
 			}
 		}
 		catch (Exception ex)
@@ -6302,22 +6304,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ChangeExamRoomProcess").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ChangeExamRoomProcess").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.ChangeExamRoomProcess");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
-				listArgs.Add(HisServiceReqView);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				Inventec.Desktop.Common.Modules.Module module2 = new Inventec.Desktop.Common.Modules.Module();
+				list.Add(HisServiceReqView);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).Show();
+				((Form)pluginInstance).Show();
 			}
 		}
 		catch (Exception ex)
@@ -6347,23 +6349,23 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ServiceReqList").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ServiceReqList").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.ServiceReqList");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				HIS_TREATMENT treatment = new HIS_TREATMENT();
-				treatment.ID = HisServiceReqView.TREATMENT_ID;
-				listArgs.Add(treatment);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				HIS_TREATMENT hIS_TREATMENT = new HIS_TREATMENT();
+				hIS_TREATMENT.ID = HisServiceReqView.TREATMENT_ID;
+				list.Add(hIS_TREATMENT);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -6413,44 +6415,44 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			List<object> listArgs = new List<object>();
-			Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
+			List<object> list = new List<object>();
+			Inventec.Desktop.Common.Modules.Module module = new Inventec.Desktop.Common.Modules.Module();
 			long intructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
-			AssignPrescriptionADO assignPrescription = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
-			assignPrescription.TreatmentCode = HisServiceReqView.TDL_TREATMENT_CODE;
-			assignPrescription.HeinCardnumber = HisServiceReqView.TDL_HEIN_CARD_NUMBER;
-			assignPrescription.TreatmentId = HisServiceReqView.TREATMENT_ID;
-			assignPrescription.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
-			assignPrescription.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
-			assignPrescription.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
-			assignPrescription.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
-			assignPrescription.ProvisionalDiagnosis = txtProvisionalDianosis.Text.Trim();
-			assignPrescription.IsCabinet = true;
-			HIS.UC.Icd.ADO.IcdInputADO icdADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-			HIS.UC.Icd.ADO.IcdInputADO icdCauseADO = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
-			SecondaryIcdDataADO icdSubADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
-			assignPrescription.IcdExam = new HIS_SERVICE_REQ
+			AssignPrescriptionADO assignPrescriptionADO = new AssignPrescriptionADO(HisServiceReqView.TREATMENT_ID, intructionTime, HisServiceReqView.ID);
+			assignPrescriptionADO.TreatmentCode = HisServiceReqView.TDL_TREATMENT_CODE;
+			assignPrescriptionADO.HeinCardnumber = HisServiceReqView.TDL_HEIN_CARD_NUMBER;
+			assignPrescriptionADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
+			assignPrescriptionADO.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
+			assignPrescriptionADO.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
+			assignPrescriptionADO.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
+			assignPrescriptionADO.DgProcessDataResult = RefeshServiceReqInfoAfterFinish;
+			assignPrescriptionADO.ProvisionalDiagnosis = txtProvisionalDianosis.Text.Trim();
+			assignPrescriptionADO.IsCabinet = true;
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = UcIcdGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO2 = UcIcdCauseGetValue() as HIS.UC.Icd.ADO.IcdInputADO;
+			SecondaryIcdDataADO secondaryIcdDataADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+			assignPrescriptionADO.IcdExam = new HIS_SERVICE_REQ
 			{
-				ICD_CODE = ((icdADO != null) ? icdADO.ICD_CODE : ""),
-				ICD_NAME = ((icdADO != null) ? icdADO.ICD_NAME : ""),
-				ICD_CAUSE_CODE = ((icdCauseADO != null) ? icdCauseADO.ICD_CODE : ""),
-				ICD_CAUSE_NAME = ((icdCauseADO != null) ? icdCauseADO.ICD_NAME : ""),
-				ICD_SUB_CODE = ((icdSubADO != null) ? icdSubADO.ICD_SUB_CODE : ""),
-				ICD_TEXT = ((icdSubADO != null) ? icdSubADO.ICD_TEXT : ""),
+				ICD_CODE = ((icdInputADO != null) ? icdInputADO.ICD_CODE : ""),
+				ICD_NAME = ((icdInputADO != null) ? icdInputADO.ICD_NAME : ""),
+				ICD_CAUSE_CODE = ((icdInputADO2 != null) ? icdInputADO2.ICD_CODE : ""),
+				ICD_CAUSE_NAME = ((icdInputADO2 != null) ? icdInputADO2.ICD_NAME : ""),
+				ICD_SUB_CODE = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_SUB_CODE : ""),
+				ICD_TEXT = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_TEXT : ""),
 				TRADITIONAL_ICD_CODE = IcdCodeYHCT,
 				TRADITIONAL_ICD_NAME = IcdNameYHCT,
 				TRADITIONAL_ICD_SUB_CODE = IcdSubCodeYHCT,
 				TRADITIONAL_ICD_TEXT = IcdTextYHCT
 			};
-			listArgs.Add(assignPrescription);
+			list.Add(assignPrescriptionADO);
 			if (!IsApplyFormClosingOption(moduleData.ModuleLink))
 			{
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 			else
 			{
@@ -6462,22 +6464,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					GlobalVariables.FormAssignPrescriptionPK.WindowState = FormWindowState.Maximized;
 					GlobalVariables.FormAssignPrescriptionPK.ShowInTaskbar = true;
-					Type classType2 = GlobalVariables.FormAssignPrescriptionPK.GetType();
-					MethodInfo methodInfo2 = classType2.GetMethod("ReloadModuleByInputData");
-					methodInfo2.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[3] { assignPrescription, null, this.moduleData });
+					Type type = GlobalVariables.FormAssignPrescriptionPK.GetType();
+					MethodInfo method = type.GetMethod("ReloadModuleByInputData");
+					method.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[3] { assignPrescriptionADO, null, this.moduleData });
 					GlobalVariables.FormAssignPrescriptionPK.Activate();
 					return;
 				}
-				GlobalVariables.FormAssignPrescriptionPK = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
+				GlobalVariables.FormAssignPrescriptionPK = (Form)PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), list);
 				GlobalVariables.FormAssignPrescriptionPK.ShowInTaskbar = true;
 				if (GlobalVariables.FormAssignPrescriptionPK == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
 				GlobalVariables.FormAssignPrescriptionPK.Show();
-				Type classType = GlobalVariables.FormAssignPrescriptionPK.GetType();
-				MethodInfo methodInfo = classType.GetMethod("ChangeIsUseApplyFormClosingOption");
-				methodInfo.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[1] { true });
+				Type type2 = GlobalVariables.FormAssignPrescriptionPK.GetType();
+				MethodInfo method2 = type2.GetMethod("ChangeIsUseApplyFormClosingOption");
+				method2.Invoke(GlobalVariables.FormAssignPrescriptionPK, new object[1] { true });
 			}
 		}
 		catch (Exception ex)
@@ -6495,26 +6497,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisTrackingList").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisTrackingList").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.HisTrackingList");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				DHSTADO dhstADO = UcDHSTGetValue() as DHSTADO;
+				List<object> list = new List<object>();
+				DHSTADO source = UcDHSTGetValue() as DHSTADO;
 				Mapper.CreateMap<DHSTADO, HIS_DHST>();
-				HIS_DHST dhst = Mapper.Map<DHSTADO, HIS_DHST>(dhstADO);
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				listArgs.Add(dhst);
-				listArgs.Add(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				HIS_DHST item = Mapper.Map<DHSTADO, HIS_DHST>(source);
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				list.Add(item);
+				list.Add(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -6541,26 +6543,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				LoadDHST();
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.TrackingCreate").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.TrackingCreate").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.TrackingCreate");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
 				if (dhst != null)
 				{
-					listArgs.Add(dhst);
+					list.Add(dhst);
 				}
-				listArgs.Add(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				list.Add(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -6571,22 +6573,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void btnDichVuHenKham_Click(object sender, EventArgs e)
 	{
-		Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AppointmentService").FirstOrDefault();
-		if (moduleData == null)
+		Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AppointmentService").FirstOrDefault();
+		if (module == null)
 		{
 			LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AppointmentService");
 		}
-		if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+		if (module.IsPlugin && module.ExtensionInfo != null)
 		{
-			List<object> listArgs = new List<object>();
-			Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
-			listArgs.Add(treatment.ID);
-			object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-			if (extenceInstance == null)
+			List<object> list = new List<object>();
+			Inventec.Desktop.Common.Modules.Module module2 = new Inventec.Desktop.Common.Modules.Module();
+			list.Add(treatment.ID);
+			object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+			if (pluginInstance == null)
 			{
 				throw new ArgumentNullException("moduleData is null");
 			}
-			((Form)extenceInstance).Show();
+			((Form)pluginInstance).Show();
 		}
 	}
 
@@ -6608,10 +6610,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (HisServiceReqView != null)
 			{
-				InitDataADO ado = new InitDataADO();
-				ado.ProviderType = "MEDISOFT";
-				ado.PatientId = HisServiceReqView.TDL_PATIENT_ID;
-				new OtherTreatmentHistoryProcessor(ado)?.Run(HIS.Desktop.Plugins.Library.OtherTreatmentHistory.Enum.Xemthuocpk);
+				InitDataADO initDataADO = new InitDataADO();
+				initDataADO.ProviderType = "MEDISOFT";
+				initDataADO.PatientId = HisServiceReqView.TDL_PATIENT_ID;
+				new OtherTreatmentHistoryProcessor(initDataADO)?.Run(HIS.Desktop.Plugins.Library.OtherTreatmentHistory.Enum.Xemthuocpk);
 			}
 		}
 		catch (Exception ex)
@@ -6690,9 +6692,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			WaitingManager.Show();
-			HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd FormSecondaryIcd = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
+			HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd frmSecondaryIcd2 = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
 			WaitingManager.Hide();
-			FormSecondaryIcd.ShowDialog();
+			frmSecondaryIcd2.ShowDialog();
 		}
 		catch (Exception ex)
 		{
@@ -6705,22 +6707,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ContentSubclinical").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.ContentSubclinical").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.ContentSubclinical");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				listArgs.Add(new DelegateSelectData(DelegateSelectDataContentSubclinical));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				list.Add(new DelegateSelectData(DelegateSelectDataContentSubclinical));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -6975,35 +6977,35 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			string strIsToCalculateEgfr = "";
-			List<HIS_TEST_INDEX> TestIndexData = (from o in BackendDataWorker.Get<HIS_TEST_INDEX>()
+			List<HIS_TEST_INDEX> list = (from o in BackendDataWorker.Get<HIS_TEST_INDEX>()
 				where o.IS_TO_CALCULATE_EGFR == 1
 				select o).ToList();
-			if (TestIndexData != null && TestIndexData.Count > 0)
+			if (list != null && list.Count > 0)
 			{
-				CommonParam param = new CommonParam();
-				HisSereServTeinFilter filter = new HisSereServTeinFilter();
-				filter.TDL_TREATMENT_ID = treatmentId;
-				filter.TEST_INDEX_IDs = TestIndexData.Select((HIS_TEST_INDEX o) => o.ID).ToList();
-				List<HIS_SERE_SERV_TEIN> SereServTeinData = new BackendAdapter(param).Get<List<HIS_SERE_SERV_TEIN>>("/api/HisSereServTein/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-				if (SereServTeinData != null && SereServTeinData.Count > 0)
+				CommonParam commonParam = new CommonParam();
+				HisSereServTeinFilter hisSereServTeinFilter = new HisSereServTeinFilter();
+				hisSereServTeinFilter.TDL_TREATMENT_ID = treatmentId;
+				hisSereServTeinFilter.TEST_INDEX_IDs = list.Select((HIS_TEST_INDEX o) => o.ID).ToList();
+				List<HIS_SERE_SERV_TEIN> list2 = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV_TEIN>>("/api/HisSereServTein/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServTeinFilter, commonParam);
+				if (list2 != null && list2.Count > 0)
 				{
-					HIS_SERE_SERV_TEIN DataSereServTein = (from o in SereServTeinData
+					HIS_SERE_SERV_TEIN DataSereServTein = (from o in list2
 						where !string.IsNullOrEmpty(o.VALUE)
 						orderby o.MODIFY_TIME descending, o.ID descending
 						select o).FirstOrDefault();
-					HIS_TEST_INDEX testIndex = TestIndexData.FirstOrDefault((HIS_TEST_INDEX o) => o.ID == (DataSereServTein.TEST_INDEX_ID ?? 0));
-					if (testIndex != null)
+					HIS_TEST_INDEX hIS_TEST_INDEX = list.FirstOrDefault((HIS_TEST_INDEX o) => o.ID == (DataSereServTein.TEST_INDEX_ID ?? 0));
+					if (hIS_TEST_INDEX != null)
 					{
 						string ssTeinVL = DataSereServTein.VALUE.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator).Replace(",", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => ssTeinVL), ssTeinVL));
-						if (decimal.TryParse(ssTeinVL, out var chiso) && chiso > 0m)
+						if (decimal.TryParse(ssTeinVL, out var result) && result > 0m)
 						{
-							if (testIndex.CONVERT_RATIO_MLCT.HasValue)
+							if (hIS_TEST_INDEX.CONVERT_RATIO_MLCT.HasValue)
 							{
-								chiso *= testIndex.CONVERT_RATIO_MLCT ?? 0m;
+								result *= hIS_TEST_INDEX.CONVERT_RATIO_MLCT ?? 0m;
 							}
-							decimal mlct = Inventec.Common.Calculate.Calculation.MucLocCauThan(HisServiceReqView.TDL_PATIENT_DOB, spinWeight.Value, spinHeight.Value, chiso, HisServiceReqView.TDL_PATIENT_GENDER_ID == 2);
-							strIsToCalculateEgfr = ((mlct != 0m) ? mlct.ToString() : "");
+							decimal num = Inventec.Common.Calculate.Calculation.MucLocCauThan(HisServiceReqView.TDL_PATIENT_DOB, spinWeight.Value, spinHeight.Value, result, HisServiceReqView.TDL_PATIENT_GENDER_ID == 2);
+							strIsToCalculateEgfr = ((num != 0m) ? num.ToString() : "");
 						}
 					}
 					else
@@ -7048,17 +7050,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			bool showCbo = true;
+			bool flag = true;
 			if (!string.IsNullOrEmpty(searchCode))
 			{
-				List<HIS_NEXT_TREA_INTR> listData = dataNextTreatmentInstructions.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE.Contains(searchCode)).ToList();
-				List<HIS_NEXT_TREA_INTR> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE == searchCode).ToList() : listData));
-				if (result != null && result.Count > 0)
+				List<HIS_NEXT_TREA_INTR> list = dataNextTreatmentInstructions.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE.Contains(searchCode)).ToList();
+				List<HIS_NEXT_TREA_INTR> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE == searchCode).ToList() : list));
+				if (list2 != null && list2.Count > 0)
 				{
-					showCbo = false;
-					txtNextTreatmentInstructionCode.Text = result.First().NEXT_TREA_INTR_CODE;
-					txtNextTreatmentInstructionMainText.Text = result.First().NEXT_TREA_INTR_NAME;
-					cboNextTreatmentInstructions.EditValue = listData.First().ID;
+					flag = false;
+					txtNextTreatmentInstructionCode.Text = list2.First().NEXT_TREA_INTR_CODE;
+					txtNextTreatmentInstructionMainText.Text = list2.First().NEXT_TREA_INTR_NAME;
+					cboNextTreatmentInstructions.EditValue = list.First().ID;
 					chkEditNextTreatmentInstruction.Checked = AutoCheckNextTreatmentInstruction;
 					if (chkEditNextTreatmentInstruction.Checked)
 					{
@@ -7072,7 +7074,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					}
 				}
 			}
-			if (showCbo)
+			if (flag)
 			{
 				cboNextTreatmentInstructions.Focus();
 				cboNextTreatmentInstructions.ShowPopup();
@@ -7130,11 +7132,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			cboNextTreatmentInstructions.Properties.Buttons[1].Visible = true;
-			HIS_NEXT_TREA_INTR nextTreatmentIntruction = dataNextTreatmentInstructions.FirstOrDefault((HIS_NEXT_TREA_INTR o) => o.ID == Parse.ToInt64((cboNextTreatmentInstructions.EditValue ?? ((object)0)).ToString()));
-			if (nextTreatmentIntruction != null)
+			HIS_NEXT_TREA_INTR hIS_NEXT_TREA_INTR = dataNextTreatmentInstructions.FirstOrDefault((HIS_NEXT_TREA_INTR o) => o.ID == Parse.ToInt64((cboNextTreatmentInstructions.EditValue ?? ((object)0)).ToString()));
+			if (hIS_NEXT_TREA_INTR != null)
 			{
-				txtNextTreatmentInstructionCode.Text = nextTreatmentIntruction.NEXT_TREA_INTR_CODE;
-				txtNextTreatmentInstructionMainText.Text = nextTreatmentIntruction.NEXT_TREA_INTR_NAME;
+				txtNextTreatmentInstructionCode.Text = hIS_NEXT_TREA_INTR.NEXT_TREA_INTR_CODE;
+				txtNextTreatmentInstructionMainText.Text = hIS_NEXT_TREA_INTR.NEXT_TREA_INTR_NAME;
 				chkEditNextTreatmentInstruction.Checked = AutoCheckNextTreatmentInstruction;
 				if (chkEditNextTreatmentInstruction.Checked)
 				{
@@ -7273,9 +7275,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			string search = ((TextEdit)sender).Text.Trim();
 			if (!string.IsNullOrEmpty(search))
 			{
-				List<HIS_NEXT_TREA_INTR> listData = dataNextTreatmentInstructions.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE.Contains(search)).ToList();
-				List<HIS_NEXT_TREA_INTR> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE == search).ToList() : listData));
-				if (result == null || result.Count <= 0)
+				List<HIS_NEXT_TREA_INTR> list = dataNextTreatmentInstructions.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE.Contains(search)).ToList();
+				List<HIS_NEXT_TREA_INTR> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_CODE == search).ToList() : list));
+				if (list2 == null || list2.Count <= 0)
 				{
 					e.Cancel = true;
 					return;
@@ -7335,8 +7337,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd FormSecondaryIcd = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
-			FormSecondaryIcd.ShowDialog();
+			HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd frmSecondaryIcd2 = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
+			frmSecondaryIcd2.ShowDialog();
 		}
 		catch (Exception ex)
 		{
@@ -7395,16 +7397,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			else if (e.KeyCode == Keys.Down)
 			{
-				int rowHandlerNext = 0;
-				int countInGridRows = gvIcdSubCode.RowCount;
-				if (countInGridRows > 1)
+				int focusedRowHandle = 0;
+				int rowCount = gvIcdSubCode.RowCount;
+				if (rowCount > 1)
 				{
-					rowHandlerNext = 1;
+					focusedRowHandle = 1;
 				}
-				Rectangle buttonBounds = new Rectangle(panelControlCauseIcd.Bounds.X, panelControlCauseIcd.Bounds.Y, panelControlCauseIcd.Bounds.Width, panelControlCauseIcd.Bounds.Height);
-				popupControlContainer1.ShowPopup(new Point(buttonBounds.X + 110, buttonBounds.Bottom - 50));
+				Rectangle rectangle = new Rectangle(panelControlCauseIcd.Bounds.X, panelControlCauseIcd.Bounds.Y, panelControlCauseIcd.Bounds.Width, panelControlCauseIcd.Bounds.Height);
+				popupControlContainer1.ShowPopup(new Point(rectangle.X + 110, rectangle.Bottom - 50));
 				gvIcdSubCode.Focus();
-				gvIcdSubCode.FocusedRowHandle = rowHandlerNext;
+				gvIcdSubCode.FocusedRowHandle = focusedRowHandle;
 			}
 			else
 			{
@@ -7427,8 +7429,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (e.KeyCode == Keys.F1)
 			{
-				HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd FormSecondaryIcd = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
-				FormSecondaryIcd.ShowDialog();
+				HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd frmSecondaryIcd2 = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
+				frmSecondaryIcd2.ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -7448,8 +7450,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (!string.IsNullOrEmpty(txtIcdText.Text.Trim()))
 			{
-				string strIcdSubText = "";
-				strIcdSubText = ((txtIcdText.Text.LastIndexOf(";") <= -1) ? txtIcdText.Text.Trim() : txtIcdText.Text.Substring(txtIcdText.Text.LastIndexOf(";")).Replace(";", ""));
+				string text = "";
+				text = ((txtIcdText.Text.LastIndexOf(";") <= -1) ? txtIcdText.Text.Trim() : txtIcdText.Text.Substring(txtIcdText.Text.LastIndexOf(";")).Replace(";", ""));
 				if (isShowContainerMediMatyForChoose)
 				{
 					customGridViewSubIcdName.ActiveFilter.Clear();
@@ -7460,7 +7462,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					{
 						isShowContainerMediMaty = true;
 					}
-					customGridViewSubIcdName.ActiveFilterString = $"[ICD_NAME_UNSIGN] Like '%{Inventec.Common.String.Convert.UnSignVNese(strIcdSubText).ToLower()}%'";
+					customGridViewSubIcdName.ActiveFilterString = $"[ICD_NAME_UNSIGN] Like '%{Inventec.Common.String.Convert.UnSignVNese(text).ToLower()}%'";
 					customGridViewSubIcdName.OptionsFilter.FilterEditorUseMenuForOperandsAndOperators = false;
 					customGridViewSubIcdName.OptionsFilter.ShowAllTableValuesInCheckedFilterPopup = false;
 					customGridViewSubIcdName.OptionsFilter.ShowAllTableValuesInFilterPopup = false;
@@ -7539,10 +7541,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			else if (e.KeyCode == Keys.Down)
 			{
-				int rowHandlerNext = 0;
+				int focusedRowHandle = 0;
 				ShowPopupContainerIcsSub();
 				customGridViewSubIcdName.Focus();
-				customGridViewSubIcdName.FocusedRowHandle = rowHandlerNext;
+				customGridViewSubIcdName.FocusedRowHandle = focusedRowHandle;
 			}
 			else if (e.KeyCode == Keys.Shift || e.KeyCode == Keys.ShiftKey)
 			{
@@ -7573,8 +7575,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (e.KeyCode == Keys.F1)
 			{
-				HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd FormSecondaryIcd = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
-				FormSecondaryIcd.ShowDialog();
+				HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd frmSecondaryIcd2 = new HIS.Desktop.Plugins.ExamServiceReqExecute.frmSecondaryIcd(stringIcds, txtIcdSubCode.Text, txtIcdText.Text, (int)ConfigApplications.NumPageSize, checkIcdManager, txtIcdCode.Text);
+				frmSecondaryIcd2.ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -7667,8 +7669,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			string icdName__Olds = ((txtIcdText.Text == txtIcdText.Properties.NullValuePrompt) ? "" : txtIcdText.Text.Trim());
-			txtIcdText.Text = ProcessIcdNameChanged(icdName__Olds, icdNames);
+			string oldIcdNames = ((txtIcdText.Text == txtIcdText.Properties.NullValuePrompt) ? "" : txtIcdText.Text.Trim());
+			txtIcdText.Text = ProcessIcdNameChanged(oldIcdNames, icdNames);
 			if (icdNames.Equals(";"))
 			{
 				txtIcdText.Text = "";
@@ -7686,24 +7688,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private string ProcessIcdNameChanged(string oldIcdNames, string newIcdNames)
 	{
-		string result = "";
+		string text = "";
 		try
 		{
-			result = newIcdNames;
+			text = newIcdNames;
 			if (!string.IsNullOrEmpty(oldIcdNames))
 			{
-				string[] arrNames = oldIcdNames.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-				if (arrNames != null && arrNames.Length != 0)
+				string[] array = oldIcdNames.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+				if (array != null && array.Length != 0)
 				{
-					string[] array = arrNames;
-					foreach (string item in array)
+					string[] array2 = array;
+					foreach (string item in array2)
 					{
 						if (!string.IsNullOrEmpty(item) && !newIcdNames.Contains(IcdUtil.AddSeperateToKey(item)))
 						{
-							HIS_ICD checkInList = currentIcds.Where((HIS_ICD o) => IcdUtil.AddSeperateToKey(item).Equals(IcdUtil.AddSeperateToKey(o.ICD_NAME))).FirstOrDefault();
-							if (checkInList == null || checkInList.ID == 0)
+							HIS_ICD hIS_ICD = currentIcds.Where((HIS_ICD o) => IcdUtil.AddSeperateToKey(item).Equals(IcdUtil.AddSeperateToKey(o.ICD_NAME))).FirstOrDefault();
+							if (hIS_ICD == null || hIS_ICD.ID == 0)
 							{
-								result = result + item + ";";
+								text = text + item + ";";
 							}
 						}
 					}
@@ -7714,63 +7716,63 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Warn(ex);
 		}
-		return result;
+		return text;
 	}
 
 	private bool CheckIcdWrongCode(ref string strIcdNames, ref string strWrongIcdCodes)
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
 			if (!string.IsNullOrEmpty(txtIcdSubCode.Text.Trim()))
 			{
 				strWrongIcdCodes = "";
-				List<string> arrWrongCodes = new List<string>();
-				List<string> lstIcdCodes = new List<string>();
-				List<string> lstIcdSubName = new List<string>();
-				List<string> arrIcdExtraCodes = (from o in (from o in txtIcdSubCode.Text.Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries)
+				List<string> list = new List<string>();
+				List<string> list2 = new List<string>();
+				List<string> list3 = new List<string>();
+				List<string> list4 = (from o in (from o in txtIcdSubCode.Text.Split(icdSeparators, StringSplitOptions.RemoveEmptyEntries)
 						where !string.IsNullOrEmpty(o)
 						select o.Trim()).Distinct()
 					where !string.IsNullOrEmpty(o)
 					select o).ToList();
-				if (arrIcdExtraCodes != null && arrIcdExtraCodes.Count() > 0)
+				if (list4 != null && list4.Count() > 0)
 				{
-					bool next = true;
-					foreach (string itemCode in arrIcdExtraCodes)
+					bool flag = true;
+					foreach (string itemCode in list4)
 					{
-						HIS_ICD icdByCode = currentIcds.FirstOrDefault((HIS_ICD o) => o.ICD_CODE.ToLower() == itemCode.ToLower());
-						if (icdByCode != null && icdByCode.ID > 0)
+						HIS_ICD hIS_ICD = currentIcds.FirstOrDefault((HIS_ICD o) => o.ICD_CODE.ToLower() == itemCode.ToLower());
+						if (hIS_ICD != null && hIS_ICD.ID > 0)
 						{
-							string messErr = null;
-							if (next && !checkIcdManager.ProcessCheckIcd(null, txtIcdSubCode.Text.Trim(), ref messErr, IsCheck: false))
+							string MessageError = null;
+							if (flag && !checkIcdManager.ProcessCheckIcd(null, txtIcdSubCode.Text.Trim(), ref MessageError, IsCheck: false))
 							{
-								next = false;
-								XtraMessageBox.Show(messErr, "Thông báo", MessageBoxButtons.OK);
+								flag = false;
+								XtraMessageBox.Show(MessageError, "Thông báo", MessageBoxButtons.OK);
 							}
 							else
 							{
-								strIcdNames = strIcdNames + ";" + icdByCode.ICD_NAME;
-								lstIcdCodes.Add(icdByCode.ICD_CODE);
-								lstIcdSubName.Add(icdByCode.ICD_NAME);
+								strIcdNames = strIcdNames + ";" + hIS_ICD.ICD_NAME;
+								list2.Add(hIS_ICD.ICD_CODE);
+								list3.Add(hIS_ICD.ICD_NAME);
 							}
 						}
 						else
 						{
-							arrWrongCodes.Add(itemCode);
+							list.Add(itemCode);
 							strWrongIcdCodes = strWrongIcdCodes + ";" + itemCode;
 						}
 					}
 					strIcdNames += ";";
-					if (lstIcdCodes != null && lstIcdCodes.Count > 0)
+					if (list2 != null && list2.Count > 0)
 					{
-						txtIcdSubCode.Text = string.Join(";", lstIcdCodes);
-						txtIcdText.Text = string.Join(";", lstIcdSubName);
+						txtIcdSubCode.Text = string.Join(";", list2);
+						txtIcdText.Text = string.Join(";", list3);
 					}
 					if (!string.IsNullOrEmpty(strWrongIcdCodes))
 					{
-						valid = false;
+						result = false;
 						SetCheckedIcdsToControl(txtIcdSubCode.Text, txtIcdText.Text.Trim());
-						XtraMessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.KhongTimThayIcdTuongUngVoiCacMaSau, string.Join(",", arrWrongCodes)), "Thông báo", MessageBoxButtons.OK);
+						XtraMessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.KhongTimThayIcdTuongUngVoiCacMaSau, string.Join(",", list)), "Thông báo", MessageBoxButtons.OK);
 						ShowPopupIcdChoose();
 					}
 				}
@@ -7783,22 +7785,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		}
 		catch (Exception ex)
 		{
-			valid = false;
+			result = false;
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private bool ProccessorByIcdCode(string currentValue)
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
 			string strIcdNames = "";
 			string strWrongIcdCodes = "";
 			if (!CheckIcdWrongCode(ref strIcdNames, ref strWrongIcdCodes))
 			{
-				valid = false;
+				result = false;
 				LogSystem.Debug("Ma icd nhap vao khong ton tai trong danh muc. " + LogUtil.TraceData(LogUtil.GetMemberName(() => strWrongIcdCodes), strWrongIcdCodes));
 			}
 		}
@@ -7806,24 +7808,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private void ShowPopupContainerIcsSub()
 	{
 		try
 		{
-			int width = Screen.PrimaryScreen.Bounds.Width;
-			float widthPlus = ((width < 1900) ? ((width > 1440) ? 50 : 100) : 0);
-			float sizePlus = ((width < 1900) ? ((width < 1680 && width > 1400) ? 45 : ((width <= 1366) ? 30 : 0)) : 0);
+			int num = Screen.PrimaryScreen.Bounds.Width;
+			float num2 = ((num < 1900) ? ((num > 1440) ? 50 : 100) : 0);
+			float num3 = ((num < 1900) ? ((num < 1680 && num > 1400) ? 45 : ((num <= 1366) ? 30 : 0)) : 0);
 			popupControlContainerSubIcdName.Width = 600;
 			popupControlContainerSubIcdName.Height = 250;
 			customGridViewSubIcdName.Focus();
 			customGridViewSubIcdName.FocusedRowHandle = 0;
-			Rectangle buttonBounds = new Rectangle(panelControlCauseIcd.Bounds.X, panelControlCauseIcd.Bounds.Y, panelControlCauseIcd.Bounds.Width, panelControlCauseIcd.Bounds.Height);
-			float sizeText = lblCDPhu.Appearance.Font.Size;
-			popupControlContainerSubIcdName.ShowPopup(new Point(buttonBounds.X + layoutControlItem50.Location.X, buttonBounds.Bottom - 200 + ((sizeText > 11f) ? ((int)(sizeText * 4f)) : (((double)sizeText > 9.5) ? ((int)((double)sizeText * 2.5)) : ((int)sizeText))) + (int)sizePlus));
-			LogSystem.Debug("buttonBounds.X + 300=" + buttonBounds.X + 300 + ", buttonBounds.Bottom - 80=" + (buttonBounds.Bottom - 80));
+			Rectangle rectangle = new Rectangle(panelControlCauseIcd.Bounds.X, panelControlCauseIcd.Bounds.Y, panelControlCauseIcd.Bounds.Width, panelControlCauseIcd.Bounds.Height);
+			float size = lblCDPhu.Appearance.Font.Size;
+			popupControlContainerSubIcdName.ShowPopup(new Point(rectangle.X + layoutControlItem50.Location.X, rectangle.Bottom - 200 + ((size > 11f) ? ((int)(size * 4f)) : (((double)size > 9.5) ? ((int)((double)size * 2.5)) : ((int)size))) + (int)num3));
+			LogSystem.Debug("buttonBounds.X + 300=" + rectangle.X + 300 + ", buttonBounds.Bottom - 80=" + (rectangle.Bottom - 80));
 		}
 		catch (Exception ex)
 		{
@@ -7837,43 +7839,43 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Debug("SetCheckedSubIcdsToControl.1");
 			isNotProcessWhileChangedTextSubIcd = true;
-			string strIcdSubText = "";
+			string text = "";
 			if (txtIcdText.Text.LastIndexOf(";") > -1)
 			{
-				strIcdSubText = txtIcdText.Text.Substring(txtIcdText.Text.LastIndexOf(";")).Replace(";", "");
+				text = txtIcdText.Text.Substring(txtIcdText.Text.LastIndexOf(";")).Replace(";", "");
 			}
 			else
 			{
-				strIcdSubText = txtIcdText.Text.Trim();
+				text = txtIcdText.Text.Trim();
 			}
-			string icdNames = null;
-			string icdCodes = null;
-			string icdName__Olds = txtIcdText.Text.Trim();
-			List<HIS.Desktop.Plugins.ExamServiceReqExecute.ADO.IcdADO> checkList = icdSubcodeAdoChecks.Where((HIS.Desktop.Plugins.ExamServiceReqExecute.ADO.IcdADO o) => o.IsChecked).ToList();
-			int count = 0;
-			foreach (HIS.Desktop.Plugins.ExamServiceReqExecute.ADO.IcdADO item in checkList)
+			string text2 = null;
+			string text3 = null;
+			string oldIcdNames = txtIcdText.Text.Trim();
+			List<HIS.Desktop.Plugins.ExamServiceReqExecute.ADO.IcdADO> list = icdSubcodeAdoChecks.Where((HIS.Desktop.Plugins.ExamServiceReqExecute.ADO.IcdADO o) => o.IsChecked).ToList();
+			int num = 0;
+			foreach (HIS.Desktop.Plugins.ExamServiceReqExecute.ADO.IcdADO item in list)
 			{
-				count++;
-				string messErr = null;
-				if (!checkIcdManager.ProcessCheckIcd(null, item.ICD_CODE, ref messErr, IsCheck: false))
+				num++;
+				string MessageError = null;
+				if (!checkIcdManager.ProcessCheckIcd(null, item.ICD_CODE, ref MessageError, IsCheck: false))
 				{
-					XtraMessageBox.Show(messErr, "Thông báo", MessageBoxButtons.OK);
+					XtraMessageBox.Show(MessageError, "Thông báo", MessageBoxButtons.OK);
 					item.IsChecked = false;
 				}
-				else if (count == checkList.Count)
+				else if (num == list.Count)
 				{
-					icdCodes += item.ICD_CODE;
-					icdNames += item.ICD_NAME;
+					text3 += item.ICD_CODE;
+					text2 += item.ICD_NAME;
 				}
 				else
 				{
-					icdCodes = icdCodes + item.ICD_CODE + ";";
-					icdNames = icdNames + item.ICD_NAME + ";";
+					text3 = text3 + item.ICD_CODE + ";";
+					text2 = text2 + item.ICD_NAME + ";";
 				}
 			}
-			string newtxtIcdText = ProcessIcdNameChanged(icdName__Olds, icdNames);
-			txtIcdText.Text = icdNames;
-			txtIcdSubCode.Text = icdCodes;
+			string text4 = ProcessIcdNameChanged(oldIcdNames, text2);
+			txtIcdText.Text = text2;
+			txtIcdSubCode.Text = text3;
 			isNotProcessWhileChangedTextSubIcd = false;
 			LogSystem.Debug("SetCheckedSubIcdsToControl.2");
 		}
@@ -7954,38 +7956,38 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if ((Control.ModifierKeys & Keys.Control) != Keys.Control)
 			{
 				LogSystem.Debug("customGridViewSubIcdName_MouseDown.1");
-				GridView view = sender as GridView;
-				GridHitInfo hi = view.CalcHitInfo(e.Location);
-				if (hi.InRowCell)
+				GridView gridView = sender as GridView;
+				GridHitInfo gridHitInfo = gridView.CalcHitInfo(e.Location);
+				if (gridHitInfo.InRowCell)
 				{
 					LogSystem.Debug("customGridViewSubIcdName_MouseDown.2");
-					if (hi.Column.FieldName == "IsChecked" && hi.Column.RealColumnEdit != null && hi.Column.RealColumnEdit.GetType() == typeof(RepositoryItemCheckEdit))
+					if (gridHitInfo.Column.FieldName == "IsChecked" && gridHitInfo.Column.RealColumnEdit != null && gridHitInfo.Column.RealColumnEdit.GetType() == typeof(RepositoryItemCheckEdit))
 					{
 						LogSystem.Debug("customGridViewSubIcdName_MouseDown.3");
-						view.FocusedRowHandle = hi.RowHandle;
-						view.FocusedColumn = hi.Column;
-						view.ShowEditor();
-						CheckEdit checkEdit = view.ActiveEditor as CheckEdit;
-						CheckEditViewInfo checkInfo = (CheckEditViewInfo)checkEdit.GetViewInfo();
-						Rectangle glyphRect = checkInfo.CheckInfo.GlyphRect;
-						GridViewInfo viewInfo = view.GetViewInfo() as GridViewInfo;
-						Rectangle gridGlyphRect = new Rectangle(viewInfo.GetGridCellInfo(hi).Bounds.X + glyphRect.X, viewInfo.GetGridCellInfo(hi).Bounds.Y + glyphRect.Y, glyphRect.Width, glyphRect.Height);
-						if (!gridGlyphRect.Contains(e.Location))
+						gridView.FocusedRowHandle = gridHitInfo.RowHandle;
+						gridView.FocusedColumn = gridHitInfo.Column;
+						gridView.ShowEditor();
+						CheckEdit checkEdit = gridView.ActiveEditor as CheckEdit;
+						CheckEditViewInfo checkEditViewInfo = (CheckEditViewInfo)checkEdit.GetViewInfo();
+						Rectangle glyphRect = checkEditViewInfo.CheckInfo.GlyphRect;
+						GridViewInfo gridViewInfo = gridView.GetViewInfo() as GridViewInfo;
+						Rectangle rectangle = new Rectangle(gridViewInfo.GetGridCellInfo(gridHitInfo).Bounds.X + glyphRect.X, gridViewInfo.GetGridCellInfo(gridHitInfo).Bounds.Y + glyphRect.Y, glyphRect.Width, glyphRect.Height);
+						if (!rectangle.Contains(e.Location))
 						{
-							view.CloseEditor();
-							if (!view.IsCellSelected(hi.RowHandle, hi.Column))
+							gridView.CloseEditor();
+							if (!gridView.IsCellSelected(gridHitInfo.RowHandle, gridHitInfo.Column))
 							{
-								view.SelectCell(hi.RowHandle, hi.Column);
+								gridView.SelectCell(gridHitInfo.RowHandle, gridHitInfo.Column);
 							}
 							else
 							{
-								view.UnselectCell(hi.RowHandle, hi.Column);
+								gridView.UnselectCell(gridHitInfo.RowHandle, gridHitInfo.Column);
 							}
 						}
 						else
 						{
 							checkEdit.Checked = !checkEdit.Checked;
-							view.CloseEditor();
+							gridView.CloseEditor();
 						}
 						(e as DXMouseEventArgs).Handled = true;
 						LogSystem.Debug("customGridViewSubIcdName_MouseDown.4");
@@ -8036,16 +8038,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			else if (e.KeyCode == Keys.Down)
 			{
-				int rowHandlerNext = 0;
-				int countInGridRows = gridViewIcdCode.RowCount;
-				if (countInGridRows > 1)
+				int focusedRowHandle = 0;
+				int rowCount = gridViewIcdCode.RowCount;
+				if (rowCount > 1)
 				{
-					rowHandlerNext = 1;
+					focusedRowHandle = 1;
 				}
-				Rectangle buttonBounds = new Rectangle(panelIcd.Bounds.X, panelIcd.Bounds.Y, panelIcd.Bounds.Width, panelIcd.Bounds.Height);
-				popupControlContainerMediMaty.ShowPopup(new Point(buttonBounds.X + 110, buttonBounds.Bottom));
+				Rectangle rectangle = new Rectangle(panelIcd.Bounds.X, panelIcd.Bounds.Y, panelIcd.Bounds.Width, panelIcd.Bounds.Height);
+				popupControlContainerMediMaty.ShowPopup(new Point(rectangle.X + 110, rectangle.Bottom));
 				gridViewIcdCode.Focus();
-				gridViewIcdCode.FocusedRowHandle = rowHandlerNext;
+				gridViewIcdCode.FocusedRowHandle = focusedRowHandle;
 			}
 			else if (e.Control && e.KeyCode == Keys.A)
 			{
@@ -8104,10 +8106,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					gridViewIcdCode.FocusedRowHandle = 0;
 					gridViewIcdCode.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
 					gridViewIcdCode.OptionsFind.HighlightFindResults = true;
-					Rectangle buttonBounds = new Rectangle(panelIcd.Bounds.X, panelIcd.Bounds.Y, panelIcd.Bounds.Width, panelIcd.Bounds.Height);
+					Rectangle rectangle = new Rectangle(panelIcd.Bounds.X, panelIcd.Bounds.Y, panelIcd.Bounds.Width, panelIcd.Bounds.Height);
 					if (isShow)
 					{
-						popupControlContainerMediMaty.ShowPopup(new Point(buttonBounds.X + 110, buttonBounds.Bottom));
+						popupControlContainerMediMaty.ShowPopup(new Point(rectangle.X + 110, rectangle.Bottom));
 						isShow = false;
 					}
 					txtIcdCode.Focus();
@@ -8191,24 +8193,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			bool showCbo = true;
+			bool flag = true;
 			if (!string.IsNullOrEmpty(searchCode))
 			{
-				List<HIS_ICD> listData = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(searchCode)).ToList();
-				List<HIS_ICD> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_ICD o) => o.ICD_CODE == searchCode).ToList() : listData));
-				if (result != null && result.Count > 0)
+				List<HIS_ICD> list = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(searchCode)).ToList();
+				List<HIS_ICD> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_ICD o) => o.ICD_CODE == searchCode).ToList() : list));
+				if (list2 != null && list2.Count > 0)
 				{
-					showCbo = false;
+					flag = false;
 					isShowContainerMediMaty = false;
 					isShowContainerMediMatyForChoose = true;
-					txtIcdCode.Text = result.First().ICD_CODE;
-					txtIcdMainText.Text = result.First().ICD_NAME;
-					cboIcds.EditValue = listData.First().ID;
+					txtIcdCode.Text = list2.First().ICD_CODE;
+					txtIcdMainText.Text = list2.First().ICD_NAME;
+					cboIcds.EditValue = list.First().ID;
 					chkEditIcd.Checked = chkEditIcd.Enabled && isAutoCheckIcd;
-					string messErr = null;
-					if (!checkIcdManager.ProcessCheckIcd(txtIcdCode.Text.Trim(), txtIcdSubCode.Text.Trim(), ref messErr, IsCheck: false))
+					string MessageError = null;
+					if (!checkIcdManager.ProcessCheckIcd(txtIcdCode.Text.Trim(), txtIcdSubCode.Text.Trim(), ref MessageError, IsCheck: false))
 					{
-						XtraMessageBox.Show(messErr, "Thông báo", MessageBoxButtons.OK);
+						XtraMessageBox.Show(MessageError, "Thông báo", MessageBoxButtons.OK);
 						if (CheckIcdManager.IcdCodeError.Equals(txtIcdCode.Text.Trim()))
 						{
 							string text3 = (txtIcdCode.Text = (txtIcdMainText.Text = null));
@@ -8226,10 +8228,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 						txtIcdSubCode.Focus();
 						txtIcdSubCode.SelectionStart = txtIcdSubCode.Text.Length;
 					}
-					ReloadIcdFinish(result.First());
+					ReloadIcdFinish(list2.First());
 				}
 			}
-			if (showCbo)
+			if (flag)
 			{
 				cboIcds.Focus();
 				cboIcds.ShowPopup();
@@ -8247,26 +8249,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (ucHospitalize != null)
 			{
-				HospitalizeInitADO ado2 = new HospitalizeInitADO();
-				ado2.IcdCode = ((icdInput != null) ? icdInput.ICD_CODE : "");
-				ado2.IcdName = ((icdInput != null) ? icdInput.ICD_NAME : "");
+				HospitalizeInitADO hospitalizeInitADO = new HospitalizeInitADO();
+				hospitalizeInitADO.IcdCode = ((icdInput != null) ? icdInput.ICD_CODE : "");
+				hospitalizeInitADO.IcdName = ((icdInput != null) ? icdInput.ICD_NAME : "");
 				if (HisServiceReqResult != null && HisServiceReqResult.HospitalizeResult != null && HisServiceReqResult.HospitalizeResult.Treatment != null)
 				{
-					ado2.InCode = HisServiceReqResult.HospitalizeResult.Treatment.IN_CODE;
-					ado2.TraditionalIcdCode = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_CODE;
-					ado2.TraditionalIcdName = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_NAME;
-					ado2.TraditionalIcdSubCode = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_SUB_CODE;
-					ado2.TraditionalIcdText = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_TEXT;
-					ado2.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
+					hospitalizeInitADO.InCode = HisServiceReqResult.HospitalizeResult.Treatment.IN_CODE;
+					hospitalizeInitADO.TraditionalIcdCode = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_CODE;
+					hospitalizeInitADO.TraditionalIcdName = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_NAME;
+					hospitalizeInitADO.TraditionalIcdSubCode = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_SUB_CODE;
+					hospitalizeInitADO.TraditionalIcdText = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_TEXT;
+					hospitalizeInitADO.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
 				}
-				hospitalizeProcessor.ReLoad(ucHospitalize, ado2);
+				hospitalizeProcessor.ReLoad(ucHospitalize, hospitalizeInitADO);
 			}
 			if (ucTreatmentFinish != null)
 			{
-				TreatmentFinishInitADO ado = new TreatmentFinishInitADO();
-				ado.IcdCode = ((icdInput != null) ? icdInput.ICD_CODE : "");
-				ado.IcdName = ((icdInput != null) ? icdInput.ICD_NAME : "");
-				treatmentFinishProcessor.ReLoad(ucTreatmentFinish, ado);
+				TreatmentFinishInitADO treatmentFinishInitADO = new TreatmentFinishInitADO();
+				treatmentFinishInitADO.IcdCode = ((icdInput != null) ? icdInput.ICD_CODE : "");
+				treatmentFinishInitADO.IcdName = ((icdInput != null) ? icdInput.ICD_NAME : "");
+				treatmentFinishProcessor.ReLoad(ucTreatmentFinish, treatmentFinishInitADO);
 			}
 			icdDefaultFinish.ICD_CODE = ((icdInput != null) ? icdInput.ICD_CODE : "");
 			icdDefaultFinish.ICD_NAME = ((icdInput != null) ? icdInput.ICD_NAME : "");
@@ -8338,18 +8340,18 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			txtIcdCode.ErrorText = "";
 			dxValidationProviderForLeftPanel.RemoveControlError(txtIcdCode);
 			cboIcds.Properties.Buttons[1].Visible = true;
-			HIS_ICD icd = currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64((cboIcds.EditValue ?? ((object)0)).ToString()));
-			if (icd == null)
+			HIS_ICD hIS_ICD = currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64((cboIcds.EditValue ?? ((object)0)).ToString()));
+			if (hIS_ICD == null)
 			{
 				return;
 			}
 			isShowContainerMediMatyForChoose = true;
-			txtIcdCode.Text = icd.ICD_CODE;
-			txtIcdMainText.Text = icd.ICD_NAME;
-			string messErr = null;
-			if (!checkIcdManager.ProcessCheckIcd(txtIcdCode.Text.Trim(), txtIcdSubCode.Text.Trim(), ref messErr, IsCheck: false))
+			txtIcdCode.Text = hIS_ICD.ICD_CODE;
+			txtIcdMainText.Text = hIS_ICD.ICD_NAME;
+			string MessageError = null;
+			if (!checkIcdManager.ProcessCheckIcd(txtIcdCode.Text.Trim(), txtIcdSubCode.Text.Trim(), ref MessageError, IsCheck: false))
 			{
-				XtraMessageBox.Show(messErr, "Thông báo", MessageBoxButtons.OK);
+				XtraMessageBox.Show(MessageError, "Thông báo", MessageBoxButtons.OK);
 				if (CheckIcdManager.IcdCodeError.Equals(txtIcdCode.Text.Trim()))
 				{
 					string text3 = (txtIcdCode.Text = (txtIcdMainText.Text = null));
@@ -8367,7 +8369,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				NextForcusSubIcd();
 			}
-			ReloadIcdFinish(icd);
+			ReloadIcdFinish(hIS_ICD);
 		}
 		catch (Exception ex)
 		{
@@ -8439,7 +8441,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HIS_ICD icd = new HIS_ICD();
+			HIS_ICD hIS_ICD = new HIS_ICD();
 			if (chkEditIcd.Checked)
 			{
 				cboIcds.Visible = false;
@@ -8454,19 +8456,19 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				}
 				txtIcdMainText.Focus();
 				txtIcdMainText.SelectAll();
-				icd.ICD_CODE = txtIcdCode.Text.Trim();
-				icd.ICD_NAME = txtIcdMainText.Text.Trim();
+				hIS_ICD.ICD_CODE = txtIcdCode.Text.Trim();
+				hIS_ICD.ICD_NAME = txtIcdMainText.Text.Trim();
 			}
 			else if (!chkEditIcd.Checked)
 			{
 				txtIcdMainText.Visible = false;
 				cboIcds.Visible = true;
 				txtIcdMainText.Text = cboIcds.Text.Trim();
-				icd = ((cboIcds.EditValue == null) ? null : currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64(cboIcds.EditValue.ToString())));
+				hIS_ICD = ((cboIcds.EditValue == null) ? null : currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64(cboIcds.EditValue.ToString())));
 			}
-			if (icd != null)
+			if (hIS_ICD != null)
 			{
-				ReloadIcdFinish(icd);
+				ReloadIcdFinish(hIS_ICD);
 			}
 		}
 		catch (Exception ex)
@@ -8524,9 +8526,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			string search = ((TextEdit)sender).Text.Trim();
 			if (!string.IsNullOrEmpty(search))
 			{
-				List<HIS_ICD> listData = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(search)).ToList();
-				List<HIS_ICD> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_ICD o) => o.ICD_CODE == search).ToList() : listData));
-				if (result == null || result.Count <= 0)
+				List<HIS_ICD> list = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(search)).ToList();
+				List<HIS_ICD> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_ICD o) => o.ICD_CODE == search).ToList() : list));
+				if (list2 == null || list2.Count <= 0)
 				{
 					e.Cancel = true;
 					return;
@@ -8589,16 +8591,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			LogSystem.Debug("cboIcds_EditValueChanged.1");
-			HIS_ICD icd = null;
+			HIS_ICD hIS_ICD = null;
 			if (cboIcds.EditValue != null)
 			{
-				icd = currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64(cboIcds.EditValue.ToString()));
+				hIS_ICD = currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64(cboIcds.EditValue.ToString()));
 			}
-			if (icd != null)
+			if (hIS_ICD != null)
 			{
-				if (icd != null)
+				if (hIS_ICD != null)
 				{
-					int? num = icd.IS_REQUIRE_CAUSE;
+					int? num = hIS_ICD.IS_REQUIRE_CAUSE;
 					int num2 = 1;
 					if (num.GetValueOrDefault() == num2 && num.HasValue && !isAllowNoIcd)
 					{
@@ -8612,7 +8614,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			LoadRequiredCause(isRequired: false);
 			goto IL_00c3;
 			IL_00ae:
-			ReloadIcdFinish(icd);
+			ReloadIcdFinish(hIS_ICD);
 			goto IL_00c3;
 			IL_00c3:
 			LogSystem.Debug("cboIcds_EditValueChanged.3");
@@ -8664,16 +8666,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			string search = ((TextEdit)sender).Text.Trim();
-			if (string.IsNullOrEmpty(search))
+			string text = ((TextEdit)sender).Text.Trim();
+			if (string.IsNullOrEmpty(text))
 			{
 				return;
 			}
-			long AllowToEditIcdName = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.AllowToEditIcdName"));
-			LogSystem.Warn("AllowToEditIcdName: " + AllowToEditIcdName + " _TextIcdName: " + _TextIcdName);
-			if (AllowToEditIcdName == 1 && !string.IsNullOrEmpty(_TextIcdName))
+			long num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.AllowToEditIcdName"));
+			LogSystem.Warn("AllowToEditIcdName: " + num + " _TextIcdName: " + _TextIcdName);
+			if (num == 1 && !string.IsNullOrEmpty(_TextIcdName))
 			{
-				if (!search.StartsWith(_TextIcdName))
+				if (!text.StartsWith(_TextIcdName))
 				{
 					e.Cancel = true;
 					return;
@@ -8698,12 +8700,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			LogSystem.Debug("txtIcdMainText_EditValueChanged.1");
-			HIS_ICD icd = new HIS_ICD();
-			icd.ICD_CODE = txtIcdCode.Text.Trim();
-			icd.ICD_NAME = txtIcdMainText.Text.Trim();
-			if (icd != null)
+			HIS_ICD hIS_ICD = new HIS_ICD();
+			hIS_ICD.ICD_CODE = txtIcdCode.Text.Trim();
+			hIS_ICD.ICD_NAME = txtIcdMainText.Text.Trim();
+			if (hIS_ICD != null)
 			{
-				ReloadIcdFinish(icd);
+				ReloadIcdFinish(hIS_ICD);
 			}
 			LogSystem.Debug("txtIcdMainText_EditValueChanged.3");
 		}
@@ -8732,17 +8734,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			bool showCbo = true;
+			bool flag = true;
 			if (!string.IsNullOrEmpty(searchCode))
 			{
-				List<HIS_ICD> listData = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(searchCode)).ToList();
-				List<HIS_ICD> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_ICD o) => o.ICD_CODE == searchCode).ToList() : listData));
-				if (result != null && result.Count > 0)
+				List<HIS_ICD> list = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(searchCode)).ToList();
+				List<HIS_ICD> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_ICD o) => o.ICD_CODE == searchCode).ToList() : list));
+				if (list2 != null && list2.Count > 0)
 				{
-					showCbo = false;
-					txtIcdCodeCause.Text = result.First().ICD_CODE;
-					txtIcdMainTextCause.Text = result.First().ICD_NAME;
-					cboIcdsCause.EditValue = listData.First().ID;
+					flag = false;
+					txtIcdCodeCause.Text = list2.First().ICD_CODE;
+					txtIcdMainTextCause.Text = list2.First().ICD_NAME;
+					cboIcdsCause.EditValue = list.First().ID;
 					chkEditIcdCause.Checked = chkEditIcdCause.Enabled && isAutoCheckIcd;
 					if (chkEditIcdCause.Checked)
 					{
@@ -8756,7 +8758,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					}
 				}
 			}
-			if (showCbo)
+			if (flag)
 			{
 				LogSystem.Debug("LoadIcdComboCause cboIcdsCause.ShowPopup()");
 				cboIcdsCause.Focus();
@@ -8814,11 +8816,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			cboIcdsCause.Properties.Buttons[1].Visible = true;
-			HIS_ICD icd = currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64((cboIcdsCause.EditValue ?? ((object)0)).ToString()));
-			if (icd != null)
+			HIS_ICD hIS_ICD = currentIcds.FirstOrDefault((HIS_ICD o) => o.ID == Parse.ToInt64((cboIcdsCause.EditValue ?? ((object)0)).ToString()));
+			if (hIS_ICD != null)
 			{
-				txtIcdCodeCause.Text = icd.ICD_CODE;
-				txtIcdMainTextCause.Text = icd.ICD_NAME;
+				txtIcdCodeCause.Text = hIS_ICD.ICD_CODE;
+				txtIcdMainTextCause.Text = hIS_ICD.ICD_NAME;
 				chkEditIcdCause.Checked = chkEditIcdCause.Enabled && isAutoCheckIcd;
 				if (chkEditIcdCause.Enabled)
 				{
@@ -8958,9 +8960,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			string search = ((TextEdit)sender).Text.Trim();
 			if (!string.IsNullOrEmpty(search))
 			{
-				List<HIS_ICD> listData = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(search)).ToList();
-				List<HIS_ICD> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_ICD o) => o.ICD_CODE == search).ToList() : listData));
-				if (result == null || result.Count <= 0)
+				List<HIS_ICD> list = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(search)).ToList();
+				List<HIS_ICD> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_ICD o) => o.ICD_CODE == search).ToList() : list));
+				if (list2 == null || list2.Count <= 0)
 				{
 					e.Cancel = true;
 					return;
@@ -9021,25 +9023,25 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			WaitingManager.Show();
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.TextLibrary").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.TextLibrary").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.TextLibrary");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				TextLibraryInfoADO ado = new TextLibraryInfoADO();
-				ado.Content = content;
-				ado.Hashtag = hashtag;
-				listArgs.Add(ado);
-				listArgs.Add(new DelegateDataTextLib(ProcessDataTextLib));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				TextLibraryInfoADO textLibraryInfoADO = new TextLibraryInfoADO();
+				textLibraryInfoADO.Content = content;
+				textLibraryInfoADO.Hashtag = hashtag;
+				list.Add(textLibraryInfoADO);
+				list.Add(new DelegateDataTextLib(ProcessDataTextLib));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 				WaitingManager.Hide();
 			}
 			WaitingManager.Hide();
@@ -9293,27 +9295,27 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				if (isShowSubIcd)
 				{
 					txtIcdSubCode.Refresh();
-					string keyWord = "";
+					string text = "";
 					if (txtIcdSubCode.Text.Contains(";"))
 					{
-						string[] arrText = txtIcdSubCode.Text.Split(';');
-						keyWord = arrText[arrText.Length - 1];
+						string[] array = txtIcdSubCode.Text.Split(';');
+						text = array[array.Length - 1];
 					}
 					else
 					{
-						keyWord = txtIcdSubCode.Text.Trim();
+						text = txtIcdSubCode.Text.Trim();
 					}
-					gvIcdSubCode.ActiveFilterString = $"[ICD_CODE] Like '%{keyWord}%'";
+					gvIcdSubCode.ActiveFilterString = $"[ICD_CODE] Like '%{text}%'";
 					gvIcdSubCode.OptionsFilter.FilterEditorUseMenuForOperandsAndOperators = false;
 					gvIcdSubCode.OptionsFilter.ShowAllTableValuesInCheckedFilterPopup = false;
 					gvIcdSubCode.OptionsFilter.ShowAllTableValuesInFilterPopup = false;
 					gvIcdSubCode.FocusedRowHandle = 0;
 					gvIcdSubCode.OptionsView.ShowFilterPanelMode = ShowFilterPanelMode.Never;
 					gvIcdSubCode.OptionsFind.HighlightFindResults = true;
-					Rectangle buttonBounds = new Rectangle(panelControlCauseIcd.Bounds.X, panelControlCauseIcd.Bounds.Y, panelControlCauseIcd.Bounds.Width, panelControlCauseIcd.Bounds.Height);
+					Rectangle rectangle = new Rectangle(panelControlCauseIcd.Bounds.X, panelControlCauseIcd.Bounds.Y, panelControlCauseIcd.Bounds.Width, panelControlCauseIcd.Bounds.Height);
 					if (isShowSubIcd)
 					{
-						popupControlContainer1.ShowPopup(new Point(buttonBounds.X + 110, buttonBounds.Bottom - 90));
+						popupControlContainer1.ShowPopup(new Point(rectangle.X + 110, rectangle.Bottom - 90));
 						isShowSubTemp = true;
 					}
 					txtIcdSubCode.Focus();
@@ -9373,14 +9375,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					}
 				}
 			}
-			catch (Exception ex2)
+			catch (Exception ex)
 			{
-				LogSystem.Error(ex2);
+				LogSystem.Error(ex);
 			}
 		}
-		catch (Exception ex)
+		catch (Exception ex2)
 		{
-			LogSystem.Warn(ex);
+			LogSystem.Warn(ex2);
 		}
 	}
 
@@ -9401,14 +9403,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					txtIcdSubCode.Select(txtIcdSubCode.Text.Length, txtIcdSubCode.Text.Length);
 				}
 			}
-			catch (Exception ex2)
+			catch (Exception ex)
 			{
-				LogSystem.Error(ex2);
+				LogSystem.Error(ex);
 			}
 		}
-		catch (Exception ex)
+		catch (Exception ex2)
 		{
-			LogSystem.Warn(ex);
+			LogSystem.Warn(ex2);
 		}
 	}
 
@@ -9418,42 +9420,42 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (!string.IsNullOrEmpty(icdSubCode))
 			{
-				List<HIS_ICD> listData = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(icdSubCode)).ToList();
-				List<HIS_ICD> result = ((listData == null) ? null : ((listData.Count > 1) ? listData.Where((HIS_ICD o) => o.ICD_CODE == icdSubCode).ToList() : listData));
-				if (result != null && result.Count > 0)
+				List<HIS_ICD> list = currentIcds.Where((HIS_ICD o) => o.ICD_CODE.Equals(icdSubCode)).ToList();
+				List<HIS_ICD> list2 = ((list == null) ? null : ((list.Count > 1) ? list.Where((HIS_ICD o) => o.ICD_CODE == icdSubCode).ToList() : list));
+				if (list2 != null && list2.Count > 0)
 				{
 					if (txtIcdSubCode.Text.Contains(";"))
 					{
-						string[] arrText = txtIcdSubCode.Text.Split(';');
-						string txt = "";
-						for (int i = 0; i < arrText.Length - 1; i++)
+						string[] array = txtIcdSubCode.Text.Split(';');
+						string text = "";
+						for (int i = 0; i < array.Length - 1; i++)
 						{
-							txt = txt + arrText[i] + ";";
+							text = text + array[i] + ";";
 						}
-						txtIcdSubCode.Text = txt + result.First().ICD_CODE + ";";
+						txtIcdSubCode.Text = text + list2.First().ICD_CODE + ";";
 					}
 					else
 					{
-						txtIcdSubCode.Text = result.First().ICD_CODE + ";";
+						txtIcdSubCode.Text = list2.First().ICD_CODE + ";";
 					}
 				}
 			}
-			List<string> arrIcdCode = txtIcdSubCode.Text.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-			string icdCodeList = txtIcdSubCode.Text.Trim();
-			string messErr = null;
-			if (!checkIcdManager.ProcessCheckIcd(txtIcdCode.Text, txtIcdSubCode.Text, ref messErr, IsCheck: false))
+			List<string> list3 = txtIcdSubCode.Text.Trim().Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+			string text2 = txtIcdSubCode.Text.Trim();
+			string MessageError = null;
+			if (!checkIcdManager.ProcessCheckIcd(txtIcdCode.Text, txtIcdSubCode.Text, ref MessageError, IsCheck: false))
 			{
-				XtraMessageBox.Show(messErr, "Thông báo", MessageBoxButtons.OK);
-				string[] parts = icdCodeList.Split(';');
-				parts = parts.Where((string p) => !string.IsNullOrEmpty(p)).ToArray();
-				icdCodeList = string.Join(";", parts);
-				int lastIndexOfSemicolon = icdCodeList.LastIndexOf(';');
-				if (lastIndexOfSemicolon > 0)
+				XtraMessageBox.Show(MessageError, "Thông báo", MessageBoxButtons.OK);
+				string[] source = text2.Split(';');
+				source = source.Where((string p) => !string.IsNullOrEmpty(p)).ToArray();
+				text2 = string.Join(";", source);
+				int num = text2.LastIndexOf(';');
+				if (num > 0)
 				{
-					icdCodeList = icdCodeList.Substring(0, lastIndexOfSemicolon);
+					text2 = text2.Substring(0, num);
 				}
 			}
-			txtIcdSubCode.Text = icdCodeList;
+			txtIcdSubCode.Text = text2;
 		}
 		catch (Exception ex)
 		{
@@ -9491,7 +9493,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					return;
 				}
-				CommonParam param = new CommonParam();
+				CommonParam commonParam = new CommonParam();
 				WaitingManager.Show();
 				HisTrackingSDO sdo = new HisTrackingSDO();
 				sdo.WorkingRoomId = moduleData.RoomId;
@@ -9557,37 +9559,37 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					sdo.Dhst.SPO2 = Inventec.Common.Number.Get.RoundCurrency(spinSPO2.Value, 2) / 100m;
 				}
-				HisServiceReqFilter _reqFilter = new HisServiceReqFilter();
-				_reqFilter.TREATMENT_ID = treatmentId;
-				_reqFilter.INTRUCTION_DATE__EQUAL = long.Parse(Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now).ToString().Substring(0, 8) + "000000");
-				_reqFilter.REQUEST_LOGINNAME__EXACT = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-				_reqFilter.HAS_EXECUTE = true;
-				List<HIS_SERVICE_REQ> dataReqs = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, _reqFilter, param);
-				dataReqs = dataReqs.Where((HIS_SERVICE_REQ o) => !o.TRACKING_ID.HasValue).ToList();
-				if (dataReqs != null && dataReqs.Count > 0)
+				HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+				hisServiceReqFilter.TREATMENT_ID = treatmentId;
+				hisServiceReqFilter.INTRUCTION_DATE__EQUAL = long.Parse(Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now).ToString().Substring(0, 8) + "000000");
+				hisServiceReqFilter.REQUEST_LOGINNAME__EXACT = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+				hisServiceReqFilter.HAS_EXECUTE = true;
+				List<HIS_SERVICE_REQ> source = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, commonParam);
+				source = source.Where((HIS_SERVICE_REQ o) => !o.TRACKING_ID.HasValue).ToList();
+				if (source != null && source.Count > 0)
 				{
 					sdo.ServiceReqs = new List<TrackingServiceReq>();
-					foreach (HIS_SERVICE_REQ item in dataReqs)
+					foreach (HIS_SERVICE_REQ item in source)
 					{
-						TrackingServiceReq ado = new TrackingServiceReq();
-						ado.ServiceReqId = item.ID;
-						ado.IsNotShowMedicine = false;
-						ado.IsNotShowMaterial = false;
-						ado.IsNotShowOutMedi = false;
-						ado.IsNotShowOutMate = false;
-						sdo.ServiceReqs.Add(ado);
+						TrackingServiceReq trackingServiceReq = new TrackingServiceReq();
+						trackingServiceReq.ServiceReqId = item.ID;
+						trackingServiceReq.IsNotShowMedicine = false;
+						trackingServiceReq.IsNotShowMaterial = false;
+						trackingServiceReq.IsNotShowOutMedi = false;
+						trackingServiceReq.IsNotShowOutMate = false;
+						sdo.ServiceReqs.Add(trackingServiceReq);
 					}
 				}
-				bool success = false;
+				bool value = false;
 				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => sdo), sdo));
-				HIS_TRACKING resultData = new BackendAdapter(param).Post<HIS_TRACKING>("api/HisTracking/Create", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sdo, param);
-				if (resultData != null)
+				HIS_TRACKING hIS_TRACKING = new BackendAdapter(commonParam).Post<HIS_TRACKING>("api/HisTracking/Create", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sdo, commonParam);
+				if (hIS_TRACKING != null)
 				{
-					success = true;
+					value = true;
 				}
 				WaitingManager.Hide();
-				MessageManager.Show(param, success);
-				SessionManager.ProcessTokenLost(param);
+				MessageManager.Show(commonParam, value);
+				SessionManager.ProcessTokenLost(commonParam);
 			}
 		}
 		catch (Exception ex)
@@ -9622,8 +9624,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			SendSDOExam();
-			frmInformationExam frm = new frmInformationExam(HisServiceReqView, sdoSendFrmExam, GetSDOExam, tabControlDetailData.SelectedTabPageIndex);
-			frm.ShowDialog();
+			frmInformationExam frmInformationExam = new frmInformationExam(HisServiceReqView, sdoSendFrmExam, GetSDOExam, tabControlDetailData.SelectedTabPageIndex);
+			frmInformationExam.ShowDialog();
 		}
 		catch (Exception ex)
 		{
@@ -9996,17 +9998,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			bool isNum = true;
+			bool flag = true;
 			string text = txtPartExamEyeCountFinger.Text.Trim();
-			foreach (char item in text)
+			foreach (char c in text)
 			{
-				if (!char.IsNumber(item))
+				if (!char.IsNumber(c))
 				{
-					isNum = false;
+					flag = false;
 					break;
 				}
 			}
-			if (isNum)
+			if (flag)
 			{
 				lblCountFinger.Text = "mét";
 			}
@@ -10062,22 +10064,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			IsCheckedGetLastDHSTByPatient = !IsCheckedGetLastDHSTByPatient;
 			LoadDHSTByPatient();
-			ControlStateRDO csAddOrUpdate = ((currentControlStateRDO != null) ? currentControlStateRDO.Where((ControlStateRDO o) => o.KEY == lcgDHST.Name).FirstOrDefault() : null);
-			if (csAddOrUpdate != null)
+			ControlStateRDO controlStateRDO = ((currentControlStateRDO != null) ? currentControlStateRDO.Where((ControlStateRDO o) => o.KEY == lcgDHST.Name).FirstOrDefault() : null);
+			if (controlStateRDO != null)
 			{
-				csAddOrUpdate.VALUE = (IsCheckedGetLastDHSTByPatient ? "1" : "0");
+				controlStateRDO.VALUE = (IsCheckedGetLastDHSTByPatient ? "1" : "0");
 			}
 			else
 			{
-				csAddOrUpdate = new ControlStateRDO();
-				csAddOrUpdate.KEY = lcgDHST.Name;
-				csAddOrUpdate.VALUE = (IsCheckedGetLastDHSTByPatient ? "1" : "0");
-				csAddOrUpdate.MODULE_LINK = moduleData.ModuleLink;
+				controlStateRDO = new ControlStateRDO();
+				controlStateRDO.KEY = lcgDHST.Name;
+				controlStateRDO.VALUE = (IsCheckedGetLastDHSTByPatient ? "1" : "0");
+				controlStateRDO.MODULE_LINK = moduleData.ModuleLink;
 				if (currentControlStateRDO == null)
 				{
 					currentControlStateRDO = new List<ControlStateRDO>();
 				}
-				currentControlStateRDO.Add(csAddOrUpdate);
+				currentControlStateRDO.Add(controlStateRDO);
 			}
 			controlStateWorker.SetData(currentControlStateRDO);
 		}
@@ -10091,29 +10093,29 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam parmam = new CommonParam();
-			TreatmentExamADO row = (TreatmentExamADO)gridViewTreatmentHistory.GetFocusedRow();
-			if (row == null)
+			CommonParam commonParam = new CommonParam();
+			TreatmentExamADO treatmentExamADO = (TreatmentExamADO)gridViewTreatmentHistory.GetFocusedRow();
+			if (treatmentExamADO == null)
 			{
 				return;
 			}
-			HisServiceReqFilter filter = new HisServiceReqFilter();
-			filter.SERVICE_REQ_TYPE_ID = 1L;
-			filter.TREATMENT_ID = row.ID;
-			List<HIS_SERVICE_REQ> serviceReq = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("/api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-			if (serviceReq == null || serviceReq.Count <= 0)
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.SERVICE_REQ_TYPE_ID = 1L;
+			hisServiceReqFilter.TREATMENT_ID = treatmentExamADO.ID;
+			List<HIS_SERVICE_REQ> list = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("/api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, param);
+			if (list == null || list.Count <= 0)
 			{
 				return;
 			}
 			selectedService = new HIS_SERVICE_REQ();
-			if (serviceReq.Count > 1)
+			if (list.Count > 1)
 			{
-				IOrderedEnumerable<HIS_SERVICE_REQ> sortServiceReq = serviceReq.OrderBy((HIS_SERVICE_REQ s) => s.EXAM_END_TYPE = 3L).ThenBy((HIS_SERVICE_REQ o) => o.IS_MAIN_EXAM = (short)1).ThenByDescending((HIS_SERVICE_REQ p) => p.INTRUCTION_TIME);
-				selectedService = sortServiceReq.First();
+				IOrderedEnumerable<HIS_SERVICE_REQ> source = list.OrderBy((HIS_SERVICE_REQ s) => s.EXAM_END_TYPE = 3L).ThenBy((HIS_SERVICE_REQ o) => o.IS_MAIN_EXAM = (short)1).ThenByDescending((HIS_SERVICE_REQ p) => p.INTRUCTION_TIME);
+				selectedService = source.First();
 			}
 			else
 			{
-				selectedService = serviceReq.First();
+				selectedService = list.First();
 			}
 			if (selectedService != null)
 			{
@@ -10220,10 +10222,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			txtNextTreatmentInstructionCode.Text = data.NEXT_TREAT_INTR_CODE;
 			if (data.NEXT_TREATMENT_INSTRUCTION != null && dataNextTreatmentInstructions != null && dataNextTreatmentInstructions.Count > 0)
 			{
-				HIS_NEXT_TREA_INTR rs = dataNextTreatmentInstructions.FirstOrDefault((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_NAME.Equals(data.NEXT_TREATMENT_INSTRUCTION));
-				if (rs != null)
+				HIS_NEXT_TREA_INTR hIS_NEXT_TREA_INTR = dataNextTreatmentInstructions.FirstOrDefault((HIS_NEXT_TREA_INTR o) => o.NEXT_TREA_INTR_NAME.Equals(data.NEXT_TREATMENT_INSTRUCTION));
+				if (hIS_NEXT_TREA_INTR != null)
 				{
-					cboNextTreatmentInstructions.EditValue = rs.ID;
+					cboNextTreatmentInstructions.EditValue = hIS_NEXT_TREA_INTR.ID;
 				}
 			}
 			if (data.ICD_CODE != null && currentIcds != null && currentIcds.Count > 0)
@@ -10237,19 +10239,19 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				List<string> listICD_CODE = data.ICD_SUB_CODE.Split(';').ToList();
 				if (listICD_CODE != null)
 				{
-					List<string> icd = (from o in currentIcds
+					List<string> values = (from o in currentIcds
 						where listICD_CODE.Contains(o.ICD_CODE)
 						select o into p
 						select p.ICD_NAME).ToList();
-					txtIcdText.Text = string.Join(";", icd);
+					txtIcdText.Text = string.Join(";", values);
 				}
 			}
 			if (data.ICD_CAUSE_CODE != null && currentIcds != null && currentIcds.Count > 0)
 			{
-				HIS_ICD rs2 = currentIcds.FirstOrDefault((HIS_ICD o) => o.ICD_CODE.Equals(data.ICD_CAUSE_CODE));
-				if (rs2 != null)
+				HIS_ICD hIS_ICD = currentIcds.FirstOrDefault((HIS_ICD o) => o.ICD_CODE.Equals(data.ICD_CAUSE_CODE));
+				if (hIS_ICD != null)
 				{
-					cboIcdsCause.EditValue = rs2.ID;
+					cboIcdsCause.EditValue = hIS_ICD.ID;
 				}
 				txtIcdCodeCause.Text = data.ICD_CAUSE_CODE;
 			}
@@ -10258,54 +10260,54 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			HisDhstFilter filter = new HisDhstFilter();
-			filter.TREATMENT_ID = data.TREATMENT_ID;
-			List<HIS_DHST> listDhst = new BackendAdapter(new CommonParam()).Get<List<HIS_DHST>>("/api/HisDhst/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, new CommonParam());
-			if (listDhst != null)
+			HisDhstFilter hisDhstFilter = new HisDhstFilter();
+			hisDhstFilter.TREATMENT_ID = data.TREATMENT_ID;
+			List<HIS_DHST> list = new BackendAdapter(new CommonParam()).Get<List<HIS_DHST>>("/api/HisDhst/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDhstFilter, new CommonParam());
+			if (list != null)
 			{
-				HIS_DHST dhst = listDhst.FirstOrDefault();
-				dtExecuteTime.DateTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(dhst.EXECUTE_TIME ?? 0) ?? DateTime.Now;
-				if (dhst.PULSE.HasValue)
+				HIS_DHST hIS_DHST = list.FirstOrDefault();
+				dtExecuteTime.DateTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(hIS_DHST.EXECUTE_TIME ?? 0) ?? DateTime.Now;
+				if (hIS_DHST.PULSE.HasValue)
 				{
-					spinPulse.EditValue = dhst.PULSE;
+					spinPulse.EditValue = hIS_DHST.PULSE;
 				}
-				if (dhst.BLOOD_PRESSURE_MAX.HasValue)
+				if (hIS_DHST.BLOOD_PRESSURE_MAX.HasValue)
 				{
-					spinBloodPressureMax.EditValue = dhst.BLOOD_PRESSURE_MAX;
+					spinBloodPressureMax.EditValue = hIS_DHST.BLOOD_PRESSURE_MAX;
 				}
-				if (dhst.BLOOD_PRESSURE_MIN.HasValue)
+				if (hIS_DHST.BLOOD_PRESSURE_MIN.HasValue)
 				{
-					spinBloodPressureMin.EditValue = dhst.BLOOD_PRESSURE_MIN;
+					spinBloodPressureMin.EditValue = hIS_DHST.BLOOD_PRESSURE_MIN;
 				}
-				if (dhst.WEIGHT.HasValue)
+				if (hIS_DHST.WEIGHT.HasValue)
 				{
-					spinWeight.EditValue = dhst.WEIGHT;
+					spinWeight.EditValue = hIS_DHST.WEIGHT;
 				}
-				if (dhst.HEIGHT.HasValue)
+				if (hIS_DHST.HEIGHT.HasValue)
 				{
-					spinHeight.EditValue = dhst.HEIGHT;
+					spinHeight.EditValue = hIS_DHST.HEIGHT;
 				}
-				if (dhst.SPO2.HasValue)
+				if (hIS_DHST.SPO2.HasValue)
 				{
-					spinSPO2.EditValue = dhst.SPO2;
+					spinSPO2.EditValue = hIS_DHST.SPO2;
 				}
-				if (dhst.TEMPERATURE.HasValue)
+				if (hIS_DHST.TEMPERATURE.HasValue)
 				{
-					spinTemperature.EditValue = dhst.TEMPERATURE;
+					spinTemperature.EditValue = hIS_DHST.TEMPERATURE;
 				}
-				if (dhst.BREATH_RATE.HasValue)
+				if (hIS_DHST.BREATH_RATE.HasValue)
 				{
-					spinBreathRate.EditValue = dhst.BREATH_RATE;
+					spinBreathRate.EditValue = hIS_DHST.BREATH_RATE;
 				}
-				if (dhst.CHEST.HasValue)
+				if (hIS_DHST.CHEST.HasValue)
 				{
-					spinChest.EditValue = dhst.CHEST;
+					spinChest.EditValue = hIS_DHST.CHEST;
 				}
-				if (dhst.BELLY.HasValue)
+				if (hIS_DHST.BELLY.HasValue)
 				{
-					spinBelly.EditValue = dhst.BELLY;
+					spinBelly.EditValue = hIS_DHST.BELLY;
 				}
-				txtNote.Text = dhst.NOTE;
+				txtNote.Text = hIS_DHST.NOTE;
 				LogSystem.Debug("FillDataCopyToControl.Load thanh cong DHST");
 			}
 		}
@@ -10329,64 +10331,64 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		this.components = new System.ComponentModel.Container();
 		System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HIS.Desktop.Plugins.ExamServiceReqExecute.ExamServiceReqExecuteControl));
-		DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-		DevExpress.Utils.ToolTipItem toolTipItem2 = new DevExpress.Utils.ToolTipItem();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject37 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject38 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject39 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject41 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject1 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject11 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject22 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject32 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject40 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject51 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject55 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject33 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject34 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject35 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject36 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject42 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject43 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject44 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject45 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject46 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject47 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject48 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject49 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject56 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject9 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject10 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject12 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject13 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject14 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject15 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject16 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject17 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject18 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject19 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject20 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject21 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject23 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject24 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject25 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject26 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject27 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject50 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject52 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject53 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject54 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject28 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject29 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject30 = new DevExpress.Utils.SerializableAppearanceObject();
-		DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject31 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SuperToolTip superToolTip = new DevExpress.Utils.SuperToolTip();
+		DevExpress.Utils.ToolTipItem toolTipItem = new DevExpress.Utils.ToolTipItem();
+		DevExpress.Utils.SerializableAppearanceObject appearance = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance2 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered2 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed2 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled2 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance3 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered3 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed3 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled3 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance4 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered4 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed4 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled4 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance5 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered5 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed5 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled5 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance6 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered6 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed6 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled6 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance7 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered7 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed7 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled7 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance8 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered8 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed8 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled8 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance9 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered9 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed9 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled9 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance10 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered10 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed10 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled10 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance11 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered11 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed11 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled11 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance12 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered12 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed12 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled12 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance13 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered13 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed13 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled13 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearance14 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceHovered14 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearancePressed14 = new DevExpress.Utils.SerializableAppearanceObject();
+		DevExpress.Utils.SerializableAppearanceObject appearanceDisabled14 = new DevExpress.Utils.SerializableAppearanceObject();
 		this.dxValidationProviderForLeftPanel = new DevExpress.XtraEditors.DXErrorProvider.DXValidationProvider(this.components);
 		this.dxErrorProviderForSpinVat = new DevExpress.XtraEditors.DXErrorProvider.DXErrorProvider(this.components);
 		this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
@@ -12108,9 +12110,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinSPO2.Properties.NullValuePromptShowForEmptyValue = true;
 		this.spinSPO2.Size = new System.Drawing.Size(138, 22);
 		this.spinSPO2.StyleController = this.layoutControl3;
-		toolTipItem2.Text = "Độ bão hòa oxy trong máu ngoại vi (mao mạch), được đo thông qua da";
-		superToolTip2.Items.Add(toolTipItem2);
-		this.spinSPO2.SuperTip = superToolTip2;
+		toolTipItem.Text = "Độ bão hòa oxy trong máu ngoại vi (mao mạch), được đo thông qua da";
+		superToolTip.Items.Add(toolTipItem);
+		this.spinSPO2.SuperTip = superToolTip;
 		this.spinSPO2.TabIndex = 13;
 		this.spinSPO2.KeyUp += new System.Windows.Forms.KeyEventHandler(spSPO2_KeyUp);
 		this.spinSPO2.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(spinSPO2_PreviewKeyDown);
@@ -12159,7 +12161,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinBelly.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinBelly.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject37, serializableAppearanceObject38, serializableAppearanceObject39, serializableAppearanceObject41, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance, appearanceHovered, appearancePressed, appearanceDisabled, "", null, null, true)
 		});
 		this.spinBelly.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinBelly.Properties.Mask.EditMask = "######.#0;";
@@ -12201,7 +12203,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinHeight.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinHeight.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject1, serializableAppearanceObject5, serializableAppearanceObject11, serializableAppearanceObject22, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance2, appearanceHovered2, appearancePressed2, appearanceDisabled2, "", null, null, true)
 		});
 		this.spinHeight.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinHeight.Properties.Mask.EditMask = "######.#0;";
@@ -12250,7 +12252,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinChest.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinChest.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject32, serializableAppearanceObject40, serializableAppearanceObject51, serializableAppearanceObject55, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance3, appearanceHovered3, appearancePressed3, appearanceDisabled3, "", null, null, true)
 		});
 		this.spinChest.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinChest.Properties.Mask.EditMask = "######.#0;";
@@ -12466,7 +12468,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.Btn_History.AutoHeight = false;
 		this.Btn_History.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, (System.Drawing.Image)resources.GetObject("Btn_History.Buttons"), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject33, serializableAppearanceObject34, serializableAppearanceObject35, serializableAppearanceObject36, "Lịch sử điều trị", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, (System.Drawing.Image)resources.GetObject("Btn_History.Buttons"), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance4, appearanceHovered4, appearancePressed4, appearanceDisabled4, "Lịch sử điều trị", null, null, true)
 		});
 		this.Btn_History.Name = "Btn_History";
 		this.Btn_History.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
@@ -12482,7 +12484,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.Btn_Bordereau.AutoHeight = false;
 		this.Btn_Bordereau.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, (System.Drawing.Image)resources.GetObject("Btn_Bordereau.Buttons"), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject42, serializableAppearanceObject43, serializableAppearanceObject44, serializableAppearanceObject45, "Bảng kê thanh toán", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, (System.Drawing.Image)resources.GetObject("Btn_Bordereau.Buttons"), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance5, appearanceHovered5, appearancePressed5, appearanceDisabled5, "Bảng kê thanh toán", null, null, true)
 		});
 		this.Btn_Bordereau.Name = "Btn_Bordereau";
 		this.Btn_Bordereau.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
@@ -12498,7 +12500,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.btnCopy.AutoHeight = false;
 		this.btnCopy.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, (System.Drawing.Image)resources.GetObject("btnCopy.Buttons"), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject46, serializableAppearanceObject47, serializableAppearanceObject48, serializableAppearanceObject49, "Sao chép nội dung xử lý", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Glyph, "", -1, true, true, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, (System.Drawing.Image)resources.GetObject("btnCopy.Buttons"), new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance6, appearanceHovered6, appearancePressed6, appearanceDisabled6, "Sao chép nội dung xử lý", null, null, true)
 		});
 		this.btnCopy.Name = "btnCopy";
 		this.btnCopy.TextEditStyle = DevExpress.XtraEditors.Controls.TextEditStyles.HideTextEditor;
@@ -12892,7 +12894,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinWeight.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinWeight.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject56, serializableAppearanceObject2, serializableAppearanceObject3, serializableAppearanceObject4, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance7, appearanceHovered7, appearancePressed7, appearanceDisabled7, "", null, null, true)
 		});
 		this.spinWeight.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinWeight.Properties.Mask.EditMask = "######.#0;";
@@ -13257,7 +13259,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinBreathRate.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinBreathRate.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject6, serializableAppearanceObject7, serializableAppearanceObject8, serializableAppearanceObject9, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance8, appearanceHovered8, appearancePressed8, appearanceDisabled8, "", null, null, true)
 		});
 		this.spinBreathRate.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinBreathRate.Properties.Mask.EditMask = "######.#0;";
@@ -13277,7 +13279,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.cboKskCode.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[2]
 		{
 			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Delete, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject10, serializableAppearanceObject12, serializableAppearanceObject13, serializableAppearanceObject14, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Delete, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance9, appearanceHovered9, appearancePressed9, appearanceDisabled9, "", null, null, true)
 		});
 		this.cboKskCode.Properties.NullText = "";
 		this.cboKskCode.Properties.View = this.gridLookUpEdit1View;
@@ -13300,7 +13302,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinBloodPressureMin.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinBloodPressureMin.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject15, serializableAppearanceObject16, serializableAppearanceObject17, serializableAppearanceObject18, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance10, appearanceHovered10, appearancePressed10, appearanceDisabled10, "", null, null, true)
 		});
 		this.spinBloodPressureMin.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinBloodPressureMin.Properties.Mask.EditMask = "######0;";
@@ -13328,7 +13330,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinBloodPressureMax.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinBloodPressureMax.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject19, serializableAppearanceObject20, serializableAppearanceObject21, serializableAppearanceObject23, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance11, appearanceHovered11, appearancePressed11, appearanceDisabled11, "", null, null, true)
 		});
 		this.spinBloodPressureMax.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinBloodPressureMax.Properties.Mask.EditMask = "######0;";
@@ -13485,7 +13487,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinTemperature.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinTemperature.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject24, serializableAppearanceObject25, serializableAppearanceObject26, serializableAppearanceObject27, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance12, appearanceHovered12, appearancePressed12, appearanceDisabled12, "", null, null, true)
 		});
 		this.spinTemperature.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinTemperature.Properties.Mask.EditMask = "######.#0;";
@@ -13949,7 +13951,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.cboPartExamEyeTension.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[2]
 		{
 			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo),
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Delete, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject50, serializableAppearanceObject52, serializableAppearanceObject53, serializableAppearanceObject54, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Delete, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance13, appearanceHovered13, appearancePressed13, appearanceDisabled13, "", null, null, true)
 		});
 		this.cboPartExamEyeTension.Properties.Items.AddRange(new object[3] { "Maclakov", "Hơi", "Selemen" });
 		this.cboPartExamEyeTension.Size = new System.Drawing.Size(76, 22);
@@ -15373,7 +15375,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		this.spinPulse.Properties.AllowNullInput = DevExpress.Utils.DefaultBoolean.True;
 		this.spinPulse.Properties.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[1]
 		{
-			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), serializableAppearanceObject28, serializableAppearanceObject29, serializableAppearanceObject30, serializableAppearanceObject31, "", null, null, true)
+			new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo, "", -1, true, false, false, DevExpress.XtraEditors.ImageLocation.MiddleCenter, null, new DevExpress.Utils.KeyShortcut(System.Windows.Forms.Keys.None), appearance14, appearanceHovered14, appearancePressed14, appearanceDisabled14, "", null, null, true)
 		});
 		this.spinPulse.Properties.DisplayFormat.FormatType = DevExpress.Utils.FormatType.Custom;
 		this.spinPulse.Properties.Mask.EditMask = "#######0;";
@@ -16851,13 +16853,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		if (data != null && data is DXMenuItem)
 		{
-			DXPopupMenu menu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
-			if (menu == null)
+			DXPopupMenu dXPopupMenu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
+			if (dXPopupMenu == null)
 			{
-				menu = new DXPopupMenu();
+				dXPopupMenu = new DXPopupMenu();
 			}
-			menu.Items.Add(data as DXMenuItem);
-			btnPrint_ExamService.DropDownControl = menu;
+			dXPopupMenu.Items.Add(data as DXMenuItem);
+			btnPrint_ExamService.DropDownControl = dXPopupMenu;
 		}
 	}
 
@@ -16865,11 +16867,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			DXPopupMenu menu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
-			DXMenuItem itemKhamThem = new DXMenuItem("Yêu cầu khám thêm", onClickInPhieuKhamBenh);
-			itemKhamThem.Tag = PrintType.YEU_CAU_KHAM;
-			menu.Items.Add(itemKhamThem);
-			btnPrint_ExamService.DropDownControl = menu;
+			DXPopupMenu dXPopupMenu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
+			DXMenuItem dXMenuItem = new DXMenuItem("Yêu cầu khám thêm", onClickInPhieuKhamBenh);
+			dXMenuItem.Tag = PrintType.YEU_CAU_KHAM;
+			dXPopupMenu.Items.Add(dXMenuItem);
+			btnPrint_ExamService.DropDownControl = dXPopupMenu;
 		}
 		catch (Exception ex)
 		{
@@ -17014,11 +17016,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			DXMenuItem dXMenuItem = data as DXMenuItem;
 			if (dXMenuItem != null)
 			{
-				DXPopupMenu menu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
-				if (!menu.Items.OfType<DXMenuItem>().Any((DXMenuItem a) => a.Tag == dXMenuItem.Tag))
+				DXPopupMenu dXPopupMenu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
+				if (!dXPopupMenu.Items.OfType<DXMenuItem>().Any((DXMenuItem a) => a.Tag == dXMenuItem.Tag))
 				{
-					menu.Items.Add(dXMenuItem);
-					btnPrint_ExamService.DropDownControl = menu;
+					dXPopupMenu.Items.Add(dXMenuItem);
+					btnPrint_ExamService.DropDownControl = dXPopupMenu;
 				}
 			}
 		}
@@ -17044,11 +17046,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			string printerName = "";
-			string fileName = "";
+			string text = "";
+			string text2 = "";
 			if (GlobalVariables.dicPrinter.ContainsKey("Mps000010"))
 			{
-				printerName = GlobalVariables.dicPrinter["Mps000010"];
+				text = GlobalVariables.dicPrinter["Mps000010"];
 			}
 			if (!base.InvokeRequired)
 			{
@@ -17129,34 +17131,34 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			V_HIS_PATIENT_TYPE_ALTER currentHisPatientTypeAlter = new BackendAdapter(param).Get<V_HIS_PATIENT_TYPE_ALTER>("/api/HisPatientTypeAlter/GetLastByTreatmentId", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentId, param);
+			CommonParam commonParam = new CommonParam();
+			V_HIS_PATIENT_TYPE_ALTER v_HIS_PATIENT_TYPE_ALTER = new BackendAdapter(commonParam).Get<V_HIS_PATIENT_TYPE_ALTER>("/api/HisPatientTypeAlter/GetLastByTreatmentId", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentId, commonParam);
 			BordereauInitData bordereauInitData = new BordereauInitData();
-			bordereauInitData.PatientTypeAlter = currentHisPatientTypeAlter;
+			bordereauInitData.PatientTypeAlter = v_HIS_PATIENT_TYPE_ALTER;
 			ReloadMenuOption reloadMenuOption = new ReloadMenuOption();
 			reloadMenuOption.ReloadMenu = ReloadMenu;
 			reloadMenuOption.Type = ReloadMenuOption.MenuType.NORMAL;
 			reloadMenuOption.BordereauPrint = BordereauPrint.Type.MPS_BASE;
-			PrintBordereauProcessor processor = new PrintBordereauProcessor(HisServiceReqView.TREATMENT_ID, HisServiceReqView.TDL_PATIENT_ID, bordereauInitData, reloadMenuOption);
+			PrintBordereauProcessor printBordereauProcessor = new PrintBordereauProcessor(HisServiceReqView.TREATMENT_ID, HisServiceReqView.TDL_PATIENT_ID, bordereauInitData, reloadMenuOption);
 			if (HisConfigCFG.IsAutoExitAfterFinish && isPrintBordereau)
 			{
-				processor.Print(PrintOption.Value.PRINT_NOW);
+				printBordereauProcessor.Print(PrintOption.Value.PRINT_NOW);
 			}
 			else if (isPrintBordereau && !isSignBordereau)
 			{
-				processor.Print(PrintOption.Value.PRINT_NOW_AND_INIT_MENU);
+				printBordereauProcessor.Print(PrintOption.Value.PRINT_NOW_AND_INIT_MENU);
 			}
 			else if (isPrintBordereau && isSignBordereau)
 			{
-				processor.Print(PrintOption.Value.PRINT_NOW_AND_EMR_SIGN_NOW);
+				printBordereauProcessor.Print(PrintOption.Value.PRINT_NOW_AND_EMR_SIGN_NOW);
 			}
 			else if (!isPrintBordereau && isSignBordereau)
 			{
-				processor.Print(PrintOption.Value.EMR_SIGN_NOW);
+				printBordereauProcessor.Print(PrintOption.Value.EMR_SIGN_NOW);
 			}
 			else
 			{
-				processor.Print(PrintOption.Value.INIT_MENU);
+				printBordereauProcessor.Print(PrintOption.Value.INIT_MENU);
 			}
 		}
 		catch (Exception ex)
@@ -17169,18 +17171,18 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			RichEditorStore richEditorMain = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.PrintTemplatePath);
+			RichEditorStore richEditorStore = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.PrintTemplatePath);
 			if (IsPrintBHXH && !IsSignBHXH)
 			{
-				richEditorMain.RunPrintTemplate("Mps000298", DelegateRunPrinterPrint);
+				richEditorStore.RunPrintTemplate("Mps000298", DelegateRunPrinterPrint);
 			}
 			else if (!IsPrintBHXH && IsSignBHXH)
 			{
-				richEditorMain.RunPrintTemplate("Mps000298", DelegateRunPrinterSign);
+				richEditorStore.RunPrintTemplate("Mps000298", DelegateRunPrinterSign);
 			}
 			else if (IsPrintBHXH && IsSignBHXH)
 			{
-				richEditorMain.RunPrintTemplate("Mps000298", DelegateRunPrinterSignAndPrint);
+				richEditorStore.RunPrintTemplate("Mps000298", DelegateRunPrinterSignAndPrint);
 			}
 		}
 		catch (Exception ex)
@@ -17236,53 +17238,53 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			WaitingManager.Show();
-			V_HIS_TREATMENT treatmentView = new V_HIS_TREATMENT();
-			DataObjectMapper.Map<V_HIS_TREATMENT>(treatmentView, treatment);
-			CommonParam param = new CommonParam();
+			V_HIS_TREATMENT v_HIS_TREATMENT = new V_HIS_TREATMENT();
+			DataObjectMapper.Map<V_HIS_TREATMENT>(v_HIS_TREATMENT, treatment);
+			CommonParam commonParam = new CommonParam();
 			HisSereServFilter hisSereServFilter = new HisSereServFilter();
-			hisSereServFilter.TREATMENT_ID = treatmentView.ID;
-			List<HIS_SERE_SERV> lstHisSereServ = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("/api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, base.ProcessLostToken, param);
-			HisPatientTypeAlterViewFilter filter = new HisPatientTypeAlterViewFilter();
-			filter.TREATMENT_ID = treatmentView.ID;
-			List<V_HIS_PATIENT_TYPE_ALTER> lstPatientTypeAlter = new BackendAdapter(param).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, base.ProcessLostToken, param);
-			HisPatientFilter patientFilter = new HisPatientFilter();
-			patientFilter.ID = treatmentView.PATIENT_ID;
-			HIS_PATIENT Patient = new BackendAdapter(param).Get<List<HIS_PATIENT>>("api/HisPatient/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientFilter, param).FirstOrDefault();
-			HIS_SERE_SERV HisSereServ = new HIS_SERE_SERV();
-			V_HIS_PATIENT_TYPE_ALTER PatientTypeAlter = new V_HIS_PATIENT_TYPE_ALTER();
-			if (lstHisSereServ != null && lstHisSereServ.Count > 0)
+			hisSereServFilter.TREATMENT_ID = v_HIS_TREATMENT.ID;
+			List<HIS_SERE_SERV> list = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("/api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, base.ProcessLostToken, commonParam);
+			HisPatientTypeAlterViewFilter hisPatientTypeAlterViewFilter = new HisPatientTypeAlterViewFilter();
+			hisPatientTypeAlterViewFilter.TREATMENT_ID = v_HIS_TREATMENT.ID;
+			List<V_HIS_PATIENT_TYPE_ALTER> list2 = new BackendAdapter(commonParam).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewFilter, base.ProcessLostToken, commonParam);
+			HisPatientFilter hisPatientFilter = new HisPatientFilter();
+			hisPatientFilter.ID = v_HIS_TREATMENT.PATIENT_ID;
+			HIS_PATIENT hIS_PATIENT = new BackendAdapter(commonParam).Get<List<HIS_PATIENT>>("api/HisPatient/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientFilter, commonParam).FirstOrDefault();
+			HIS_SERE_SERV hisSereServ = new HIS_SERE_SERV();
+			V_HIS_PATIENT_TYPE_ALTER v_HIS_PATIENT_TYPE_ALTER = new V_HIS_PATIENT_TYPE_ALTER();
+			if (list != null && list.Count > 0)
 			{
-				HisSereServ = lstHisSereServ.FirstOrDefault();
+				hisSereServ = list.FirstOrDefault();
 			}
-			if (lstPatientTypeAlter != null && lstPatientTypeAlter.Count > 0)
+			if (list2 != null && list2.Count > 0)
 			{
-				PatientTypeAlter = lstPatientTypeAlter.FirstOrDefault();
+				v_HIS_PATIENT_TYPE_ALTER = list2.FirstOrDefault();
 			}
-			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatmentView != null) ? treatmentView.TREATMENT_CODE : "", printTypeCode, (moduleData != null) ? moduleData.RoomId : 0);
+			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((v_HIS_TREATMENT != null) ? v_HIS_TREATMENT.TREATMENT_CODE : "", printTypeCode, (moduleData != null) ? moduleData.RoomId : 0);
 			LogSystem.Info("inputADO: " + LogUtil.TraceData(LogUtil.GetMemberName(() => inputADO), inputADO));
 			string printerName = "";
 			if (GlobalVariables.dicPrinter.ContainsKey(printTypeCode))
 			{
 				printerName = GlobalVariables.dicPrinter[printTypeCode];
 			}
-			Mps000298PDO mps000298RDO = new Mps000298PDO(treatmentView, PatientTypeAlter, Patient, HisSereServ);
+			Mps000298PDO data = new Mps000298PDO(v_HIS_TREATMENT, v_HIS_PATIENT_TYPE_ALTER, hIS_PATIENT, hisSereServ);
 			WaitingManager.Hide();
 			switch (PrintOrSign)
 			{
 			case 1L:
 				LogSystem.Warn(" PrintOrSign == 1 in ");
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, mps000298RDO, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName));
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName));
 				break;
 			case 2L:
 				LogSystem.Warn(" PrintOrSign == 2 ký ");
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, mps000298RDO, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow, printerName)
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow, printerName)
 				{
 					EmrInputADO = inputADO
 				});
 				break;
 			case 3L:
 				LogSystem.Warn(" PrintOrSign == 3 ký và in ");
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, mps000298RDO, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow, printerName)
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow, printerName)
 				{
 					EmrInputADO = inputADO
 				});
@@ -17328,25 +17330,25 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			string icdCode = null;
-			string icdName = null;
-			string icSubCode = null;
-			string ictSubName = null;
+			string icdMainText = null;
+			string ictExtraCodes = null;
+			string ictExtraNames = null;
 			string icdCodeYHCT = null;
-			string icdNameYHCT = null;
-			string icSubCodeYHCT = null;
-			string ictSubNameYHCT = null;
+			string icdMainTextYHCT = null;
+			string ictExtraCodesYHCT = null;
+			string ictExtraNamesYHCT = null;
 			if (dataResult is OutPatientPresResultSDO)
 			{
-				HIS_SERVICE_REQ serviceReq3 = ((OutPatientPresResultSDO)dataResult).ServiceReqs[0];
-				icdCode = serviceReq3.ICD_CODE;
-				icdName = serviceReq3.ICD_NAME;
-				icSubCode = serviceReq3.ICD_SUB_CODE;
-				ictSubName = serviceReq3.ICD_TEXT;
-				icdCodeYHCT = serviceReq3.TRADITIONAL_ICD_CODE;
-				icdNameYHCT = serviceReq3.TRADITIONAL_ICD_NAME;
-				icSubCodeYHCT = serviceReq3.TRADITIONAL_ICD_SUB_CODE;
-				ictSubNameYHCT = serviceReq3.TRADITIONAL_ICD_TEXT;
-				if (serviceReq3.SERVICE_REQ_STT_ID == 3)
+				HIS_SERVICE_REQ hIS_SERVICE_REQ = ((OutPatientPresResultSDO)dataResult).ServiceReqs[0];
+				icdCode = hIS_SERVICE_REQ.ICD_CODE;
+				icdMainText = hIS_SERVICE_REQ.ICD_NAME;
+				ictExtraCodes = hIS_SERVICE_REQ.ICD_SUB_CODE;
+				ictExtraNames = hIS_SERVICE_REQ.ICD_TEXT;
+				icdCodeYHCT = hIS_SERVICE_REQ.TRADITIONAL_ICD_CODE;
+				icdMainTextYHCT = hIS_SERVICE_REQ.TRADITIONAL_ICD_NAME;
+				ictExtraCodesYHCT = hIS_SERVICE_REQ.TRADITIONAL_ICD_SUB_CODE;
+				ictExtraNamesYHCT = hIS_SERVICE_REQ.TRADITIONAL_ICD_TEXT;
+				if (hIS_SERVICE_REQ.SERVICE_REQ_STT_ID == 3)
 				{
 					HisServiceReqView.SERVICE_REQ_STT_ID = ((OutPatientPresResultSDO)dataResult).ServiceReqs[0].SERVICE_REQ_STT_ID;
 					if (reLoadServiceReq != null)
@@ -17355,24 +17357,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					}
 					if (HisConfigCFG.IsAutoExitAfterFinish)
 					{
-						XtraTabControl main2 = SessionManager.GetTabControlMain();
-						XtraTabPage page2 = main2.TabPages[GlobalVariables.SelectedTabPageIndex];
-						TabControlBaseProcess.CloseCurrentTabPage(page2, main2);
+						XtraTabControl tabControlMain = SessionManager.GetTabControlMain();
+						XtraTabPage page = tabControlMain.TabPages[GlobalVariables.SelectedTabPageIndex];
+						TabControlBaseProcess.CloseCurrentTabPage(page, tabControlMain);
 					}
 				}
 			}
 			else if (dataResult is InPatientPresResultSDO)
 			{
-				HIS_SERVICE_REQ serviceReq2 = ((InPatientPresResultSDO)dataResult).ServiceReqs[0];
-				icdCode = serviceReq2.ICD_CODE;
-				icdName = serviceReq2.ICD_NAME;
-				icSubCode = serviceReq2.ICD_SUB_CODE;
-				ictSubName = serviceReq2.ICD_TEXT;
-				icdCodeYHCT = serviceReq2.TRADITIONAL_ICD_CODE;
-				icdNameYHCT = serviceReq2.TRADITIONAL_ICD_NAME;
-				icSubCodeYHCT = serviceReq2.TRADITIONAL_ICD_SUB_CODE;
-				ictSubNameYHCT = serviceReq2.TRADITIONAL_ICD_TEXT;
-				if (serviceReq2.SERVICE_REQ_STT_ID == 3)
+				HIS_SERVICE_REQ hIS_SERVICE_REQ2 = ((InPatientPresResultSDO)dataResult).ServiceReqs[0];
+				icdCode = hIS_SERVICE_REQ2.ICD_CODE;
+				icdMainText = hIS_SERVICE_REQ2.ICD_NAME;
+				ictExtraCodes = hIS_SERVICE_REQ2.ICD_SUB_CODE;
+				ictExtraNames = hIS_SERVICE_REQ2.ICD_TEXT;
+				icdCodeYHCT = hIS_SERVICE_REQ2.TRADITIONAL_ICD_CODE;
+				icdMainTextYHCT = hIS_SERVICE_REQ2.TRADITIONAL_ICD_NAME;
+				ictExtraCodesYHCT = hIS_SERVICE_REQ2.TRADITIONAL_ICD_SUB_CODE;
+				ictExtraNamesYHCT = hIS_SERVICE_REQ2.TRADITIONAL_ICD_TEXT;
+				if (hIS_SERVICE_REQ2.SERVICE_REQ_STT_ID == 3)
 				{
 					HisServiceReqView.SERVICE_REQ_STT_ID = ((InPatientPresResultSDO)dataResult).ServiceReqs[0].SERVICE_REQ_STT_ID;
 					if (reLoadServiceReq != null)
@@ -17381,25 +17383,25 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					}
 					if (HisConfigCFG.IsAutoExitAfterFinish)
 					{
-						XtraTabControl main = SessionManager.GetTabControlMain();
-						XtraTabPage page = main.TabPages[GlobalVariables.SelectedTabPageIndex];
-						TabControlBaseProcess.CloseCurrentTabPage(page, main);
+						XtraTabControl tabControlMain2 = SessionManager.GetTabControlMain();
+						XtraTabPage page2 = tabControlMain2.TabPages[GlobalVariables.SelectedTabPageIndex];
+						TabControlBaseProcess.CloseCurrentTabPage(page2, tabControlMain2);
 					}
 				}
 			}
 			else if (dataResult is HisServiceReqListResultSDO)
 			{
-				V_HIS_SERVICE_REQ serviceReq = ((HisServiceReqListResultSDO)dataResult).ServiceReqs[0];
-				icdCode = serviceReq.ICD_CODE;
-				icdName = serviceReq.ICD_NAME;
-				icSubCode = serviceReq.ICD_SUB_CODE;
-				ictSubName = serviceReq.ICD_TEXT;
-				icdCodeYHCT = serviceReq.TRADITIONAL_ICD_CODE;
-				icdNameYHCT = serviceReq.TRADITIONAL_ICD_NAME;
-				icSubCodeYHCT = serviceReq.TRADITIONAL_ICD_SUB_CODE;
-				ictSubNameYHCT = serviceReq.TRADITIONAL_ICD_TEXT;
+				V_HIS_SERVICE_REQ v_HIS_SERVICE_REQ = ((HisServiceReqListResultSDO)dataResult).ServiceReqs[0];
+				icdCode = v_HIS_SERVICE_REQ.ICD_CODE;
+				icdMainText = v_HIS_SERVICE_REQ.ICD_NAME;
+				ictExtraCodes = v_HIS_SERVICE_REQ.ICD_SUB_CODE;
+				ictExtraNames = v_HIS_SERVICE_REQ.ICD_TEXT;
+				icdCodeYHCT = v_HIS_SERVICE_REQ.TRADITIONAL_ICD_CODE;
+				icdMainTextYHCT = v_HIS_SERVICE_REQ.TRADITIONAL_ICD_NAME;
+				ictExtraCodesYHCT = v_HIS_SERVICE_REQ.TRADITIONAL_ICD_SUB_CODE;
+				ictExtraNamesYHCT = v_HIS_SERVICE_REQ.TRADITIONAL_ICD_TEXT;
 			}
-			RefeshIcd(icdCode, icdName, icSubCode, ictSubName, icdCodeYHCT, icdNameYHCT, icSubCodeYHCT, ictSubNameYHCT);
+			RefeshIcd(icdCode, icdMainText, ictExtraCodes, ictExtraNames, icdCodeYHCT, icdMainTextYHCT, ictExtraCodesYHCT, ictExtraNamesYHCT);
 		}
 		catch (Exception ex)
 		{
@@ -17444,62 +17446,62 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HIS.UC.Icd.ADO.IcdInputADO icdInput = new HIS.UC.Icd.ADO.IcdInputADO();
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = new HIS.UC.Icd.ADO.IcdInputADO();
 			if (!string.IsNullOrEmpty(icdCode))
 			{
-				HIS_ICD icd = BackendDataWorker.Get<HIS_ICD>().FirstOrDefault((HIS_ICD o) => o.ICD_CODE == icdCode);
-				icdInput.ICD_CODE = icd.ICD_CODE;
+				HIS_ICD hIS_ICD = BackendDataWorker.Get<HIS_ICD>().FirstOrDefault((HIS_ICD o) => o.ICD_CODE == icdCode);
+				icdInputADO.ICD_CODE = hIS_ICD.ICD_CODE;
 			}
 			if (!string.IsNullOrEmpty(icdMainText))
 			{
-				icdInput.ICD_NAME = icdMainText;
+				icdInputADO.ICD_NAME = icdMainText;
 			}
-			LoadIcdToControl(icdInput.ICD_CODE, icdInput.ICD_NAME);
+			LoadIcdToControl(icdInputADO.ICD_CODE, icdInputADO.ICD_NAME);
 			LoadIcdToControlIcdSub(ictExtraCodes, ictExtraNames);
 			LoadIcdToControlIcdYHCT(icdCodeYHCT, icdMainTextYHCT, ictExtraCodesYHCT, ictExtraNamesYHCT);
 			if (ucHospitalize != null)
 			{
-				HospitalizeInitADO ado = new HospitalizeInitADO();
-				ado.IcdCode = icdInput.ICD_CODE;
-				ado.IcdName = icdInput.ICD_NAME;
-				ado.IcdSubCode = ictExtraCodes;
-				ado.IcdText = ictExtraNames;
-				ado.TraditionalIcdCode = icdCodeYHCT;
-				ado.TraditionalIcdName = icdMainTextYHCT;
-				ado.TraditionalIcdSubCode = ictExtraCodesYHCT;
-				ado.TraditionalIcdText = ictExtraNamesYHCT;
+				HospitalizeInitADO hospitalizeInitADO = new HospitalizeInitADO();
+				hospitalizeInitADO.IcdCode = icdInputADO.ICD_CODE;
+				hospitalizeInitADO.IcdName = icdInputADO.ICD_NAME;
+				hospitalizeInitADO.IcdSubCode = ictExtraCodes;
+				hospitalizeInitADO.IcdText = ictExtraNames;
+				hospitalizeInitADO.TraditionalIcdCode = icdCodeYHCT;
+				hospitalizeInitADO.TraditionalIcdName = icdMainTextYHCT;
+				hospitalizeInitADO.TraditionalIcdSubCode = ictExtraCodesYHCT;
+				hospitalizeInitADO.TraditionalIcdText = ictExtraNamesYHCT;
 				if (HisServiceReqResult != null && HisServiceReqResult.HospitalizeResult != null && HisServiceReqResult.HospitalizeResult.Treatment != null)
 				{
-					ado.InCode = HisServiceReqResult.HospitalizeResult.Treatment.IN_CODE;
-					ado.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
+					hospitalizeInitADO.InCode = HisServiceReqResult.HospitalizeResult.Treatment.IN_CODE;
+					hospitalizeInitADO.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
 				}
-				hospitalizeProcessor.ReLoad(ucHospitalize, ado);
+				hospitalizeProcessor.ReLoad(ucHospitalize, hospitalizeInitADO);
 			}
 			GetTotalIcd();
 			if (ucTreatmentFinish != null)
 			{
-				TreatmentFinishInitADO ado2 = new TreatmentFinishInitADO();
-				ado2.IcdCode = icdInput.ICD_CODE;
-				ado2.IcdName = icdInput.ICD_NAME;
-				ado2.TraditionalIcdCode = icdCodeYHCT;
-				ado2.TraditionalIcdName = icdMainTextYHCT;
-				ado2.TraditionalIcdSubCode = ictExtraCodesYHCT;
-				ado2.TraditionalIcdText = ictExtraNamesYHCT;
+				TreatmentFinishInitADO treatmentFinishInitADO = new TreatmentFinishInitADO();
+				treatmentFinishInitADO.IcdCode = icdInputADO.ICD_CODE;
+				treatmentFinishInitADO.IcdName = icdInputADO.ICD_NAME;
+				treatmentFinishInitADO.TraditionalIcdCode = icdCodeYHCT;
+				treatmentFinishInitADO.TraditionalIcdName = icdMainTextYHCT;
+				treatmentFinishInitADO.TraditionalIcdSubCode = ictExtraCodesYHCT;
+				treatmentFinishInitADO.TraditionalIcdText = ictExtraNamesYHCT;
 				if (dicIcd != null && dicIcd.Count > 0)
 				{
-					Dictionary<string, string> dicNotIcdMain = new Dictionary<string, string>();
-					dicNotIcdMain = ((!dicIcd.ContainsKey(icdDefaultFinish.ICD_CODE)) ? dicIcd : dicIcd.Where((KeyValuePair<string, string> o) => o.Key != icdDefaultFinish.ICD_CODE).ToDictionary((KeyValuePair<string, string> o) => o.Key, (KeyValuePair<string, string> o) => o.Value));
-					ado2.IcdSubCode = string.Join(";", dicNotIcdMain.Keys);
-					ado2.IcdText = string.Join(";", dicNotIcdMain.Values);
+					Dictionary<string, string> dictionary = new Dictionary<string, string>();
+					dictionary = ((!dicIcd.ContainsKey(icdDefaultFinish.ICD_CODE)) ? dicIcd : dicIcd.Where((KeyValuePair<string, string> o) => o.Key != icdDefaultFinish.ICD_CODE).ToDictionary((KeyValuePair<string, string> o) => o.Key, (KeyValuePair<string, string> o) => o.Value));
+					treatmentFinishInitADO.IcdSubCode = string.Join(";", dictionary.Keys);
+					treatmentFinishInitADO.IcdText = string.Join(";", dictionary.Values);
 				}
 				if (lstIcdText != null && lstIcdText.Count > 0)
 				{
-					ado2.IcdText = ado2.IcdText + ";" + string.Join(";", lstIcdText);
+					treatmentFinishInitADO.IcdText = treatmentFinishInitADO.IcdText + ";" + string.Join(";", lstIcdText);
 				}
-				treatmentFinishProcessor.ReLoad(ucTreatmentFinish, ado2);
+				treatmentFinishProcessor.ReLoad(ucTreatmentFinish, treatmentFinishInitADO);
 			}
-			icdDefaultFinish.ICD_CODE = icdInput.ICD_CODE;
-			icdDefaultFinish.ICD_NAME = icdInput.ICD_NAME;
+			icdDefaultFinish.ICD_CODE = icdInputADO.ICD_CODE;
+			icdDefaultFinish.ICD_NAME = icdInputADO.ICD_NAME;
 		}
 		catch (Exception ex)
 		{
@@ -17513,41 +17515,41 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		lstIcdText = new List<string>();
 		try
 		{
-			string icdSubCode = null;
-			string icdText = null;
-			object icdValue = UcIcdGetValue();
-			if (icdValue != null && icdValue is HIS.UC.Icd.ADO.IcdInputADO)
+			string text = null;
+			string text2 = null;
+			object obj = UcIcdGetValue();
+			if (obj != null && obj is HIS.UC.Icd.ADO.IcdInputADO)
 			{
-				icdSubCode = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_CODE;
-				icdText = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_NAME;
-				if (dicIcd.ContainsKey(icdSubCode))
+				text = ((HIS.UC.Icd.ADO.IcdInputADO)obj).ICD_CODE;
+				text2 = ((HIS.UC.Icd.ADO.IcdInputADO)obj).ICD_NAME;
+				if (dicIcd.ContainsKey(text))
 				{
-					dicIcd.Remove(icdSubCode);
+					dicIcd.Remove(text);
 				}
-				dicIcd[icdSubCode] = icdText;
+				dicIcd[text] = text2;
 			}
-			SecondaryIcdDataADO icdSub = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
-			icdSubCode = icdSub?.ICD_SUB_CODE;
-			icdText = icdSub?.ICD_TEXT;
-			if (string.IsNullOrEmpty(icdSubCode))
+			SecondaryIcdDataADO secondaryIcdDataADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+			text = secondaryIcdDataADO?.ICD_SUB_CODE;
+			text2 = secondaryIcdDataADO?.ICD_TEXT;
+			if (string.IsNullOrEmpty(text))
 			{
 				return;
 			}
-			string[] arrIcdSub = icdSubCode.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-			string[] arrText = icdText.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries);
-			for (int j = 0; j < arrIcdSub.Length; j++)
+			string[] array = text.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+			string[] array2 = text2.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+			for (int i = 0; i < array.Length; i++)
 			{
-				if (dicIcd.ContainsKey(arrIcdSub[j]))
+				if (dicIcd.ContainsKey(array[i]))
 				{
-					dicIcd.Remove(arrIcdSub[j]);
+					dicIcd.Remove(array[i]);
 				}
-				dicIcd[arrIcdSub[j]] = ((arrText.Length - 1 >= j) ? arrText[j] : null);
+				dicIcd[array[i]] = ((array2.Length - 1 >= i) ? array2[i] : null);
 			}
-			if (arrIcdSub.Length < arrText.Length)
+			if (array.Length < array2.Length)
 			{
-				for (int i = arrIcdSub.Length; i < arrText.Length; i++)
+				for (int j = array.Length; j < array2.Length; j++)
 				{
-					lstIcdText.Add(arrText[i]);
+					lstIcdText.Add(array2[j]);
 				}
 			}
 		}
@@ -17561,15 +17563,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			long tabNum = ConfigApplicationWorker.Get<long>("CONFIG_KEY__EXAM_SERVICE_REQ_EXCUTE__TAB_INFO_SHOW_DEFAULT");
-			XtraTabPage activeTab = new XtraTabPage();
-			long num = tabNum;
-			long num2 = num - 1;
-			if ((ulong)num2 > 15uL)
+			long num = ConfigApplicationWorker.Get<long>("CONFIG_KEY__EXAM_SERVICE_REQ_EXCUTE__TAB_INFO_SHOW_DEFAULT");
+			XtraTabPage xtraTabPage = new XtraTabPage();
+			long num2 = num;
+			long num3 = num2 - 1;
+			if ((ulong)num3 > 15uL)
 			{
 				goto IL_0106;
 			}
-			switch (num2)
+			switch (num3)
 			{
 			case 0L:
 				break;
@@ -17606,71 +17608,71 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			default:
 				goto IL_0106;
 			}
-			activeTab = xtraTabPageChung;
+			xtraTabPage = xtraTabPageChung;
 			goto IL_010a;
 			IL_010a:
-			long key = ConfigApplicationWorker.Get<long>("CONFIG_KEY__EXAM_SERVICE_REQ_EXCUTE_HIDE_TABS_INFOMATION__APPLICATION");
-			if (key == 1)
+			long num4 = ConfigApplicationWorker.Get<long>("CONFIG_KEY__EXAM_SERVICE_REQ_EXCUTE_HIDE_TABS_INFOMATION__APPLICATION");
+			if (num4 == 1)
 			{
 				for (int i = 0; i < tab.TabPages.Count; i++)
 				{
 					tab.TabPages[i].PageVisible = false;
 				}
 			}
-			activeTab.PageVisible = true;
-			tab.SelectedTabPage = activeTab;
+			xtraTabPage.PageVisible = true;
+			tab.SelectedTabPage = xtraTabPage;
 			lcForTabpageMat__ThiTruong.OptionsView.ShareLookAndFeelWithChildren = false;
 			lcForTabpageMat__ThiTruong.LookAndFeel.SetFlatStyle();
 			lcForTabpageMat__ThiTruong.OptionsView.DrawItemBorders = true;
 			lcForTabpageMat__ThiTruong.OptionsView.ItemBorderColor = Color.Black;
 			return;
 			IL_0106:
-			activeTab = null;
+			xtraTabPage = null;
 			goto IL_010a;
 			IL_00fd:
-			activeTab = xtraTabDaLieu;
+			xtraTabPage = xtraTabDaLieu;
 			goto IL_010a;
 			IL_00f4:
-			activeTab = xtraTabSanPhuKhoa;
+			xtraTabPage = xtraTabSanPhuKhoa;
 			goto IL_010a;
 			IL_00eb:
-			activeTab = xtraTabVanDong;
+			xtraTabPage = xtraTabVanDong;
 			goto IL_010a;
 			IL_00e2:
-			activeTab = xtraTabDinhDuong;
+			xtraTabPage = xtraTabDinhDuong;
 			goto IL_010a;
 			IL_00d9:
-			activeTab = xtraTabTamThan;
+			xtraTabPage = xtraTabTamThan;
 			goto IL_010a;
 			IL_00d0:
-			activeTab = xtraTabNoiTiet;
+			xtraTabPage = xtraTabNoiTiet;
 			goto IL_010a;
 			IL_00c7:
-			activeTab = xtraTabMat;
+			xtraTabPage = xtraTabMat;
 			goto IL_010a;
 			IL_00be:
-			activeTab = xtraTabRangHamMat;
+			xtraTabPage = xtraTabRangHamMat;
 			goto IL_010a;
 			IL_00b5:
-			activeTab = xtraTabTaiMuiHong;
+			xtraTabPage = xtraTabTaiMuiHong;
 			goto IL_010a;
 			IL_00ac:
-			activeTab = xtraTabCoXuongKhop;
+			xtraTabPage = xtraTabCoXuongKhop;
 			goto IL_010a;
 			IL_00a3:
-			activeTab = xtraTabThanKinh;
+			xtraTabPage = xtraTabThanKinh;
 			goto IL_010a;
 			IL_009a:
-			activeTab = xtraTabThanTietNieu;
+			xtraTabPage = xtraTabThanTietNieu;
 			goto IL_010a;
 			IL_0091:
-			activeTab = xtraTabTieuHoa;
+			xtraTabPage = xtraTabTieuHoa;
 			goto IL_010a;
 			IL_0088:
-			activeTab = xtraTabHoHap;
+			xtraTabPage = xtraTabHoHap;
 			goto IL_010a;
 			IL_007c:
-			activeTab = xtraTabTuanHoan;
+			xtraTabPage = xtraTabTuanHoan;
 			goto IL_010a;
 		}
 		catch (Exception ex)
@@ -17681,15 +17683,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private string GetIcdMainCode()
 	{
-		string mainCode = "";
+		string result = "";
 		try
 		{
 			if (icdProcessorYHCT != null && ucIcdYHCT != null)
 			{
-				object icdValue = icdProcessorYHCT.GetValue(ucIcdYHCT);
-				if (icdValue != null && icdValue is HIS.UC.Icd.ADO.IcdInputADO)
+				object value = icdProcessorYHCT.GetValue(ucIcdYHCT);
+				if (value != null && value is HIS.UC.Icd.ADO.IcdInputADO)
 				{
-					mainCode = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_CODE;
+					result = ((HIS.UC.Icd.ADO.IcdInputADO)value).ICD_CODE;
 				}
 			}
 		}
@@ -17697,7 +17699,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Error(ex);
 		}
-		return mainCode;
+		return result;
 	}
 
 	private void InitUcIcdYHCT()
@@ -17705,19 +17707,19 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			icdProcessorYHCT = new IcdProcessor();
-			IcdInitADO ado = new IcdInitADO();
-			ado.DelegateNextFocus = NextForcusSubIcd;
-			ado.LblIcdMain = "CĐ YHCT:";
-			ado.ToolTipsIcdMain = "Chẩn đoán y học cổ truyền";
-			ado.Width = 450;
-			ado.Height = 30;
-			ado.hisTreatment = treatment;
-			ado.DataIcds = (from o in BackendDataWorker.Get<HIS_ICD>()
+			IcdInitADO icdInitADO = new IcdInitADO();
+			icdInitADO.DelegateNextFocus = NextForcusSubIcd;
+			icdInitADO.LblIcdMain = "CĐ YHCT:";
+			icdInitADO.ToolTipsIcdMain = "Chẩn đoán y học cổ truyền";
+			icdInitADO.Width = 450;
+			icdInitADO.Height = 30;
+			icdInitADO.hisTreatment = treatment;
+			icdInitADO.DataIcds = (from o in BackendDataWorker.Get<HIS_ICD>()
 				where o.IS_ACTIVE == 1 && o.IS_TRADITIONAL == 1
 				orderby o.ICD_CODE
 				select o).ToList();
-			ado.AutoCheckIcd = HisConfigCFG.AutoCheckIcd == "1";
-			ucIcdYHCT = (UserControl)icdProcessorYHCT.Run(ado);
+			icdInitADO.AutoCheckIcd = HisConfigCFG.AutoCheckIcd == "1";
+			ucIcdYHCT = (UserControl)icdProcessorYHCT.Run(icdInitADO);
 			if (ucIcdYHCT != null)
 			{
 				panelControlIcdYHCT.Controls.Add(ucIcdYHCT);
@@ -17734,21 +17736,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			List<HIS_ICD> dataICD = (from o in BackendDataWorker.Get<HIS_ICD>()
+			List<HIS_ICD> hisIcds = (from o in BackendDataWorker.Get<HIS_ICD>()
 				where o.IS_ACTIVE == 1 && o.IS_TRADITIONAL == 1
 				orderby o.ICD_CODE
 				select o).ToList();
-			subIcdProcessorYHCT = new SecondaryIcdProcessor(new CommonParam(), dataICD);
-			SecondaryIcdInitADO ado = new SecondaryIcdInitADO();
-			ado.DelegateGetIcdMain = GetIcdMainCode;
-			ado.Width = 450;
-			ado.Height = 30;
-			ado.TextLblIcd = "CĐ YHCT Phụ:";
-			ado.TootiplciIcdSubCode = "Chẩn đoán y học cổ truyền phụ";
-			ado.hisTreatment = treatment;
-			ado.TextNullValue = "Nhấn F1 để chọn bệnh";
-			ado.limitDataSource = (int)ConfigApplications.NumPageSize;
-			ucSecondaryIcdYHCT = (UserControl)subIcdProcessorYHCT.Run(ado);
+			subIcdProcessorYHCT = new SecondaryIcdProcessor(new CommonParam(), hisIcds);
+			SecondaryIcdInitADO secondaryIcdInitADO = new SecondaryIcdInitADO();
+			secondaryIcdInitADO.DelegateGetIcdMain = GetIcdMainCode;
+			secondaryIcdInitADO.Width = 450;
+			secondaryIcdInitADO.Height = 30;
+			secondaryIcdInitADO.TextLblIcd = "CĐ YHCT Phụ:";
+			secondaryIcdInitADO.TootiplciIcdSubCode = "Chẩn đoán y học cổ truyền phụ";
+			secondaryIcdInitADO.hisTreatment = treatment;
+			secondaryIcdInitADO.TextNullValue = "Nhấn F1 để chọn bệnh";
+			secondaryIcdInitADO.limitDataSource = (int)ConfigApplications.NumPageSize;
+			ucSecondaryIcdYHCT = (UserControl)subIcdProcessorYHCT.Run(secondaryIcdInitADO);
 			if (ucSecondaryIcdYHCT != null)
 			{
 				panelControlUcSubIcdYHCT.Controls.Add(ucSecondaryIcdYHCT);
@@ -17778,27 +17780,27 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		object result = null;
 		try
 		{
-			HIS.UC.Icd.ADO.IcdInputADO outPut = new HIS.UC.Icd.ADO.IcdInputADO();
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = new HIS.UC.Icd.ADO.IcdInputADO();
 			if (txtIcdCodeCause.ErrorText == "")
 			{
 				if (chkEditIcdCause.Checked)
 				{
-					outPut.ICD_NAME = txtIcdMainTextCause.Text.Trim();
+					icdInputADO.ICD_NAME = txtIcdMainTextCause.Text.Trim();
 				}
 				else
 				{
-					outPut.ICD_NAME = cboIcdsCause.Text.Trim();
+					icdInputADO.ICD_NAME = cboIcdsCause.Text.Trim();
 				}
 				if (!string.IsNullOrEmpty(txtIcdCodeCause.Text.Trim()))
 				{
-					outPut.ICD_CODE = txtIcdCodeCause.Text.Trim();
+					icdInputADO.ICD_CODE = txtIcdCodeCause.Text.Trim();
 				}
 			}
 			else
 			{
-				outPut = null;
+				icdInputADO = null;
 			}
-			result = outPut;
+			result = icdInputADO;
 		}
 		catch (Exception ex)
 		{
@@ -17814,17 +17816,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (isRequired)
 			{
 				lciIcdTextCause.AppearanceItemCaption.ForeColor = Color.Maroon;
-				IcdValidationRuleControl icdMainRule = new IcdValidationRuleControl();
-				icdMainRule.txtIcdCode = txtIcdCodeCause;
-				icdMainRule.btnBenhChinh = cboIcdsCause;
-				icdMainRule.txtMainText = txtIcdMainTextCause;
-				icdMainRule.chkCheck = chkEditIcdCause;
-				icdMainRule.maxLengthCode = maxLengthCode;
-				icdMainRule.maxLengthText = maxLengthText;
-				icdMainRule.IsObligatoryTranferMediOrg = IsObligatoryTranferMediOrg;
-				icdMainRule.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
-				icdMainRule.ErrorType = ErrorType.Warning;
-				dxValidationProviderForLeftPanel.SetValidationRule(txtIcdCodeCause, icdMainRule);
+				IcdValidationRuleControl icdValidationRuleControl = new IcdValidationRuleControl();
+				icdValidationRuleControl.txtIcdCode = txtIcdCodeCause;
+				icdValidationRuleControl.btnBenhChinh = cboIcdsCause;
+				icdValidationRuleControl.txtMainText = txtIcdMainTextCause;
+				icdValidationRuleControl.chkCheck = chkEditIcdCause;
+				icdValidationRuleControl.maxLengthCode = maxLengthCode;
+				icdValidationRuleControl.maxLengthText = maxLengthText;
+				icdValidationRuleControl.IsObligatoryTranferMediOrg = IsObligatoryTranferMediOrg;
+				icdValidationRuleControl.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
+				icdValidationRuleControl.ErrorType = ErrorType.Warning;
+				dxValidationProviderForLeftPanel.SetValidationRule(txtIcdCodeCause, icdValidationRuleControl);
 			}
 			else
 			{
@@ -17879,12 +17881,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (!string.IsNullOrEmpty(icdCode))
 			{
-				HIS_ICD icd = currentIcds.Where((HIS_ICD p) => p.ICD_CODE == icdCode).FirstOrDefault();
-				if (icd != null)
+				HIS_ICD hIS_ICD = currentIcds.Where((HIS_ICD p) => p.ICD_CODE == icdCode).FirstOrDefault();
+				if (hIS_ICD != null)
 				{
-					txtIcdCodeCause.Text = icd.ICD_CODE;
-					cboIcdsCause.EditValue = icd.ID;
-					if (autoCheckIcd == 1 || (!string.IsNullOrEmpty(icdName) && (icdName ?? "").Trim().ToLower() != (icd.ICD_NAME ?? "").Trim().ToLower()))
+					txtIcdCodeCause.Text = hIS_ICD.ICD_CODE;
+					cboIcdsCause.EditValue = hIS_ICD.ID;
+					if (autoCheckIcd == 1 || (!string.IsNullOrEmpty(icdName) && (icdName ?? "").Trim().ToLower() != (hIS_ICD.ICD_NAME ?? "").Trim().ToLower()))
 					{
 						chkEditIcdCause.Checked = autoCheckIcd != 2;
 						txtIcdMainTextCause.Text = icdName;
@@ -17892,7 +17894,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					else
 					{
 						chkEditIcdCause.Checked = false;
-						txtIcdMainTextCause.Text = icd.ICD_NAME;
+						txtIcdMainTextCause.Text = hIS_ICD.ICD_NAME;
 					}
 				}
 				else
@@ -17992,19 +17994,19 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HIS.UC.Icd.ADO.IcdInputADO Icd = new HIS.UC.Icd.ADO.IcdInputADO();
-			Icd.ICD_CODE = icdCodeYHCT;
-			Icd.ICD_NAME = icdNameYHCT;
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = new HIS.UC.Icd.ADO.IcdInputADO();
+			icdInputADO.ICD_CODE = icdCodeYHCT;
+			icdInputADO.ICD_NAME = icdNameYHCT;
 			if (ucIcdYHCT != null)
 			{
-				icdProcessorYHCT.Reload(ucIcdYHCT, Icd);
+				icdProcessorYHCT.Reload(ucIcdYHCT, icdInputADO);
 			}
-			SecondaryIcdDataADO subIcd = new SecondaryIcdDataADO();
-			subIcd.ICD_SUB_CODE = icdSubCodeYHCT;
-			subIcd.ICD_TEXT = icdSubNameYHCT;
+			SecondaryIcdDataADO secondaryIcdDataADO = new SecondaryIcdDataADO();
+			secondaryIcdDataADO.ICD_SUB_CODE = icdSubCodeYHCT;
+			secondaryIcdDataADO.ICD_TEXT = icdSubNameYHCT;
 			if (ucSecondaryIcdYHCT != null)
 			{
-				subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, subIcd);
+				subIcdProcessorYHCT.Reload(ucSecondaryIcdYHCT, secondaryIcdDataADO);
 			}
 		}
 		catch (Exception ex)
@@ -18031,16 +18033,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		object result = null;
 		try
 		{
-			SecondaryIcdDataADO outPut = new SecondaryIcdDataADO();
+			SecondaryIcdDataADO secondaryIcdDataADO = new SecondaryIcdDataADO();
 			if (!string.IsNullOrEmpty(txtIcdSubCode.Text.Trim()))
 			{
-				outPut.ICD_SUB_CODE = txtIcdSubCode.Text.Trim();
+				secondaryIcdDataADO.ICD_SUB_CODE = txtIcdSubCode.Text.Trim();
 			}
 			if (!string.IsNullOrEmpty(txtIcdText.Text.Trim()))
 			{
-				outPut.ICD_TEXT = txtIcdText.Text.Trim();
+				secondaryIcdDataADO.ICD_TEXT = txtIcdText.Text.Trim();
 			}
-			result = outPut;
+			result = secondaryIcdDataADO;
 		}
 		catch (Exception ex)
 		{
@@ -18099,20 +18101,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		object result = null;
 		try
 		{
-			HIS.UC.Icd.ADO.IcdInputADO outPut = new HIS.UC.Icd.ADO.IcdInputADO();
+			HIS.UC.Icd.ADO.IcdInputADO icdInputADO = new HIS.UC.Icd.ADO.IcdInputADO();
 			if (chkEditIcd.Checked)
 			{
-				outPut.ICD_NAME = txtIcdMainText.Text.Trim();
+				icdInputADO.ICD_NAME = txtIcdMainText.Text.Trim();
 			}
 			else
 			{
-				outPut.ICD_NAME = cboIcds.Text.Trim();
+				icdInputADO.ICD_NAME = cboIcds.Text.Trim();
 			}
 			if (!string.IsNullOrEmpty(txtIcdCode.Text.Trim()))
 			{
-				outPut.ICD_CODE = txtIcdCode.Text.Trim();
+				icdInputADO.ICD_CODE = txtIcdCode.Text.Trim();
 			}
-			result = outPut;
+			result = icdInputADO;
 		}
 		catch (Exception ex)
 		{
@@ -18128,17 +18130,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (isRequired)
 			{
 				lciIcdText.AppearanceItemCaption.ForeColor = Color.Maroon;
-				IcdValidationRuleControl icdMainRule = new IcdValidationRuleControl();
-				icdMainRule.txtIcdCode = txtIcdCode;
-				icdMainRule.btnBenhChinh = cboIcds;
-				icdMainRule.txtMainText = txtIcdMainText;
-				icdMainRule.chkCheck = chkEditIcd;
-				icdMainRule.maxLengthCode = maxLengthCode;
-				icdMainRule.maxLengthText = maxLengthText;
-				icdMainRule.IsObligatoryTranferMediOrg = IsObligatoryTranferMediOrg;
-				icdMainRule.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
-				icdMainRule.ErrorType = ErrorType.Warning;
-				dxValidationProviderForLeftPanel.SetValidationRule(txtIcdCode, icdMainRule);
+				IcdValidationRuleControl icdValidationRuleControl = new IcdValidationRuleControl();
+				icdValidationRuleControl.txtIcdCode = txtIcdCode;
+				icdValidationRuleControl.btnBenhChinh = cboIcds;
+				icdValidationRuleControl.txtMainText = txtIcdMainText;
+				icdValidationRuleControl.chkCheck = chkEditIcd;
+				icdValidationRuleControl.maxLengthCode = maxLengthCode;
+				icdValidationRuleControl.maxLengthText = maxLengthText;
+				icdValidationRuleControl.IsObligatoryTranferMediOrg = IsObligatoryTranferMediOrg;
+				icdValidationRuleControl.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
+				icdValidationRuleControl.ErrorType = ErrorType.Warning;
+				dxValidationProviderForLeftPanel.SetValidationRule(txtIcdCode, icdValidationRuleControl);
 			}
 			else
 			{
@@ -18158,12 +18160,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlMaxLengthValidationRule icdMainRule = new ControlMaxLengthValidationRule();
-			icdMainRule.editor = control;
-			icdMainRule.maxLength = maxLength;
-			icdMainRule.IsRequired = isRequired;
-			icdMainRule.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, icdMainRule);
+			ControlMaxLengthValidationRule controlMaxLengthValidationRule = new ControlMaxLengthValidationRule();
+			controlMaxLengthValidationRule.editor = control;
+			controlMaxLengthValidationRule.maxLength = maxLength;
+			controlMaxLengthValidationRule.IsRequired = isRequired;
+			controlMaxLengthValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, controlMaxLengthValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -18206,13 +18208,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (!string.IsNullOrEmpty(icdCode))
 			{
-				HIS_ICD icd = currentIcds.Where((HIS_ICD p) => p.ICD_CODE == icdCode).FirstOrDefault();
-				if (icd != null)
+				HIS_ICD hIS_ICD = currentIcds.Where((HIS_ICD p) => p.ICD_CODE == icdCode).FirstOrDefault();
+				if (hIS_ICD != null)
 				{
 					isShowContainerMediMatyForChoose = true;
-					txtIcdCode.Text = icd.ICD_CODE;
-					cboIcds.EditValue = icd.ID;
-					if (autoCheckIcd == 1 || (!string.IsNullOrEmpty(icdName) && (icdName ?? "").Trim().ToLower() != (icd.ICD_NAME ?? "").Trim().ToLower()))
+					txtIcdCode.Text = hIS_ICD.ICD_CODE;
+					cboIcds.EditValue = hIS_ICD.ID;
+					if (autoCheckIcd == 1 || (!string.IsNullOrEmpty(icdName) && (icdName ?? "").Trim().ToLower() != (hIS_ICD.ICD_NAME ?? "").Trim().ToLower()))
 					{
 						chkEditIcd.Checked = autoCheckIcd != 2;
 						txtIcdMainText.Text = icdName;
@@ -18220,7 +18222,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					else
 					{
 						chkEditIcd.Checked = false;
-						txtIcdMainText.Text = icd.ICD_NAME;
+						txtIcdMainText.Text = hIS_ICD.ICD_NAME;
 					}
 				}
 				else
@@ -18256,20 +18258,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			cbo.ForceInitialize();
 			cbo.Properties.View.Columns.Clear();
 			cbo.Properties.PopupFormSize = new Size(900, 250);
-			GridColumn aColumnCode = cbo.Properties.View.Columns.AddField("ICD_CODE");
-			aColumnCode.Caption = "Mã";
-			aColumnCode.Visible = true;
-			aColumnCode.VisibleIndex = 1;
-			aColumnCode.Width = 60;
-			GridColumn aColumnName = cbo.Properties.View.Columns.AddField("ICD_NAME");
-			aColumnName.Caption = "Tên";
-			aColumnName.Visible = true;
-			aColumnName.VisibleIndex = 2;
-			aColumnName.Width = 340;
-			GridColumn aColumnNameUnsign = cbo.Properties.View.Columns.AddField("ICD_NAME_UNSIGN");
-			aColumnNameUnsign.Visible = true;
-			aColumnNameUnsign.VisibleIndex = -1;
-			aColumnNameUnsign.Width = 340;
+			GridColumn gridColumn = cbo.Properties.View.Columns.AddField("ICD_CODE");
+			gridColumn.Caption = "Mã";
+			gridColumn.Visible = true;
+			gridColumn.VisibleIndex = 1;
+			gridColumn.Width = 60;
+			GridColumn gridColumn2 = cbo.Properties.View.Columns.AddField("ICD_NAME");
+			gridColumn2.Caption = "Tên";
+			gridColumn2.Visible = true;
+			gridColumn2.VisibleIndex = 2;
+			gridColumn2.Width = 340;
+			GridColumn gridColumn3 = cbo.Properties.View.Columns.AddField("ICD_NAME_UNSIGN");
+			gridColumn3.Visible = true;
+			gridColumn3.VisibleIndex = -1;
+			gridColumn3.Width = 340;
 			cbo.Properties.View.Columns["ICD_NAME_UNSIGN"].Width = 0;
 		}
 		catch (Exception ex)
@@ -18309,27 +18311,27 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		object result = null;
 		try
 		{
-			NextTreatmentInstructionInputADO outPut = new NextTreatmentInstructionInputADO();
+			NextTreatmentInstructionInputADO nextTreatmentInstructionInputADO = new NextTreatmentInstructionInputADO();
 			if (txtNextTreatmentInstructionCode.ErrorText == "")
 			{
 				if (chkEditNextTreatmentInstruction.Checked)
 				{
-					outPut.NEXT_TREA_INTR_NAME = txtNextTreatmentInstructionMainText.Text.Trim();
+					nextTreatmentInstructionInputADO.NEXT_TREA_INTR_NAME = txtNextTreatmentInstructionMainText.Text.Trim();
 				}
 				else
 				{
-					outPut.NEXT_TREA_INTR_NAME = cboNextTreatmentInstructions.Text.Trim();
+					nextTreatmentInstructionInputADO.NEXT_TREA_INTR_NAME = cboNextTreatmentInstructions.Text.Trim();
 				}
 				if (!string.IsNullOrEmpty(txtNextTreatmentInstructionCode.Text.Trim()))
 				{
-					outPut.NEXT_TREA_INTR_CODE = txtNextTreatmentInstructionCode.Text.Trim();
+					nextTreatmentInstructionInputADO.NEXT_TREA_INTR_CODE = txtNextTreatmentInstructionCode.Text.Trim();
 				}
 			}
 			else
 			{
-				outPut = null;
+				nextTreatmentInstructionInputADO = null;
 			}
-			result = outPut;
+			result = nextTreatmentInstructionInputADO;
 		}
 		catch (Exception ex)
 		{
@@ -18358,17 +18360,17 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (isRequired)
 			{
 				lciNextTreatmentInstructionText.AppearanceItemCaption.ForeColor = Color.Maroon;
-				NextTreatmentInstValidationRuleControl nextTreatmentIntructionMainRule = new NextTreatmentInstValidationRuleControl();
-				nextTreatmentIntructionMainRule.txtNextTreatmentInstructionCode = txtNextTreatmentInstructionCode;
-				nextTreatmentIntructionMainRule.btnBenhChinh = cboNextTreatmentInstructions;
-				nextTreatmentIntructionMainRule.txtMainText = txtNextTreatmentInstructionMainText;
-				nextTreatmentIntructionMainRule.chkCheck = chkEditNextTreatmentInstruction;
-				nextTreatmentIntructionMainRule.maxLengthCode = maxLengthCode;
-				nextTreatmentIntructionMainRule.maxLengthText = maxLengthText;
-				nextTreatmentIntructionMainRule.IsObligatoryTranferMediOrg = IsObligatoryTranferMediOrg;
-				nextTreatmentIntructionMainRule.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
-				nextTreatmentIntructionMainRule.ErrorType = ErrorType.Warning;
-				dxValidationProviderForLeftPanel.SetValidationRule(txtNextTreatmentInstructionCode, nextTreatmentIntructionMainRule);
+				NextTreatmentInstValidationRuleControl nextTreatmentInstValidationRuleControl = new NextTreatmentInstValidationRuleControl();
+				nextTreatmentInstValidationRuleControl.txtNextTreatmentInstructionCode = txtNextTreatmentInstructionCode;
+				nextTreatmentInstValidationRuleControl.btnBenhChinh = cboNextTreatmentInstructions;
+				nextTreatmentInstValidationRuleControl.txtMainText = txtNextTreatmentInstructionMainText;
+				nextTreatmentInstValidationRuleControl.chkCheck = chkEditNextTreatmentInstruction;
+				nextTreatmentInstValidationRuleControl.maxLengthCode = maxLengthCode;
+				nextTreatmentInstValidationRuleControl.maxLengthText = maxLengthText;
+				nextTreatmentInstValidationRuleControl.IsObligatoryTranferMediOrg = IsObligatoryTranferMediOrg;
+				nextTreatmentInstValidationRuleControl.ErrorText = HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.TruongDuLieuBatBuoc;
+				nextTreatmentInstValidationRuleControl.ErrorType = ErrorType.Warning;
+				dxValidationProviderForLeftPanel.SetValidationRule(txtNextTreatmentInstructionCode, nextTreatmentInstValidationRuleControl);
 			}
 			else
 			{
@@ -18512,56 +18514,56 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		object result = null;
 		try
 		{
-			DHSTADO outPut = new DHSTADO();
+			DHSTADO dHSTADO = new DHSTADO();
 			if (dtExecuteTime.EditValue != null)
 			{
-				outPut.EXECUTE_TIME = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtExecuteTime.DateTime);
+				dHSTADO.EXECUTE_TIME = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(dtExecuteTime.DateTime);
 			}
 			if (spinBloodPressureMax.EditValue != null)
 			{
-				outPut.BLOOD_PRESSURE_MAX = Parse.ToInt64(spinBloodPressureMax.Value.ToString());
+				dHSTADO.BLOOD_PRESSURE_MAX = Parse.ToInt64(spinBloodPressureMax.Value.ToString());
 			}
 			if (spinBloodPressureMin.EditValue != null)
 			{
-				outPut.BLOOD_PRESSURE_MIN = Parse.ToInt64(spinBloodPressureMin.Value.ToString());
+				dHSTADO.BLOOD_PRESSURE_MIN = Parse.ToInt64(spinBloodPressureMin.Value.ToString());
 			}
 			if (spinBreathRate.EditValue != null)
 			{
-				outPut.BREATH_RATE = Inventec.Common.Number.Get.RoundCurrency(spinBreathRate.Value, 2);
+				dHSTADO.BREATH_RATE = Inventec.Common.Number.Get.RoundCurrency(spinBreathRate.Value, 2);
 			}
 			if (spinHeight.EditValue != null)
 			{
-				outPut.HEIGHT = Inventec.Common.Number.Get.RoundCurrency(spinHeight.Value, 2);
+				dHSTADO.HEIGHT = Inventec.Common.Number.Get.RoundCurrency(spinHeight.Value, 2);
 			}
 			if (spinChest.EditValue != null)
 			{
-				outPut.CHEST = Inventec.Common.Number.Get.RoundCurrency(spinChest.Value, 2);
+				dHSTADO.CHEST = Inventec.Common.Number.Get.RoundCurrency(spinChest.Value, 2);
 			}
 			if (spinBelly.EditValue != null)
 			{
-				outPut.BELLY = Inventec.Common.Number.Get.RoundCurrency(spinBelly.Value, 2);
+				dHSTADO.BELLY = Inventec.Common.Number.Get.RoundCurrency(spinBelly.Value, 2);
 			}
 			if (spinPulse.EditValue != null)
 			{
-				outPut.PULSE = Parse.ToInt64(spinPulse.Value.ToString());
+				dHSTADO.PULSE = Parse.ToInt64(spinPulse.Value.ToString());
 			}
 			if (spinTemperature.EditValue != null)
 			{
-				outPut.TEMPERATURE = Inventec.Common.Number.Get.RoundCurrency(spinTemperature.Value, 2);
+				dHSTADO.TEMPERATURE = Inventec.Common.Number.Get.RoundCurrency(spinTemperature.Value, 2);
 			}
 			if (spinWeight.EditValue != null)
 			{
-				outPut.WEIGHT = Inventec.Common.Number.Get.RoundCurrency(spinWeight.Value, 2);
+				dHSTADO.WEIGHT = Inventec.Common.Number.Get.RoundCurrency(spinWeight.Value, 2);
 			}
 			if (spinSPO2.EditValue != null)
 			{
-				outPut.SPO2 = Inventec.Common.Number.Get.RoundCurrency(spinSPO2.Value, 2) / 100m;
+				dHSTADO.SPO2 = Inventec.Common.Number.Get.RoundCurrency(spinSPO2.Value, 2) / 100m;
 			}
-			outPut.NOTE = txtNote.Text.Trim();
-			outPut.IsVali = true;
-			if (!CheckDhst(outPut))
+			dHSTADO.NOTE = txtNote.Text.Trim();
+			dHSTADO.IsVali = true;
+			if (!CheckDhst(dHSTADO))
 			{
-				result = outPut;
+				result = dHSTADO;
 			}
 		}
 		catch (Exception ex)
@@ -18573,18 +18575,18 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool CheckDhst(DHSTADO data)
 	{
-		bool result = true;
+		bool flag = true;
 		try
 		{
-			result = result && !data.PULSE.HasValue && !data.BLOOD_PRESSURE_MAX.HasValue && !data.BLOOD_PRESSURE_MIN.HasValue && !data.TEMPERATURE.HasValue && !data.BREATH_RATE.HasValue && !data.HEIGHT.HasValue && !data.WEIGHT.HasValue && !data.CHEST.HasValue && !data.BELLY.HasValue && !data.CAPILLARY_BLOOD_GLUCOSE.HasValue && !data.SPO2.HasValue;
+			flag = flag && !data.PULSE.HasValue && !data.BLOOD_PRESSURE_MAX.HasValue && !data.BLOOD_PRESSURE_MIN.HasValue && !data.TEMPERATURE.HasValue && !data.BREATH_RATE.HasValue && !data.HEIGHT.HasValue && !data.WEIGHT.HasValue && !data.CHEST.HasValue && !data.BELLY.HasValue && !data.CAPILLARY_BLOOD_GLUCOSE.HasValue && !data.SPO2.HasValue;
 		}
 		catch (Exception ex)
 		{
-			result = false;
+			flag = false;
 			LogSystem.Error(ex);
 		}
-		LogSystem.Info("CheckDhst: " + result);
-		return result;
+		LogSystem.Info("CheckDhst: " + flag);
+		return flag;
 	}
 
 	public async Task UcDHSTValidateControl()
@@ -18676,30 +18678,30 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool IsValidControlSPO2()
 	{
-		bool valid = false;
+		bool result = false;
 		try
 		{
 			if (spinSPO2.EditValue != null)
 			{
-				valid = spinSPO2.Value > 0m && spinSPO2.Value <= 100m;
+				result = spinSPO2.Value > 0m && spinSPO2.Value <= 100m;
 			}
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private void ValidateControlSpinEditWeight(SpinEdit control, bool Option, bool IsRequired)
 	{
 		try
 		{
-			WeightValidaionRule controlEdit = new WeightValidaionRule();
-			controlEdit.spn = control;
-			controlEdit.IsRequired = IsRequired;
-			controlEdit.IsRequiredWeightOption = (Option ? IsRequiredWeightOption : 0);
-			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEdit);
+			WeightValidaionRule weightValidaionRule = new WeightValidaionRule();
+			weightValidaionRule.spn = control;
+			weightValidaionRule.IsRequired = IsRequired;
+			weightValidaionRule.IsRequiredWeightOption = (Option ? IsRequiredWeightOption : 0);
+			dxValidationProviderForLeftPanel.SetValidationRule(control, weightValidaionRule);
 		}
 		catch (Exception ex)
 		{
@@ -18711,11 +18713,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlEditValidationRule controlEdit = new ControlEditValidationRule();
-			controlEdit.editor = control;
-			controlEdit.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
-			controlEdit.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEdit);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = control;
+			controlEditValidationRule.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -18727,11 +18729,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ValidateMaxLength controlEdit = new ValidateMaxLength();
-			controlEdit.textEdit = control;
-			controlEdit.maxLength = maxLength;
-			controlEdit.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEdit);
+			ValidateMaxLength validateMaxLength = new ValidateMaxLength();
+			validateMaxLength.textEdit = control;
+			validateMaxLength.maxLength = maxLength;
+			validateMaxLength.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, validateMaxLength);
 		}
 		catch (Exception ex)
 		{
@@ -18743,13 +18745,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlEditValidationRule controlEdit = new ControlEditValidationRule();
-			controlEdit.editor = control;
-			controlEdit.isUseOnlyCustomValidControl = true;
-			controlEdit.isValidControl = isValidControl;
-			controlEdit.ErrorText = (string.IsNullOrEmpty(message) ? Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap) : message);
-			controlEdit.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEdit);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = control;
+			controlEditValidationRule.isUseOnlyCustomValidControl = true;
+			controlEditValidationRule.isValidControl = isValidControl;
+			controlEditValidationRule.ErrorText = (string.IsNullOrEmpty(message) ? Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap) : message);
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -18761,11 +18763,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlEditValidationRule controlEdit = new ControlEditValidationRule();
-			controlEdit.editor = control;
-			controlEdit.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
-			controlEdit.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEdit);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = control;
+			controlEditValidationRule.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -18777,11 +18779,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlEditValidationRule controlEdit = new ControlEditValidationRule();
-			controlEdit.editor = control;
-			controlEdit.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
-			controlEdit.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEdit);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = control;
+			controlEditValidationRule.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(control, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -18793,11 +18795,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ControlEditValidationRule controlEdit = new ControlEditValidationRule();
-			controlEdit.editor = spinBloodPressureMin;
-			controlEdit.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
-			controlEdit.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(spinBloodPressureMax, controlEdit);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = spinBloodPressureMin;
+			controlEditValidationRule.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(spinBloodPressureMax, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -18867,15 +18869,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			decimal bmi = default(decimal);
+			decimal d = default(decimal);
 			_ = spinHeight.Value;
 			if (spinHeight.Value != 0m)
 			{
-				bmi = spinWeight.Value / (spinHeight.Value / 100m * (spinHeight.Value / 100m));
+				d = spinWeight.Value / (spinHeight.Value / 100m * (spinHeight.Value / 100m));
 			}
-			double leatherArea = 0.007184 * Math.Pow((double)spinHeight.Value, 0.725) * Math.Pow((double)spinWeight.Value, 0.425);
-			lblBMI.Text = string.Concat(Math.Round(bmi, 2));
-			lblLeatherArea.Text = string.Concat(Math.Round(leatherArea, 2));
+			double value = 0.007184 * Math.Pow((double)spinHeight.Value, 0.725) * Math.Pow((double)spinWeight.Value, 0.425);
+			lblBMI.Text = string.Concat(Math.Round(d, 2));
+			lblLeatherArea.Text = string.Concat(Math.Round(value, 2));
 		}
 		catch (Exception ex)
 		{
@@ -18966,22 +18968,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AppointmentService").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AppointmentService").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AppointmentService");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
-				listArgs.Add(treatment.ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				Inventec.Desktop.Common.Modules.Module module2 = new Inventec.Desktop.Common.Modules.Module();
+				list.Add(treatment.ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).Show();
+				((Form)pluginInstance).Show();
 			}
 		}
 		catch (Exception ex)
@@ -18999,28 +19001,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisAssignBlood").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisAssignBlood").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.HisAssignBlood");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				Inventec.Desktop.Common.Modules.Module currentModule = new Inventec.Desktop.Common.Modules.Module();
+				List<object> list = new List<object>();
+				Inventec.Desktop.Common.Modules.Module module2 = new Inventec.Desktop.Common.Modules.Module();
 				long intructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
-				AssignBloodADO assignBlood = new AssignBloodADO(HisServiceReqView.TREATMENT_ID, intructionTime, 0L);
-				assignBlood.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
-				assignBlood.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
-				assignBlood.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
-				assignBlood.DgProcessRefeshIcd = RefeshIcd;
-				listArgs.Add(assignBlood);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				AssignBloodADO assignBloodADO = new AssignBloodADO(HisServiceReqView.TREATMENT_ID, intructionTime, 0L);
+				assignBloodADO.GenderName = HisServiceReqView.TDL_PATIENT_GENDER_NAME;
+				assignBloodADO.PatientName = HisServiceReqView.TDL_PATIENT_NAME;
+				assignBloodADO.PatientDob = HisServiceReqView.TDL_PATIENT_DOB;
+				assignBloodADO.DgProcessRefeshIcd = RefeshIcd;
+				list.Add(assignBloodADO);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -19033,23 +19035,23 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPaan").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.AssignPaan").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.AssignPaan");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView);
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				listArgs.Add(HisServiceReqView.ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView);
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				list.Add(HisServiceReqView.ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).Show();
+				((Form)pluginInstance).Show();
 			}
 		}
 		catch (Exception ex)
@@ -19062,21 +19064,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.MediReactSum").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.MediReactSum").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.MediReactSum");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -19089,21 +19091,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.InfusionSumByTreatment").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.InfusionSumByTreatment").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.InfusionSumByTreatment");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -19121,21 +19123,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.DebateDiagnostic").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.DebateDiagnostic").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.DebateDiagnostic");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -19148,21 +19150,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisMedicalAssessment").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisMedicalAssessment").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.HisMedicalAssessment");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -19175,21 +19177,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.Debate").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.Debate").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.Debate");
 			}
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
-				List<object> listArgs = new List<object>();
-				listArgs.Add(HisServiceReqView.TREATMENT_ID);
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(HisServiceReqView.TREATMENT_ID);
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 		}
 		catch (Exception ex)
@@ -19251,134 +19253,134 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	public HIS_EXAM_SERVICE_TEMP SendexamServiceTemp()
 	{
-		HIS_EXAM_SERVICE_TEMP examServiceTemp = new HIS_EXAM_SERVICE_TEMP();
+		HIS_EXAM_SERVICE_TEMP hIS_EXAM_SERVICE_TEMP = new HIS_EXAM_SERVICE_TEMP();
 		try
 		{
-			examServiceTemp.HOSPITALIZATION_REASON = txtHospitalizationReason.Text.Trim();
-			examServiceTemp.PATHOLOGICAL_PROCESS = txtPathologicalProcess.Text.Trim();
-			examServiceTemp.PATHOLOGICAL_HISTORY = txtPathologicalHistory.Text.Trim();
-			examServiceTemp.PATHOLOGICAL_HISTORY_FAMILY = txtPathologicalHistoryFamily.Text.Trim();
-			examServiceTemp.FULL_EXAM = txtKhamToanThan.Text.Trim();
-			examServiceTemp.PART_EXAM = txtKhamBoPhan.Text.Trim();
-			examServiceTemp.PART_EXAM_CIRCULATION = txtTuanHoan.Text.Trim();
-			examServiceTemp.PART_EXAM_RESPIRATORY = txtHoHap.Text.Trim();
-			examServiceTemp.PART_EXAM_DIGESTION = txtTieuHoa.Text.Trim();
-			examServiceTemp.PART_EXAM_KIDNEY_UROLOGY = txtThanTietNieu.Text.Trim();
-			examServiceTemp.PART_EXAM_MENTAL = txtPartExamMental.Text.Trim();
-			examServiceTemp.PART_EXAM_NUTRITION = txtPartExamNutrition.Text.Trim();
-			examServiceTemp.PART_EXAM_MOTION = txtPartExamMotion.Text.Trim();
-			examServiceTemp.PART_EXAM_OBSTETRIC = txtPartExanObstetric.Text.Trim();
-			examServiceTemp.PART_EXAM_NEUROLOGICAL = txtThanKinh.Text.Trim();
-			examServiceTemp.PART_EXAM_MUSCLE_BONE = txtCoXuongKhop.Text.Trim();
-			examServiceTemp.PART_EXAM_STOMATOLOGY = txtRHM.Text.Trim();
-			examServiceTemp.PART_EXAM_EYE = txtMat.Text.Trim();
-			examServiceTemp.PART_EXAM_OEND = txtNoiTiet.Text.Trim();
-			examServiceTemp.DESCRIPTION = txtSubclinical.Text.Trim();
-			examServiceTemp.CONCLUDE = txtTreatmentInstruction.Text.Trim();
-			examServiceTemp.NOTE = cboNextTreatmentInstructions.Text.Trim();
-			examServiceTemp.PART_EXAM_EAR = txtTai.Text.Trim();
-			examServiceTemp.PART_EXAM_NOSE = txtMui.Text.Trim();
-			examServiceTemp.PART_EXAM_THROAT = txtHong.Text.Trim();
-			examServiceTemp.PART_EXAM_EAR_RIGHT_NORMAL = txtPART_EXAM_EAR_RIGHT_NORMAL.Text.Trim();
-			examServiceTemp.PART_EXAM_EAR_RIGHT_WHISPER = txtPART_EXAM_EAR_RIGHT_WHISPER.Text.Trim();
-			examServiceTemp.PART_EXAM_EAR_LEFT_NORMAL = txtPART_EXAM_EAR_LEFT_NORMAL.Text.Trim();
-			examServiceTemp.PART_EXAM_EAR_LEFT_WHISPER = txtPART_EXAM_EAR_LEFT_WHISPER.Text.Trim();
-			examServiceTemp.PART_EXAM_UPPER_JAW = txtPART_EXAM_UPPER_JAW.Text.Trim();
-			examServiceTemp.PART_EXAM_LOWER_JAW = txtPART_EXAM_LOWER_JAW.Text.Trim();
-			examServiceTemp.PART_EXAM_EYE_TENSION_LEFT = txtNhanApTrai.Text.Trim();
-			examServiceTemp.PART_EXAM_EYE_TENSION_RIGHT = txtNhanApPhai.Text.Trim();
-			examServiceTemp.PART_EXAM_EYESIGHT_LEFT = txtThiLucKhongKinhTrai.Text.Trim();
-			examServiceTemp.PART_EXAM_EYESIGHT_RIGHT = txtThiLucKhongKinhPhai.Text.Trim();
-			examServiceTemp.PART_EXAM_HOLE_GLASS_LEFT = txtKinhLoTrai.Text.Trim();
-			examServiceTemp.PART_EXAM_HOLE_GLASS_RIGHT = txtKinhLoPhai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.HOSPITALIZATION_REASON = txtHospitalizationReason.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PATHOLOGICAL_PROCESS = txtPathologicalProcess.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PATHOLOGICAL_HISTORY = txtPathologicalHistory.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PATHOLOGICAL_HISTORY_FAMILY = txtPathologicalHistoryFamily.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.FULL_EXAM = txtKhamToanThan.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM = txtKhamBoPhan.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_CIRCULATION = txtTuanHoan.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_RESPIRATORY = txtHoHap.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_DIGESTION = txtTieuHoa.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_KIDNEY_UROLOGY = txtThanTietNieu.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_MENTAL = txtPartExamMental.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_NUTRITION = txtPartExamNutrition.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_MOTION = txtPartExamMotion.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_OBSTETRIC = txtPartExanObstetric.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_NEUROLOGICAL = txtThanKinh.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_MUSCLE_BONE = txtCoXuongKhop.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_STOMATOLOGY = txtRHM.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE = txtMat.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_OEND = txtNoiTiet.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.DESCRIPTION = txtSubclinical.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.CONCLUDE = txtTreatmentInstruction.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.NOTE = cboNextTreatmentInstructions.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EAR = txtTai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_NOSE = txtMui.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_THROAT = txtHong.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EAR_RIGHT_NORMAL = txtPART_EXAM_EAR_RIGHT_NORMAL.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EAR_RIGHT_WHISPER = txtPART_EXAM_EAR_RIGHT_WHISPER.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EAR_LEFT_NORMAL = txtPART_EXAM_EAR_LEFT_NORMAL.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EAR_LEFT_WHISPER = txtPART_EXAM_EAR_LEFT_WHISPER.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_UPPER_JAW = txtPART_EXAM_UPPER_JAW.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_LOWER_JAW = txtPART_EXAM_LOWER_JAW.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_TENSION_LEFT = txtNhanApTrai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_TENSION_RIGHT = txtNhanApPhai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYESIGHT_LEFT = txtThiLucKhongKinhTrai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYESIGHT_RIGHT = txtThiLucKhongKinhPhai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_HOLE_GLASS_LEFT = txtKinhLoTrai.Text.Trim();
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_HOLE_GLASS_RIGHT = txtKinhLoPhai.Text.Trim();
 			if (chkPART_EXAM_HORIZONTAL_SIGHT__BT.Checked)
 			{
-				examServiceTemp.PART_EXAM_HORIZONTAL_SIGHT = 1L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_HORIZONTAL_SIGHT = 1L;
 			}
 			if (chkPART_EXAM_HORIZONTAL_SIGHT__HC.Checked)
 			{
-				examServiceTemp.PART_EXAM_HORIZONTAL_SIGHT = 2L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_HORIZONTAL_SIGHT = 2L;
 			}
 			if (chkPART_EXAM_VERTICAL_SIGHT__BT.Checked)
 			{
-				examServiceTemp.PART_EXAM_VERTICAL_SIGHT = 1L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_VERTICAL_SIGHT = 1L;
 			}
 			if (chkPART_EXAM_VERTICAL_SIGHT__HC.Checked)
 			{
-				examServiceTemp.PART_EXAM_VERTICAL_SIGHT = 2L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_VERTICAL_SIGHT = 2L;
 			}
 			if (chkPART_EXAM_EYE_BLIND_COLOR__BT.Checked)
 			{
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 1L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 1L;
 			}
 			if (chkPART_EXAM_EYE_BLIND_COLOR__MMTB.Checked)
 			{
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 2L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 2L;
 			}
 			if (chkPART_EXAM_EYE_BLIND_COLOR__MMD.Checked)
 			{
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 3L;
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 6L;
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 7L;
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 9L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 3L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 6L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 7L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 9L;
 			}
-			chkPART_EXAM_EYE_BLIND_COLOR__MMXLC.Checked = examServiceTemp.PART_EXAM_EYE_BLIND_COLOR == 4 || examServiceTemp.PART_EXAM_EYE_BLIND_COLOR == 6 || examServiceTemp.PART_EXAM_EYE_BLIND_COLOR == 8 || examServiceTemp.PART_EXAM_EYE_BLIND_COLOR == 9;
+			chkPART_EXAM_EYE_BLIND_COLOR__MMXLC.Checked = hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR == 4 || hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR == 6 || hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR == 8 || hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR == 9;
 			if (chkPART_EXAM_EYE_BLIND_COLOR__MMV.Checked)
 			{
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 5L;
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 7L;
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 8L;
-				examServiceTemp.PART_EXAM_EYE_BLIND_COLOR = 9L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 5L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 7L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 8L;
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_BLIND_COLOR = 9L;
 			}
-			examServiceTemp.PART_EXAM_EYE_ST_PLUS = (chkPartExamEyeStPlus.Checked ? new short?(1) : new short?(0));
-			examServiceTemp.PART_EXAM_EYE_ST_MINUS = (chkPartExamEyeStMinus.Checked ? new short?(1) : new short?(0));
-			examServiceTemp.PART_EXAM_EYE_TENSION = ((cboPartExamEyeTension.SelectedIndex != -1) ? cboPartExamEyeTension.EditValue.ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_ST_PLUS = (chkPartExamEyeStPlus.Checked ? new short?(1) : new short?(0));
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_ST_MINUS = (chkPartExamEyeStMinus.Checked ? new short?(1) : new short?(0));
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_TENSION = ((cboPartExamEyeTension.SelectedIndex != -1) ? cboPartExamEyeTension.EditValue.ToString() : null);
 			if (!string.IsNullOrEmpty(txtPartExamEyeCountFinger.Text.Trim()))
 			{
-				examServiceTemp.PART_EXAM_EYE_COUNT_FINGER = txtPartExamEyeCountFinger.Text.Trim();
+				hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYE_COUNT_FINGER = txtPartExamEyeCountFinger.Text.Trim();
 			}
-			examServiceTemp.PART_EYE_GLASS_OLD_SPH_RIGHT = ((txtPartEyeGlassOldSphRight.EditValue != null) ? txtPartEyeGlassOldSphRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_CYL_RIGHT = ((txtPartEyeGlassOldCylRight.EditValue != null) ? txtPartEyeGlassOldCylRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_AXE_RIGHT = ((txtPartEyeGlassOldAxeRight.EditValue != null) ? txtPartEyeGlassOldAxeRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYESIGHT_GLASS_OLD_RIGHT = ((txtPartEyesightGlassOldRight.EditValue != null) ? txtPartEyesightGlassOldRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_KCDT_RIGHT = ((txtPartEyeGlassOldKcdtRight.EditValue != null) ? txtPartEyeGlassOldKcdtRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_ADD_RIGHT = ((txtPartEyeGlassOldAddRight.EditValue != null) ? txtPartEyeGlassOldAddRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_SPH_LEFT = ((txtPartEyeGlassOldSphLeft.EditValue != null) ? txtPartEyeGlassOldSphLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_CYL_LEFT = ((txtPartEyeGlassOldCylLeft.EditValue != null) ? txtPartEyeGlassOldCylLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_AXE_LEFT = ((txtPartEyeGlassOldAxeLeft.EditValue != null) ? txtPartEyeGlassOldAxeLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYESIGHT_GLASS_OLD_LEFT = ((txtPartEyesightGlassOldLeft.EditValue != null) ? txtPartEyesightGlassOldLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_KCDT_LEFT = ((txtPartEyeGlassOldKcdtLeft.EditValue != null) ? txtPartEyeGlassOldKcdtLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_OLD_ADD_LEFT = ((txtPartEyeGlassOldAddLeft.EditValue != null) ? txtPartEyeGlassOldAddLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_SPH_RIGHT = ((txtPartEyeGlassSphRight.EditValue != null) ? txtPartEyeGlassSphRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_CYL_RIGHT = ((txtPartEyeGlassCylRight.EditValue != null) ? txtPartEyeGlassCylRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_AXE_RIGHT = ((txtPartEyeGlassAxeRight.EditValue != null) ? txtPartEyeGlassAxeRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EXAM_EYESIGHT_GLASS_RIGHT = ((txtPartExamEyeSightGlassRight.EditValue != null) ? txtPartExamEyeSightGlassRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_KCDT_RIGHT = ((txtPartEyeGlassKcdtRight.EditValue != null) ? txtPartEyeGlassKcdtRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_ADD_RIGHT = ((txtPartEyeGlassAddRight.EditValue != null) ? txtPartEyeGlassAddRight.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_SPH_LEFT = ((txtPartEyeGlassSphLeft.EditValue != null) ? txtPartEyeGlassSphLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_CYL_LEFT = ((txtPartEyeGlassCylLeft.EditValue != null) ? txtPartEyeGlassCylLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_AXE_LEFT = ((txtPartEyeGlassAxeLeft.EditValue != null) ? txtPartEyeGlassAxeLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EXAM_EYESIGHT_GLASS_LEFT = ((txtPartExamEyeSightGlassLeft.EditValue != null) ? txtPartExamEyeSightGlassLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_KCDT_LEFT = ((txtPartEyeGlassKcdtLeft.EditValue != null) ? txtPartEyeGlassKcdtLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EYE_GLASS_ADD_LEFT = ((txtPartEyeGlassAddLeft.EditValue != null) ? txtPartEyeGlassAddLeft.Text.Trim().ToString() : null);
-			examServiceTemp.PART_EXAM_DERMATOLOGY = txtDaLieu.Text.Trim();
-			return examServiceTemp;
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_SPH_RIGHT = ((txtPartEyeGlassOldSphRight.EditValue != null) ? txtPartEyeGlassOldSphRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_CYL_RIGHT = ((txtPartEyeGlassOldCylRight.EditValue != null) ? txtPartEyeGlassOldCylRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_AXE_RIGHT = ((txtPartEyeGlassOldAxeRight.EditValue != null) ? txtPartEyeGlassOldAxeRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYESIGHT_GLASS_OLD_RIGHT = ((txtPartEyesightGlassOldRight.EditValue != null) ? txtPartEyesightGlassOldRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_KCDT_RIGHT = ((txtPartEyeGlassOldKcdtRight.EditValue != null) ? txtPartEyeGlassOldKcdtRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_ADD_RIGHT = ((txtPartEyeGlassOldAddRight.EditValue != null) ? txtPartEyeGlassOldAddRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_SPH_LEFT = ((txtPartEyeGlassOldSphLeft.EditValue != null) ? txtPartEyeGlassOldSphLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_CYL_LEFT = ((txtPartEyeGlassOldCylLeft.EditValue != null) ? txtPartEyeGlassOldCylLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_AXE_LEFT = ((txtPartEyeGlassOldAxeLeft.EditValue != null) ? txtPartEyeGlassOldAxeLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYESIGHT_GLASS_OLD_LEFT = ((txtPartEyesightGlassOldLeft.EditValue != null) ? txtPartEyesightGlassOldLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_KCDT_LEFT = ((txtPartEyeGlassOldKcdtLeft.EditValue != null) ? txtPartEyeGlassOldKcdtLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_OLD_ADD_LEFT = ((txtPartEyeGlassOldAddLeft.EditValue != null) ? txtPartEyeGlassOldAddLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_SPH_RIGHT = ((txtPartEyeGlassSphRight.EditValue != null) ? txtPartEyeGlassSphRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_CYL_RIGHT = ((txtPartEyeGlassCylRight.EditValue != null) ? txtPartEyeGlassCylRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_AXE_RIGHT = ((txtPartEyeGlassAxeRight.EditValue != null) ? txtPartEyeGlassAxeRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYESIGHT_GLASS_RIGHT = ((txtPartExamEyeSightGlassRight.EditValue != null) ? txtPartExamEyeSightGlassRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_KCDT_RIGHT = ((txtPartEyeGlassKcdtRight.EditValue != null) ? txtPartEyeGlassKcdtRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_ADD_RIGHT = ((txtPartEyeGlassAddRight.EditValue != null) ? txtPartEyeGlassAddRight.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_SPH_LEFT = ((txtPartEyeGlassSphLeft.EditValue != null) ? txtPartEyeGlassSphLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_CYL_LEFT = ((txtPartEyeGlassCylLeft.EditValue != null) ? txtPartEyeGlassCylLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_AXE_LEFT = ((txtPartEyeGlassAxeLeft.EditValue != null) ? txtPartEyeGlassAxeLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_EYESIGHT_GLASS_LEFT = ((txtPartExamEyeSightGlassLeft.EditValue != null) ? txtPartExamEyeSightGlassLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_KCDT_LEFT = ((txtPartEyeGlassKcdtLeft.EditValue != null) ? txtPartEyeGlassKcdtLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EYE_GLASS_ADD_LEFT = ((txtPartEyeGlassAddLeft.EditValue != null) ? txtPartEyeGlassAddLeft.Text.Trim().ToString() : null);
+			hIS_EXAM_SERVICE_TEMP.PART_EXAM_DERMATOLOGY = txtDaLieu.Text.Trim();
+			return hIS_EXAM_SERVICE_TEMP;
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
 		}
-		return examServiceTemp;
+		return hIS_EXAM_SERVICE_TEMP;
 	}
 
 	private bool ValidForButtonOtherClick()
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
-			long hospitalizationReasonRequired = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.HospitalizationReasonRequired"));
-			string PatientTypeCode = BackendDataWorker.Get<HIS_PATIENT_TYPE>().FirstOrDefault((HIS_PATIENT_TYPE o) => o.ID == treatment.TDL_PATIENT_TYPE_ID).PATIENT_TYPE_CODE;
-			if ((hospitalizationReasonRequired == 1 && string.IsNullOrEmpty(txtHospitalizationReason.Text.Trim())) || (string.IsNullOrEmpty(txtHospitalizationReason.Text.Trim()) && !string.IsNullOrEmpty(HisConfigCFG.HospitalizationReasonRequiredByPatientCode) && HisConfigCFG.HospitalizationReasonRequiredByPatientCode.Split(',').ToList().Contains(PatientTypeCode)))
+			long num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.HospitalizationReasonRequired"));
+			string pATIENT_TYPE_CODE = BackendDataWorker.Get<HIS_PATIENT_TYPE>().FirstOrDefault((HIS_PATIENT_TYPE o) => o.ID == treatment.TDL_PATIENT_TYPE_ID).PATIENT_TYPE_CODE;
+			if ((num == 1 && string.IsNullOrEmpty(txtHospitalizationReason.Text.Trim())) || (string.IsNullOrEmpty(txtHospitalizationReason.Text.Trim()) && !string.IsNullOrEmpty(HisConfigCFG.HospitalizationReasonRequiredByPatientCode) && HisConfigCFG.HospitalizationReasonRequiredByPatientCode.Split(',').ToList().Contains(pATIENT_TYPE_CODE)))
 			{
 				if (MessageBox.Show("Bắt buộc nhập lý do khám", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation) == DialogResult.OK)
 				{
@@ -19396,73 +19398,73 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private bool ValidIcd(bool isSave)
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
-			int icd_code = txtIcdCode.Text.Length;
-			LogSystem.Debug("Do dai ma cd chinh: " + icd_code);
-			int icd_name = CountVi.Count(cboIcds.Text) ?? 0;
-			LogSystem.Debug("Do dai ten cd chinh: " + icd_name);
-			int icd_code_sub = txtIcdSubCode.Text.Length;
-			LogSystem.Debug("Do dai ma cd phu: " + icd_code_sub);
-			int icd_text = CountVi.Count(txtIcdText.Text) ?? 0;
-			LogSystem.Debug("Do dai ten cd phu: " + icd_text);
-			int yhct_code = ((IcdCodeYHCT != null) ? IcdCodeYHCT.Length : 0);
-			LogSystem.Debug("Do dai ma cd yhct phu: " + yhct_code);
-			int yhct_sub_code = ((IcdSubCodeYHCT != null) ? IcdSubCodeYHCT.Length : 0);
-			LogSystem.Debug("Do dai ten cd yhct phu: " + yhct_sub_code);
-			string errror_string = "";
-			if (icd_code + icd_code_sub > 100)
+			int length = txtIcdCode.Text.Length;
+			LogSystem.Debug("Do dai ma cd chinh: " + length);
+			int num = CountVi.Count(cboIcds.Text) ?? 0;
+			LogSystem.Debug("Do dai ten cd chinh: " + num);
+			int length2 = txtIcdSubCode.Text.Length;
+			LogSystem.Debug("Do dai ma cd phu: " + length2);
+			int num2 = CountVi.Count(txtIcdText.Text) ?? 0;
+			LogSystem.Debug("Do dai ten cd phu: " + num2);
+			int num3 = ((IcdCodeYHCT != null) ? IcdCodeYHCT.Length : 0);
+			LogSystem.Debug("Do dai ma cd yhct phu: " + num3);
+			int num4 = ((IcdSubCodeYHCT != null) ? IcdSubCodeYHCT.Length : 0);
+			LogSystem.Debug("Do dai ten cd yhct phu: " + num4);
+			string value = "";
+			if (length + length2 > 100)
 			{
-				errror_string = "Mã chẩn đoán phụ nhập quá 100 ký tự";
+				value = "Mã chẩn đoán phụ nhập quá 100 ký tự";
 			}
-			else if (icd_name + icd_text > 1500)
+			else if (num + num2 > 1500)
 			{
-				errror_string = "Tên chẩn đoán phụ nhập quá 1500 ký tự";
+				value = "Tên chẩn đoán phụ nhập quá 1500 ký tự";
 			}
-			else if (yhct_code + yhct_sub_code > 255)
+			else if (num3 + num4 > 255)
 			{
-				errror_string = "Mã chẩn đoán YHCT phụ nhập quá 255 ký tự";
+				value = "Mã chẩn đoán YHCT phụ nhập quá 255 ký tự";
 			}
-			if (!string.IsNullOrEmpty(errror_string))
+			if (!string.IsNullOrEmpty(value))
 			{
 				if (isSave)
 				{
-					MessageBox.Show(this, errror_string, "Thông báo", MessageBoxButtons.OK);
+					MessageBox.Show(this, value, "Thông báo", MessageBoxButtons.OK);
 				}
 				isWarning = true;
-				valid = false;
+				result = false;
 			}
 		}
 		catch (Exception ex)
 		{
-			valid = false;
+			result = false;
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private bool ValidAddress()
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
 			if (HisConfigCFG.RequiredAddressOption && treatment != null && (string.IsNullOrEmpty(treatment.TDL_PATIENT_PROVINCE_CODE) || string.IsNullOrEmpty(treatment.TDL_PATIENT_DISTRICT_CODE) || string.IsNullOrEmpty(treatment.TDL_PATIENT_COMMUNE_CODE)))
 			{
 				MessageBox.Show("Bệnh nhân chưa nhập tỉnh - huyện - xã. Vui lòng bổ sung.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-				valid = false;
+				result = false;
 			}
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private bool ValidDhstOption()
@@ -19473,20 +19475,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				if (spinWeight.EditValue == null)
 				{
-					IEnumerable<HIS_CONFIG> configCode = from o in BackendDataWorker.Get<HIS_CONFIG>()
+					IEnumerable<HIS_CONFIG> source = from o in BackendDataWorker.Get<HIS_CONFIG>()
 						where o.KEY == "HIS.Desktop.Plugins.ExamServiceReqExecute.Dhst.RequiredWeightHeight_Option"
 						select o;
-					XtraMessageBox.Show($"Bắt buộc nhập thông tin Cân nặng (được thiết lập theo mã cấu hình hệ thống {configCode.ToList()[0].CONFIG_CODE})", HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.OK);
+					XtraMessageBox.Show($"Bắt buộc nhập thông tin Cân nặng (được thiết lập theo mã cấu hình hệ thống {source.ToList()[0].CONFIG_CODE})", HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.OK);
 					spinWeight.Focus();
 					return false;
 				}
 			}
 			else if (spinHeight.EditValue == null || spinWeight.EditValue == null)
 			{
-				IEnumerable<HIS_CONFIG> configCode2 = from o in BackendDataWorker.Get<HIS_CONFIG>()
+				IEnumerable<HIS_CONFIG> source2 = from o in BackendDataWorker.Get<HIS_CONFIG>()
 					where o.KEY == "HIS.Desktop.Plugins.ExamServiceReqExecute.Dhst.RequiredWeightHeight_Option"
 					select o;
-				XtraMessageBox.Show($"Bắt buộc nhập thông tin Chiều cao/Cân nặng (được thiết lập theo mã cấu hình hệ thống {configCode2.ToList()[0].CONFIG_CODE})", HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.OK);
+				XtraMessageBox.Show($"Bắt buộc nhập thông tin Chiều cao/Cân nặng (được thiết lập theo mã cấu hình hệ thống {source2.ToList()[0].CONFIG_CODE})", HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaCanhBao), MessageBoxButtons.OK);
 				if (spinHeight.EditValue == null)
 				{
 					spinHeight.Focus();
@@ -19522,16 +19524,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool ValidForSave()
 	{
-		bool valid = (IsValidForSave = true);
+		bool flag = (IsValidForSave = true);
 		try
 		{
 			LogSystem.Debug("ValidForSave 1");
 			if (!string.IsNullOrEmpty(txtIcdCode.Text.Trim()))
 			{
 				LogSystem.Debug("ValidForSave 2");
-				HIS_ICD listData = currentIcds.FirstOrDefault((HIS_ICD o) => o.ICD_CODE.Equals(txtIcdCode.Text.Trim()));
-				HIS_ICD result = ((listData != null) ? listData : null);
-				if (result == null)
+				HIS_ICD hIS_ICD = currentIcds.FirstOrDefault((HIS_ICD o) => o.ICD_CODE.Equals(txtIcdCode.Text.Trim()));
+				HIS_ICD hIS_ICD2 = ((hIS_ICD != null) ? hIS_ICD : null);
+				if (hIS_ICD2 == null)
 				{
 					LogSystem.Debug("ValidForSave 3");
 					txtIcdCode.DoValidate();
@@ -19544,13 +19546,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (!string.IsNullOrEmpty(txtIcdMainText.Text.Trim()))
 			{
-				long AllowToEditIcdName = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.AllowToEditIcdName"));
-				LogSystem.Warn("AllowToEditIcdName: " + AllowToEditIcdName + " _TextIcdName: " + _TextIcdName);
-				if (AllowToEditIcdName == 1 && !string.IsNullOrEmpty(_TextIcdName))
+				long num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.AllowToEditIcdName"));
+				LogSystem.Warn("AllowToEditIcdName: " + num + " _TextIcdName: " + _TextIcdName);
+				if (num == 1 && !string.IsNullOrEmpty(_TextIcdName))
 				{
-					string textICD = txtIcdMainText.Text.Trim();
-					LogSystem.Warn("AllowToEditIcdName: " + AllowToEditIcdName + " _TextIcdName: " + _TextIcdName + " textICD: " + textICD);
-					if (!textICD.StartsWith(_TextIcdName))
+					string text = txtIcdMainText.Text.Trim();
+					LogSystem.Warn("AllowToEditIcdName: " + num + " _TextIcdName: " + _TextIcdName + " textICD: " + text);
+					if (!text.StartsWith(_TextIcdName))
 					{
 						txtIcdMainText.DoValidate();
 						MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.CanhbaoKhongChoSuaICDName, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -19563,34 +19565,34 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			isNotCheckValidateIcdUC = false;
 			if ((HisConfigCFG.CheckIcdWhenSave == "1" || HisConfigCFG.CheckIcdWhenSave == "2") && isClickSaveFinish)
 			{
-				string icdCode = txtIcdCode.Text.Trim();
-				string icdSubCode = txtIcdSubCode.Text.Trim();
+				string text2 = txtIcdCode.Text.Trim();
+				string text3 = txtIcdSubCode.Text.Trim();
 				if (chkTreatmentFinish.Checked)
 				{
-					ExamTreatmentFinishResult data2 = treatmentFinishProcessor.GetIcd(ucTreatmentFinish) as ExamTreatmentFinishResult;
-					if (icdCode.Equals(data2.icdADOInTreatment.ICD_CODE))
+					ExamTreatmentFinishResult examTreatmentFinishResult = treatmentFinishProcessor.GetIcd(ucTreatmentFinish) as ExamTreatmentFinishResult;
+					if (text2.Equals(examTreatmentFinishResult.icdADOInTreatment.ICD_CODE))
 					{
 						isNotCheckValidateIcdUC = true;
-						if (data2.TreatmentFinishSDO != null)
+						if (examTreatmentFinishResult.TreatmentFinishSDO != null)
 						{
-							if (!string.IsNullOrEmpty(icdSubCode))
+							if (!string.IsNullOrEmpty(text3))
 							{
-								List<string> lstISC = icdSubCode.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-								List<string> lstISCuc = data2.TreatmentFinishSDO.IcdSubCode.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
-								lstISC.AddRange(lstISCuc);
-								icdSubCode = string.Join(";", lstISCuc.Distinct().ToList());
+								List<string> list = text3.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+								List<string> list2 = examTreatmentFinishResult.TreatmentFinishSDO.IcdSubCode.Split(";".ToCharArray(), StringSplitOptions.RemoveEmptyEntries).ToList();
+								list.AddRange(list2);
+								text3 = string.Join(";", list2.Distinct().ToList());
 							}
 							else
 							{
-								icdSubCode = data2.TreatmentFinishSDO.IcdSubCode;
+								text3 = examTreatmentFinishResult.TreatmentFinishSDO.IcdSubCode;
 							}
 						}
 					}
 				}
 				else if (chkHospitalize.Checked)
 				{
-					HospitalizeExamADO data = hospitalizeProcessor.GetIcd(ucHospitalize) as HospitalizeExamADO;
-					if (icdCode.Equals(data.icdADOInTreatment.ICD_CODE))
+					HospitalizeExamADO hospitalizeExamADO = hospitalizeProcessor.GetIcd(ucHospitalize) as HospitalizeExamADO;
+					if (text2.Equals(hospitalizeExamADO.icdADOInTreatment.ICD_CODE))
 					{
 						isNotCheckValidateIcdUC = true;
 					}
@@ -19599,14 +19601,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			LogSystem.Debug("ValidForSave 5");
 			dxValidationProviderForLeftPanel.RemoveControlError(txtIcdCode);
 			positionHandleControlLeft = -1;
-			valid = (IsValidForSave = dxValidationProviderForLeftPanel.Validate() && valid);
+			flag = (IsValidForSave = dxValidationProviderForLeftPanel.Validate() && flag);
 		}
 		catch (Exception ex)
 		{
-			valid = false;
+			flag = false;
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return flag;
 	}
 
 	private bool CheckWarningOverTotalPatientPrice()
@@ -19616,46 +19618,46 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (chkTreatmentFinish.Checked && treatment != null)
 			{
-				HIS_TREATMENT_TYPE treatmentType = BackendDataWorker.Get<HIS_TREATMENT_TYPE>().FirstOrDefault((HIS_TREATMENT_TYPE o) => o.ID == treatment.TDL_TREATMENT_TYPE_ID);
-				if (treatmentType != null && (treatmentType.FEE_DEBT_OPTION == 1 || treatmentType.FEE_DEBT_OPTION == 2))
+				HIS_TREATMENT_TYPE hIS_TREATMENT_TYPE = BackendDataWorker.Get<HIS_TREATMENT_TYPE>().FirstOrDefault((HIS_TREATMENT_TYPE o) => o.ID == treatment.TDL_TREATMENT_TYPE_ID);
+				if (hIS_TREATMENT_TYPE != null && (hIS_TREATMENT_TYPE.FEE_DEBT_OPTION == 1 || hIS_TREATMENT_TYPE.FEE_DEBT_OPTION == 2))
 				{
-					List<V_HIS_TREATMENT_FEE> treatmentFees = LoadTreatmentFee();
-					if (treatmentFees == null || treatmentFees.Count == 0)
+					List<V_HIS_TREATMENT_FEE> list = LoadTreatmentFee();
+					if (list == null || list.Count == 0)
 					{
 						return result = false;
 					}
-					decimal totalPrice = default(decimal);
-					decimal totalHeinPrice = default(decimal);
-					decimal totalPatientPrice = default(decimal);
-					decimal totalDeposit = default(decimal);
-					decimal totalDebt = default(decimal);
-					decimal totalBill = default(decimal);
-					decimal totalBillTransferAmount = default(decimal);
-					decimal totalRepay = default(decimal);
-					decimal total_obtained_price = default(decimal);
-					totalPrice = treatmentFees[0].TOTAL_PRICE ?? 0m;
-					totalHeinPrice = treatmentFees[0].TOTAL_HEIN_PRICE ?? 0m;
-					totalPatientPrice = treatmentFees[0].TOTAL_PATIENT_PRICE ?? 0m;
-					totalDeposit = treatmentFees[0].TOTAL_DEPOSIT_AMOUNT ?? 0m;
-					totalDebt = treatmentFees[0].TOTAL_DEBT_AMOUNT ?? 0m;
-					totalBill = treatmentFees[0].TOTAL_BILL_AMOUNT ?? 0m;
-					totalBillTransferAmount = treatmentFees[0].TOTAL_BILL_TRANSFER_AMOUNT ?? 0m;
-					totalRepay = treatmentFees[0].TOTAL_REPAY_AMOUNT ?? 0m;
-					total_obtained_price = totalDeposit + totalDebt + totalBill - totalBillTransferAmount - totalRepay;
-					decimal transfer = totalPatientPrice - total_obtained_price;
-					if (transfer > 0m)
+					decimal num = default(decimal);
+					decimal num2 = default(decimal);
+					decimal num3 = default(decimal);
+					decimal num4 = default(decimal);
+					decimal num5 = default(decimal);
+					decimal num6 = default(decimal);
+					decimal num7 = default(decimal);
+					decimal num8 = default(decimal);
+					decimal num9 = default(decimal);
+					num = list[0].TOTAL_PRICE ?? 0m;
+					num2 = list[0].TOTAL_HEIN_PRICE ?? 0m;
+					num3 = list[0].TOTAL_PATIENT_PRICE ?? 0m;
+					num4 = list[0].TOTAL_DEPOSIT_AMOUNT ?? 0m;
+					num5 = list[0].TOTAL_DEBT_AMOUNT ?? 0m;
+					num6 = list[0].TOTAL_BILL_AMOUNT ?? 0m;
+					num7 = list[0].TOTAL_BILL_TRANSFER_AMOUNT ?? 0m;
+					num8 = list[0].TOTAL_REPAY_AMOUNT ?? 0m;
+					num9 = num4 + num5 + num6 - num7 - num8;
+					decimal num10 = num3 - num9;
+					if (num10 > 0m)
 					{
-						if (treatmentType.FEE_DEBT_OPTION == 1)
+						if (hIS_TREATMENT_TYPE.FEE_DEBT_OPTION == 1)
 						{
-							DialogResult myResult = XtraMessageBox.Show(this, $"Bệnh nhân đang thiếu viện phí {Inventec.Common.Number.Convert.NumberToString(transfer, ConfigApplications.NumberSeperator)} đồng. Bạn có muốn tiếp tục?", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
-							if (myResult != DialogResult.OK)
+							DialogResult dialogResult = XtraMessageBox.Show(this, $"Bệnh nhân đang thiếu viện phí {Inventec.Common.Number.Convert.NumberToString(num10, ConfigApplications.NumberSeperator)} đồng. Bạn có muốn tiếp tục?", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+							if (dialogResult != DialogResult.OK)
 							{
 								result = false;
 							}
 						}
 						else
 						{
-							XtraMessageBox.Show(this, $"Bệnh nhân đang thiếu viện phí {Inventec.Common.Number.Convert.NumberToString(transfer, ConfigApplications.NumberSeperator)} đồng.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OK);
+							XtraMessageBox.Show(this, $"Bệnh nhân đang thiếu viện phí {Inventec.Common.Number.Convert.NumberToString(num10, ConfigApplications.NumberSeperator)} đồng.", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OK);
 							result = false;
 						}
 					}
@@ -19672,22 +19674,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool CheckExamFinish(HisServiceReqExamUpdateSDO hisServiceReqSDO)
 	{
-		bool result = true;
+		bool flag = true;
 		try
 		{
 			string error = "";
-			result = ValidateFinishTime(hisServiceReqSDO, ref error);
-			if (!result)
+			flag = ValidateFinishTime(hisServiceReqSDO, ref error);
+			if (!flag)
 			{
 				MessageBox.Show(error, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 			}
 		}
 		catch (Exception ex)
 		{
-			result = false;
+			flag = false;
 			LogSystem.Warn(ex);
 		}
-		return result;
+		return flag;
 	}
 
 	private bool ValidateFinishTime(HisServiceReqExamUpdateSDO hisServiceReqSDO, ref string error)
@@ -19729,19 +19731,19 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool CheckHospitalizeTime(HisServiceReqExamUpdateSDO hisServiceReqSDO)
 	{
-		bool result = true;
+		bool flag = true;
 		try
 		{
 			if (hisServiceReqSDO.HospitalizeSDO != null && treatment != null)
 			{
 				string error = "";
-				bool validateFinisTime = ValidateFinishTime(hisServiceReqSDO, ref error);
+				bool flag2 = ValidateFinishTime(hisServiceReqSDO, ref error);
 				if (hisServiceReqSDO.HospitalizeSDO.Time > 0 && hisServiceReqSDO.HospitalizeSDO.Time < treatment.IN_TIME)
 				{
 					error += HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThoiGianNhapVienNhoHonThoiGianVaoVien;
-					result = false;
+					flag = false;
 				}
-				if (!result)
+				if (!flag)
 				{
 					MessageBox.Show(error, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 				}
@@ -19749,10 +19751,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		}
 		catch (Exception ex)
 		{
-			result = false;
+			flag = false;
 			LogSystem.Warn(ex);
 		}
-		return result;
+		return flag;
 	}
 
 	private bool CheckSunSatAppointmentTime(HisServiceReqExamUpdateSDO hisServiceReqSDO)
@@ -19762,15 +19764,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (hisServiceReqSDO.TreatmentFinishSDO != null && hisServiceReqSDO.TreatmentFinishSDO.AppointmentTime.HasValue)
 			{
-				DateTime dtAppointmentTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(hisServiceReqSDO.TreatmentFinishSDO.AppointmentTime.Value) ?? DateTime.Now;
-				if (dtAppointmentTime.DayOfWeek == DayOfWeek.Sunday)
+				DateTime dateTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(hisServiceReqSDO.TreatmentFinishSDO.AppointmentTime.Value) ?? DateTime.Now;
+				if (dateTime.DayOfWeek == DayOfWeek.Sunday)
 				{
 					if (XtraMessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.CanhBaoNgayHenLaChuNhat, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 					{
 						return false;
 					}
 				}
-				else if (dtAppointmentTime.DayOfWeek == DayOfWeek.Saturday && XtraMessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.CanhBaoNgayHenLaThuBay, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+				else if (dateTime.DayOfWeek == DayOfWeek.Saturday && XtraMessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.CanhBaoNgayHenLaThuBay, HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				{
 					return false;
 				}
@@ -19782,35 +19784,35 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (hisServiceReqSDO.TreatmentFinishSDO != null && hisServiceReqSDO.TreatmentFinishSDO.AppointmentExamRoomIds != null && hisServiceReqSDO.TreatmentFinishSDO.AppointmentExamRoomIds.Count > 0)
 			{
-				List<HIS_EXECUTE_ROOM> listRoom = (from o in BackendDataWorker.Get<HIS_EXECUTE_ROOM>()
+				List<HIS_EXECUTE_ROOM> source = (from o in BackendDataWorker.Get<HIS_EXECUTE_ROOM>()
 					where hisServiceReqSDO.TreatmentFinishSDO.AppointmentExamRoomIds.Contains(o.ROOM_ID)
 					select o).ToList();
-				List<HIS_EXECUTE_ROOM> roomConfig = listRoom.Where((HIS_EXECUTE_ROOM o) => o.MAX_APPOINTMENT_BY_DAY.HasValue && o.MAX_APPOINTMENT_BY_DAY.Value > 0).ToList();
-				if (roomConfig != null && roomConfig.Count > 0)
+				List<HIS_EXECUTE_ROOM> list = source.Where((HIS_EXECUTE_ROOM o) => o.MAX_APPOINTMENT_BY_DAY.HasValue && o.MAX_APPOINTMENT_BY_DAY.Value > 0).ToList();
+				if (list != null && list.Count > 0)
 				{
-					HisExecuteRoomAppointedFilter exrFilter = new HisExecuteRoomAppointedFilter();
-					exrFilter.EXECUTE_ROOM_IDs = roomConfig.Select((HIS_EXECUTE_ROOM s) => s.ID).ToList();
+					HisExecuteRoomAppointedFilter hisExecuteRoomAppointedFilter = new HisExecuteRoomAppointedFilter();
+					hisExecuteRoomAppointedFilter.EXECUTE_ROOM_IDs = list.Select((HIS_EXECUTE_ROOM s) => s.ID).ToList();
 					if (hisServiceReqSDO.TreatmentFinishSDO.AppointmentTime.HasValue)
 					{
-						exrFilter.INTR_OR_APPOINT_DATE = long.Parse(hisServiceReqSDO.TreatmentFinishSDO.AppointmentTime.Value.ToString().Substring(0, 8) + "000000");
+						hisExecuteRoomAppointedFilter.INTR_OR_APPOINT_DATE = long.Parse(hisServiceReqSDO.TreatmentFinishSDO.AppointmentTime.Value.ToString().Substring(0, 8) + "000000");
 					}
 					else
 					{
-						exrFilter.INTR_OR_APPOINT_DATE = HisServiceReqView.INTRUCTION_DATE;
+						hisExecuteRoomAppointedFilter.INTR_OR_APPOINT_DATE = HisServiceReqView.INTRUCTION_DATE;
 					}
-					List<HisExecuteRoomAppointedSDO> rsApi = new BackendAdapter(param).Get<List<HisExecuteRoomAppointedSDO>>("api/HisExecuteRoom/GetCountAppointed", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, exrFilter, param);
-					if (rsApi != null && rsApi.Count > 0)
+					List<HisExecuteRoomAppointedSDO> list2 = new BackendAdapter(param).Get<List<HisExecuteRoomAppointedSDO>>("api/HisExecuteRoom/GetCountAppointed", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExecuteRoomAppointedFilter, param);
+					if (list2 != null && list2.Count > 0)
 					{
-						List<string> lstMess = new List<string>();
-						foreach (HisExecuteRoomAppointedSDO item in rsApi)
+						List<string> list3 = new List<string>();
+						foreach (HisExecuteRoomAppointedSDO item in list2)
 						{
-							HIS_EXECUTE_ROOM room = roomConfig.FirstOrDefault((HIS_EXECUTE_ROOM o) => o.ID == item.ExecuteRoomId);
-							if (room != null && (room.MAX_APPOINTMENT_BY_DAY ?? 0) <= (item.CurrentAmount ?? 0))
+							HIS_EXECUTE_ROOM hIS_EXECUTE_ROOM = list.FirstOrDefault((HIS_EXECUTE_ROOM o) => o.ID == item.ExecuteRoomId);
+							if (hIS_EXECUTE_ROOM != null && (hIS_EXECUTE_ROOM.MAX_APPOINTMENT_BY_DAY ?? 0) <= (item.CurrentAmount ?? 0))
 							{
-								lstMess.Add($"{item.ExecuteRoomName} ({item.CurrentAmount ?? 0}/{item.MaxAmount ?? 0})");
+								list3.Add($"{item.ExecuteRoomName} ({item.CurrentAmount ?? 0}/{item.MaxAmount ?? 0})");
 							}
 						}
-						if (lstMess.Count > 0 && XtraMessageBox.Show(string.Format("Phòng khám có số lượt hẹn khám vượt số lượt cho phép: {0} Bạn có muốn tiếp tục?", string.Join(", ", lstMess)), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+						if (list3.Count > 0 && XtraMessageBox.Show(string.Format("Phòng khám có số lượt hẹn khám vượt số lượt cho phép: {0} Bạn có muốn tiếp tục?", string.Join(", ", list3)), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
 						{
 							return false;
 						}
@@ -19835,45 +19837,45 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				if (checkSameHeinCFG == 1)
 				{
-					bool checkSameHein = false;
-					CommonParam param = new CommonParam();
-					HisPatientTypeAlterViewFilter patientTypeAlterFilter = new HisPatientTypeAlterViewFilter();
-					patientTypeAlterFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-					List<V_HIS_PATIENT_TYPE_ALTER> patientTypeAlter = new BackendAdapter(param).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientTypeAlterFilter, param);
-					if (patientTypeAlter != null && patientTypeAlter.Count >= 2)
+					bool flag = false;
+					CommonParam commonParam = new CommonParam();
+					HisPatientTypeAlterViewFilter hisPatientTypeAlterViewFilter = new HisPatientTypeAlterViewFilter();
+					hisPatientTypeAlterViewFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
+					List<V_HIS_PATIENT_TYPE_ALTER> list = new BackendAdapter(commonParam).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewFilter, commonParam);
+					if (list != null && list.Count >= 2)
 					{
-						foreach (V_HIS_PATIENT_TYPE_ALTER item in patientTypeAlter)
+						foreach (V_HIS_PATIENT_TYPE_ALTER item in list)
 						{
-							List<V_HIS_PATIENT_TYPE_ALTER> sameHein = patientTypeAlter.Where((V_HIS_PATIENT_TYPE_ALTER o) => o.HEIN_CARD_NUMBER == item.HEIN_CARD_NUMBER).ToList();
-							if (sameHein == null || sameHein.Count < 2)
+							List<V_HIS_PATIENT_TYPE_ALTER> list2 = list.Where((V_HIS_PATIENT_TYPE_ALTER o) => o.HEIN_CARD_NUMBER == item.HEIN_CARD_NUMBER).ToList();
+							if (list2 == null || list2.Count < 2)
 							{
 								continue;
 							}
-							List<string> checkHeinOrg = sameHein.Select((V_HIS_PATIENT_TYPE_ALTER o) => o.HEIN_MEDI_ORG_CODE).Distinct().ToList();
-							if (checkHeinOrg.Count > 1)
+							List<string> list3 = list2.Select((V_HIS_PATIENT_TYPE_ALTER o) => o.HEIN_MEDI_ORG_CODE).Distinct().ToList();
+							if (list3.Count > 1)
 							{
-								checkSameHein = true;
+								flag = true;
 								break;
 							}
-							List<string> checkRightRoute = sameHein.Select((V_HIS_PATIENT_TYPE_ALTER o) => o.RIGHT_ROUTE_CODE).Distinct().ToList();
-							if (checkRightRoute.Count == 1)
+							List<string> list4 = list2.Select((V_HIS_PATIENT_TYPE_ALTER o) => o.RIGHT_ROUTE_CODE).Distinct().ToList();
+							if (list4.Count == 1)
 							{
-								if (checkRightRoute.FirstOrDefault() == "DT")
+								if (list4.FirstOrDefault() == "DT")
 								{
-									List<string> checkRightRouteType = sameHein.Select((V_HIS_PATIENT_TYPE_ALTER o) => o.RIGHT_ROUTE_TYPE_CODE).Distinct().ToList();
-									if (checkRightRouteType.Count > 1)
+									List<string> list5 = list2.Select((V_HIS_PATIENT_TYPE_ALTER o) => o.RIGHT_ROUTE_TYPE_CODE).Distinct().ToList();
+									if (list5.Count > 1)
 									{
-										checkSameHein = true;
+										flag = true;
 										break;
 									}
 								}
 								continue;
 							}
-							checkSameHein = true;
+							flag = true;
 							break;
 						}
 					}
-					if (checkSameHein)
+					if (flag)
 					{
 						XtraMessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.CanhBaoSaiThongTinTheBHYT, HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaThongBao));
 						result = false;
@@ -19881,16 +19883,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				}
 				if (hisServiceReqSDO.TreatmentFinishSDO.CreateOutPatientMediRecord && hisServiceReqSDO.TreatmentFinishSDO.ProgramId > 0)
 				{
-					HIS_PROGRAM program = (from o in BackendDataWorker.Get<HIS_PROGRAM>()
+					HIS_PROGRAM hIS_PROGRAM = (from o in BackendDataWorker.Get<HIS_PROGRAM>()
 						where o.ID == hisServiceReqSDO.TreatmentFinishSDO.ProgramId
 						select o).FirstOrDefault();
-					if (program != null)
+					if (hIS_PROGRAM != null)
 					{
-						int? num = program.AUTO_CHANGE_TO_OUT_PATIENT;
+						int? num = hIS_PROGRAM.AUTO_CHANGE_TO_OUT_PATIENT;
 						int num2 = 1;
 						if (num.GetValueOrDefault() == num2 && num.HasValue && treatment.TDL_TREATMENT_TYPE_ID != 2)
 						{
-							XtraMessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ChuongTrinhBatBuocChonDienDieuTriNgoaiTruHoSoSeDuocTuDongCapNhatSangDienDieuTriNgoaiTru, program.PROGRAM_NAME), HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaThongBao));
+							XtraMessageBox.Show(string.Format(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ChuongTrinhBatBuocChonDienDieuTriNgoaiTruHoSoSeDuocTuDongCapNhatSangDienDieuTriNgoaiTru, hIS_PROGRAM.PROGRAM_NAME), HIS.Desktop.LibraryMessage.MessageUtil.GetMessage(HIS.Desktop.LibraryMessage.Message.Enum.TieuDeCuaSoThongBaoLaThongBao));
 						}
 					}
 				}
@@ -19941,13 +19943,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					return false;
 				}
-				HIS_TREATMENT treatment = this.treatment;
-				if (hisServiceReqSDO.ExamAdditionSDO != null && treatment != null && treatment.TDL_HEIN_CARD_NUMBER != null && treatment.TDL_TREATMENT_TYPE_ID != 3 && treatment.TDL_TREATMENT_TYPE_ID != 2)
+				HIS_TREATMENT hIS_TREATMENT = treatment;
+				if (hisServiceReqSDO.ExamAdditionSDO != null && hIS_TREATMENT != null && hIS_TREATMENT.TDL_HEIN_CARD_NUMBER != null && hIS_TREATMENT.TDL_TREATMENT_TYPE_ID != 3 && hIS_TREATMENT.TDL_TREATMENT_TYPE_ID != 2)
 				{
-					V_HIS_EXECUTE_ROOM executeRoom = new V_HIS_EXECUTE_ROOM();
-					if (HisConfigs.Get<string>("HIS.Desktop.WarningOverExamBhyt") == "1" && CheckOverExamBhyt(hisServiceReqSDO.ExamAdditionSDO, ref executeRoom) && executeRoom.MAX_REQ_BHYT_BY_DAY.HasValue)
+					V_HIS_EXECUTE_ROOM data = new V_HIS_EXECUTE_ROOM();
+					if (HisConfigs.Get<string>("HIS.Desktop.WarningOverExamBhyt") == "1" && CheckOverExamBhyt(hisServiceReqSDO.ExamAdditionSDO, ref data) && data.MAX_REQ_BHYT_BY_DAY.HasValue)
 					{
-						result = XtraMessageBox.Show(executeRoom.EXECUTE_ROOM_NAME + " đã vượt quá " + executeRoom.MAX_REQ_BHYT_BY_DAY + " lượt khám BHYT trong ngày. Bạn có muốn thực hiện không?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.Yes;
+						result = XtraMessageBox.Show(data.EXECUTE_ROOM_NAME + " đã vượt quá " + data.MAX_REQ_BHYT_BY_DAY + " lượt khám BHYT trong ngày. Bạn có muốn thực hiện không?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.Yes;
 					}
 				}
 			}
@@ -19962,28 +19964,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool CheckOverExamBhyt(HisServiceReqExamAdditionSDO input, ref V_HIS_EXECUTE_ROOM data)
 	{
-		bool rs = false;
+		bool result = false;
 		try
 		{
 			if (input.AdditionRoomId > 0)
 			{
-				V_HIS_EXECUTE_ROOM executeRoom = BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>().FirstOrDefault((V_HIS_EXECUTE_ROOM o) => o.ROOM_ID == input.AdditionRoomId);
-				if (executeRoom != null)
+				V_HIS_EXECUTE_ROOM v_HIS_EXECUTE_ROOM = BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>().FirstOrDefault((V_HIS_EXECUTE_ROOM o) => o.ROOM_ID == input.AdditionRoomId);
+				if (v_HIS_EXECUTE_ROOM != null)
 				{
-					data = executeRoom;
-					CommonParam param = new CommonParam();
-					HisSereServBhytOutpatientExamFilter filter = new HisSereServBhytOutpatientExamFilter();
-					long now = Inventec.Common.DateTime.Get.Now() ?? 0;
-					if (now > 0 && now.ToString().Length > 8)
+					data = v_HIS_EXECUTE_ROOM;
+					CommonParam commonParam = new CommonParam();
+					HisSereServBhytOutpatientExamFilter hisSereServBhytOutpatientExamFilter = new HisSereServBhytOutpatientExamFilter();
+					long num = Inventec.Common.DateTime.Get.Now() ?? 0;
+					if (num > 0 && num.ToString().Length > 8)
 					{
-						filter.INTRUCTION_DATE = Parse.ToInt64(now.ToString().Substring(0, 8) + "000000");
+						hisSereServBhytOutpatientExamFilter.INTRUCTION_DATE = Parse.ToInt64(num.ToString().Substring(0, 8) + "000000");
 					}
-					filter.ROOM_IDs = new List<long>();
-					filter.ROOM_IDs.Add(executeRoom.ROOM_ID);
-					List<HIS_SERE_SERV> rsApi = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("api/HisSereServ/GetSereServBhytOutpatientExam", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-					if (rsApi != null && rsApi.Count >= (executeRoom.MAX_REQ_BHYT_BY_DAY ?? 0))
+					hisSereServBhytOutpatientExamFilter.ROOM_IDs = new List<long>();
+					hisSereServBhytOutpatientExamFilter.ROOM_IDs.Add(v_HIS_EXECUTE_ROOM.ROOM_ID);
+					List<HIS_SERE_SERV> list = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("api/HisSereServ/GetSereServBhytOutpatientExam", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServBhytOutpatientExamFilter, commonParam);
+					if (list != null && list.Count >= (v_HIS_EXECUTE_ROOM.MAX_REQ_BHYT_BY_DAY ?? 0))
 					{
-						rs = true;
+						result = true;
 					}
 				}
 				else
@@ -19997,26 +19999,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			LogSystem.Warn(ex);
 			return false;
 		}
-		return rs;
+		return result;
 	}
 
 	private bool CheckFinishTime(HisServiceReqExamUpdateSDO data)
 	{
-		bool rs = false;
+		bool result = false;
 		try
 		{
-			HisSereServFilter ssFilter = new HisSereServFilter();
-			ssFilter.TREATMENT_ID = data.TreatmentFinishSDO.TreatmentId;
-			ssFilter.HAS_EXECUTE = true;
-			List<HIS_SERE_SERV> hisSereServs = new BackendAdapter(new CommonParam()).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, ssFilter, SessionManager.ActionLostToken, null);
-			if (hisSereServs != null || hisSereServs.Count > 0)
+			HisSereServFilter hisSereServFilter = new HisSereServFilter();
+			hisSereServFilter.TREATMENT_ID = data.TreatmentFinishSDO.TreatmentId;
+			hisSereServFilter.HAS_EXECUTE = true;
+			List<HIS_SERE_SERV> list = new BackendAdapter(new CommonParam()).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, SessionManager.ActionLostToken, null);
+			if (list != null || list.Count > 0)
 			{
-				List<HIS_SERE_SERV> listData = hisSereServs.Where((HIS_SERE_SERV o) => o.AMOUNT > 0m && o.TDL_INTRUCTION_TIME > data.TreatmentFinishSDO.TreatmentFinishTime).ToList();
-				if (listData != null && listData.Count > 0)
+				List<HIS_SERE_SERV> list2 = list.Where((HIS_SERE_SERV o) => o.AMOUNT > 0m && o.TDL_INTRUCTION_TIME > data.TreatmentFinishSDO.TreatmentFinishTime).ToList();
+				if (list2 != null && list2.Count > 0)
 				{
-					List<string> listCode = listData.Select((HIS_SERE_SERV s) => s.TDL_SERVICE_REQ_CODE).Distinct().ToList();
-					XtraMessageBox.Show(string.Format("Thời gian kết thúc điều trị nhỏ hơn thời gian y lệnh của các mã yêu cầu sau: {0}", string.Join(",", listCode)), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, DefaultBoolean.True);
-					rs = true;
+					List<string> values = list2.Select((HIS_SERE_SERV s) => s.TDL_SERVICE_REQ_CODE).Distinct().ToList();
+					XtraMessageBox.Show(string.Format("Thời gian kết thúc điều trị nhỏ hơn thời gian y lệnh của các mã yêu cầu sau: {0}", string.Join(",", values)), HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao, DefaultBoolean.True);
+					result = true;
 				}
 			}
 		}
@@ -20025,16 +20027,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			LogSystem.Warn(ex);
 			return false;
 		}
-		return rs;
+		return result;
 	}
 
 	private void TreatmentFinishSuccess()
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HIS_SERVICE_REQ finishExam = new BackendAdapter(param).Post<HIS_SERVICE_REQ>("/api/HisServiceReq/Finish", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, HisServiceReqView.ID, param);
-			if (finishExam != null)
+			CommonParam commonParam = new CommonParam();
+			HIS_SERVICE_REQ hIS_SERVICE_REQ = new BackendAdapter(commonParam).Post<HIS_SERVICE_REQ>("/api/HisServiceReq/Finish", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, HisServiceReqView.ID, commonParam);
+			if (hIS_SERVICE_REQ != null)
 			{
 				TabControlBaseProcess.CloseSelectedTabPage(SessionManager.GetTabControlMain());
 			}
@@ -20059,52 +20061,52 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool ProcessExamServiceReqExecute(V_HIS_SERVICE_REQ HisServiceReqWithOrderSDO, HisServiceReqExamUpdateSDO examServiceReqUpdateSDO)
 	{
-		bool valid = true;
+		bool flag = true;
 		try
 		{
-			bool success = true;
+			bool flag2 = true;
 			if (chkHospitalize.Checked)
 			{
 				long DepartmentID = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).DepartmentId;
-				HisServiceReqFilter _reqFilter = new HisServiceReqFilter();
-				_reqFilter.TREATMENT_ID = treatmentId;
-				_reqFilter.REQUEST_DEPARTMENT_ID = DepartmentID;
-				List<HIS_SERVICE_REQ> dataReqs = new BackendAdapter(null).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, _reqFilter, null);
-				List<HIS_SERVICE_REQ> hisser_ = new List<HIS_SERVICE_REQ>();
-				if (dataReqs != null && dataReqs.Count > 0)
+				HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+				hisServiceReqFilter.TREATMENT_ID = treatmentId;
+				hisServiceReqFilter.REQUEST_DEPARTMENT_ID = DepartmentID;
+				List<HIS_SERVICE_REQ> list = new BackendAdapter(null).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, null);
+				List<HIS_SERVICE_REQ> list2 = new List<HIS_SERVICE_REQ>();
+				if (list != null && list.Count > 0)
 				{
-					foreach (long item in dataReqs.Select((HIS_SERVICE_REQ o) => o.INTRUCTION_TIME))
+					foreach (long item in list.Select((HIS_SERVICE_REQ o) => o.INTRUCTION_TIME))
 					{
-						DateTime t1 = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(item) ?? DateTime.Now;
-						DateTime t2 = DateTime.Now;
-						if (t1 > t2)
+						DateTime dateTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(item) ?? DateTime.Now;
+						DateTime now = DateTime.Now;
+						if (dateTime > now)
 						{
-							IEnumerable<HIS_SERVICE_REQ> data = dataReqs.Where((HIS_SERVICE_REQ o) => o.INTRUCTION_TIME == item);
-							hisser_.AddRange(data);
+							IEnumerable<HIS_SERVICE_REQ> collection = list.Where((HIS_SERVICE_REQ o) => o.INTRUCTION_TIME == item);
+							list2.AddRange(collection);
 						}
 					}
 				}
-				if (hisser_ != null && hisser_.Count > 0)
+				if (list2 != null && list2.Count > 0)
 				{
-					success = false;
-					string TB1 = string.Join(",", hisser_.Select((HIS_SERVICE_REQ o) => o.SERVICE_REQ_CODE).ToList().Distinct()).ToString();
-					string Khoa1 = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == DepartmentID).DEPARTMENT_NAME;
+					flag2 = false;
+					string text = string.Join(",", list2.Select((HIS_SERVICE_REQ o) => o.SERVICE_REQ_CODE).ToList().Distinct()).ToString();
+					string dEPARTMENT_NAME = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == DepartmentID).DEPARTMENT_NAME;
 					HospitalizeExamADO hisDepartmentTranHospitalizeSDO = hospitalizeProcessor.GetValue(ucHospitalize) as HospitalizeExamADO;
 					if (hisDepartmentTranHospitalizeSDO != null)
 					{
-						string Khoa2 = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.DepartmentId).DEPARTMENT_NAME;
-						string TB2 = "Các y lệnh " + TB1 + " " + Khoa1 + " có thời gian y lệnh lớn hơn thời gian hiện tại nhập viện của " + Khoa2 + ". Bạn có muốn tiếp tục?";
-						success = XtraMessageBox.Show(TB2, "Thông Báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
+						string dEPARTMENT_NAME2 = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.DepartmentId).DEPARTMENT_NAME;
+						string text2 = "Các y lệnh " + text + " " + dEPARTMENT_NAME + " có thời gian y lệnh lớn hơn thời gian hiện tại nhập viện của " + dEPARTMENT_NAME2 + ". Bạn có muốn tiếp tục?";
+						flag2 = XtraMessageBox.Show(text2, "Thông Báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes;
 					}
 				}
 			}
-			valid = success;
-			if (success && HisServiceReqWithOrderSDO != null && examServiceReqUpdateSDO != null)
+			flag = flag2;
+			if (flag2 && HisServiceReqWithOrderSDO != null && examServiceReqUpdateSDO != null)
 			{
 				ProcessExamServiceReqDTO(ref examServiceReqUpdateSDO);
-				valid = valid && ProcessExamAddition(ref examServiceReqUpdateSDO, HisServiceReqWithOrderSDO);
+				flag = flag && ProcessExamAddition(ref examServiceReqUpdateSDO, HisServiceReqWithOrderSDO);
 				ProcessHospitalize(ref examServiceReqUpdateSDO);
-				valid = valid && ProcessTreatmentFinish(ref examServiceReqUpdateSDO);
+				flag = flag && ProcessTreatmentFinish(ref examServiceReqUpdateSDO);
 				ProcessExamFinish(ref examServiceReqUpdateSDO);
 				ProcessExamSereIcdDTO(ref examServiceReqUpdateSDO);
 				ProcessExamSereNextTreatmentIntructionDTO(ref examServiceReqUpdateSDO);
@@ -20117,19 +20119,19 @@ public class ExamServiceReqExecuteControl : UserControlBase
 						examServiceReqUpdateSDO.TreatmentFinishSDO.HospitalizeReasonName = treatment.HOSPITALIZE_REASON_NAME;
 					}
 				}
-				catch (Exception ex2)
+				catch (Exception ex)
 				{
 					LogSystem.Debug("Loi khi map du lieu vao TreatmentFinishSDO.HospitalizeReasonCode");
-					LogSystem.Warn(ex2);
+					LogSystem.Warn(ex);
 				}
 			}
 		}
-		catch (Exception ex)
+		catch (Exception ex2)
 		{
-			valid = false;
-			LogSystem.Warn(ex);
+			flag = false;
+			LogSystem.Warn(ex2);
 		}
-		return valid;
+		return flag;
 	}
 
 	private void ProcessExamServiceReqDTO(ref HisServiceReqExamUpdateSDO examServiceReqUpdateSDO)
@@ -20259,10 +20261,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				examServiceReqUpdateSDO.PatientCaseId = null;
 			}
-			List<long> lstContraindications = contraindicationSelecteds.Select((HIS_CONTRAINDICATION o) => o.ID).ToList();
-			if (lstContraindications != null && lstContraindications.Count > 0)
+			List<long> list = contraindicationSelecteds.Select((HIS_CONTRAINDICATION o) => o.ID).ToList();
+			if (list != null && list.Count > 0)
 			{
-				examServiceReqUpdateSDO.ContraindicationIds = lstContraindications;
+				examServiceReqUpdateSDO.ContraindicationIds = list;
 			}
 			examServiceReqUpdateSDO.NotePatient = CurrentPatient.NOTE;
 			examServiceReqUpdateSDO.PartExamEyeStPlus = (chkPartExamEyeStPlus.Checked ? new short?(1) : new short?(0));
@@ -20311,59 +20313,59 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			if (chkExamServiceAdd.Checked && ucExamAddition != null && examServiceAddProcessor.GetValueV2(ucExamAddition) is ExamServiceAddADO hisServiceReqExamAdditionSDO)
+			if (chkExamServiceAdd.Checked && ucExamAddition != null && examServiceAddProcessor.GetValueV2(ucExamAddition) is ExamServiceAddADO examServiceAddADO)
 			{
-				List<long> serviceIds = new List<long>();
-				if (hisServiceReqExamAdditionSDO.AdditionServiceId.HasValue)
+				List<long> list = new List<long>();
+				if (examServiceAddADO.AdditionServiceId.HasValue)
 				{
-					serviceIds.Add(hisServiceReqExamAdditionSDO.AdditionServiceId.Value);
+					list.Add(examServiceAddADO.AdditionServiceId.Value);
 				}
-				List<HIS_SERE_SERV> sereServWithMinDurations = GetSereServWithMinDuration(treatment.PATIENT_ID, serviceIds);
-				if (sereServWithMinDurations != null && sereServWithMinDurations.Count > 0)
+				List<HIS_SERE_SERV> sereServWithMinDuration = GetSereServWithMinDuration(treatment.PATIENT_ID, list);
+				if (sereServWithMinDuration != null && sereServWithMinDuration.Count > 0)
 				{
-					string sereServMinDurationStr = "";
-					foreach (HIS_SERE_SERV item in sereServWithMinDurations)
+					string text = "";
+					foreach (HIS_SERE_SERV item in sereServWithMinDuration)
 					{
-						sereServMinDurationStr = sereServMinDurationStr + item.TDL_SERVICE_CODE + " - " + item.TDL_SERVICE_NAME + "; ";
+						text = text + item.TDL_SERVICE_CODE + " - " + item.TDL_SERVICE_NAME + "; ";
 					}
-					if (MessageBox.Show($"Các dịch vụ sau có thời gian chỉ định nằm trong khoảng thời gian không cho phép: {sereServMinDurationStr} .Bạn có muốn tiếp tục?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.No)
+					if (MessageBox.Show($"Các dịch vụ sau có thời gian chỉ định nằm trong khoảng thời gian không cho phép: {text} .Bạn có muốn tiếp tục?", "Thông báo", MessageBoxButtons.YesNo) == DialogResult.No)
 					{
 						serviceReqUpdateSDO.ExamAdditionSDO = null;
 						return false;
 					}
 				}
 				serviceReqUpdateSDO.ExamAdditionSDO = new HisServiceReqExamAdditionSDO();
-				serviceReqUpdateSDO.ExamAdditionSDO.AdditionRoomId = hisServiceReqExamAdditionSDO.AdditionRoomId;
-				serviceReqUpdateSDO.ExamAdditionSDO.AdditionServiceId = hisServiceReqExamAdditionSDO.AdditionServiceId;
-				serviceReqUpdateSDO.ExamAdditionSDO.CurrentSereServId = hisServiceReqExamAdditionSDO.CurrentSereServId;
-				serviceReqUpdateSDO.ExamAdditionSDO.IsChangeDepartment = hisServiceReqExamAdditionSDO.IsChangeDepartment;
-				serviceReqUpdateSDO.ExamAdditionSDO.IsPrimary = hisServiceReqExamAdditionSDO.IsPrimary;
-				serviceReqUpdateSDO.ExamAdditionSDO.IsFinishCurrent = hisServiceReqExamAdditionSDO.IsFinishCurrent;
-				serviceReqUpdateSDO.ExamAdditionSDO.RequestRoomId = hisServiceReqExamAdditionSDO.RequestRoomId;
-				serviceReqUpdateSDO.ExamAdditionSDO.InstructionTime = hisServiceReqExamAdditionSDO.InstructionTime;
-				serviceReqUpdateSDO.ExamAdditionSDO.PatientTypeId = hisServiceReqExamAdditionSDO.PatientTypeId;
-				serviceReqUpdateSDO.ExamAdditionSDO.PrimaryPatientTypeId = hisServiceReqExamAdditionSDO.PrimaryPatientTypeId;
-				serviceReqUpdateSDO.ExamAdditionSDO.IsNotRequireFee = hisServiceReqExamAdditionSDO.IsNotRequireFee;
-				serviceReqUpdateSDO.AppointmentExamRoomId = hisServiceReqExamAdditionSDO.RoomApointmentId;
-				serviceReqUpdateSDO.AppointmentExamServiceId = hisServiceReqExamAdditionSDO.ServiceApointmentId;
-				serviceReqUpdateSDO.NotePatient = hisServiceReqExamAdditionSDO.Note;
-				serviceReqUpdateSDO.FinishTime = hisServiceReqExamAdditionSDO.FinishTime;
-				serviceReqUpdateSDO.ExamAdditionSDO.IsNotUseBhyt = hisServiceReqExamAdditionSDO.IsNotUseBhyt;
-				long finishExamAdd = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.IsFinishExamAdd"));
-				if (finishExamAdd == 1)
+				serviceReqUpdateSDO.ExamAdditionSDO.AdditionRoomId = examServiceAddADO.AdditionRoomId;
+				serviceReqUpdateSDO.ExamAdditionSDO.AdditionServiceId = examServiceAddADO.AdditionServiceId;
+				serviceReqUpdateSDO.ExamAdditionSDO.CurrentSereServId = examServiceAddADO.CurrentSereServId;
+				serviceReqUpdateSDO.ExamAdditionSDO.IsChangeDepartment = examServiceAddADO.IsChangeDepartment;
+				serviceReqUpdateSDO.ExamAdditionSDO.IsPrimary = examServiceAddADO.IsPrimary;
+				serviceReqUpdateSDO.ExamAdditionSDO.IsFinishCurrent = examServiceAddADO.IsFinishCurrent;
+				serviceReqUpdateSDO.ExamAdditionSDO.RequestRoomId = examServiceAddADO.RequestRoomId;
+				serviceReqUpdateSDO.ExamAdditionSDO.InstructionTime = examServiceAddADO.InstructionTime;
+				serviceReqUpdateSDO.ExamAdditionSDO.PatientTypeId = examServiceAddADO.PatientTypeId;
+				serviceReqUpdateSDO.ExamAdditionSDO.PrimaryPatientTypeId = examServiceAddADO.PrimaryPatientTypeId;
+				serviceReqUpdateSDO.ExamAdditionSDO.IsNotRequireFee = examServiceAddADO.IsNotRequireFee;
+				serviceReqUpdateSDO.AppointmentExamRoomId = examServiceAddADO.RoomApointmentId;
+				serviceReqUpdateSDO.AppointmentExamServiceId = examServiceAddADO.ServiceApointmentId;
+				serviceReqUpdateSDO.NotePatient = examServiceAddADO.Note;
+				serviceReqUpdateSDO.FinishTime = examServiceAddADO.FinishTime;
+				serviceReqUpdateSDO.ExamAdditionSDO.IsNotUseBhyt = examServiceAddADO.IsNotUseBhyt;
+				long num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.ExamServiceReqExecute.IsFinishExamAdd"));
+				if (num == 1)
 				{
 					serviceReqUpdateSDO.IsFinish = true;
 				}
-				if (HisServiceReqView != null && (HisServiceReqView.IS_MAIN_EXAM ?? 0) == 1 && hisServiceReqExamAdditionSDO.IsPrimary)
+				if (HisServiceReqView != null && (HisServiceReqView.IS_MAIN_EXAM ?? 0) == 1 && examServiceAddADO.IsPrimary)
 				{
 					serviceReqUpdateSDO.IsFinish = true;
 				}
-				isPrintExamServiceAdd = hisServiceReqExamAdditionSDO.IsPrintExamAdd;
-				isSignExamServiceAdd = hisServiceReqExamAdditionSDO.IsSignExamAdd;
-				serviceReqUpdateSDO.AppointmentTime = hisServiceReqExamAdditionSDO.AppointmentTime;
-				serviceReqUpdateSDO.AppointmentDesc = hisServiceReqExamAdditionSDO.Advise;
-				IsAppointment_ExamServiceAdd = hisServiceReqExamAdditionSDO.IsAppointment;
-				IsPrintAppointment_ExamServiceAdd = hisServiceReqExamAdditionSDO.IsPrintAppointment;
+				isPrintExamServiceAdd = examServiceAddADO.IsPrintExamAdd;
+				isSignExamServiceAdd = examServiceAddADO.IsSignExamAdd;
+				serviceReqUpdateSDO.AppointmentTime = examServiceAddADO.AppointmentTime;
+				serviceReqUpdateSDO.AppointmentDesc = examServiceAddADO.Advise;
+				IsAppointment_ExamServiceAdd = examServiceAddADO.IsAppointment;
+				IsPrintAppointment_ExamServiceAdd = examServiceAddADO.IsPrintAppointment;
 			}
 		}
 		catch (Exception ex)
@@ -20378,54 +20380,54 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			if (chkHospitalize.Checked && ucHospitalize != null && hospitalizeProcessor.GetValue(ucHospitalize) is HospitalizeExamADO hisDepartmentTranHospitalizeSDO)
+			if (chkHospitalize.Checked && ucHospitalize != null && hospitalizeProcessor.GetValue(ucHospitalize) is HospitalizeExamADO hospitalizeExamADO)
 			{
 				serviceReqUpdateSDO.HospitalizeSDO = new HisDepartmentTranHospitalizeSDO();
-				if (hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO != null)
+				if (hospitalizeExamADO.HisDepartmentTranHospitalizeSDO != null)
 				{
-					serviceReqUpdateSDO.HospitalizeSDO.BedRoomId = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.BedRoomId;
-					serviceReqUpdateSDO.HospitalizeSDO.DepartmentId = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.DepartmentId;
+					serviceReqUpdateSDO.HospitalizeSDO.BedRoomId = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.BedRoomId;
+					serviceReqUpdateSDO.HospitalizeSDO.DepartmentId = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.DepartmentId;
 					serviceReqUpdateSDO.HospitalizeSDO.RequestRoomId = moduleData.RoomId;
-					serviceReqUpdateSDO.HospitalizeSDO.TreatmentId = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.TreatmentId;
-					serviceReqUpdateSDO.HospitalizeSDO.TreatmentTypeId = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.TreatmentTypeId;
-					serviceReqUpdateSDO.HospitalizeSDO.Time = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.Time;
-					serviceReqUpdateSDO.HospitalizeSDO.IsEmergency = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.IsEmergency;
-					serviceReqUpdateSDO.FinishTime = hisDepartmentTranHospitalizeSDO.FinishTime;
-					serviceReqUpdateSDO.HospitalizeSDO.RelativeName = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.RelativeName;
-					serviceReqUpdateSDO.HospitalizeSDO.RelativePhone = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.RelativePhone;
-					serviceReqUpdateSDO.HospitalizeSDO.RelativeAddress = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.RelativeAddress;
-					serviceReqUpdateSDO.HospitalizeSDO.CareerId = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.CareerId;
-					serviceReqUpdateSDO.HospitalizeSDO.InHospitalizationReasonCode = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.InHospitalizationReasonCode;
-					serviceReqUpdateSDO.HospitalizeSDO.InHospitalizationReasonName = hisDepartmentTranHospitalizeSDO.HisDepartmentTranHospitalizeSDO.InHospitalizationReasonName;
+					serviceReqUpdateSDO.HospitalizeSDO.TreatmentId = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.TreatmentId;
+					serviceReqUpdateSDO.HospitalizeSDO.TreatmentTypeId = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.TreatmentTypeId;
+					serviceReqUpdateSDO.HospitalizeSDO.Time = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.Time;
+					serviceReqUpdateSDO.HospitalizeSDO.IsEmergency = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.IsEmergency;
+					serviceReqUpdateSDO.FinishTime = hospitalizeExamADO.FinishTime;
+					serviceReqUpdateSDO.HospitalizeSDO.RelativeName = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.RelativeName;
+					serviceReqUpdateSDO.HospitalizeSDO.RelativePhone = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.RelativePhone;
+					serviceReqUpdateSDO.HospitalizeSDO.RelativeAddress = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.RelativeAddress;
+					serviceReqUpdateSDO.HospitalizeSDO.CareerId = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.CareerId;
+					serviceReqUpdateSDO.HospitalizeSDO.InHospitalizationReasonCode = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.InHospitalizationReasonCode;
+					serviceReqUpdateSDO.HospitalizeSDO.InHospitalizationReasonName = hospitalizeExamADO.HisDepartmentTranHospitalizeSDO.InHospitalizationReasonName;
 				}
-				serviceReqUpdateSDO.NotePatient = hisDepartmentTranHospitalizeSDO.Note;
-				isPrintHospitalizeExam = hisDepartmentTranHospitalizeSDO.IsPrintHospitalizeExam;
-				isSign = hisDepartmentTranHospitalizeSDO.IsSign;
-				isPrintSign = hisDepartmentTranHospitalizeSDO.IsPrintSign;
-				IsPrintMps178 = hisDepartmentTranHospitalizeSDO.IsPrintMps178;
-				if (hisDepartmentTranHospitalizeSDO.icdADOInTreatment != null && !string.IsNullOrWhiteSpace(hisDepartmentTranHospitalizeSDO.icdADOInTreatment.ICD_CODE))
+				serviceReqUpdateSDO.NotePatient = hospitalizeExamADO.Note;
+				isPrintHospitalizeExam = hospitalizeExamADO.IsPrintHospitalizeExam;
+				isSign = hospitalizeExamADO.IsSign;
+				isPrintSign = hospitalizeExamADO.IsPrintSign;
+				IsPrintMps178 = hospitalizeExamADO.IsPrintMps178;
+				if (hospitalizeExamADO.icdADOInTreatment != null && !string.IsNullOrWhiteSpace(hospitalizeExamADO.icdADOInTreatment.ICD_CODE))
 				{
-					serviceReqUpdateSDO.HospitalizeSDO.IcdCode = hisDepartmentTranHospitalizeSDO.icdADOInTreatment.ICD_CODE;
-					serviceReqUpdateSDO.HospitalizeSDO.IcdName = hisDepartmentTranHospitalizeSDO.icdADOInTreatment.ICD_NAME;
+					serviceReqUpdateSDO.HospitalizeSDO.IcdCode = hospitalizeExamADO.icdADOInTreatment.ICD_CODE;
+					serviceReqUpdateSDO.HospitalizeSDO.IcdName = hospitalizeExamADO.icdADOInTreatment.ICD_NAME;
 				}
-				else if (UcIcdGetValue() is HIS.UC.Icd.ADO.IcdInputADO icdValue)
+				else if (UcIcdGetValue() is HIS.UC.Icd.ADO.IcdInputADO icdInputADO)
 				{
-					serviceReqUpdateSDO.HospitalizeSDO.IcdCode = icdValue.ICD_CODE;
-					serviceReqUpdateSDO.HospitalizeSDO.IcdName = icdValue.ICD_NAME;
+					serviceReqUpdateSDO.HospitalizeSDO.IcdCode = icdInputADO.ICD_CODE;
+					serviceReqUpdateSDO.HospitalizeSDO.IcdName = icdInputADO.ICD_NAME;
 				}
-				if (hisDepartmentTranHospitalizeSDO.TraditionalIcdADOInTreatment != null && !string.IsNullOrWhiteSpace(hisDepartmentTranHospitalizeSDO.TraditionalIcdADOInTreatment.ICD_CODE))
+				if (hospitalizeExamADO.TraditionalIcdADOInTreatment != null && !string.IsNullOrWhiteSpace(hospitalizeExamADO.TraditionalIcdADOInTreatment.ICD_CODE))
 				{
-					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdCode = hisDepartmentTranHospitalizeSDO.TraditionalIcdADOInTreatment.ICD_CODE;
-					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdName = hisDepartmentTranHospitalizeSDO.TraditionalIcdADOInTreatment.ICD_NAME;
+					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdCode = hospitalizeExamADO.TraditionalIcdADOInTreatment.ICD_CODE;
+					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdName = hospitalizeExamADO.TraditionalIcdADOInTreatment.ICD_NAME;
 				}
-				if (hisDepartmentTranHospitalizeSDO.tradtionalIcdSub != null)
+				if (hospitalizeExamADO.tradtionalIcdSub != null)
 				{
-					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdSubCode = hisDepartmentTranHospitalizeSDO.tradtionalIcdSub.ICD_SUB_CODE;
-					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdText = hisDepartmentTranHospitalizeSDO.tradtionalIcdSub.ICD_TEXT;
+					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdSubCode = hospitalizeExamADO.tradtionalIcdSub.ICD_SUB_CODE;
+					serviceReqUpdateSDO.HospitalizeSDO.TraditionalIcdText = hospitalizeExamADO.tradtionalIcdSub.ICD_TEXT;
 				}
-				SecondaryIcdDataADO icdSub = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
-				serviceReqUpdateSDO.HospitalizeSDO.IcdSubCode = ((icdSub != null) ? icdSub.ICD_SUB_CODE : "");
-				serviceReqUpdateSDO.HospitalizeSDO.IcdText = ((icdSub != null) ? icdSub.ICD_TEXT : "");
+				SecondaryIcdDataADO secondaryIcdDataADO = UcSecondaryIcdGetValue() as SecondaryIcdDataADO;
+				serviceReqUpdateSDO.HospitalizeSDO.IcdSubCode = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_SUB_CODE : "");
+				serviceReqUpdateSDO.HospitalizeSDO.IcdText = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_TEXT : "");
 			}
 		}
 		catch (Exception ex)
@@ -20436,22 +20438,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private bool ProcessTreatmentFinish(ref HisServiceReqExamUpdateSDO serviceReqUpdateSDO)
 	{
-		bool valid = true;
+		bool result = true;
 		try
 		{
 			ExamTreatmentFinishResult treatmentFinish;
-			long? cboThongTinBoSung;
-			string str2;
+			long? treatmentEndTypeExtId;
+			string text2;
 			if (chkTreatmentFinish.Checked && ucTreatmentFinish != null)
 			{
-				string str1 = null;
-				str2 = null;
+				string text = null;
+				text2 = null;
 				treatmentFinish = treatmentFinishProcessor.GetValue(ucTreatmentFinish) as ExamTreatmentFinishResult;
 				serviceReqUpdateSDO.TreatmentFinishSDO = new HisTreatmentFinishSDO();
 				if (treatmentFinish != null && treatmentFinish.TreatmentFinishSDO != null)
 				{
-					cboThongTinBoSung = treatmentFinish.TreatmentFinishSDO.TreatmentEndTypeExtId;
-					if (cboThongTinBoSung == 1)
+					treatmentEndTypeExtId = treatmentFinish.TreatmentFinishSDO.TreatmentEndTypeExtId;
+					if (treatmentEndTypeExtId == 1)
 					{
 						if (treatmentFinish.TreatmentFinishSDO.SickLeaveDay.HasValue)
 						{
@@ -20460,8 +20462,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 							{
 								if (treatment != null)
 								{
-									int age = Inventec.Common.DateTime.Calculation.Age(treatment.TDL_PATIENT_DOB);
-									if (age < 7 && (string.IsNullOrWhiteSpace(treatmentFinish.TreatmentFinishSDO.PatientRelativeName) || string.IsNullOrWhiteSpace(treatmentFinish.TreatmentFinishSDO.PatientRelativeType)))
+									int num = Inventec.Common.DateTime.Calculation.Age(treatment.TDL_PATIENT_DOB);
+									if (num < 7 && (string.IsNullOrWhiteSpace(treatmentFinish.TreatmentFinishSDO.PatientRelativeName) || string.IsNullOrWhiteSpace(treatmentFinish.TreatmentFinishSDO.PatientRelativeType)))
 									{
 										MessageBox.Show("Thông tin nghỉ hưởng BHXH thiếu thông tin bố mẹ. Vui lòng kiểm tra lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 										return false;
@@ -20473,7 +20475,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 						MessageBox.Show("Thông tin nghỉ hưởng BHXH thiếu số ngày nghỉ. Vui lòng kiểm tra lại!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 						return false;
 					}
-					if (cboThongTinBoSung == 2)
+					if (treatmentEndTypeExtId == 2)
 					{
 						if (treatmentFinish.TreatmentFinishSDO.SickLeaveDay.HasValue)
 						{
@@ -20495,11 +20497,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			long treatmentEndTypeId;
 			if ((HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1" || HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "2") && treatmentEndTypeId == 2)
 			{
-				HisExpMestFilter filter2 = new HisExpMestFilter();
-				filter2.TDL_TREATMENT_ID = treatment.ID;
-				filter2.EXP_MEST_TYPE_ID = 1L;
-				List<HIS_EXP_MEST> expMestPK = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter2, null);
-				if (expMestPK != null && expMestPK.Count > 0 && XtraMessageBox.Show(string.Format("Bệnh nhân tồn tại đơn phòng khám, {0}", (HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1") ? "không cho phép chuyển viện" : "bạn có muốn cho bệnh nhân chuyển viện không?"), "Thông báo", (!(HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1")) ? MessageBoxButtons.YesNo : MessageBoxButtons.OK) == (DialogResult)((HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1") ? 1 : 7))
+				HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+				hisExpMestFilter.TDL_TREATMENT_ID = treatment.ID;
+				hisExpMestFilter.EXP_MEST_TYPE_ID = 1L;
+				List<HIS_EXP_MEST> list = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, null);
+				if (list != null && list.Count > 0 && XtraMessageBox.Show(string.Format("Bệnh nhân tồn tại đơn phòng khám, {0}", (HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1") ? "không cho phép chuyển viện" : "bạn có muốn cho bệnh nhân chuyển viện không?"), "Thông báo", (!(HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1")) ? MessageBoxButtons.YesNo : MessageBoxButtons.OK) == (DialogResult)((HisConfigCFG.OptionTreatmentEndTypeIsTransfer == "1") ? 1 : 7))
 				{
 					return false;
 				}
@@ -20508,29 +20510,29 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (treatment != null)
 			{
 				long? tDL_TREATMENT_TYPE_ID = treatment.TDL_TREATMENT_TYPE_ID;
-				long num = 1L;
-				if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num && tDL_TREATMENT_TYPE_ID.HasValue && treatmentFinish.TreatmentFinishSDO.TreatmentEndTypeExtId == 1)
+				long num2 = 1L;
+				if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num2 && tDL_TREATMENT_TYPE_ID.HasValue && treatmentFinish.TreatmentFinishSDO.TreatmentEndTypeExtId == 1)
 				{
-					decimal? SickLeaveDay = treatmentFinish.TreatmentFinishSDO.SickLeaveDay;
-					long? SickLeaveFrom = treatmentFinish.TreatmentFinishSDO.SickLeaveFrom;
-					long? SickLeaveTo = treatmentFinish.TreatmentFinishSDO.SickLeaveTo;
+					decimal? sickLeaveDay2 = treatmentFinish.TreatmentFinishSDO.SickLeaveDay;
+					long? sickLeaveFrom = treatmentFinish.TreatmentFinishSDO.SickLeaveFrom;
+					long? sickLeaveTo = treatmentFinish.TreatmentFinishSDO.SickLeaveTo;
 					long SickLeaveFrom_Date = 0L;
-					long SickLeaveTo_Date = 0L;
-					DateTime? dtSickLeaveFrom = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(SickLeaveFrom ?? 0);
-					if (dtSickLeaveFrom.HasValue && dtSickLeaveFrom != DateTime.MinValue)
+					long num3 = 0L;
+					DateTime? dateTime = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(sickLeaveFrom ?? 0);
+					if (dateTime.HasValue && dateTime != DateTime.MinValue)
 					{
-						SickLeaveFrom_Date = long.Parse((dtSickLeaveFrom ?? default(DateTime)).ToString("yyyyMMdd") + "000000");
+						SickLeaveFrom_Date = long.Parse((dateTime ?? default(DateTime)).ToString("yyyyMMdd") + "000000");
 					}
-					DateTime? dtSickLeaveTo = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(SickLeaveTo ?? 0);
-					if (dtSickLeaveTo.HasValue && dtSickLeaveTo != DateTime.MinValue)
+					DateTime? dateTime2 = Inventec.Common.DateTime.Convert.TimeNumberToSystemDateTime(sickLeaveTo ?? 0);
+					if (dateTime2.HasValue && dateTime2 != DateTime.MinValue)
 					{
-						SickLeaveTo_Date = long.Parse((dtSickLeaveTo ?? default(DateTime)).ToString("yyyyMMdd") + "000000");
+						num3 = long.Parse((dateTime2 ?? default(DateTime)).ToString("yyyyMMdd") + "000000");
 					}
-					if (SickLeaveDay.HasValue)
+					if (sickLeaveDay2.HasValue)
 					{
-						decimal? sickLeaveDay = SickLeaveDay;
-						decimal num2 = 30;
-						if (sickLeaveDay.GetValueOrDefault() > num2 && sickLeaveDay.HasValue)
+						decimal? sickLeaveDay = sickLeaveDay2;
+						decimal num4 = 30;
+						if (sickLeaveDay.GetValueOrDefault() > num4 && sickLeaveDay.HasValue)
 						{
 							XtraMessageBox.Show("Số ngày nghỉ không được vượt quá 30 ngày", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 							treatmentFinishProcessor.FocusControl(ucTreatmentFinish);
@@ -20538,36 +20540,36 @@ public class ExamServiceReqExecuteControl : UserControlBase
 							return false;
 						}
 					}
-					CommonParam param = new CommonParam();
-					HisTreatmentFilter filter = new HisTreatmentFilter();
-					filter.PATIENT_ID = treatment.PATIENT_ID;
-					filter.TREATMENT_END_TYPE_EXT_ID = 1L;
-					filter.TDL_TREATMENT_TYPE_ID = 1L;
-					List<HIS_TREATMENT> dataCheck = new BackendAdapter(param).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-					if (dataCheck != null && dataCheck.Count > 0)
+					CommonParam commonParam = new CommonParam();
+					HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+					hisTreatmentFilter.PATIENT_ID = treatment.PATIENT_ID;
+					hisTreatmentFilter.TREATMENT_END_TYPE_EXT_ID = 1L;
+					hisTreatmentFilter.TDL_TREATMENT_TYPE_ID = 1L;
+					List<HIS_TREATMENT> list2 = new BackendAdapter(commonParam).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, commonParam);
+					if (list2 != null && list2.Count > 0)
 					{
-						List<HIS_TREATMENT> dt = dataCheck.Where(delegate(HIS_TREATMENT o)
+						List<HIS_TREATMENT> list3 = list2.Where(delegate(HIS_TREATMENT o)
 						{
-							int result;
+							int result2;
 							if (o.ID != treatment.ID && o.SICK_LEAVE_FROM.HasValue)
 							{
-								long num5 = SickLeaveFrom_Date;
+								long num7 = SickLeaveFrom_Date;
 								long? sICK_LEAVE_FROM = o.SICK_LEAVE_FROM;
-								if (num5 >= sICK_LEAVE_FROM.GetValueOrDefault() && sICK_LEAVE_FROM.HasValue && o.SICK_LEAVE_TO.HasValue)
+								if (num7 >= sICK_LEAVE_FROM.GetValueOrDefault() && sICK_LEAVE_FROM.HasValue && o.SICK_LEAVE_TO.HasValue)
 								{
-									result = ((SickLeaveFrom_Date <= o.SICK_LEAVE_TO) ? 1 : 0);
+									result2 = ((SickLeaveFrom_Date <= o.SICK_LEAVE_TO) ? 1 : 0);
 									goto IL_0082;
 								}
 							}
-							result = 0;
+							result2 = 0;
 							goto IL_0082;
 							IL_0082:
-							return (byte)result != 0;
+							return (byte)result2 != 0;
 						}).ToList();
-						if (dt != null && dt.Count > 0)
+						if (list3 != null && list3.Count > 0)
 						{
-							HIS_TREATMENT treatmentCheck = dt.OrderByDescending((HIS_TREATMENT o) => o.OUT_TIME).ToList()[0];
-							XtraMessageBox.Show($"Ngày nghỉ ốm giao với ngày nghỉ ốm được cấp của đợt khám trước đó: {treatmentCheck.TREATMENT_CODE} (nghỉ từ {Inventec.Common.DateTime.Convert.TimeNumberToDateString(treatmentCheck.SICK_LEAVE_FROM ?? 0)} - {Inventec.Common.DateTime.Convert.TimeNumberToDateString(treatmentCheck.SICK_LEAVE_TO ?? 0)})", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+							HIS_TREATMENT hIS_TREATMENT = list3.OrderByDescending((HIS_TREATMENT o) => o.OUT_TIME).ToList()[0];
+							XtraMessageBox.Show($"Ngày nghỉ ốm giao với ngày nghỉ ốm được cấp của đợt khám trước đó: {hIS_TREATMENT.TREATMENT_CODE} (nghỉ từ {Inventec.Common.DateTime.Convert.TimeNumberToDateString(hIS_TREATMENT.SICK_LEAVE_FROM ?? 0)} - {Inventec.Common.DateTime.Convert.TimeNumberToDateString(hIS_TREATMENT.SICK_LEAVE_TO ?? 0)})", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 							treatmentFinishProcessor.FocusControl(ucTreatmentFinish);
 							IsReturn = true;
 							return false;
@@ -20577,12 +20579,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (treatmentFinish.TreatmentFinishSDO.ProgramId > 0)
 			{
-				HIS_PROGRAM Program = BackendDataWorker.Get<HIS_PROGRAM>().FirstOrDefault((HIS_PROGRAM o) => o.ID == treatmentFinish.TreatmentFinishSDO.ProgramId);
-				if (Program != null)
+				HIS_PROGRAM hIS_PROGRAM = BackendDataWorker.Get<HIS_PROGRAM>().FirstOrDefault((HIS_PROGRAM o) => o.ID == treatmentFinish.TreatmentFinishSDO.ProgramId);
+				if (hIS_PROGRAM != null)
 				{
-					int? num3 = Program.AUTO_CHANGE_TO_OUT_PATIENT;
-					int num4 = 1;
-					if (num3.GetValueOrDefault() == num4 && num3.HasValue && (string.IsNullOrEmpty(txtSubclinical.Text.Trim()) || string.IsNullOrEmpty(txtTreatmentInstruction.Text.Trim())))
+					int? num5 = hIS_PROGRAM.AUTO_CHANGE_TO_OUT_PATIENT;
+					int num6 = 1;
+					if (num5.GetValueOrDefault() == num6 && num5.HasValue && (string.IsNullOrEmpty(txtSubclinical.Text.Trim()) || string.IsNullOrEmpty(txtTreatmentInstruction.Text.Trim())))
 					{
 						XtraMessageBox.Show("Bạn chưa nhập \"Phương pháp điều trị\" hoặc \"Tóm tắt kết quả cận lâm sàng\".", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao);
 						return false;
@@ -20604,22 +20606,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				serviceReqUpdateSDO.TreatmentFinishSDO.SickUsername = treatmentFinish.TreatmentFinishSDO.SickUsername;
 			}
 			serviceReqUpdateSDO.FinishTime = treatmentFinish.TreatmentFinishSDO.TreatmentFinishTime;
-			str2 = treatmentFinish.TreatmentFinishSDO.SubclinicalResult;
-			if (!string.IsNullOrEmpty(str2))
+			text2 = treatmentFinish.TreatmentFinishSDO.SubclinicalResult;
+			if (!string.IsNullOrEmpty(text2))
 			{
-				serviceReqUpdateSDO.Subclinical = str2;
+				serviceReqUpdateSDO.Subclinical = text2;
 			}
 			if (treatmentFinish != null && treatmentFinish.icdADOInTreatment != null && !string.IsNullOrWhiteSpace(treatmentFinish.icdADOInTreatment.ICD_CODE))
 			{
 				serviceReqUpdateSDO.TreatmentFinishSDO.IcdCode = treatmentFinish.icdADOInTreatment.ICD_CODE;
 				serviceReqUpdateSDO.TreatmentFinishSDO.IcdName = treatmentFinish.icdADOInTreatment.ICD_NAME;
 			}
-			else if (UcIcdGetValue() is HIS.UC.Icd.ADO.IcdInputADO icdValue)
+			else if (UcIcdGetValue() is HIS.UC.Icd.ADO.IcdInputADO icdInputADO)
 			{
-				serviceReqUpdateSDO.TreatmentFinishSDO.IcdCode = icdValue.ICD_CODE;
-				serviceReqUpdateSDO.TreatmentFinishSDO.IcdName = icdValue.ICD_NAME;
+				serviceReqUpdateSDO.TreatmentFinishSDO.IcdCode = icdInputADO.ICD_CODE;
+				serviceReqUpdateSDO.TreatmentFinishSDO.IcdName = icdInputADO.ICD_NAME;
 			}
-			List<HIS_ICD> icd = (from s in BackendDataWorker.Get<HIS_ICD>()
+			List<HIS_ICD> list4 = (from s in BackendDataWorker.Get<HIS_ICD>()
 				where s.IS_ACTIVE == 1 && s.IS_TRADITIONAL == 1
 				select s).ToList();
 			serviceReqUpdateSDO.TreatmentFinishSDO.TraditionalIcdSubCode = treatmentFinish.traditionInIcdSub.ICD_SUB_CODE;
@@ -20628,7 +20630,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				foreach (string item in treatmentFinish.traditionInIcdSub.ICD_SUB_CODE.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList())
 				{
-					if (!icd.Exists((HIS_ICD o) => o.ICD_CODE == item))
+					if (!list4.Exists((HIS_ICD o) => o.ICD_CODE == item))
 					{
 						MessageBox.Show("Chẩn đoán YHCT phụ không có trong danh mục");
 						return false;
@@ -20668,8 +20670,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (HisConfigCFG.RequiredTreatmentMethodOption == "1" && treatment != null)
 			{
 				long? tDL_TREATMENT_TYPE_ID = treatment.TDL_TREATMENT_TYPE_ID;
-				long num = 3L;
-				if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num && tDL_TREATMENT_TYPE_ID.HasValue && (treatmentEndTypeId == 2 || treatmentEndTypeId == 3 || treatmentEndTypeId == 6 || treatmentEndTypeId == 8 || treatmentEndTypeId == 4))
+				long num2 = 3L;
+				if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num2 && tDL_TREATMENT_TYPE_ID.HasValue && (treatmentEndTypeId == 2 || treatmentEndTypeId == 3 || treatmentEndTypeId == 6 || treatmentEndTypeId == 8 || treatmentEndTypeId == 4))
 				{
 					if (string.IsNullOrEmpty(txtTreatmentInstruction.Text.Trim()))
 					{
@@ -20679,7 +20681,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					goto IL_042b;
 				}
 			}
-			if (HisConfigCFG.RequiredTreatmentMethodOption == "2" && ((cboThongTinBoSung.HasValue && cboThongTinBoSung == 1) || (treatment != null && (treatment.TDL_TREATMENT_TYPE_ID == 3 || treatment.TDL_TREATMENT_TYPE_ID == 2 || treatment.TDL_TREATMENT_TYPE_ID == 4) && (treatmentEndTypeId == 2 || treatmentEndTypeId == 3 || treatmentEndTypeId == 6 || treatmentEndTypeId == 8 || treatmentEndTypeId == 4))) && string.IsNullOrEmpty(txtTreatmentInstruction.Text.Trim()))
+			if (HisConfigCFG.RequiredTreatmentMethodOption == "2" && ((treatmentEndTypeExtId.HasValue && treatmentEndTypeExtId == 1) || (treatment != null && (treatment.TDL_TREATMENT_TYPE_ID == 3 || treatment.TDL_TREATMENT_TYPE_ID == 2 || treatment.TDL_TREATMENT_TYPE_ID == 4) && (treatmentEndTypeId == 2 || treatmentEndTypeId == 3 || treatmentEndTypeId == 6 || treatmentEndTypeId == 8 || treatmentEndTypeId == 4))) && string.IsNullOrEmpty(txtTreatmentInstruction.Text.Trim()))
 			{
 				XtraMessageBox.Show("Bạn chưa nhập \"Phương pháp điều trị\".", HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ThongBao);
 				return false;
@@ -20719,22 +20721,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Warn(ex);
 		}
-		return valid;
+		return result;
 	}
 
 	private void CallApiSevereIllnessInfo()
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			SevereIllnessInfoSDO sdo = new SevereIllnessInfoSDO();
-			sdo.SevereIllnessInfo = SevereIllnessInfo;
-			sdo.EventsCausesDeaths = EventsCausesDeaths;
-			HisServiceReqExamUpdateResultSDO dt = new BackendAdapter(param).Post<HisServiceReqExamUpdateResultSDO>("api/HisSevereIllnessInfo/CreateOrUpdate", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sdo, param);
+			CommonParam commonParam = new CommonParam();
+			SevereIllnessInfoSDO severeIllnessInfoSDO = new SevereIllnessInfoSDO();
+			severeIllnessInfoSDO.SevereIllnessInfo = SevereIllnessInfo;
+			severeIllnessInfoSDO.EventsCausesDeaths = EventsCausesDeaths;
+			HisServiceReqExamUpdateResultSDO hisServiceReqExamUpdateResultSDO = new BackendAdapter(commonParam).Post<HisServiceReqExamUpdateResultSDO>("api/HisSevereIllnessInfo/CreateOrUpdate", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, severeIllnessInfoSDO, commonParam);
 			string message = $"Lưu thông tin tử vong. TREATMENT_CODE: {treatment.TREATMENT_CODE}. SERVICE_REQ_CODE: {HisServiceReqView.SERVICE_REQ_CODE}";
-			string login = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-			SdaEventLogCreate eventlog = new SdaEventLogCreate();
-			eventlog.Create(login, null, true, message);
+			string loginName = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+			SdaEventLogCreate sdaEventLogCreate = new SdaEventLogCreate();
+			sdaEventLogCreate.Create(loginName, null, true, message);
 		}
 		catch (Exception ex)
 		{
@@ -20744,20 +20746,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private HIS_PATIENT GetPatientByID(long id)
 	{
-		HIS_PATIENT result = null;
+		HIS_PATIENT hIS_PATIENT = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisPatientFilter filter = new HisPatientFilter();
-			filter.ID = id;
-			result = new BackendAdapter(param).Get<List<HIS_PATIENT>>("api/HisPatient/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param).FirstOrDefault();
+			CommonParam commonParam = new CommonParam();
+			HisPatientFilter hisPatientFilter = new HisPatientFilter();
+			hisPatientFilter.ID = id;
+			hIS_PATIENT = new BackendAdapter(commonParam).Get<List<HIS_PATIENT>>("api/HisPatient/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientFilter, commonParam).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
-			result = null;
+			hIS_PATIENT = null;
 			LogSystem.Warn(ex);
 		}
-		return result;
+		return hIS_PATIENT;
 	}
 
 	private void ProcessExamFinish(ref HisServiceReqExamUpdateSDO serviceReqUpdateSDO)
@@ -20792,21 +20794,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			object icdValue = UcIcdGetValue();
-			if (icdValue != null && icdValue is HIS.UC.Icd.ADO.IcdInputADO)
+			object obj = UcIcdGetValue();
+			if (obj != null && obj is HIS.UC.Icd.ADO.IcdInputADO)
 			{
-				serviceReqUpdateSDO.IcdCode = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_CODE;
-				serviceReqUpdateSDO.IcdName = ((HIS.UC.Icd.ADO.IcdInputADO)icdValue).ICD_NAME;
+				serviceReqUpdateSDO.IcdCode = ((HIS.UC.Icd.ADO.IcdInputADO)obj).ICD_CODE;
+				serviceReqUpdateSDO.IcdName = ((HIS.UC.Icd.ADO.IcdInputADO)obj).ICD_NAME;
 			}
-			object icdValueCause = UcIcdCauseGetValue();
-			if (icdValueCause != null && icdValueCause is HIS.UC.Icd.ADO.IcdInputADO)
+			object obj2 = UcIcdCauseGetValue();
+			if (obj2 != null && obj2 is HIS.UC.Icd.ADO.IcdInputADO)
 			{
-				serviceReqUpdateSDO.IcdCauseCode = ((HIS.UC.Icd.ADO.IcdInputADO)icdValueCause).ICD_CODE;
-				serviceReqUpdateSDO.IcdCauseName = ((HIS.UC.Icd.ADO.IcdInputADO)icdValueCause).ICD_NAME;
+				serviceReqUpdateSDO.IcdCauseCode = ((HIS.UC.Icd.ADO.IcdInputADO)obj2).ICD_CODE;
+				serviceReqUpdateSDO.IcdCauseName = ((HIS.UC.Icd.ADO.IcdInputADO)obj2).ICD_NAME;
 			}
-			SecondaryIcdDataADO icdSub = (SecondaryIcdDataADO)UcSecondaryIcdGetValue();
-			serviceReqUpdateSDO.IcdSubCode = ((icdSub != null) ? icdSub.ICD_SUB_CODE : "");
-			serviceReqUpdateSDO.IcdText = ((icdSub != null) ? icdSub.ICD_TEXT : "");
+			SecondaryIcdDataADO secondaryIcdDataADO = (SecondaryIcdDataADO)UcSecondaryIcdGetValue();
+			serviceReqUpdateSDO.IcdSubCode = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_SUB_CODE : "");
+			serviceReqUpdateSDO.IcdText = ((secondaryIcdDataADO != null) ? secondaryIcdDataADO.ICD_TEXT : "");
 		}
 		catch (Exception ex)
 		{
@@ -20818,9 +20820,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			NextTreatmentInstructionInputADO value = UcNextTreatmentInstGetValue() as NextTreatmentInstructionInputADO;
-			serviceReqUpdateSDO.NextTreaIntrCode = ((value != null) ? value.NEXT_TREA_INTR_CODE : "");
-			serviceReqUpdateSDO.NextTreaIntrName = ((value != null) ? value.NEXT_TREA_INTR_NAME : "");
+			NextTreatmentInstructionInputADO nextTreatmentInstructionInputADO = UcNextTreatmentInstGetValue() as NextTreatmentInstructionInputADO;
+			serviceReqUpdateSDO.NextTreaIntrCode = ((nextTreatmentInstructionInputADO != null) ? nextTreatmentInstructionInputADO.NEXT_TREA_INTR_CODE : "");
+			serviceReqUpdateSDO.NextTreaIntrName = ((nextTreatmentInstructionInputADO != null) ? nextTreatmentInstructionInputADO.NEXT_TREA_INTR_NAME : "");
 		}
 		catch (Exception ex)
 		{
@@ -20832,34 +20834,34 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			if (!(UcDHSTGetValue() is DHSTADO dhstADO))
+			if (!(UcDHSTGetValue() is DHSTADO dHSTADO))
 			{
 				return;
 			}
-			valiDHST = dhstADO.IsVali;
-			if (dhstADO.IsVali)
+			valiDHST = dHSTADO.IsVali;
+			if (dHSTADO.IsVali)
 			{
 				serviceReqUpdateSDO.HisDhst = new HIS_DHST();
 				if (HisServiceReqView.DHST_ID.HasValue)
 				{
 					serviceReqUpdateSDO.HisDhst.ID = HisServiceReqView.DHST_ID.Value;
 				}
-				serviceReqUpdateSDO.HisDhst.BELLY = dhstADO.BELLY;
-				serviceReqUpdateSDO.HisDhst.BLOOD_PRESSURE_MAX = dhstADO.BLOOD_PRESSURE_MAX;
-				serviceReqUpdateSDO.HisDhst.BLOOD_PRESSURE_MIN = dhstADO.BLOOD_PRESSURE_MIN;
-				serviceReqUpdateSDO.HisDhst.WEIGHT = dhstADO.WEIGHT;
-				serviceReqUpdateSDO.HisDhst.HEIGHT = dhstADO.HEIGHT;
-				serviceReqUpdateSDO.HisDhst.PULSE = dhstADO.PULSE;
-				serviceReqUpdateSDO.HisDhst.CHEST = dhstADO.CHEST;
-				serviceReqUpdateSDO.HisDhst.TEMPERATURE = dhstADO.TEMPERATURE;
-				serviceReqUpdateSDO.HisDhst.BREATH_RATE = dhstADO.BREATH_RATE;
-				serviceReqUpdateSDO.HisDhst.BELLY = dhstADO.BELLY;
-				serviceReqUpdateSDO.HisDhst.SPO2 = dhstADO.SPO2;
+				serviceReqUpdateSDO.HisDhst.BELLY = dHSTADO.BELLY;
+				serviceReqUpdateSDO.HisDhst.BLOOD_PRESSURE_MAX = dHSTADO.BLOOD_PRESSURE_MAX;
+				serviceReqUpdateSDO.HisDhst.BLOOD_PRESSURE_MIN = dHSTADO.BLOOD_PRESSURE_MIN;
+				serviceReqUpdateSDO.HisDhst.WEIGHT = dHSTADO.WEIGHT;
+				serviceReqUpdateSDO.HisDhst.HEIGHT = dHSTADO.HEIGHT;
+				serviceReqUpdateSDO.HisDhst.PULSE = dHSTADO.PULSE;
+				serviceReqUpdateSDO.HisDhst.CHEST = dHSTADO.CHEST;
+				serviceReqUpdateSDO.HisDhst.TEMPERATURE = dHSTADO.TEMPERATURE;
+				serviceReqUpdateSDO.HisDhst.BREATH_RATE = dHSTADO.BREATH_RATE;
+				serviceReqUpdateSDO.HisDhst.BELLY = dHSTADO.BELLY;
+				serviceReqUpdateSDO.HisDhst.SPO2 = dHSTADO.SPO2;
 				serviceReqUpdateSDO.HisDhst.EXECUTE_LOGINNAME = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
 				serviceReqUpdateSDO.HisDhst.EXECUTE_USERNAME = ClientTokenManagerStore.ClientTokenManager.GetUserName();
-				serviceReqUpdateSDO.HisDhst.EXECUTE_TIME = dhstADO.EXECUTE_TIME;
-				serviceReqUpdateSDO.HisDhst.NOTE = dhstADO.NOTE;
-				serviceReqUpdateSDO.HisDhst.CAPILLARY_BLOOD_GLUCOSE = dhstADO.CAPILLARY_BLOOD_GLUCOSE;
+				serviceReqUpdateSDO.HisDhst.EXECUTE_TIME = dHSTADO.EXECUTE_TIME;
+				serviceReqUpdateSDO.HisDhst.NOTE = dHSTADO.NOTE;
+				serviceReqUpdateSDO.HisDhst.CAPILLARY_BLOOD_GLUCOSE = dHSTADO.CAPILLARY_BLOOD_GLUCOSE;
 			}
 		}
 		catch (Exception ex)
@@ -20870,16 +20872,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void CreateThreadPostApi()
 	{
-		Thread threadSevereIllnessInfo = new Thread(CallS);
+		Thread thread = new Thread(CallS);
 		try
 		{
-			threadSevereIllnessInfo.Start();
-			threadSevereIllnessInfo.Join();
+			thread.Start();
+			thread.Join();
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
-			threadSevereIllnessInfo.Abort();
+			thread.Abort();
 		}
 	}
 
@@ -20903,9 +20905,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			string message = $"Lưu xử lý khám: SERVICE_REQ_CODE {HisServiceReqView.SERVICE_REQ_CODE}";
-			string login = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-			SdaEventLogCreate eventlog = new SdaEventLogCreate();
-			eventlog.Create(login, null, true, message);
+			string loginName = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+			SdaEventLogCreate sdaEventLogCreate = new SdaEventLogCreate();
+			sdaEventLogCreate.Create(loginName, null, true, message);
 		}
 		catch (Exception ex)
 		{
@@ -20917,16 +20919,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			V_HIS_ACCOUNT_BOOK accountBook = ListAcountBook.FirstOrDefault((V_HIS_ACCOUNT_BOOK o) => o.ID == (Room.BILL_ACCOUNT_BOOK_ID ?? 0));
-			if (accountBook != null && GlobalVariables.dicNumOrderInAccountBook != null && GlobalVariables.dicNumOrderInAccountBook.Count > 0 && GlobalVariables.dicNumOrderInAccountBook.ContainsKey(accountBook.ID))
+			V_HIS_ACCOUNT_BOOK v_HIS_ACCOUNT_BOOK = ListAcountBook.FirstOrDefault((V_HIS_ACCOUNT_BOOK o) => o.ID == (Room.BILL_ACCOUNT_BOOK_ID ?? 0));
+			if (v_HIS_ACCOUNT_BOOK != null && GlobalVariables.dicNumOrderInAccountBook != null && GlobalVariables.dicNumOrderInAccountBook.Count > 0 && GlobalVariables.dicNumOrderInAccountBook.ContainsKey(v_HIS_ACCOUNT_BOOK.ID))
 			{
-				CommonParam param = new CommonParam();
-				HisAccountBookFilter filter = new HisAccountBookFilter();
-				filter.ID = accountBook.ID;
-				List<V_HIS_TRANSACTION> apiResult = new BackendAdapter(param).Get<List<V_HIS_TRANSACTION>>("api/HisAccountBook/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-				if (apiResult != null && apiResult.Count > 0)
+				CommonParam commonParam = new CommonParam();
+				HisAccountBookFilter hisAccountBookFilter = new HisAccountBookFilter();
+				hisAccountBookFilter.ID = v_HIS_ACCOUNT_BOOK.ID;
+				List<V_HIS_TRANSACTION> list = new BackendAdapter(commonParam).Get<List<V_HIS_TRANSACTION>>("api/HisAccountBook/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisAccountBookFilter, commonParam);
+				if (list != null && list.Count > 0)
 				{
-					GlobalVariables.dicNumOrderInAccountBook[accountBook.ID] = apiResult.First().NUM_ORDER;
+					GlobalVariables.dicNumOrderInAccountBook[v_HIS_ACCOUNT_BOOK.ID] = list.First().NUM_ORDER;
 				}
 			}
 		}
@@ -20949,16 +20951,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					{
 						GlobalVariables.dicNumOrderInAccountBook = new Dictionary<long, decimal>();
 					}
-					CommonParam param = new CommonParam();
+					CommonParam commonParam = new CommonParam();
 					HisAccountBookViewFilter hisAccountBookViewFilter = new HisAccountBookViewFilter();
 					hisAccountBookViewFilter.ID = accountBook.ID;
-					List<V_HIS_ACCOUNT_BOOK> accountBooks = new BackendAdapter(param).Get<List<V_HIS_ACCOUNT_BOOK>>("api/HisAccountBook/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisAccountBookViewFilter, param);
-					if (accountBooks != null && accountBooks.Count > 0)
+					List<V_HIS_ACCOUNT_BOOK> list = new BackendAdapter(commonParam).Get<List<V_HIS_ACCOUNT_BOOK>>("api/HisAccountBook/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisAccountBookViewFilter, commonParam);
+					if (list != null && list.Count > 0)
 					{
-						V_HIS_ACCOUNT_BOOK accountBookNew = accountBooks.FirstOrDefault();
+						V_HIS_ACCOUNT_BOOK v_HIS_ACCOUNT_BOOK = list.FirstOrDefault();
 						decimal num = default(decimal);
-						num = ((!((accountBookNew.CURRENT_NUM_ORDER ?? 0m) > 0m)) ? ((decimal)accountBookNew.FROM_NUM_ORDER - 1m) : (accountBookNew.CURRENT_NUM_ORDER ?? 0m));
-						GlobalVariables.dicNumOrderInAccountBook.Add(accountBookNew.ID, num);
+						num = ((!((v_HIS_ACCOUNT_BOOK.CURRENT_NUM_ORDER ?? 0m) > 0m)) ? ((decimal)v_HIS_ACCOUNT_BOOK.FROM_NUM_ORDER - 1m) : (v_HIS_ACCOUNT_BOOK.CURRENT_NUM_ORDER ?? 0m));
+						GlobalVariables.dicNumOrderInAccountBook.Add(v_HIS_ACCOUNT_BOOK.ID, num);
 						result = GlobalVariables.dicNumOrderInAccountBook[accountBook.ID] + 1m;
 					}
 				}
@@ -20981,90 +20983,90 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private List<V_HIS_ACCOUNT_BOOK> LoadAccountBookList(long cashierRoomId)
 	{
-		List<V_HIS_ACCOUNT_BOOK> ListAccountBook = new List<V_HIS_ACCOUNT_BOOK>();
+		List<V_HIS_ACCOUNT_BOOK> list = new List<V_HIS_ACCOUNT_BOOK>();
 		try
 		{
 			string loginName = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-			HisAccountBookViewFilter acFilter = new HisAccountBookViewFilter();
-			acFilter.CASHIER_ROOM_ID = cashierRoomId;
-			acFilter.LOGINNAME = loginName;
-			acFilter.IS_ACTIVE = 1;
-			acFilter.FOR_BILL = true;
-			acFilter.IS_OUT_OF_BILL = false;
-			acFilter.ORDER_DIRECTION = "DESC";
-			acFilter.ORDER_FIELD = "ID";
-			ListAccountBook = new BackendAdapter(new CommonParam()).Get<List<V_HIS_ACCOUNT_BOOK>>("api/HisAccountBook/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, acFilter, null);
-			if (ListAccountBook != null && ListAccountBook.Count > 0)
+			HisAccountBookViewFilter hisAccountBookViewFilter = new HisAccountBookViewFilter();
+			hisAccountBookViewFilter.CASHIER_ROOM_ID = cashierRoomId;
+			hisAccountBookViewFilter.LOGINNAME = loginName;
+			hisAccountBookViewFilter.IS_ACTIVE = 1;
+			hisAccountBookViewFilter.FOR_BILL = true;
+			hisAccountBookViewFilter.IS_OUT_OF_BILL = false;
+			hisAccountBookViewFilter.ORDER_DIRECTION = "DESC";
+			hisAccountBookViewFilter.ORDER_FIELD = "ID";
+			list = new BackendAdapter(new CommonParam()).Get<List<V_HIS_ACCOUNT_BOOK>>("api/HisAccountBook/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisAccountBookViewFilter, null);
+			if (list != null && list.Count > 0)
 			{
-				ListAccountBook = ((WorkPlace.WorkInfoSDO == null || !WorkPlace.WorkInfoSDO.WorkingShiftId.HasValue) ? ListAccountBook.Where((V_HIS_ACCOUNT_BOOK o) => !o.WORKING_SHIFT_ID.HasValue).ToList() : ListAccountBook.Where((V_HIS_ACCOUNT_BOOK o) => !o.WORKING_SHIFT_ID.HasValue || o.WORKING_SHIFT_ID == WorkPlace.WorkInfoSDO.WorkingShiftId.Value).ToList());
+				list = ((WorkPlace.WorkInfoSDO == null || !WorkPlace.WorkInfoSDO.WorkingShiftId.HasValue) ? list.Where((V_HIS_ACCOUNT_BOOK o) => !o.WORKING_SHIFT_ID.HasValue).ToList() : list.Where((V_HIS_ACCOUNT_BOOK o) => !o.WORKING_SHIFT_ID.HasValue || o.WORKING_SHIFT_ID == WorkPlace.WorkInfoSDO.WorkingShiftId.Value).ToList());
 			}
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
 		}
-		return ListAccountBook;
+		return list;
 	}
 
 	private ElectronicBillResult TaoHoaDonDienTuBenThu3CungCap(V_HIS_TREATMENT_FEE row, V_HIS_TRANSACTION transaction, List<HIS_SERE_SERV_BILL> sereServs)
 	{
-		ElectronicBillResult result = new ElectronicBillResult();
+		ElectronicBillResult electronicBillResult = new ElectronicBillResult();
 		try
 		{
 			if (sereServs == null)
 			{
-				result.Success = false;
+				electronicBillResult.Success = false;
 				LogSystem.Debug("Khong co dich vu thanh toan nao duoc chon!");
-				return result;
+				return electronicBillResult;
 			}
-			HIS_TRANSACTION tran = new HIS_TRANSACTION();
-			DataObjectMapper.Map<HIS_TRANSACTION>(tran, transaction);
-			ElectronicBillDataInput dataInput = new ElectronicBillDataInput();
-			dataInput.Amount = transaction.AMOUNT;
-			dataInput.Branch = BackendDataWorker.Get<HIS_BRANCH>().FirstOrDefault((HIS_BRANCH o) => o.ID == WorkPlace.GetBranchId());
+			HIS_TRANSACTION hIS_TRANSACTION = new HIS_TRANSACTION();
+			DataObjectMapper.Map<HIS_TRANSACTION>(hIS_TRANSACTION, transaction);
+			ElectronicBillDataInput electronicBillDataInput = new ElectronicBillDataInput();
+			electronicBillDataInput.Amount = transaction.AMOUNT;
+			electronicBillDataInput.Branch = BackendDataWorker.Get<HIS_BRANCH>().FirstOrDefault((HIS_BRANCH o) => o.ID == WorkPlace.GetBranchId());
 			if (transaction.EXEMPTION.HasValue)
 			{
-				dataInput.Discount = transaction.EXEMPTION;
-				dataInput.DiscountRatio = Math.Round(transaction.EXEMPTION.Value / transaction.AMOUNT, 2);
+				electronicBillDataInput.Discount = transaction.EXEMPTION;
+				electronicBillDataInput.DiscountRatio = Math.Round(transaction.EXEMPTION.Value / transaction.AMOUNT, 2);
 			}
-			dataInput.PaymentMethod = transaction.PAY_FORM_NAME;
-			dataInput.SereServBill = sereServs;
-			dataInput.Treatment = row;
-			dataInput.Currency = "VND";
-			dataInput.Transaction = tran;
-			dataInput.TransactionTime = transaction.TRANSACTION_TIME;
-			dataInput.SymbolCode = transaction.SYMBOL_CODE;
-			dataInput.TemplateCode = transaction.TEMPLATE_CODE;
-			dataInput.EinvoiceTypeId = transaction.EINVOICE_TYPE_ID;
+			electronicBillDataInput.PaymentMethod = transaction.PAY_FORM_NAME;
+			electronicBillDataInput.SereServBill = sereServs;
+			electronicBillDataInput.Treatment = row;
+			electronicBillDataInput.Currency = "VND";
+			electronicBillDataInput.Transaction = hIS_TRANSACTION;
+			electronicBillDataInput.TransactionTime = transaction.TRANSACTION_TIME;
+			electronicBillDataInput.SymbolCode = transaction.SYMBOL_CODE;
+			electronicBillDataInput.TemplateCode = transaction.TEMPLATE_CODE;
+			electronicBillDataInput.EinvoiceTypeId = transaction.EINVOICE_TYPE_ID;
 			WaitingManager.Show();
-			ElectronicBillProcessor electronicBillProcessor = new ElectronicBillProcessor(dataInput);
-			result = electronicBillProcessor.Run(ElectronicBillType.ENUM.CREATE_INVOICE);
+			ElectronicBillProcessor electronicBillProcessor = new ElectronicBillProcessor(electronicBillDataInput);
+			electronicBillResult = electronicBillProcessor.Run(ElectronicBillType.ENUM.CREATE_INVOICE);
 			WaitingManager.Hide();
 		}
 		catch (Exception ex)
 		{
-			result.Success = false;
+			electronicBillResult.Success = false;
 			LogSystem.Error(ex);
 		}
-		return result;
+		return electronicBillResult;
 	}
 
 	private void SaveExamServiceReq(HisServiceReqExamUpdateSDO serviceReqExamUpdateSDO)
 	{
-		Thread threadCreateInvoice = null;
+		Thread thread = null;
 		paramCreateVoice = new CommonParam();
-		CommonParam param = new CommonParam();
-		bool success = false;
+		CommonParam commonParam = new CommonParam();
+		bool flag = false;
 		try
 		{
 			WaitingManager.Show();
 			serviceReqExamUpdateSDO.RequestRoomId = moduleData.RoomId;
-			HisServiceReqResult = new BackendAdapter(param).Post<HisServiceReqExamUpdateResultSDO>("api/HisServiceReq/ExamUpdate", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqExamUpdateSDO, param);
+			HisServiceReqResult = new BackendAdapter(commonParam).Post<HisServiceReqExamUpdateResultSDO>("api/HisServiceReq/ExamUpdate", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqExamUpdateSDO, commonParam);
 			if (HisServiceReqResult != null)
 			{
 				CreateThreadPostApi();
 				LogSystem.Debug(LogUtil.TraceData("HisServiceReqResult", HisServiceReqResult));
-				success = true;
+				flag = true;
 				HisServiceReqView = new V_HIS_SERVICE_REQ();
 				DataObjectMapper.Map<V_HIS_SERVICE_REQ>(HisServiceReqView, HisServiceReqResult.ServiceReq);
 				EnableButtonByServiceReq(HisServiceReqResult.ServiceReq.SERVICE_REQ_STT_ID);
@@ -21096,14 +21098,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 						long num = 1L;
 						if (tDL_TREATMENT_TYPE_ID.GetValueOrDefault() == num && tDL_TREATMENT_TYPE_ID.HasValue && !string.IsNullOrEmpty(HisConfigCFG.AutoCreatePaymentTransactions))
 						{
-							List<HIS_PATIENT_TYPE> PatientTypes = (from o in BackendDataWorker.Get<HIS_PATIENT_TYPE>()
+							List<HIS_PATIENT_TYPE> list = (from o in BackendDataWorker.Get<HIS_PATIENT_TYPE>()
 								where HisConfigCFG.AutoCreatePaymentTransactions.Split(new string[1] { ";" }, StringSplitOptions.RemoveEmptyEntries).ToList().Contains(o.PATIENT_TYPE_CODE)
 								select o).ToList();
 							ListAcountBook = LoadAccountBookList(Room.DEFAULT_CASHIER_ROOM_ID ?? 0);
-							if (PatientTypes != null && PatientTypes.Count > 0 && ListAcountBook != null && ListAcountBook.Count > 0)
+							if (list != null && list.Count > 0 && ListAcountBook != null && ListAcountBook.Count > 0)
 							{
-								threadCreateInvoice = new Thread(CreateInvoice);
-								threadCreateInvoice.Start();
+								thread = new Thread(CreateInvoice);
+								thread.Start();
 							}
 						}
 					}
@@ -21117,16 +21119,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					icdDefaultFinish.ICD_CODE = HisServiceReqResult.HospitalizeResult.Treatment.ICD_CODE;
 					icdDefaultFinish.ICD_NAME = HisServiceReqResult.HospitalizeResult.Treatment.ICD_NAME;
-					HospitalizeInitADO hospitalizeInitData = new HospitalizeInitADO();
-					hospitalizeInitData.InCode = HisServiceReqResult.HospitalizeResult.Treatment.IN_CODE;
-					hospitalizeInitData.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
-					hospitalizeInitData.IcdCode = HisServiceReqResult.HospitalizeResult.Treatment.ICD_CODE;
-					hospitalizeInitData.IcdName = HisServiceReqResult.HospitalizeResult.Treatment.ICD_NAME;
-					hospitalizeInitData.TraditionalIcdCode = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_CODE;
-					hospitalizeInitData.TraditionalIcdName = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_NAME;
+					HospitalizeInitADO hospitalizeInitADO = new HospitalizeInitADO();
+					hospitalizeInitADO.InCode = HisServiceReqResult.HospitalizeResult.Treatment.IN_CODE;
+					hospitalizeInitADO.isAutoCheckChkHospitalizeExam = HisConfigCFG.IsAutoCheckPrintHospitalizeExam;
+					hospitalizeInitADO.IcdCode = HisServiceReqResult.HospitalizeResult.Treatment.ICD_CODE;
+					hospitalizeInitADO.IcdName = HisServiceReqResult.HospitalizeResult.Treatment.ICD_NAME;
+					hospitalizeInitADO.TraditionalIcdCode = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_CODE;
+					hospitalizeInitADO.TraditionalIcdName = HisServiceReqResult.HospitalizeResult.Treatment.TRADITIONAL_ICD_NAME;
 					if (ucHospitalize != null)
 					{
-						hospitalizeProcessor.ReLoad(ucHospitalize, hospitalizeInitData);
+						hospitalizeProcessor.ReLoad(ucHospitalize, hospitalizeInitADO);
 					}
 				}
 				if (HisServiceReqResult.AdditionExamResult != null)
@@ -21200,21 +21202,21 @@ public class ExamServiceReqExecuteControl : UserControlBase
 						printTreatmentFinishProcessor.Print("Mps000174");
 					}
 					LogSystem.Fatal("Phiếu Trích Phụ Lục MPS000316 ( UC_TREATMENT_FINISH) _____ 1");
-					HIS_SERVICE_REQ req = new HIS_SERVICE_REQ();
-					DataObjectMapper.Map<HIS_SERVICE_REQ>(req, HisServiceReqView);
-					PrintTestTotalProcessor printTest = new PrintTestTotalProcessor(req);
+					HIS_SERVICE_REQ objDestination = new HIS_SERVICE_REQ();
+					DataObjectMapper.Map<HIS_SERVICE_REQ>(objDestination, HisServiceReqView);
+					PrintTestTotalProcessor printTestTotalProcessor = new PrintTestTotalProcessor(objDestination);
 					LogSystem.Fatal("Phiếu Trích Phụ Lục MPS000316 ( UC_TREATMENT_FINISH) _____ 2");
 					if (isInPhieuPhuLuc && !isKyPhieuPhuLuc)
 					{
-						printTest.Print("Mps000316", MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow);
+						printTestTotalProcessor.Print("Mps000316", MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow);
 					}
 					else if (isInPhieuPhuLuc && isKyPhieuPhuLuc)
 					{
-						printTest.Print("Mps000316", MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow);
+						printTestTotalProcessor.Print("Mps000316", MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow);
 					}
 					else if (!isInPhieuPhuLuc && isKyPhieuPhuLuc)
 					{
-						printTest.Print("Mps000316", MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow);
+						printTestTotalProcessor.Print("Mps000316", MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow);
 					}
 					LogSystem.Fatal("Phiếu Trích Phụ Lục MPS000316 ( UC_TREATMENT_FINISH) _____ 3");
 					if (IsSignExam || IsPrintExam)
@@ -21255,33 +21257,33 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					btnVoBenhAn.Enabled = false;
 				}
-				if (success && HisConfigCFG.IsAutoExitAfterFinish && ((chkExamServiceAdd.Checked && ucExamAddition != null) || (chkHospitalize.Checked && ucHospitalize != null) || (chkTreatmentFinish.Checked && ucTreatmentFinish != null) || chkExamFinish.Checked))
+				if (flag && HisConfigCFG.IsAutoExitAfterFinish && ((chkExamServiceAdd.Checked && ucExamAddition != null) || (chkHospitalize.Checked && ucHospitalize != null) || (chkTreatmentFinish.Checked && ucTreatmentFinish != null) || chkExamFinish.Checked))
 				{
 					timeClose.Start();
 				}
 			}
 			WaitingManager.Hide();
-			if (success)
+			if (flag)
 			{
-				long WarningOption = HisConfigs.Get<long>("HIS.DESKTOP.HIS_PATIENT_PROGRAM.NOT_HAS_EMR_COVER_TYPE.WARNING_OPTION");
-				if (WarningOption == 1 && treatment != null && treatment.PROGRAM_ID.HasValue && !treatment.EMR_COVER_TYPE_ID.HasValue && MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ChuaDuocTaoVoBenhAn, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+				long num2 = HisConfigs.Get<long>("HIS.DESKTOP.HIS_PATIENT_PROGRAM.NOT_HAS_EMR_COVER_TYPE.WARNING_OPTION");
+				if (num2 == 1 && treatment != null && treatment.PROGRAM_ID.HasValue && !treatment.EMR_COVER_TYPE_ID.HasValue && MessageBox.Show(HIS.Desktop.Plugins.ExamServiceReqExecute.Resources.ResourceMessage.ChuaDuocTaoVoBenhAn, "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
 				{
 					VoBenhAn();
 				}
 			}
-			if (threadCreateInvoice != null)
+			if (thread != null)
 			{
-				threadCreateInvoice.Join();
+				thread.Join();
 				if (paramCreateVoice.Messages != null && paramCreateVoice.Messages.Count > 0)
 				{
-					param.Messages.AddRange(paramCreateVoice.Messages);
+					commonParam.Messages.AddRange(paramCreateVoice.Messages);
 				}
 				else
 				{
 					UpdateDictionaryNumOrderAccountBook();
 				}
 			}
-			MessageManager.Show(base.ParentForm, param, success);
+			MessageManager.Show(base.ParentForm, commonParam, flag);
 		}
 		catch (Exception ex)
 		{
@@ -21294,36 +21296,36 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			V_HIS_TREATMENT_FEE treatmentFees = LoadTreatmentFee().FirstOrDefault();
+			V_HIS_TREATMENT_FEE v_HIS_TREATMENT_FEE = LoadTreatmentFee().FirstOrDefault();
 			V_HIS_ACCOUNT_BOOK accountBook = ListAcountBook.FirstOrDefault((V_HIS_ACCOUNT_BOOK o) => o.ID == (Room.BILL_ACCOUNT_BOOK_ID ?? 0));
 			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => accountBook), accountBook));
-			if (accountBook == null || treatmentFees == null || !((treatmentFees.TOTAL_PATIENT_PRICE ?? 0m) - (treatmentFees.TOTAL_DEPOSIT_AMOUNT ?? 0m) - (treatmentFees.TOTAL_BILL_AMOUNT ?? 0m) + (treatmentFees.TOTAL_BILL_TRANSFER_AMOUNT ?? 0m) - (treatmentFees.TOTAL_BILL_TRANSFER_AMOUNT ?? 0m) + (treatmentFees.TOTAL_REPAY_AMOUNT ?? 0m) - (treatmentFees.TOTAL_BILL_EXEMPTION ?? 0m) + (treatmentFees.LOCKING_AMOUNT ?? 0m) == 0m))
+			if (accountBook == null || v_HIS_TREATMENT_FEE == null || !((v_HIS_TREATMENT_FEE.TOTAL_PATIENT_PRICE ?? 0m) - (v_HIS_TREATMENT_FEE.TOTAL_DEPOSIT_AMOUNT ?? 0m) - (v_HIS_TREATMENT_FEE.TOTAL_BILL_AMOUNT ?? 0m) + (v_HIS_TREATMENT_FEE.TOTAL_BILL_TRANSFER_AMOUNT ?? 0m) - (v_HIS_TREATMENT_FEE.TOTAL_BILL_TRANSFER_AMOUNT ?? 0m) + (v_HIS_TREATMENT_FEE.TOTAL_REPAY_AMOUNT ?? 0m) - (v_HIS_TREATMENT_FEE.TOTAL_BILL_EXEMPTION ?? 0m) + (v_HIS_TREATMENT_FEE.LOCKING_AMOUNT ?? 0m) == 0m))
 			{
 				return;
 			}
 			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => "StartBillByDeposit"), "StartBillByDeposit"));
-			HisTransactionBillByDepositSDO sdo = new HisTransactionBillByDepositSDO();
-			sdo.AccountBookId = Room.BILL_ACCOUNT_BOOK_ID ?? 0;
-			sdo.NumOrder = (long)setDataToDicNumOrderInAccountBook(accountBook);
-			sdo.PayformId = 3L;
-			sdo.TransactionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
-			sdo.TreatmentId = treatment.ID;
-			sdo.WorkingRoomId = Room.ID;
-			sdo.CashierRoomId = Room.DEFAULT_CASHIER_ROOM_ID;
-			sdo.IsSplitByCashierDeposit = true;
-			List<HisTransactionBillResultSDO> apiResult = new BackendAdapter(paramCreateVoice).Post<List<HisTransactionBillResultSDO>>("api/HisTransaction/BillByDeposit", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sdo, paramCreateVoice);
+			HisTransactionBillByDepositSDO hisTransactionBillByDepositSDO = new HisTransactionBillByDepositSDO();
+			hisTransactionBillByDepositSDO.AccountBookId = Room.BILL_ACCOUNT_BOOK_ID ?? 0;
+			hisTransactionBillByDepositSDO.NumOrder = (long)setDataToDicNumOrderInAccountBook(accountBook);
+			hisTransactionBillByDepositSDO.PayformId = 3L;
+			hisTransactionBillByDepositSDO.TransactionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
+			hisTransactionBillByDepositSDO.TreatmentId = treatment.ID;
+			hisTransactionBillByDepositSDO.WorkingRoomId = Room.ID;
+			hisTransactionBillByDepositSDO.CashierRoomId = Room.DEFAULT_CASHIER_ROOM_ID;
+			hisTransactionBillByDepositSDO.IsSplitByCashierDeposit = true;
+			List<HisTransactionBillResultSDO> apiResult = new BackendAdapter(paramCreateVoice).Post<List<HisTransactionBillResultSDO>>("api/HisTransaction/BillByDeposit", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTransactionBillByDepositSDO, paramCreateVoice);
 			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => "EndBillByDeposit"), "EndBillByDeposit"));
 			if (apiResult != null && apiResult.Count > 0)
 			{
 				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => "StartGetSSBill"), "StartGetSSBill"));
-				HisSereServBillFilter ssbFilter = new HisSereServBillFilter();
-				ssbFilter.BILL_IDs = apiResult.Select((HisTransactionBillResultSDO s) => s.TransactionBill.ID).ToList();
-				List<HIS_SERE_SERV_BILL> apiSsbResult = new BackendAdapter(paramCreateVoice).Get<List<HIS_SERE_SERV_BILL>>("api/HisSereServBill/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, ssbFilter, paramCreateVoice);
+				HisSereServBillFilter hisSereServBillFilter = new HisSereServBillFilter();
+				hisSereServBillFilter.BILL_IDs = apiResult.Select((HisTransactionBillResultSDO s) => s.TransactionBill.ID).ToList();
+				List<HIS_SERE_SERV_BILL> source = new BackendAdapter(paramCreateVoice).Get<List<HIS_SERE_SERV_BILL>>("api/HisSereServBill/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServBillFilter, paramCreateVoice);
 				{
 					foreach (HisTransactionBillResultSDO item in apiResult)
 					{
 						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => "StartCreateInvoice"), "StartCreateInvoice"));
-						ElectronicBillResult electronicBillResult = TaoHoaDonDienTuBenThu3CungCap(treatmentFees, item.TransactionBill, apiSsbResult.Where((HIS_SERE_SERV_BILL o) => o.BILL_ID == item.TransactionBill.ID).ToList());
+						ElectronicBillResult electronicBillResult = TaoHoaDonDienTuBenThu3CungCap(v_HIS_TREATMENT_FEE, item.TransactionBill, source.Where((HIS_SERE_SERV_BILL o) => o.BILL_ID == item.TransactionBill.ID).ToList());
 						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => electronicBillResult), electronicBillResult));
 						if (electronicBillResult == null || !electronicBillResult.Success)
 						{
@@ -21337,15 +21339,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 							}
 							continue;
 						}
-						HisTransactionInvoiceInfoSDO tsdo = new HisTransactionInvoiceInfoSDO();
-						tsdo.EinvoiceLoginname = electronicBillResult.InvoiceLoginname;
-						tsdo.InvoiceCode = electronicBillResult.InvoiceCode;
-						tsdo.InvoiceSys = electronicBillResult.InvoiceSys;
-						tsdo.EinvoiceNumOrder = electronicBillResult.InvoiceNumOrder;
-						tsdo.EInvoiceTime = electronicBillResult.InvoiceTime ?? Inventec.Common.DateTime.Get.Now() ?? 0;
-						tsdo.Id = item.TransactionBill.ID;
-						tsdo.InvoiceLookupCode = electronicBillResult.InvoiceLookupCode;
-						if (new BackendAdapter(paramCreateVoice).Post<bool>("api/HisTransaction/UpdateInvoiceInfo", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, tsdo, paramCreateVoice))
+						HisTransactionInvoiceInfoSDO hisTransactionInvoiceInfoSDO = new HisTransactionInvoiceInfoSDO();
+						hisTransactionInvoiceInfoSDO.EinvoiceLoginname = electronicBillResult.InvoiceLoginname;
+						hisTransactionInvoiceInfoSDO.InvoiceCode = electronicBillResult.InvoiceCode;
+						hisTransactionInvoiceInfoSDO.InvoiceSys = electronicBillResult.InvoiceSys;
+						hisTransactionInvoiceInfoSDO.EinvoiceNumOrder = electronicBillResult.InvoiceNumOrder;
+						hisTransactionInvoiceInfoSDO.EInvoiceTime = electronicBillResult.InvoiceTime ?? Inventec.Common.DateTime.Get.Now() ?? 0;
+						hisTransactionInvoiceInfoSDO.Id = item.TransactionBill.ID;
+						hisTransactionInvoiceInfoSDO.InvoiceLookupCode = electronicBillResult.InvoiceLookupCode;
+						if (new BackendAdapter(paramCreateVoice).Post<bool>("api/HisTransaction/UpdateInvoiceInfo", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTransactionInvoiceInfoSDO, paramCreateVoice))
 						{
 							LogSystem.Info("UpdateInvoiceInfo Success");
 						}
@@ -21372,16 +21374,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return false;
 			}
-			HisServiceReqExamUpdateSDO hisServiceReqSDO = new HisServiceReqExamUpdateSDO();
-			ProcessExamServiceReqDTO(ref hisServiceReqSDO);
-			ProcessExamSereIcdDTO(ref hisServiceReqSDO);
-			ProcessExamSereNextTreatmentIntructionDTO(ref hisServiceReqSDO);
-			ProcessExamSereDHST(ref hisServiceReqSDO);
+			HisServiceReqExamUpdateSDO examServiceReqUpdateSDO = new HisServiceReqExamUpdateSDO();
+			ProcessExamServiceReqDTO(ref examServiceReqUpdateSDO);
+			ProcessExamSereIcdDTO(ref examServiceReqUpdateSDO);
+			ProcessExamSereNextTreatmentIntructionDTO(ref examServiceReqUpdateSDO);
+			ProcessExamSereDHST(ref examServiceReqUpdateSDO);
 			if (!valiDHST)
 			{
 				return false;
 			}
-			SaveExamServiceReq(hisServiceReqSDO);
+			SaveExamServiceReq(examServiceReqUpdateSDO);
 		}
 		catch (Exception ex)
 		{
@@ -21408,11 +21410,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			V_HIS_TREATMENT_4 treatment = new V_HIS_TREATMENT_4();
-			treatment.ID = HisServiceReqView.TREATMENT_ID;
-			List<object> listArgs = new List<object>();
-			listArgs.Add(treatment);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.PublicServices_NT", moduleData.RoomId, moduleData.RoomTypeId, listArgs);
+			V_HIS_TREATMENT_4 v_HIS_TREATMENT_ = new V_HIS_TREATMENT_4();
+			v_HIS_TREATMENT_.ID = HisServiceReqView.TREATMENT_ID;
+			List<object> list = new List<object>();
+			list.Add(v_HIS_TREATMENT_);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.PublicServices_NT", moduleData.RoomId, moduleData.RoomTypeId, list);
 		}
 		catch (Exception ex)
 		{
@@ -21424,9 +21426,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			List<object> ListArgs = new List<object>();
-			ListArgs.Add(HisServiceReqView.TREATMENT_ID);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.RequestDeposit", moduleData.RoomId, moduleData.RoomTypeId, ListArgs);
+			List<object> list = new List<object>();
+			list.Add(HisServiceReqView.TREATMENT_ID);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.RequestDeposit", moduleData.RoomId, moduleData.RoomTypeId, list);
 		}
 		catch (Exception ex)
 		{
@@ -21438,29 +21440,29 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HIS_TREATMENT treatment = GetTreatmentById(HisServiceReqView.TREATMENT_ID);
-			if (treatment == null)
+			HIS_TREATMENT treatmentById = GetTreatmentById(HisServiceReqView.TREATMENT_ID);
+			if (treatmentById == null)
 			{
 				return;
 			}
-			Inventec.Desktop.Common.Modules.Module moduleData = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisTreatmentFile").FirstOrDefault();
-			if (moduleData == null)
+			Inventec.Desktop.Common.Modules.Module module = GlobalVariables.currentModuleRaws.Where((Inventec.Desktop.Common.Modules.Module o) => o.ModuleLink == "HIS.Desktop.Plugins.HisTreatmentFile").FirstOrDefault();
+			if (module == null)
 			{
 				LogSystem.Error("khong tim thay moduleLink = HIS.Desktop.Plugins.HisTreatmentFile");
 			}
 			LogSystem.Error("CHECK HIS.Desktop.Plugins.HisTreatmentFile");
-			if (moduleData.IsPlugin && moduleData.ExtensionInfo != null)
+			if (module.IsPlugin && module.ExtensionInfo != null)
 			{
 				LogSystem.Error("OPEN HIS.Desktop.Plugins.HisTreatmentFile");
-				List<object> listArgs = new List<object>();
-				listArgs.Add(treatment.ID);
-				listArgs.Add(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId));
-				object extenceInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(moduleData, this.moduleData.RoomId, this.moduleData.RoomTypeId), listArgs);
-				if (extenceInstance == null)
+				List<object> list = new List<object>();
+				list.Add(treatmentById.ID);
+				list.Add(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId));
+				object pluginInstance = PluginInstance.GetPluginInstance(PluginInstance.GetModuleWithWorkingRoom(module, moduleData.RoomId, moduleData.RoomTypeId), list);
+				if (pluginInstance == null)
 				{
 					throw new ArgumentNullException("moduleData is null");
 				}
-				((Form)extenceInstance).ShowDialog();
+				((Form)pluginInstance).ShowDialog();
 			}
 			LogSystem.Error("CLOSE HIS.Desktop.Plugins.HisTreatmentFile");
 		}
@@ -21474,9 +21476,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			List<object> ListArgs = new List<object>();
-			ListArgs.Add(HisServiceReqView.TREATMENT_ID);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.RequestDeposit", moduleData.RoomId, moduleData.RoomTypeId, ListArgs);
+			List<object> list = new List<object>();
+			list.Add(HisServiceReqView.TREATMENT_ID);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.RequestDeposit", moduleData.RoomId, moduleData.RoomTypeId, list);
 		}
 		catch (Exception ex)
 		{
@@ -21490,11 +21492,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (treatment != null)
 			{
-				PrintOtherInputADO ado = new PrintOtherInputADO();
-				ado.TreatmentId = treatment.ID;
-				ado.PatientId = treatment.PATIENT_ID;
-				PrintOtherFormProcessor printProcess = new PrintOtherFormProcessor(ado, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
-				printProcess.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000418_BENH_AN_NGOAI_TRU_DAY_MAT);
+				PrintOtherInputADO printOtherInputADO = new PrintOtherInputADO();
+				printOtherInputADO.TreatmentId = treatment.ID;
+				printOtherInputADO.PatientId = treatment.PATIENT_ID;
+				PrintOtherFormProcessor printOtherFormProcessor = new PrintOtherFormProcessor(printOtherInputADO, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
+				printOtherFormProcessor.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000418_BENH_AN_NGOAI_TRU_DAY_MAT);
 			}
 		}
 		catch (Exception ex)
@@ -21519,8 +21521,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			frmConnectCOM connectCom = new frmConnectCOM();
-			connectCom.ShowDialog();
+			frmConnectCOM frmConnectCOM = new frmConnectCOM();
+			frmConnectCOM.ShowDialog();
 		}
 		catch (Exception ex)
 		{
@@ -21534,11 +21536,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (treatment != null)
 			{
-				PrintOtherInputADO ado = new PrintOtherInputADO();
-				ado.TreatmentId = treatment.ID;
-				ado.PatientId = treatment.PATIENT_ID;
-				PrintOtherFormProcessor printProcess = new PrintOtherFormProcessor(ado, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
-				printProcess.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000419_BENH_AN_NGOAI_TRU_GLAUCOMA);
+				PrintOtherInputADO printOtherInputADO = new PrintOtherInputADO();
+				printOtherInputADO.TreatmentId = treatment.ID;
+				printOtherInputADO.PatientId = treatment.PATIENT_ID;
+				PrintOtherFormProcessor printOtherFormProcessor = new PrintOtherFormProcessor(printOtherInputADO, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
+				printOtherFormProcessor.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000419_BENH_AN_NGOAI_TRU_GLAUCOMA);
 			}
 		}
 		catch (Exception ex)
@@ -21552,10 +21554,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			long roomId = moduleData.RoomId;
-			EmrInputADO emrInputAdo = new EmrInputADO();
-			emrInputAdo.TreatmentId = treatment.ID;
-			emrInputAdo.PatientId = treatment.PATIENT_ID;
-			List<HIS_EMR_COVER_CONFIG> data = BackendDataWorker.Get<HIS_EMR_COVER_CONFIG>().Where(delegate(HIS_EMR_COVER_CONFIG o)
+			EmrInputADO emrInputADO = new EmrInputADO();
+			emrInputADO.TreatmentId = treatment.ID;
+			emrInputADO.PatientId = treatment.PATIENT_ID;
+			List<HIS_EMR_COVER_CONFIG> list = BackendDataWorker.Get<HIS_EMR_COVER_CONFIG>().Where(delegate(HIS_EMR_COVER_CONFIG o)
 			{
 				int? num3 = o.IS_ACTIVE;
 				int num4 = 1;
@@ -21563,45 +21565,45 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}).ToList();
 			if (treatment.EMR_COVER_TYPE_ID.HasValue)
 			{
-				emrInputAdo.EmrCoverTypeId = treatment.EMR_COVER_TYPE_ID.Value;
+				emrInputADO.EmrCoverTypeId = treatment.EMR_COVER_TYPE_ID.Value;
 			}
-			else if (data != null && data.Count > 0)
+			else if (list != null && list.Count > 0)
 			{
-				if (data.Count == 1)
+				if (list.Count == 1)
 				{
-					emrInputAdo.EmrCoverTypeId = data.FirstOrDefault().EMR_COVER_TYPE_ID;
+					emrInputADO.EmrCoverTypeId = list.FirstOrDefault().EMR_COVER_TYPE_ID;
 				}
 				else
 				{
-					emrInputAdo.lstEmrCoverTypeId = new List<long>();
-					emrInputAdo.lstEmrCoverTypeId = data.Select((HIS_EMR_COVER_CONFIG o) => o.EMR_COVER_TYPE_ID).ToList();
+					emrInputADO.lstEmrCoverTypeId = new List<long>();
+					emrInputADO.lstEmrCoverTypeId = list.Select((HIS_EMR_COVER_CONFIG o) => o.EMR_COVER_TYPE_ID).ToList();
 				}
 			}
 			else
 			{
 				long DepartmentID = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == roomId).DepartmentId;
-				List<HIS_EMR_COVER_CONFIG> DataConfig = BackendDataWorker.Get<HIS_EMR_COVER_CONFIG>().Where(delegate(HIS_EMR_COVER_CONFIG o)
+				List<HIS_EMR_COVER_CONFIG> list2 = BackendDataWorker.Get<HIS_EMR_COVER_CONFIG>().Where(delegate(HIS_EMR_COVER_CONFIG o)
 				{
 					int? num = o.IS_ACTIVE;
 					int num2 = 1;
 					return num.GetValueOrDefault() == num2 && num.HasValue && o.DEPARTMENT_ID == DepartmentID && o.TREATMENT_TYPE_ID == treatment.TDL_TREATMENT_TYPE_ID;
 				}).ToList();
-				if (DataConfig != null && DataConfig.Count > 0)
+				if (list2 != null && list2.Count > 0)
 				{
-					if (DataConfig.Count == 1)
+					if (list2.Count == 1)
 					{
-						emrInputAdo.EmrCoverTypeId = DataConfig.FirstOrDefault().EMR_COVER_TYPE_ID;
+						emrInputADO.EmrCoverTypeId = list2.FirstOrDefault().EMR_COVER_TYPE_ID;
 					}
 					else
 					{
-						emrInputAdo.lstEmrCoverTypeId = new List<long>();
-						emrInputAdo.lstEmrCoverTypeId = DataConfig.Select((HIS_EMR_COVER_CONFIG o) => o.EMR_COVER_TYPE_ID).ToList();
+						emrInputADO.lstEmrCoverTypeId = new List<long>();
+						emrInputADO.lstEmrCoverTypeId = list2.Select((HIS_EMR_COVER_CONFIG o) => o.EMR_COVER_TYPE_ID).ToList();
 					}
 				}
 			}
-			emrInputAdo.roomId = roomId;
-			frmPhieu frm = new frmPhieu(emrInputAdo);
-			frm.ShowDialog();
+			emrInputADO.roomId = roomId;
+			frmPhieu frmPhieu = new frmPhieu(emrInputADO);
+			frmPhieu.ShowDialog();
 		}
 		catch (Exception ex)
 		{
@@ -21663,10 +21665,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			List<Action> methods = new List<Action>();
-			methods.Add(LoadPatient);
-			methods.Add(LoadPatientTypeAlter);
-			ThreadCustomManager.MultipleThreadWithJoin(methods);
+			List<Action> list = new List<Action>();
+			list.Add(LoadPatient);
+			list.Add(LoadPatientTypeAlter);
+			ThreadCustomManager.MultipleThreadWithJoin(list);
 			if (patientTypeAlter == null)
 			{
 				patientTypeAlter = new V_HIS_PATIENT_TYPE_ALTER();
@@ -21674,24 +21676,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			OtherFormAssTreatmentInputADO otherFormAssTreatmentInputADO = new OtherFormAssTreatmentInputADO();
 			otherFormAssTreatmentInputADO.TreatmentId = treatment.ID;
 			otherFormAssTreatmentInputADO.PrintTypeCode = "Mps000437";
-			Dictionary<string, object> dicParamPlus = new Dictionary<string, object>();
-			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patient, dicParamPlus);
-			HIS_DEPARTMENT depart = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == serviceReq.EXECUTE_DEPARTMENT_ID);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "TDL_PATIENT_NAME", patient.LAST_NAME + " " + patient.FIRST_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "DOB", patient.DOB.ToString().Substring(0, 4));
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "GENDER_NAME", patient.GENDER_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "TDL_PATIENT_CODE", patient.PATIENT_CODE);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "TDL_PATIENT_PHONE", patient.PHONE);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "ADDRESS", patient.ADDRESS);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "PROVINCE_NAME", patient.PROVINCE_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "DISRICT_NAME", patient.DISTRICT_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "COMMUNE_NAME", patient.COMMUNE_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "EXECUTE_DEPARTMENT_NAME", depart.DEPARTMENT_NAME);
-			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patientTypeAlter, dicParamPlus);
-			otherFormAssTreatmentInputADO.DicParam = dicParamPlus;
-			List<object> listObj = new List<object>();
-			listObj.Add(otherFormAssTreatmentInputADO);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, listObj);
+			Dictionary<string, object> dictionary = new Dictionary<string, object>();
+			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patient, dictionary);
+			HIS_DEPARTMENT hIS_DEPARTMENT = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == serviceReq.EXECUTE_DEPARTMENT_ID);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "TDL_PATIENT_NAME", patient.LAST_NAME + " " + patient.FIRST_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "DOB", patient.DOB.ToString().Substring(0, 4));
+			TemplateKeyProcessor.SetSingleKey(dictionary, "GENDER_NAME", patient.GENDER_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "TDL_PATIENT_CODE", patient.PATIENT_CODE);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "TDL_PATIENT_PHONE", patient.PHONE);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "ADDRESS", patient.ADDRESS);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "PROVINCE_NAME", patient.PROVINCE_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "DISRICT_NAME", patient.DISTRICT_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "COMMUNE_NAME", patient.COMMUNE_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "EXECUTE_DEPARTMENT_NAME", hIS_DEPARTMENT.DEPARTMENT_NAME);
+			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patientTypeAlter, dictionary);
+			otherFormAssTreatmentInputADO.DicParam = dictionary;
+			List<object> list2 = new List<object>();
+			list2.Add(otherFormAssTreatmentInputADO);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, list2);
 		}
 		catch (Exception ex)
 		{
@@ -21704,10 +21706,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			LogSystem.Debug("LoadBieuMauGiayDongYXetNghiemHIV.1");
-			List<Action> methods = new List<Action>();
-			methods.Add(LoadPatient);
-			methods.Add(LoadPatientTypeAlter);
-			ThreadCustomManager.MultipleThreadWithJoin(methods);
+			List<Action> list = new List<Action>();
+			list.Add(LoadPatient);
+			list.Add(LoadPatientTypeAlter);
+			ThreadCustomManager.MultipleThreadWithJoin(list);
 			if (patientTypeAlter == null)
 			{
 				patientTypeAlter = new V_HIS_PATIENT_TYPE_ALTER();
@@ -21715,16 +21717,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			OtherFormAssTreatmentInputADO otherFormAssTreatmentInputADO = new OtherFormAssTreatmentInputADO();
 			otherFormAssTreatmentInputADO.TreatmentId = treatment.ID;
 			otherFormAssTreatmentInputADO.PrintTypeCode = "Mps000401";
-			Dictionary<string, object> dicParamPlus = new Dictionary<string, object>();
-			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patient, dicParamPlus);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "AGE", AgeUtil.CalculateFullAge(patient.DOB));
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "DOB_YEAR", patient.DOB.ToString().Substring(0, 4));
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "PHONE", patient.PHONE);
-			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patientTypeAlter, dicParamPlus);
-			otherFormAssTreatmentInputADO.DicParam = dicParamPlus;
-			List<object> listObj = new List<object>();
-			listObj.Add(otherFormAssTreatmentInputADO);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, listObj);
+			Dictionary<string, object> dictionary = new Dictionary<string, object>();
+			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patient, dictionary);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "AGE", AgeUtil.CalculateFullAge(patient.DOB));
+			TemplateKeyProcessor.SetSingleKey(dictionary, "DOB_YEAR", patient.DOB.ToString().Substring(0, 4));
+			TemplateKeyProcessor.SetSingleKey(dictionary, "PHONE", patient.PHONE);
+			TemplateKeyProcessor.AddKeyIntoDictionaryPrint(patientTypeAlter, dictionary);
+			otherFormAssTreatmentInputADO.DicParam = dictionary;
+			List<object> list2 = new List<object>();
+			list2.Add(otherFormAssTreatmentInputADO);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, list2);
 			LogSystem.Debug("LoadBieuMauGiayDongYXetNghiemHIV.2");
 		}
 		catch (Exception ex)
@@ -21763,10 +21765,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisTreatmentFilter treatmentFilter = new HisTreatmentFilter();
-			treatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
-			HIS_TREATMENT treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, new CommonParam()).FirstOrDefault();
-			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(treatment, BranchDataWorker.Branch, (currentModuleBase != null) ? currentModuleBase.RoomId : 0);
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
+			HIS_TREATMENT his_Treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, new CommonParam()).FirstOrDefault();
+			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(his_Treatment, BranchDataWorker.Branch, (currentModuleBase != null) ? currentModuleBase.RoomId : 0);
 			printTreatmentFinishProcessor.Print("Mps000268", PrintNow: false);
 		}
 		catch (Exception ex)
@@ -21792,26 +21794,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisExpMestFilter expMestFilter = new HisExpMestFilter();
-			expMestFilter.TDL_TREATMENT_ID = treatmentId;
-			List<HIS_EXP_MEST> expMests = new BackendAdapter(param).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestFilter, param);
-			List<HIS_EXP_MEST> expMestsFake = new List<HIS_EXP_MEST>();
-			List<HIS_SERVICE_REQ> ServiceReqFake = new List<HIS_SERVICE_REQ>();
-			if (expMests == null || expMests.Count == 0 || (expMests != null && (expMests.Where((HIS_EXP_MEST o) => o.EXP_MEST_TYPE_ID == 1).ToList() == null || expMests.Where((HIS_EXP_MEST o) => o.EXP_MEST_TYPE_ID == 1).ToList().Count == 0)))
+			CommonParam commonParam = new CommonParam();
+			HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+			hisExpMestFilter.TDL_TREATMENT_ID = treatmentId;
+			List<HIS_EXP_MEST> list = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, commonParam);
+			List<HIS_EXP_MEST> list2 = new List<HIS_EXP_MEST>();
+			List<HIS_SERVICE_REQ> list3 = new List<HIS_SERVICE_REQ>();
+			if (list == null || list.Count == 0 || (list != null && (list.Where((HIS_EXP_MEST o) => o.EXP_MEST_TYPE_ID == 1).ToList() == null || list.Where((HIS_EXP_MEST o) => o.EXP_MEST_TYPE_ID == 1).ToList().Count == 0)))
 			{
 				if (IsMenuButton)
 				{
-					HIS_EXP_MEST obj2 = new HIS_EXP_MEST();
-					obj2.ID = -1L;
-					obj2.SERVICE_REQ_ID = -1L;
-					expMestsFake.Add(obj2);
-					HIS_SERVICE_REQ hIS_SERVICE_REQ2 = new HIS_SERVICE_REQ();
-					DataObjectMapper.Map<HIS_SERVICE_REQ>(hIS_SERVICE_REQ2, treatment);
-					hIS_SERVICE_REQ2.ID = -1L;
-					hIS_SERVICE_REQ2.TREATMENT_ID = treatment.ID;
-					hIS_SERVICE_REQ2.REQUEST_ROOM_ID = moduleData.RoomId;
-					ServiceReqFake.Add(hIS_SERVICE_REQ2);
+					HIS_EXP_MEST hIS_EXP_MEST = new HIS_EXP_MEST();
+					hIS_EXP_MEST.ID = -1L;
+					hIS_EXP_MEST.SERVICE_REQ_ID = -1L;
+					list2.Add(hIS_EXP_MEST);
+					HIS_SERVICE_REQ hIS_SERVICE_REQ = new HIS_SERVICE_REQ();
+					DataObjectMapper.Map<HIS_SERVICE_REQ>(hIS_SERVICE_REQ, treatment);
+					hIS_SERVICE_REQ.ID = -1L;
+					hIS_SERVICE_REQ.TREATMENT_ID = treatment.ID;
+					hIS_SERVICE_REQ.REQUEST_ROOM_ID = moduleData.RoomId;
+					list3.Add(hIS_SERVICE_REQ);
 				}
 				else
 				{
@@ -21819,101 +21821,101 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					{
 						return;
 					}
-					HIS_EXP_MEST obj = new HIS_EXP_MEST();
-					obj.ID = -1L;
-					obj.SERVICE_REQ_ID = -1L;
-					expMestsFake.Add(obj);
-					HIS_SERVICE_REQ hIS_SERVICE_REQ = new HIS_SERVICE_REQ();
-					DataObjectMapper.Map<HIS_SERVICE_REQ>(hIS_SERVICE_REQ, treatment);
-					hIS_SERVICE_REQ.ID = -1L;
-					hIS_SERVICE_REQ.TREATMENT_ID = treatment.ID;
-					hIS_SERVICE_REQ.REQUEST_ROOM_ID = moduleData.RoomId;
-					ServiceReqFake.Add(hIS_SERVICE_REQ);
+					HIS_EXP_MEST hIS_EXP_MEST2 = new HIS_EXP_MEST();
+					hIS_EXP_MEST2.ID = -1L;
+					hIS_EXP_MEST2.SERVICE_REQ_ID = -1L;
+					list2.Add(hIS_EXP_MEST2);
+					HIS_SERVICE_REQ hIS_SERVICE_REQ2 = new HIS_SERVICE_REQ();
+					DataObjectMapper.Map<HIS_SERVICE_REQ>(hIS_SERVICE_REQ2, treatment);
+					hIS_SERVICE_REQ2.ID = -1L;
+					hIS_SERVICE_REQ2.TREATMENT_ID = treatment.ID;
+					hIS_SERVICE_REQ2.REQUEST_ROOM_ID = moduleData.RoomId;
+					list3.Add(hIS_SERVICE_REQ2);
 				}
 			}
-			HisServiceReqFilter serviceReqFilter = new HisServiceReqFilter();
-			serviceReqFilter.TREATMENT_ID = treatmentId;
-			List<HIS_SERVICE_REQ> serviceReqs = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqFilter, param);
-			IEnumerable<IGrouping<long?, HIS_EXP_MEST>> expMestGroups = null;
-			List<HIS_EXP_MEST_MEDICINE> expMestMedicines = null;
-			List<HIS_EXP_MEST_MATERIAL> expMestMaterials = null;
-			if (expMests != null && expMests.Count > 0)
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.TREATMENT_ID = treatmentId;
+			List<HIS_SERVICE_REQ> source = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, commonParam);
+			IEnumerable<IGrouping<long?, HIS_EXP_MEST>> enumerable = null;
+			List<HIS_EXP_MEST_MEDICINE> source2 = null;
+			List<HIS_EXP_MEST_MATERIAL> source3 = null;
+			if (list != null && list.Count > 0)
 			{
-				HisExpMestMedicineFilter expMestMedicineFilter = new HisExpMestMedicineFilter();
-				expMestMedicineFilter.EXP_MEST_IDs = expMests.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				expMestMedicines = new BackendAdapter(param).Get<List<HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMedicineFilter, param);
-				HisExpMestMaterialFilter expMestMaterialFilter = new HisExpMestMaterialFilter();
-				expMestMaterialFilter.EXP_MEST_IDs = expMests.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				expMestMaterials = new BackendAdapter(param).Get<List<HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMaterialFilter, param);
-				expMestGroups = from o in expMests
+				HisExpMestMedicineFilter hisExpMestMedicineFilter = new HisExpMestMedicineFilter();
+				hisExpMestMedicineFilter.EXP_MEST_IDs = list.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				source2 = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineFilter, commonParam);
+				HisExpMestMaterialFilter hisExpMestMaterialFilter = new HisExpMestMaterialFilter();
+				hisExpMestMaterialFilter.EXP_MEST_IDs = list.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				source3 = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMaterialFilter, commonParam);
+				enumerable = from o in list
 					where o.EXP_MEST_TYPE_ID == 1
 					group o by o.AGGR_EXP_MEST_ID;
 			}
-			string printTypeCode = HisConfigCFG.MPS_PrintPrescription;
-			if (string.IsNullOrEmpty(printTypeCode))
+			string text = HisConfigCFG.MPS_PrintPrescription;
+			if (string.IsNullOrEmpty(text))
 			{
-				printTypeCode = "Mps000234";
+				text = "Mps000234";
 			}
-			if (expMestGroups != null && expMestGroups.ToList().Count > 0)
+			if (enumerable != null && enumerable.ToList().Count > 0)
 			{
-				foreach (IGrouping<long?, HIS_EXP_MEST> listExpMest in expMestGroups)
+				foreach (IGrouping<long?, HIS_EXP_MEST> listExpMest in enumerable)
 				{
 					if (!listExpMest.First().AGGR_EXP_MEST_ID.HasValue)
 					{
-						foreach (HIS_EXP_MEST expMest in listExpMest)
+						foreach (HIS_EXP_MEST item in listExpMest)
 						{
-							List<long> serviceReqIdTemps2 = new List<long> { expMest.SERVICE_REQ_ID ?? 0 };
-							List<long> expMestIdTemps2 = new List<long> { expMest.ID };
-							List<HIS_SERVICE_REQ> serviceReqTemps2 = serviceReqs.Where((HIS_SERVICE_REQ o) => serviceReqIdTemps2.Contains(o.ID)).ToList();
-							List<HIS_EXP_MEST_MEDICINE> expMestMedicineTemps2 = expMestMedicines.Where((HIS_EXP_MEST_MEDICINE o) => expMestIdTemps2.Contains(o.EXP_MEST_ID ?? 0)).ToList();
-							List<HIS_EXP_MEST_MATERIAL> expMestMaterialTemps2 = expMestMaterials.Where((HIS_EXP_MEST_MATERIAL o) => expMestIdTemps2.Contains(o.EXP_MEST_ID ?? 0)).ToList();
-							List<OutPatientPresResultSDO> OutPatientPresResultSDOForPrints3 = new List<OutPatientPresResultSDO>();
-							if ((expMestMedicineTemps2 != null && expMestMedicineTemps2.Count > 0) || (expMestMaterialTemps2 != null && expMestMaterialTemps2.Count > 0))
+							List<long> serviceReqIdTemps2 = new List<long> { item.SERVICE_REQ_ID ?? 0 };
+							List<long> expMestIdTemps2 = new List<long> { item.ID };
+							List<HIS_SERVICE_REQ> serviceReqs = source.Where((HIS_SERVICE_REQ o) => serviceReqIdTemps2.Contains(o.ID)).ToList();
+							List<HIS_EXP_MEST_MEDICINE> list4 = source2.Where((HIS_EXP_MEST_MEDICINE o) => expMestIdTemps2.Contains(o.EXP_MEST_ID ?? 0)).ToList();
+							List<HIS_EXP_MEST_MATERIAL> list5 = source3.Where((HIS_EXP_MEST_MATERIAL o) => expMestIdTemps2.Contains(o.EXP_MEST_ID ?? 0)).ToList();
+							List<OutPatientPresResultSDO> list6 = new List<OutPatientPresResultSDO>();
+							if ((list4 != null && list4.Count > 0) || (list5 != null && list5.Count > 0))
 							{
-								OutPatientPresResultSDO outPatientPresResultSDO3 = new OutPatientPresResultSDO();
-								outPatientPresResultSDO3.ExpMests = new List<HIS_EXP_MEST> { expMest };
-								outPatientPresResultSDO3.ServiceReqs = serviceReqTemps2;
-								outPatientPresResultSDO3.Medicines = expMestMedicineTemps2;
-								outPatientPresResultSDO3.Materials = expMestMaterialTemps2;
-								OutPatientPresResultSDOForPrints3.Add(outPatientPresResultSDO3);
+								OutPatientPresResultSDO outPatientPresResultSDO = new OutPatientPresResultSDO();
+								outPatientPresResultSDO.ExpMests = new List<HIS_EXP_MEST> { item };
+								outPatientPresResultSDO.ServiceReqs = serviceReqs;
+								outPatientPresResultSDO.Medicines = list4;
+								outPatientPresResultSDO.Materials = list5;
+								list6.Add(outPatientPresResultSDO);
 							}
-							PrintPrescriptionProcessor printPrescriptionProcessor3 = new PrintPrescriptionProcessor(OutPatientPresResultSDOForPrints3, expMest, moduleData);
-							printPrescriptionProcessor3.Print(printTypeCode, PrintNow: false);
+							PrintPrescriptionProcessor printPrescriptionProcessor = new PrintPrescriptionProcessor(list6, item, moduleData);
+							printPrescriptionProcessor.Print(text, PrintNow: false);
 						}
 					}
 					else
 					{
-						HIS_EXP_MEST expMestPrimary = expMests.FirstOrDefault((HIS_EXP_MEST o) => o.ID == listExpMest.First().AGGR_EXP_MEST_ID);
+						HIS_EXP_MEST expMest = list.FirstOrDefault((HIS_EXP_MEST o) => o.ID == listExpMest.First().AGGR_EXP_MEST_ID);
 						List<long> serviceReqIdTemps = listExpMest.Select((HIS_EXP_MEST o) => o.SERVICE_REQ_ID ?? 0).ToList();
 						List<long> expMestIdTemps = listExpMest.Select((HIS_EXP_MEST o) => o.ID).ToList();
-						List<HIS_SERVICE_REQ> serviceReqTemps = serviceReqs.Where((HIS_SERVICE_REQ o) => serviceReqIdTemps.Contains(o.ID)).ToList();
-						List<HIS_EXP_MEST_MEDICINE> expMestMedicineTemps = expMestMedicines.Where((HIS_EXP_MEST_MEDICINE o) => expMestIdTemps.Contains(o.EXP_MEST_ID ?? 0)).ToList();
-						List<HIS_EXP_MEST_MATERIAL> expMestMaterialTemps = expMestMaterials.Where((HIS_EXP_MEST_MATERIAL o) => expMestIdTemps.Contains(o.EXP_MEST_ID ?? 0)).ToList();
-						List<OutPatientPresResultSDO> OutPatientPresResultSDOForPrints2 = new List<OutPatientPresResultSDO>();
-						if ((expMestMedicineTemps != null && expMestMedicineTemps.Count > 0) || (expMestMaterialTemps != null && expMestMaterialTemps.Count > 0))
+						List<HIS_SERVICE_REQ> serviceReqs2 = source.Where((HIS_SERVICE_REQ o) => serviceReqIdTemps.Contains(o.ID)).ToList();
+						List<HIS_EXP_MEST_MEDICINE> list7 = source2.Where((HIS_EXP_MEST_MEDICINE o) => expMestIdTemps.Contains(o.EXP_MEST_ID ?? 0)).ToList();
+						List<HIS_EXP_MEST_MATERIAL> list8 = source3.Where((HIS_EXP_MEST_MATERIAL o) => expMestIdTemps.Contains(o.EXP_MEST_ID ?? 0)).ToList();
+						List<OutPatientPresResultSDO> list9 = new List<OutPatientPresResultSDO>();
+						if ((list7 != null && list7.Count > 0) || (list8 != null && list8.Count > 0))
 						{
 							OutPatientPresResultSDO outPatientPresResultSDO2 = new OutPatientPresResultSDO();
 							outPatientPresResultSDO2.ExpMests = listExpMest.ToList();
-							outPatientPresResultSDO2.ServiceReqs = serviceReqTemps;
-							outPatientPresResultSDO2.Medicines = expMestMedicineTemps;
-							outPatientPresResultSDO2.Materials = expMestMaterialTemps;
-							OutPatientPresResultSDOForPrints2.Add(outPatientPresResultSDO2);
+							outPatientPresResultSDO2.ServiceReqs = serviceReqs2;
+							outPatientPresResultSDO2.Medicines = list7;
+							outPatientPresResultSDO2.Materials = list8;
+							list9.Add(outPatientPresResultSDO2);
 						}
-						PrintPrescriptionProcessor printPrescriptionProcessor2 = new PrintPrescriptionProcessor(OutPatientPresResultSDOForPrints2, expMestPrimary, moduleData);
-						printPrescriptionProcessor2.Print(printTypeCode, printNow);
+						PrintPrescriptionProcessor printPrescriptionProcessor2 = new PrintPrescriptionProcessor(list9, expMest, moduleData);
+						printPrescriptionProcessor2.Print(text, printNow);
 					}
 				}
 				return;
 			}
-			List<OutPatientPresResultSDO> OutPatientPresResultSDOForPrints = new List<OutPatientPresResultSDO>();
-			OutPatientPresResultSDO outPatientPresResultSDO = new OutPatientPresResultSDO();
-			outPatientPresResultSDO.ExpMests = expMestsFake;
-			outPatientPresResultSDO.ServiceReqs = ServiceReqFake;
-			outPatientPresResultSDO.Medicines = new List<HIS_EXP_MEST_MEDICINE>();
-			outPatientPresResultSDO.Materials = new List<HIS_EXP_MEST_MATERIAL>();
-			OutPatientPresResultSDOForPrints.Add(outPatientPresResultSDO);
-			PrintPrescriptionProcessor printPrescriptionProcessor = new PrintPrescriptionProcessor(OutPatientPresResultSDOForPrints, expMestsFake.First(), moduleData);
-			printPrescriptionProcessor.Print(printTypeCode, printNow);
+			List<OutPatientPresResultSDO> list10 = new List<OutPatientPresResultSDO>();
+			OutPatientPresResultSDO outPatientPresResultSDO3 = new OutPatientPresResultSDO();
+			outPatientPresResultSDO3.ExpMests = list2;
+			outPatientPresResultSDO3.ServiceReqs = list3;
+			outPatientPresResultSDO3.Medicines = new List<HIS_EXP_MEST_MEDICINE>();
+			outPatientPresResultSDO3.Materials = new List<HIS_EXP_MEST_MATERIAL>();
+			list10.Add(outPatientPresResultSDO3);
+			PrintPrescriptionProcessor printPrescriptionProcessor3 = new PrintPrescriptionProcessor(list10, list2.First(), moduleData);
+			printPrescriptionProcessor3.Print(text, printNow);
 		}
 		catch (Exception ex)
 		{
@@ -21937,24 +21939,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private V_HIS_TREATMENT_4 GetTreatment4_ByID(long treatmentId)
 	{
-		V_HIS_TREATMENT_4 result = null;
+		V_HIS_TREATMENT_4 v_HIS_TREATMENT_ = null;
 		try
 		{
 			if (treatmentId <= 0)
 			{
 				return null;
 			}
-			CommonParam param = new CommonParam();
-			HisTreatmentView4Filter filter = new HisTreatmentView4Filter();
-			filter.ID = treatmentId;
-			result = new BackendAdapter(param).Get<List<V_HIS_TREATMENT_4>>("api/HisTreatment/GetView4", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param).FirstOrDefault();
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentView4Filter hisTreatmentView4Filter = new HisTreatmentView4Filter();
+			hisTreatmentView4Filter.ID = treatmentId;
+			v_HIS_TREATMENT_ = new BackendAdapter(commonParam).Get<List<V_HIS_TREATMENT_4>>("api/HisTreatment/GetView4", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentView4Filter, commonParam).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
-			result = null;
+			v_HIS_TREATMENT_ = null;
 			LogSystem.Error(ex);
 		}
-		return result;
+		return v_HIS_TREATMENT_;
 	}
 
 	private void ProcessPrintMps000178(string printTypeCode, string fileName, ref bool result)
@@ -21966,49 +21968,49 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			V_HIS_TREATMENT_4 treatment4 = GetTreatment4_ByID(treatmentId);
-			V_HIS_PATIENT_TYPE_ALTER currentHispatientTypeAlter = new V_HIS_PATIENT_TYPE_ALTER();
-			long instructionTime = Inventec.Common.DateTime.Get.Now() ?? 0;
-			if (instructionTime < treatment4.IN_TIME)
+			V_HIS_TREATMENT_4 treatment4_ByID = GetTreatment4_ByID(treatmentId);
+			V_HIS_PATIENT_TYPE_ALTER hisPatientTypeAlter = new V_HIS_PATIENT_TYPE_ALTER();
+			long num = Inventec.Common.DateTime.Get.Now() ?? 0;
+			if (num < treatment4_ByID.IN_TIME)
 			{
-				instructionTime = treatment4.IN_TIME;
+				num = treatment4_ByID.IN_TIME;
 			}
-			PrintGlobalStore.LoadCurrentPatientTypeAlter(treatment4.ID, instructionTime, ref currentHispatientTypeAlter);
-			CommonParam param = new CommonParam();
-			HisPatientViewFilter patientFilter = new HisPatientViewFilter();
-			patientFilter.ID = treatment4.PATIENT_ID;
-			V_HIS_PATIENT currentPatient = new BackendAdapter(param).Get<List<V_HIS_PATIENT>>("api/HisPatient/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientFilter, param).FirstOrDefault();
+			PrintGlobalStore.LoadCurrentPatientTypeAlter(treatment4_ByID.ID, num, ref hisPatientTypeAlter);
+			CommonParam commonParam = new CommonParam();
+			HisPatientViewFilter hisPatientViewFilter = new HisPatientViewFilter();
+			hisPatientViewFilter.ID = treatment4_ByID.PATIENT_ID;
+			V_HIS_PATIENT v_HIS_PATIENT = new BackendAdapter(commonParam).Get<List<V_HIS_PATIENT>>("api/HisPatient/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientViewFilter, commonParam).FirstOrDefault();
 			V_HIS_DEPARTMENT_TRAN departmentTran = new V_HIS_DEPARTMENT_TRAN();
-			HisDepartmentTranViewFilter defilter = new HisDepartmentTranViewFilter();
-			defilter.TREATMENT_ID = treatment4.ID;
-			List<V_HIS_DEPARTMENT_TRAN> departmentTrans = new BackendAdapter(new CommonParam()).Get<List<V_HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, defilter, null);
-			if (departmentTrans != null && departmentTrans.Count > 0)
+			HisDepartmentTranViewFilter hisDepartmentTranViewFilter = new HisDepartmentTranViewFilter();
+			hisDepartmentTranViewFilter.TREATMENT_ID = treatment4_ByID.ID;
+			List<V_HIS_DEPARTMENT_TRAN> list = new BackendAdapter(new CommonParam()).Get<List<V_HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDepartmentTranViewFilter, null);
+			if (list != null && list.Count > 0)
 			{
-				departmentTrans = (from o in departmentTrans
+				list = (from o in list
 					orderby o.DEPARTMENT_IN_TIME ?? long.MaxValue descending, o.ID descending
 					select o).ToList();
-				departmentTran = departmentTrans.First();
+				departmentTran = list.First();
 			}
 			WaitingManager.Hide();
-			Mps000178PDO mps000178RDO = new Mps000178PDO(currentPatient, currentHispatientTypeAlter, treatment4, departmentTran);
+			Mps000178PDO data = new Mps000178PDO(v_HIS_PATIENT, hisPatientTypeAlter, treatment4_ByID, departmentTran);
 			string printerName = "";
 			if (GlobalVariables.dicPrinter.ContainsKey(printTypeCode))
 			{
 				printerName = GlobalVariables.dicPrinter[printTypeCode];
 			}
-			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment4 != null) ? treatment4.TREATMENT_CODE : "", printTypeCode, moduleData.RoomId);
+			InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment4_ByID != null) ? treatment4_ByID.TREATMENT_CODE : "", printTypeCode, moduleData.RoomId);
 			if (GlobalVariables.CheDoInChoCacChucNangTrongPhanMem == 2)
 			{
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, mps000178RDO, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName)
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName)
 				{
-					EmrInputADO = inputADO
+					EmrInputADO = emrInputADO
 				});
 			}
 			else
 			{
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, mps000178RDO, MPS.ProcessorBase.PrintConfig.PreviewType.Show, printerName)
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.Show, printerName)
 				{
-					EmrInputADO = inputADO
+					EmrInputADO = emrInputADO
 				});
 			}
 		}
@@ -22023,8 +22025,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			RichEditorStore richEditorMain = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.ROOT_PATH);
-			richEditorMain.RunPrintTemplate("Mps000478", DelegateRunPrinter);
+			RichEditorStore richEditorStore = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.ROOT_PATH);
+			richEditorStore.RunPrintTemplate("Mps000478", DelegateRunPrinter);
 		}
 		catch (Exception ex)
 		{
@@ -22047,28 +22049,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				printerName = GlobalVariables.dicPrinter[printTypeCode];
 			}
-			V_HIS_TREATMENT Treatment = GetTreatment_ByID(treatmentId);
-			List<V_HIS_EXP_MEST_MEDICINE> listExpMestMedicine_ByTreatment = GetListExpMestMedicine_ByTreatmentID(treatmentId);
-			List<V_HIS_EXP_MEST_MEDICINE> listExpMestMedicine = new List<V_HIS_EXP_MEST_MEDICINE>();
-			if (listExpMestMedicine_ByTreatment != null)
+			V_HIS_TREATMENT treatment_ByID = GetTreatment_ByID(treatmentId);
+			List<V_HIS_EXP_MEST_MEDICINE> listExpMestMedicine_ByTreatmentID = GetListExpMestMedicine_ByTreatmentID(treatmentId);
+			List<V_HIS_EXP_MEST_MEDICINE> lstExpMestMedicine = new List<V_HIS_EXP_MEST_MEDICINE>();
+			if (listExpMestMedicine_ByTreatmentID != null)
 			{
-				listExpMestMedicine = listExpMestMedicine_ByTreatment.Where((V_HIS_EXP_MEST_MEDICINE o) => o.IS_EXPEND != 1).ToList();
+				lstExpMestMedicine = listExpMestMedicine_ByTreatmentID.Where((V_HIS_EXP_MEST_MEDICINE o) => o.IS_EXPEND != 1).ToList();
 			}
-			List<V_HIS_SERE_SERV> listSereServ_ByTreatment = GetListSereServ_ByTreatmentID(treatmentId);
-			List<V_HIS_SERE_SERV> listSereServ = new List<V_HIS_SERE_SERV>();
-			if (listSereServ_ByTreatment != null)
+			List<V_HIS_SERE_SERV> listSereServ_ByTreatmentID = GetListSereServ_ByTreatmentID(treatmentId);
+			List<V_HIS_SERE_SERV> lstSereServ = new List<V_HIS_SERE_SERV>();
+			if (listSereServ_ByTreatmentID != null)
 			{
-				listSereServ = listSereServ_ByTreatment.Where((V_HIS_SERE_SERV o) => o.TDL_SERVICE_REQ_TYPE_ID == 10 || o.TDL_SERVICE_REQ_TYPE_ID == 4 || o.TDL_SERVICE_REQ_TYPE_ID == 16).ToList();
+				lstSereServ = listSereServ_ByTreatmentID.Where((V_HIS_SERE_SERV o) => o.TDL_SERVICE_REQ_TYPE_ID == 10 || o.TDL_SERVICE_REQ_TYPE_ID == 4 || o.TDL_SERVICE_REQ_TYPE_ID == 16).ToList();
 			}
 			WaitingManager.Hide();
-			Mps000478PDO pdo = new Mps000478PDO(Treatment, listSereServ, listExpMestMedicine);
+			Mps000478PDO data = new Mps000478PDO(treatment_ByID, lstSereServ, lstExpMestMedicine);
 			if (ConfigApplications.CheDoInChoCacChucNangTrongPhanMem == 2)
 			{
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, pdo, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName));
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName));
 			}
 			else
 			{
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, pdo, MPS.ProcessorBase.PrintConfig.PreviewType.Show, printerName));
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.Show, printerName));
 			}
 		}
 		catch (Exception ex)
@@ -22080,76 +22082,76 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private V_HIS_TREATMENT GetTreatment_ByID(long treatmentId)
 	{
-		V_HIS_TREATMENT result = null;
+		V_HIS_TREATMENT v_HIS_TREATMENT = null;
 		try
 		{
 			if (treatmentId <= 0)
 			{
 				return null;
 			}
-			CommonParam param = new CommonParam();
-			HisTreatmentViewFilter filter = new HisTreatmentViewFilter();
-			filter.ID = treatmentId;
-			result = new BackendAdapter(param).Get<List<V_HIS_TREATMENT>>("api/HisTreatment/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param).FirstOrDefault();
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentViewFilter hisTreatmentViewFilter = new HisTreatmentViewFilter();
+			hisTreatmentViewFilter.ID = treatmentId;
+			v_HIS_TREATMENT = new BackendAdapter(commonParam).Get<List<V_HIS_TREATMENT>>("api/HisTreatment/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentViewFilter, commonParam).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
-			result = null;
+			v_HIS_TREATMENT = null;
 			LogSystem.Error(ex);
 		}
-		return result;
+		return v_HIS_TREATMENT;
 	}
 
 	private List<V_HIS_EXP_MEST_MEDICINE> GetListExpMestMedicine_ByTreatmentID(long treatmentId)
 	{
-		List<V_HIS_EXP_MEST_MEDICINE> result = null;
+		List<V_HIS_EXP_MEST_MEDICINE> list = null;
 		try
 		{
 			if (treatmentId <= 0)
 			{
 				return null;
 			}
-			CommonParam param = new CommonParam();
-			HisExpMestMedicineViewFilter filter = new HisExpMestMedicineViewFilter();
-			filter.TDL_TREATMENT_ID = treatmentId;
-			result = new BackendAdapter(param).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
+			CommonParam commonParam = new CommonParam();
+			HisExpMestMedicineViewFilter hisExpMestMedicineViewFilter = new HisExpMestMedicineViewFilter();
+			hisExpMestMedicineViewFilter.TDL_TREATMENT_ID = treatmentId;
+			list = new BackendAdapter(commonParam).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineViewFilter, commonParam);
 		}
 		catch (Exception ex)
 		{
-			result = null;
+			list = null;
 			LogSystem.Error(ex);
 		}
-		return result;
+		return list;
 	}
 
 	private List<V_HIS_SERE_SERV> GetListSereServ_ByTreatmentID(long treatmentId)
 	{
-		List<V_HIS_SERE_SERV> result = null;
+		List<V_HIS_SERE_SERV> list = null;
 		try
 		{
 			if (treatmentId <= 0)
 			{
 				return null;
 			}
-			CommonParam param = new CommonParam();
-			HisSereServViewFilter filter = new HisSereServViewFilter();
-			filter.TREATMENT_ID = treatmentId;
-			result = new BackendAdapter(param).Get<List<V_HIS_SERE_SERV>>("api/HisSereServ/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
+			CommonParam commonParam = new CommonParam();
+			HisSereServViewFilter hisSereServViewFilter = new HisSereServViewFilter();
+			hisSereServViewFilter.TREATMENT_ID = treatmentId;
+			list = new BackendAdapter(commonParam).Get<List<V_HIS_SERE_SERV>>("api/HisSereServ/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServViewFilter, commonParam);
 		}
 		catch (Exception ex)
 		{
-			result = null;
+			list = null;
 			LogSystem.Error(ex);
 		}
-		return result;
+		return list;
 	}
 
 	private void PrintMps000485()
 	{
 		try
 		{
-			RichEditorStore richEditorMain = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.ROOT_PATH);
-			richEditorMain.RunPrintTemplate("Mps000485", DelegateRunPrinter);
+			RichEditorStore richEditorStore = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), HIS.Desktop.LocalStorage.Location.PrintStoreLocation.ROOT_PATH);
+			richEditorStore.RunPrintTemplate("Mps000485", DelegateRunPrinter);
 		}
 		catch (Exception ex)
 		{
@@ -22167,83 +22169,83 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			WaitingManager.Show();
-			string printerName = "";
+			string text = "";
 			if (GlobalVariables.dicPrinter.ContainsKey(printTypeCode))
 			{
-				printerName = GlobalVariables.dicPrinter[printTypeCode];
+				text = GlobalVariables.dicPrinter[printTypeCode];
 			}
-			HisTreatmentFilter treatmentFilter = new HisTreatmentFilter();
-			treatmentFilter.ID = treatmentId;
-			HIS_TREATMENT treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, new CommonParam()).FirstOrDefault();
-			HIS_SEVERE_ILLNESS_INFO SevereIllnessInfo = new HIS_SEVERE_ILLNESS_INFO();
-			List<HIS_EVENTS_CAUSES_DEATH> lstEvents = new List<HIS_EVENTS_CAUSES_DEATH>();
-			HIS_DEPARTMENT_TRAN departmentTran = new HIS_DEPARTMENT_TRAN();
-			HIS_DEPARTMENT department = new HIS_DEPARTMENT();
-			HIS_PATIENT_TYPE_ALTER patientTypeAlter = new HIS_PATIENT_TYPE_ALTER();
-			CommonParam param = new CommonParam();
-			HisSevereIllnessInfoFilter filter = new HisSevereIllnessInfoFilter();
-			filter.TREATMENT_ID = treatmentId;
-			List<HIS_SEVERE_ILLNESS_INFO> dtSevere = new BackendAdapter(param).Get<List<HIS_SEVERE_ILLNESS_INFO>>("api/HisSevereIllnessInfo/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-			if (dtSevere != null && dtSevere.Count > 0)
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = treatmentId;
+			HIS_TREATMENT hIS_TREATMENT = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, new CommonParam()).FirstOrDefault();
+			HIS_SEVERE_ILLNESS_INFO hIS_SEVERE_ILLNESS_INFO = new HIS_SEVERE_ILLNESS_INFO();
+			List<HIS_EVENTS_CAUSES_DEATH> list = new List<HIS_EVENTS_CAUSES_DEATH>();
+			HIS_DEPARTMENT_TRAN hIS_DEPARTMENT_TRAN = new HIS_DEPARTMENT_TRAN();
+			HIS_DEPARTMENT hIS_DEPARTMENT = new HIS_DEPARTMENT();
+			HIS_PATIENT_TYPE_ALTER hIS_PATIENT_TYPE_ALTER = new HIS_PATIENT_TYPE_ALTER();
+			CommonParam commonParam = new CommonParam();
+			HisSevereIllnessInfoFilter hisSevereIllnessInfoFilter = new HisSevereIllnessInfoFilter();
+			hisSevereIllnessInfoFilter.TREATMENT_ID = treatmentId;
+			List<HIS_SEVERE_ILLNESS_INFO> list2 = new BackendAdapter(commonParam).Get<List<HIS_SEVERE_ILLNESS_INFO>>("api/HisSevereIllnessInfo/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSevereIllnessInfoFilter, commonParam);
+			if (list2 != null && list2.Count > 0)
 			{
-				SevereIllnessInfo = dtSevere.FirstOrDefault((HIS_SEVERE_ILLNESS_INFO o) => o.IS_DEATH == 1);
-				if (SevereIllnessInfo != null)
+				hIS_SEVERE_ILLNESS_INFO = list2.FirstOrDefault((HIS_SEVERE_ILLNESS_INFO o) => o.IS_DEATH == 1);
+				if (hIS_SEVERE_ILLNESS_INFO != null)
 				{
-					HisDepartmentTranFilter filterDepartmentTran = new HisDepartmentTranFilter();
-					filterDepartmentTran.TREATMENT_ID = treatmentId;
-					filterDepartmentTran.DEPARTMENT_ID = SevereIllnessInfo.DEPARTMENT_ID;
-					List<HIS_DEPARTMENT_TRAN> datas = new BackendAdapter(null).Get<List<HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filterDepartmentTran, null);
-					if (datas != null && datas.Count > 0)
+					HisDepartmentTranFilter hisDepartmentTranFilter = new HisDepartmentTranFilter();
+					hisDepartmentTranFilter.TREATMENT_ID = treatmentId;
+					hisDepartmentTranFilter.DEPARTMENT_ID = hIS_SEVERE_ILLNESS_INFO.DEPARTMENT_ID;
+					List<HIS_DEPARTMENT_TRAN> list3 = new BackendAdapter(null).Get<List<HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDepartmentTranFilter, null);
+					if (list3 != null && list3.Count > 0)
 					{
-						departmentTran = datas.Last();
+						hIS_DEPARTMENT_TRAN = list3.Last();
 					}
-					HisDepartmentFilter filterDepartment = new HisDepartmentFilter();
-					filterDepartment.ID = SevereIllnessInfo.DEPARTMENT_ID;
-					List<HIS_DEPARTMENT> datasDepatment = new BackendAdapter(null).Get<List<HIS_DEPARTMENT>>("api/HisDepartment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filterDepartment, null);
-					if (datasDepatment != null && datasDepatment.Count > 0)
+					HisDepartmentFilter hisDepartmentFilter = new HisDepartmentFilter();
+					hisDepartmentFilter.ID = hIS_SEVERE_ILLNESS_INFO.DEPARTMENT_ID;
+					List<HIS_DEPARTMENT> list4 = new BackendAdapter(null).Get<List<HIS_DEPARTMENT>>("api/HisDepartment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDepartmentFilter, null);
+					if (list4 != null && list4.Count > 0)
 					{
-						department = datasDepatment.First();
+						hIS_DEPARTMENT = list4.First();
 					}
-					HisEventsCausesDeathFilter filterChild = new HisEventsCausesDeathFilter();
-					filterChild.SEVERE_ILLNESS_INFO_ID = SevereIllnessInfo.ID;
-					lstEvents = new BackendAdapter(param).Get<List<HIS_EVENTS_CAUSES_DEATH>>("api/HisEventsCausesDeath/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filterChild, param);
+					HisEventsCausesDeathFilter hisEventsCausesDeathFilter = new HisEventsCausesDeathFilter();
+					hisEventsCausesDeathFilter.SEVERE_ILLNESS_INFO_ID = hIS_SEVERE_ILLNESS_INFO.ID;
+					list = new BackendAdapter(commonParam).Get<List<HIS_EVENTS_CAUSES_DEATH>>("api/HisEventsCausesDeath/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisEventsCausesDeathFilter, commonParam);
 				}
 			}
-			HisPatientTypeAlterFilter patientTypeAlterFilter = new HisPatientTypeAlterFilter();
-			patientTypeAlterFilter.TREATMENT_ID = treatmentId;
-			List<HIS_PATIENT_TYPE_ALTER> patientTypeAlterData = new BackendAdapter(param).Get<List<HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientTypeAlterFilter, param);
-			if (patientTypeAlterData != null && patientTypeAlterData.Count > 0)
+			HisPatientTypeAlterFilter hisPatientTypeAlterFilter = new HisPatientTypeAlterFilter();
+			hisPatientTypeAlterFilter.TREATMENT_ID = treatmentId;
+			List<HIS_PATIENT_TYPE_ALTER> list5 = new BackendAdapter(commonParam).Get<List<HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterFilter, commonParam);
+			if (list5 != null && list5.Count > 0)
 			{
-				patientTypeAlter = patientTypeAlterData[0];
+				hIS_PATIENT_TYPE_ALTER = list5[0];
 			}
-			HIS_PATIENT patient = GetPatientByID(treatment.PATIENT_ID);
+			HIS_PATIENT patientByID = GetPatientByID(hIS_TREATMENT.PATIENT_ID);
 			HIS_BRANCH branch = BackendDataWorker.Get<HIS_BRANCH>().FirstOrDefault((HIS_BRANCH o) => o.ID == WorkPlace.GetBranchId());
-			if (SevereIllnessInfo == null)
+			if (hIS_SEVERE_ILLNESS_INFO == null)
 			{
-				SevereIllnessInfo = new HIS_SEVERE_ILLNESS_INFO();
+				hIS_SEVERE_ILLNESS_INFO = new HIS_SEVERE_ILLNESS_INFO();
 			}
-			if (lstEvents == null)
+			if (list == null)
 			{
-				lstEvents = new List<HIS_EVENTS_CAUSES_DEATH>();
+				list = new List<HIS_EVENTS_CAUSES_DEATH>();
 			}
-			if (patientTypeAlter == null)
+			if (hIS_PATIENT_TYPE_ALTER == null)
 			{
-				patientTypeAlter = new HIS_PATIENT_TYPE_ALTER();
+				hIS_PATIENT_TYPE_ALTER = new HIS_PATIENT_TYPE_ALTER();
 			}
-			if (departmentTran == null)
+			if (hIS_DEPARTMENT_TRAN == null)
 			{
-				departmentTran = new HIS_DEPARTMENT_TRAN();
+				hIS_DEPARTMENT_TRAN = new HIS_DEPARTMENT_TRAN();
 			}
-			if (department == null)
+			if (hIS_DEPARTMENT == null)
 			{
-				department = new HIS_DEPARTMENT();
+				hIS_DEPARTMENT = new HIS_DEPARTMENT();
 			}
 			WaitingManager.Hide();
-			Mps000485PDO pdo = new Mps000485PDO(SevereIllnessInfo, lstEvents, treatment, patientTypeAlter, patient, departmentTran, department, branch, currentIcds, BackendDataWorker.Get<HIS_TREATMENT_END_TYPE>().ToList(), BackendDataWorker.Get<HIS_TREATMENT_RESULT>().ToList());
-			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode);
-			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, pdo, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "")
+			Mps000485PDO data = new Mps000485PDO(hIS_SEVERE_ILLNESS_INFO, list, hIS_TREATMENT, hIS_PATIENT_TYPE_ALTER, patientByID, hIS_DEPARTMENT_TRAN, hIS_DEPARTMENT, branch, currentIcds, BackendDataWorker.Get<HIS_TREATMENT_END_TYPE>().ToList(), BackendDataWorker.Get<HIS_TREATMENT_RESULT>().ToList());
+			InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((hIS_TREATMENT != null) ? hIS_TREATMENT.TREATMENT_CODE : "", printTypeCode);
+			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "")
 			{
-				EmrInputADO = inputADO
+				EmrInputADO = emrInputADO
 			});
 		}
 		catch (Exception ex)
@@ -22272,26 +22274,26 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				CreateThreadByTreatmentIds(treatment.ID);
 			}
-			Mps000315PDO mps000315RDO = new Mps000315PDO(_KSK_Treatments, _KSK_ServiceReqs, _KSK_SereServss, _KSK_SereServExts, _KSK_BedLogs, _KSK_PatientTypeAlters, _KSK_Dhsts, _KSK_SereServTeins, lstHealthExamRank, new List<HIS_PATIENT> { CurrentPatient }, _KSK_Driver);
+			Mps000315PDO data = new Mps000315PDO(_KSK_Treatments, _KSK_ServiceReqs, _KSK_SereServss, _KSK_SereServExts, _KSK_BedLogs, _KSK_PatientTypeAlters, _KSK_Dhsts, _KSK_SereServTeins, lstHealthExamRank, new List<HIS_PATIENT> { CurrentPatient }, _KSK_Driver);
 			WaitingManager.Hide();
-			PrintData PrintData = null;
+			PrintData printData = null;
 			if (_KSK_Treatments == null || _KSK_Treatments.Count != 1)
 			{
-				PrintData = ((GlobalVariables.CheDoInChoCacChucNangTrongPhanMem != 2) ? new PrintData(printTypeCode, fileName, mps000315RDO, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "") : new PrintData(printTypeCode, fileName, mps000315RDO, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, ""));
+				printData = ((GlobalVariables.CheDoInChoCacChucNangTrongPhanMem != 2) ? new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "") : new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, ""));
 			}
 			else
 			{
-				V_HIS_TREATMENT_4 Treatments = _KSK_Treatments.FirstOrDefault();
-				InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((Treatments != null) ? Treatments.TREATMENT_CODE : "", printTypeCode, (moduleData != null) ? moduleData.RoomId : 0);
-				PrintData = ((GlobalVariables.CheDoInChoCacChucNangTrongPhanMem != 2) ? new PrintData(printTypeCode, fileName, mps000315RDO, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "")
+				V_HIS_TREATMENT_4 v_HIS_TREATMENT_ = _KSK_Treatments.FirstOrDefault();
+				InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((v_HIS_TREATMENT_ != null) ? v_HIS_TREATMENT_.TREATMENT_CODE : "", printTypeCode, (moduleData != null) ? moduleData.RoomId : 0);
+				printData = ((GlobalVariables.CheDoInChoCacChucNangTrongPhanMem != 2) ? new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "")
 				{
-					EmrInputADO = inputADO
-				} : new PrintData(printTypeCode, fileName, mps000315RDO, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, "")
+					EmrInputADO = emrInputADO
+				} : new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, "")
 				{
-					EmrInputADO = inputADO
+					EmrInputADO = emrInputADO
 				});
 			}
-			result = MpsPrinter.Run(PrintData);
+			result = MpsPrinter.Run(printData);
 		}
 		catch (Exception ex)
 		{
@@ -22302,48 +22304,48 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void CreateThreadByTreatmentIds(long _treatmentId)
 	{
-		Thread t1 = new Thread(Thread1);
-		Thread t2 = new Thread(Thread2);
-		Thread t3 = new Thread(Thread3);
-		Thread t4 = new Thread(Thread4);
-		Thread t5 = new Thread(Thread5);
-		Thread t6 = new Thread(Thread6);
-		Thread t7 = new Thread(Thread7);
-		Thread t8 = new Thread(Thread8);
-		Thread t9 = new Thread(Thread9);
+		Thread thread = new Thread(Thread1);
+		Thread thread2 = new Thread(Thread2);
+		Thread thread3 = new Thread(Thread3);
+		Thread thread4 = new Thread(Thread4);
+		Thread thread5 = new Thread(Thread5);
+		Thread thread6 = new Thread(Thread6);
+		Thread thread7 = new Thread(Thread7);
+		Thread thread8 = new Thread(Thread8);
+		Thread thread9 = new Thread(Thread9);
 		try
 		{
-			t1.Start(_treatmentId);
-			t2.Start(_treatmentId);
-			t3.Start(_treatmentId);
-			t4.Start(_treatmentId);
-			t5.Start(_treatmentId);
-			t6.Start(_treatmentId);
-			t7.Start(_treatmentId);
-			t8.Start(_treatmentId);
-			t9.Start(_treatmentId);
-			t1.Join();
-			t2.Join();
-			t3.Join();
-			t4.Join();
-			t5.Join();
-			t6.Join();
-			t7.Join();
-			t8.Join();
-			t9.Join();
+			thread.Start(_treatmentId);
+			thread2.Start(_treatmentId);
+			thread3.Start(_treatmentId);
+			thread4.Start(_treatmentId);
+			thread5.Start(_treatmentId);
+			thread6.Start(_treatmentId);
+			thread7.Start(_treatmentId);
+			thread8.Start(_treatmentId);
+			thread9.Start(_treatmentId);
+			thread.Join();
+			thread2.Join();
+			thread3.Join();
+			thread4.Join();
+			thread5.Join();
+			thread6.Join();
+			thread7.Join();
+			thread8.Join();
+			thread9.Join();
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
-			t1.Abort();
-			t2.Abort();
-			t3.Abort();
-			t4.Abort();
-			t5.Abort();
-			t6.Abort();
-			t7.Abort();
-			t8.Abort();
-			t9.Abort();
+			thread.Abort();
+			thread2.Abort();
+			thread3.Abort();
+			thread4.Abort();
+			thread5.Abort();
+			thread6.Abort();
+			thread7.Abort();
+			thread8.Abort();
+			thread9.Abort();
 		}
 	}
 
@@ -22363,12 +22365,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisKskDriverFilter filter = new HisKskDriverFilter();
-			filter.TDL_TREATMENT_ID = data;
-			List<HIS_KSK_DRIVER> rs = new BackendAdapter(_KSK_param).Get<List<HIS_KSK_DRIVER>>("api/HisKskDriver/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, _KSK_param);
-			if (rs != null && rs.Count > 0)
+			HisKskDriverFilter hisKskDriverFilter = new HisKskDriverFilter();
+			hisKskDriverFilter.TDL_TREATMENT_ID = data;
+			List<HIS_KSK_DRIVER> list = new BackendAdapter(_KSK_param).Get<List<HIS_KSK_DRIVER>>("api/HisKskDriver/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisKskDriverFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_Driver.AddRange(rs);
+				_KSK_Driver.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22477,12 +22479,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisSereServExtFilter filter = new HisSereServExtFilter();
-			filter.TDL_TREATMENT_ID = treatmentId;
-			List<HIS_SERE_SERV_EXT> rs = new BackendAdapter(_KSK_param).Get<List<HIS_SERE_SERV_EXT>>("api/HisSereServExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, _KSK_param);
-			if (rs != null && rs.Count > 0)
+			HisSereServExtFilter hisSereServExtFilter = new HisSereServExtFilter();
+			hisSereServExtFilter.TDL_TREATMENT_ID = treatmentId;
+			List<HIS_SERE_SERV_EXT> list = new BackendAdapter(_KSK_param).Get<List<HIS_SERE_SERV_EXT>>("api/HisSereServExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServExtFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_SereServExts.AddRange(rs);
+				_KSK_SereServExts.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22495,9 +22497,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisSereServViewFilter sereServFilter = new HisSereServViewFilter();
-			sereServFilter.TREATMENT_ID = treatmentId;
-			_KSK_SereServss = new BackendAdapter(_KSK_param).Get<List<V_HIS_SERE_SERV>>("api/HisSereServ/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sereServFilter, _KSK_param).ToList();
+			HisSereServViewFilter hisSereServViewFilter = new HisSereServViewFilter();
+			hisSereServViewFilter.TREATMENT_ID = treatmentId;
+			_KSK_SereServss = new BackendAdapter(_KSK_param).Get<List<V_HIS_SERE_SERV>>("api/HisSereServ/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServViewFilter, _KSK_param).ToList();
 		}
 		catch (Exception ex)
 		{
@@ -22509,14 +22511,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisServiceReqViewFilter ServiceReqfilter = new HisServiceReqViewFilter();
-			ServiceReqfilter.TREATMENT_ID = treatmentId;
-			ServiceReqfilter.SERVICE_REQ_TYPE_ID = 1L;
-			ServiceReqfilter.IS_ACTIVE = 1;
-			List<V_HIS_SERVICE_REQ> ServiceReq = new BackendAdapter(_KSK_param).Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, ServiceReqfilter, _KSK_param);
-			if (ServiceReq != null && ServiceReq.Count > 0)
+			HisServiceReqViewFilter hisServiceReqViewFilter = new HisServiceReqViewFilter();
+			hisServiceReqViewFilter.TREATMENT_ID = treatmentId;
+			hisServiceReqViewFilter.SERVICE_REQ_TYPE_ID = 1L;
+			hisServiceReqViewFilter.IS_ACTIVE = 1;
+			List<V_HIS_SERVICE_REQ> list = new BackendAdapter(_KSK_param).Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqViewFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_ServiceReqs.AddRange(ServiceReq);
+				_KSK_ServiceReqs.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22529,12 +22531,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisBedLogViewFilter bedLogFilter = new HisBedLogViewFilter();
-			bedLogFilter.TREATMENT_ID = treatmentId;
-			List<V_HIS_BED_LOG> rs = new BackendAdapter(_KSK_param).Get<List<V_HIS_BED_LOG>>("api/HisBedLog/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, bedLogFilter, _KSK_param);
-			if (rs != null && rs.Count > 0)
+			HisBedLogViewFilter hisBedLogViewFilter = new HisBedLogViewFilter();
+			hisBedLogViewFilter.TREATMENT_ID = treatmentId;
+			List<V_HIS_BED_LOG> list = new BackendAdapter(_KSK_param).Get<List<V_HIS_BED_LOG>>("api/HisBedLog/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisBedLogViewFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_BedLogs.AddRange(rs);
+				_KSK_BedLogs.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22547,12 +22549,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisPatientTypeAlterViewFilter filter = new HisPatientTypeAlterViewFilter();
-			filter.TREATMENT_ID = treatmentId;
-			List<V_HIS_PATIENT_TYPE_ALTER> PatientTypeAlters = new BackendAdapter(_KSK_param).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, _KSK_param);
-			if (PatientTypeAlters != null && PatientTypeAlters.Count > 0)
+			HisPatientTypeAlterViewFilter hisPatientTypeAlterViewFilter = new HisPatientTypeAlterViewFilter();
+			hisPatientTypeAlterViewFilter.TREATMENT_ID = treatmentId;
+			List<V_HIS_PATIENT_TYPE_ALTER> list = new BackendAdapter(_KSK_param).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_PatientTypeAlters.AddRange(PatientTypeAlters);
+				_KSK_PatientTypeAlters.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22565,12 +22567,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisDhstViewFilter Dhstfilter = new HisDhstViewFilter();
-			Dhstfilter.TREATMENT_ID = treatmentId;
-			List<V_HIS_DHST> Dhst = new BackendAdapter(_KSK_param).Get<List<V_HIS_DHST>>("api/HisDhst/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, Dhstfilter, _KSK_param);
-			if (Dhst != null && Dhst.Count > 0)
+			HisDhstViewFilter hisDhstViewFilter = new HisDhstViewFilter();
+			hisDhstViewFilter.TREATMENT_ID = treatmentId;
+			List<V_HIS_DHST> list = new BackendAdapter(_KSK_param).Get<List<V_HIS_DHST>>("api/HisDhst/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDhstViewFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_Dhsts.AddRange(Dhst);
+				_KSK_Dhsts.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22583,12 +22585,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisSereServTeinViewFilter SereServTeinfilter = new HisSereServTeinViewFilter();
-			SereServTeinfilter.TDL_TREATMENT_ID = treatmentId;
-			List<V_HIS_SERE_SERV_TEIN> SereServTein = new BackendAdapter(_KSK_param).Get<List<V_HIS_SERE_SERV_TEIN>>("api/HisSereServTein/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, SereServTeinfilter, _KSK_param);
-			if (SereServTein != null && SereServTein.Count > 0)
+			HisSereServTeinViewFilter hisSereServTeinViewFilter = new HisSereServTeinViewFilter();
+			hisSereServTeinViewFilter.TDL_TREATMENT_ID = treatmentId;
+			List<V_HIS_SERE_SERV_TEIN> list = new BackendAdapter(_KSK_param).Get<List<V_HIS_SERE_SERV_TEIN>>("api/HisSereServTein/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServTeinViewFilter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_SereServTeins.AddRange(SereServTein);
+				_KSK_SereServTeins.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22601,12 +22603,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisTreatmentView4Filter TreatmentView4filter = new HisTreatmentView4Filter();
-			TreatmentView4filter.ID = treatmentId;
-			List<V_HIS_TREATMENT_4> Treatment = new BackendAdapter(_KSK_param).Get<List<V_HIS_TREATMENT_4>>("api/HisTreatment/GetView4", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, TreatmentView4filter, _KSK_param);
-			if (Treatment != null && Treatment.Count > 0)
+			HisTreatmentView4Filter hisTreatmentView4Filter = new HisTreatmentView4Filter();
+			hisTreatmentView4Filter.ID = treatmentId;
+			List<V_HIS_TREATMENT_4> list = new BackendAdapter(_KSK_param).Get<List<V_HIS_TREATMENT_4>>("api/HisTreatment/GetView4", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentView4Filter, _KSK_param);
+			if (list != null && list.Count > 0)
 			{
-				_KSK_Treatments.AddRange(Treatment);
+				_KSK_Treatments.AddRange(list);
 			}
 		}
 		catch (Exception ex)
@@ -22627,14 +22629,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			OtherFormAssTreatmentInputADO otherFormAssTreatmentInputADO = new OtherFormAssTreatmentInputADO();
 			otherFormAssTreatmentInputADO.TreatmentId = treatment.ID;
 			otherFormAssTreatmentInputADO.PrintTypeCode = "Mps000438";
-			Dictionary<string, object> dicParamPlus = new Dictionary<string, object>();
-			HIS_DEPARTMENT depart = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == serviceReq.EXECUTE_DEPARTMENT_ID);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "EXECUTE_DEPARTMENT_NAME", depart.DEPARTMENT_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "EXECUTE_DEPARTMENT_CODE", depart.DEPARTMENT_CODE);
-			otherFormAssTreatmentInputADO.DicParam = dicParamPlus;
-			List<object> listObj = new List<object>();
-			listObj.Add(otherFormAssTreatmentInputADO);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, listObj);
+			Dictionary<string, object> dictionary = new Dictionary<string, object>();
+			HIS_DEPARTMENT hIS_DEPARTMENT = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == serviceReq.EXECUTE_DEPARTMENT_ID);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "EXECUTE_DEPARTMENT_NAME", hIS_DEPARTMENT.DEPARTMENT_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "EXECUTE_DEPARTMENT_CODE", hIS_DEPARTMENT.DEPARTMENT_CODE);
+			otherFormAssTreatmentInputADO.DicParam = dictionary;
+			List<object> list = new List<object>();
+			list.Add(otherFormAssTreatmentInputADO);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, list);
 			LogSystem.Debug("LoadBieuMauGiayXetNghiemDom.2");
 		}
 		catch (Exception ex)
@@ -22655,14 +22657,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			OtherFormAssTreatmentInputADO otherFormAssTreatmentInputADO = new OtherFormAssTreatmentInputADO();
 			otherFormAssTreatmentInputADO.TreatmentId = treatment.ID;
 			otherFormAssTreatmentInputADO.PrintTypeCode = "Mps000436";
-			Dictionary<string, object> dicParamPlus = new Dictionary<string, object>();
-			HIS_DEPARTMENT depart = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == serviceReq.EXECUTE_DEPARTMENT_ID);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "EXECUTE_DEPARTMENT_NAME", depart.DEPARTMENT_NAME);
-			TemplateKeyProcessor.SetSingleKey(dicParamPlus, "EXECUTE_DEPARTMENT_CODE", depart.DEPARTMENT_CODE);
-			otherFormAssTreatmentInputADO.DicParam = dicParamPlus;
-			List<object> listObj = new List<object>();
-			listObj.Add(otherFormAssTreatmentInputADO);
-			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, listObj);
+			Dictionary<string, object> dictionary = new Dictionary<string, object>();
+			HIS_DEPARTMENT hIS_DEPARTMENT = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == serviceReq.EXECUTE_DEPARTMENT_ID);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "EXECUTE_DEPARTMENT_NAME", hIS_DEPARTMENT.DEPARTMENT_NAME);
+			TemplateKeyProcessor.SetSingleKey(dictionary, "EXECUTE_DEPARTMENT_CODE", hIS_DEPARTMENT.DEPARTMENT_CODE);
+			otherFormAssTreatmentInputADO.DicParam = dictionary;
+			List<object> list = new List<object>();
+			list.Add(otherFormAssTreatmentInputADO);
+			PluginInstanceBehavior.ShowModule("HIS.Desktop.Plugins.OtherFormAssTreatment", (moduleData != null) ? moduleData.RoomId : 0, (moduleData != null) ? moduleData.RoomTypeId : 0, list);
 			LogSystem.Debug("LoadBieuMauGiayXetNghiemViKhuanLao.2");
 		}
 		catch (Exception ex)
@@ -22675,46 +22677,46 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisServiceReqListResultSDO serviceReqComboResultSDO = new HisServiceReqListResultSDO();
+			HisServiceReqListResultSDO hisServiceReqListResultSDO = new HisServiceReqListResultSDO();
 			if (HisServiceReqResult.AdditionExamResult != null)
 			{
-				serviceReqComboResultSDO.ServiceReqs = new List<V_HIS_SERVICE_REQ> { HisServiceReqResult.AdditionExamResult };
+				hisServiceReqListResultSDO.ServiceReqs = new List<V_HIS_SERVICE_REQ> { HisServiceReqResult.AdditionExamResult };
 			}
 			if (HisServiceReqResult.Transaction != null)
 			{
-				serviceReqComboResultSDO.Transactions = new List<V_HIS_TRANSACTION> { HisServiceReqResult.Transaction };
+				hisServiceReqListResultSDO.Transactions = new List<V_HIS_TRANSACTION> { HisServiceReqResult.Transaction };
 			}
-			serviceReqComboResultSDO.SereServDeposits = HisServiceReqResult.SereServDeposits;
+			hisServiceReqListResultSDO.SereServDeposits = HisServiceReqResult.SereServDeposits;
 			HisTreatmentWithPatientTypeInfoSDO currentHisTreatment = new HisTreatmentWithPatientTypeInfoSDO();
 			V_HIS_SERE_SERV sereServExam = new V_HIS_SERE_SERV();
-			List<Action> methods = new List<Action>();
-			methods.Add(delegate
+			List<Action> list = new List<Action>();
+			list.Add(delegate
 			{
 				currentHisTreatment = LoadTreatmentWithPatientType();
 			});
-			methods.Add(delegate
+			list.Add(delegate
 			{
 				sereServExam = SereServExam();
 			});
-			ThreadCustomManager.MultipleThreadWithJoin(methods);
+			ThreadCustomManager.MultipleThreadWithJoin(list);
 			if (sereServExam != null)
 			{
-				serviceReqComboResultSDO.SereServs = new List<V_HIS_SERE_SERV> { sereServExam };
+				hisServiceReqListResultSDO.SereServs = new List<V_HIS_SERE_SERV> { sereServExam };
 			}
 			if (isPrintExamServiceAdd && !isSignExamServiceAdd)
 			{
-				PrintServiceReqProcessor PrintServiceReqProcessor3 = new PrintServiceReqProcessor(serviceReqComboResultSDO, currentHisTreatment, null, (moduleData != null) ? moduleData.RoomId : 0, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow);
-				PrintServiceReqProcessor3.Print(printTypeCode);
+				PrintServiceReqProcessor printServiceReqProcessor = new PrintServiceReqProcessor(hisServiceReqListResultSDO, currentHisTreatment, null, (moduleData != null) ? moduleData.RoomId : 0, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow);
+				printServiceReqProcessor.Print(printTypeCode);
 			}
 			else if (isPrintExamServiceAdd && isSignExamServiceAdd)
 			{
-				PrintServiceReqProcessor PrintServiceReqProcessor2 = new PrintServiceReqProcessor(serviceReqComboResultSDO, currentHisTreatment, null, (moduleData != null) ? moduleData.RoomId : 0, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow);
-				PrintServiceReqProcessor2.Print(printTypeCode);
+				PrintServiceReqProcessor printServiceReqProcessor2 = new PrintServiceReqProcessor(hisServiceReqListResultSDO, currentHisTreatment, null, (moduleData != null) ? moduleData.RoomId : 0, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow);
+				printServiceReqProcessor2.Print(printTypeCode);
 			}
 			else if (!isPrintExamServiceAdd && isSignExamServiceAdd)
 			{
-				PrintServiceReqProcessor PrintServiceReqProcessor = new PrintServiceReqProcessor(serviceReqComboResultSDO, currentHisTreatment, null, (moduleData != null) ? moduleData.RoomId : 0, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow);
-				PrintServiceReqProcessor.Print(printTypeCode);
+				PrintServiceReqProcessor printServiceReqProcessor3 = new PrintServiceReqProcessor(hisServiceReqListResultSDO, currentHisTreatment, null, (moduleData != null) ? moduleData.RoomId : 0, MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow);
+				printServiceReqProcessor3.Print(printTypeCode);
 			}
 		}
 		catch (Exception ex)
@@ -22728,48 +22730,48 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		V_HIS_SERE_SERV sereServV = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisSereServFilter filter = new HisSereServFilter();
-			filter.SERVICE_REQ_ID = HisServiceReqResult.AdditionExamResult.ID;
-			HIS_SERE_SERV sereServ = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param).FirstOrDefault();
-			if (sereServ != null)
+			CommonParam commonParam = new CommonParam();
+			HisSereServFilter hisSereServFilter = new HisSereServFilter();
+			hisSereServFilter.SERVICE_REQ_ID = HisServiceReqResult.AdditionExamResult.ID;
+			HIS_SERE_SERV hIS_SERE_SERV = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, commonParam).FirstOrDefault();
+			if (hIS_SERE_SERV != null)
 			{
 				sereServV = new V_HIS_SERE_SERV();
-				DataObjectMapper.Map<V_HIS_SERE_SERV>(sereServV, sereServ);
-				V_HIS_SERVICE service = BackendDataWorker.Get<V_HIS_SERVICE>().FirstOrDefault((V_HIS_SERVICE o) => o.ID == sereServV.SERVICE_ID);
-				if (service != null)
+				DataObjectMapper.Map<V_HIS_SERE_SERV>(sereServV, hIS_SERE_SERV);
+				V_HIS_SERVICE v_HIS_SERVICE = BackendDataWorker.Get<V_HIS_SERVICE>().FirstOrDefault((V_HIS_SERVICE o) => o.ID == sereServV.SERVICE_ID);
+				if (v_HIS_SERVICE != null)
 				{
-					sereServV.TDL_SERVICE_CODE = service.SERVICE_CODE;
-					sereServV.TDL_SERVICE_NAME = service.SERVICE_NAME;
-					sereServV.SERVICE_TYPE_NAME = service.SERVICE_TYPE_NAME;
-					sereServV.SERVICE_TYPE_CODE = service.SERVICE_TYPE_CODE;
-					sereServV.SERVICE_UNIT_CODE = service.SERVICE_UNIT_CODE;
-					sereServV.SERVICE_UNIT_NAME = service.SERVICE_UNIT_NAME;
-					sereServV.HEIN_SERVICE_TYPE_CODE = service.HEIN_SERVICE_TYPE_CODE;
-					sereServV.HEIN_SERVICE_TYPE_NAME = service.HEIN_SERVICE_TYPE_NAME;
-					sereServV.HEIN_SERVICE_TYPE_NUM_ORDER = service.HEIN_SERVICE_TYPE_NUM_ORDER;
+					sereServV.TDL_SERVICE_CODE = v_HIS_SERVICE.SERVICE_CODE;
+					sereServV.TDL_SERVICE_NAME = v_HIS_SERVICE.SERVICE_NAME;
+					sereServV.SERVICE_TYPE_NAME = v_HIS_SERVICE.SERVICE_TYPE_NAME;
+					sereServV.SERVICE_TYPE_CODE = v_HIS_SERVICE.SERVICE_TYPE_CODE;
+					sereServV.SERVICE_UNIT_CODE = v_HIS_SERVICE.SERVICE_UNIT_CODE;
+					sereServV.SERVICE_UNIT_NAME = v_HIS_SERVICE.SERVICE_UNIT_NAME;
+					sereServV.HEIN_SERVICE_TYPE_CODE = v_HIS_SERVICE.HEIN_SERVICE_TYPE_CODE;
+					sereServV.HEIN_SERVICE_TYPE_NAME = v_HIS_SERVICE.HEIN_SERVICE_TYPE_NAME;
+					sereServV.HEIN_SERVICE_TYPE_NUM_ORDER = v_HIS_SERVICE.HEIN_SERVICE_TYPE_NUM_ORDER;
 				}
-				V_HIS_ROOM executeRoom = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == sereServV.TDL_EXECUTE_ROOM_ID);
-				if (executeRoom != null)
+				V_HIS_ROOM v_HIS_ROOM = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == sereServV.TDL_EXECUTE_ROOM_ID);
+				if (v_HIS_ROOM != null)
 				{
-					sereServV.EXECUTE_ROOM_CODE = executeRoom.ROOM_CODE;
-					sereServV.EXECUTE_ROOM_NAME = executeRoom.ROOM_NAME;
-					sereServV.EXECUTE_DEPARTMENT_CODE = executeRoom.DEPARTMENT_CODE;
-					sereServV.EXECUTE_DEPARTMENT_NAME = executeRoom.DEPARTMENT_NAME;
+					sereServV.EXECUTE_ROOM_CODE = v_HIS_ROOM.ROOM_CODE;
+					sereServV.EXECUTE_ROOM_NAME = v_HIS_ROOM.ROOM_NAME;
+					sereServV.EXECUTE_DEPARTMENT_CODE = v_HIS_ROOM.DEPARTMENT_CODE;
+					sereServV.EXECUTE_DEPARTMENT_NAME = v_HIS_ROOM.DEPARTMENT_NAME;
 				}
-				V_HIS_ROOM reqRoom = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == sereServV.TDL_REQUEST_ROOM_ID);
-				if (reqRoom != null)
+				V_HIS_ROOM v_HIS_ROOM2 = BackendDataWorker.Get<V_HIS_ROOM>().FirstOrDefault((V_HIS_ROOM o) => o.ID == sereServV.TDL_REQUEST_ROOM_ID);
+				if (v_HIS_ROOM2 != null)
 				{
-					sereServV.REQUEST_DEPARTMENT_CODE = reqRoom.DEPARTMENT_CODE;
-					sereServV.REQUEST_DEPARTMENT_NAME = reqRoom.DEPARTMENT_NAME;
-					sereServV.REQUEST_ROOM_CODE = reqRoom.ROOM_CODE;
-					sereServV.REQUEST_ROOM_NAME = reqRoom.ROOM_NAME;
+					sereServV.REQUEST_DEPARTMENT_CODE = v_HIS_ROOM2.DEPARTMENT_CODE;
+					sereServV.REQUEST_DEPARTMENT_NAME = v_HIS_ROOM2.DEPARTMENT_NAME;
+					sereServV.REQUEST_ROOM_CODE = v_HIS_ROOM2.ROOM_CODE;
+					sereServV.REQUEST_ROOM_NAME = v_HIS_ROOM2.ROOM_NAME;
 				}
-				HIS_PATIENT_TYPE patientTpye = BackendDataWorker.Get<HIS_PATIENT_TYPE>().FirstOrDefault((HIS_PATIENT_TYPE o) => o.ID == sereServV.PATIENT_TYPE_ID);
-				if (patientTpye != null)
+				HIS_PATIENT_TYPE hIS_PATIENT_TYPE = BackendDataWorker.Get<HIS_PATIENT_TYPE>().FirstOrDefault((HIS_PATIENT_TYPE o) => o.ID == sereServV.PATIENT_TYPE_ID);
+				if (hIS_PATIENT_TYPE != null)
 				{
-					sereServV.PATIENT_TYPE_CODE = patientTpye.PATIENT_TYPE_CODE;
-					sereServV.PATIENT_TYPE_NAME = patientTpye.PATIENT_TYPE_NAME;
+					sereServV.PATIENT_TYPE_CODE = hIS_PATIENT_TYPE.PATIENT_TYPE_CODE;
+					sereServV.PATIENT_TYPE_NAME = hIS_PATIENT_TYPE.PATIENT_TYPE_NAME;
 				}
 			}
 		}
@@ -22786,12 +22788,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		HisTreatmentWithPatientTypeInfoSDO result = null;
 		try
 		{
-			HisTreatmentWithPatientTypeInfoFilter filter = new HisTreatmentWithPatientTypeInfoFilter();
-			filter.TREATMENT_ID = treatmentId;
-			List<HisTreatmentWithPatientTypeInfoSDO> hisTreatments = new BackendAdapter(param).Get<List<HisTreatmentWithPatientTypeInfoSDO>>("api/HisTreatment/GetTreatmentWithPatientTypeInfoSdo", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, base.ProcessLostToken, param);
-			if (hisTreatments != null && hisTreatments.Count > 0)
+			HisTreatmentWithPatientTypeInfoFilter hisTreatmentWithPatientTypeInfoFilter = new HisTreatmentWithPatientTypeInfoFilter();
+			hisTreatmentWithPatientTypeInfoFilter.TREATMENT_ID = treatmentId;
+			List<HisTreatmentWithPatientTypeInfoSDO> list = new BackendAdapter(param).Get<List<HisTreatmentWithPatientTypeInfoSDO>>("api/HisTreatment/GetTreatmentWithPatientTypeInfoSdo", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentWithPatientTypeInfoFilter, base.ProcessLostToken, param);
+			if (list != null && list.Count > 0)
 			{
-				result = hisTreatments.FirstOrDefault();
+				result = list.FirstOrDefault();
 			}
 		}
 		catch (Exception ex)
@@ -22813,47 +22815,47 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			WaitingManager.Show();
-			List<Action> methods = new List<Action>();
-			methods.Add(ReloadTreatment);
-			methods.Add(ReloadViewTreatment);
-			methods.Add(LoadClsSereServ);
-			methods.Add(LoadDepartmentTran);
-			methods.Add(LoadDHST);
-			methods.Add(LoadServiceReqView);
-			ThreadCustomManager.MultipleThreadWithJoin(methods);
-			CommonParam param = new CommonParam();
-			HisPatientViewFilter patientFilter = new HisPatientViewFilter();
-			patientFilter.ID = treatment.PATIENT_ID;
-			List<V_HIS_PATIENT> patients = new BackendAdapter(param).Get<List<V_HIS_PATIENT>>("api/HisPatient/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientFilter, param);
-			patient = patients.FirstOrDefault();
+			List<Action> list = new List<Action>();
+			list.Add(ReloadTreatment);
+			list.Add(ReloadViewTreatment);
+			list.Add(LoadClsSereServ);
+			list.Add(LoadDepartmentTran);
+			list.Add(LoadDHST);
+			list.Add(LoadServiceReqView);
+			ThreadCustomManager.MultipleThreadWithJoin(list);
+			CommonParam commonParam = new CommonParam();
+			HisPatientViewFilter hisPatientViewFilter = new HisPatientViewFilter();
+			hisPatientViewFilter.ID = treatment.PATIENT_ID;
+			List<V_HIS_PATIENT> source = new BackendAdapter(commonParam).Get<List<V_HIS_PATIENT>>("api/HisPatient/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientViewFilter, commonParam);
+			patient = source.FirstOrDefault();
 			LoadPatientTypeAlter();
 			string userName = ClientTokenManagerStore.ClientTokenManager.GetUserName();
-			string executeRoomName = "";
+			string text = "";
 			string executeDepartmentName = "";
 			string hospitalizeDepartmentCode = "";
 			string hospitalizeDepartmentName = "";
-			executeRoomName = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).RoomName;
-			HIS_DEPARTMENT executeDepartment = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.EXECUTE_DEPARTMENT_ID);
-			HIS_DEPARTMENT hospitalizeDepartment = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == treatment.HOSPITALIZE_DEPARTMENT_ID);
-			if (executeDepartment != null)
+			text = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).RoomName;
+			HIS_DEPARTMENT hIS_DEPARTMENT = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.EXECUTE_DEPARTMENT_ID);
+			HIS_DEPARTMENT hIS_DEPARTMENT2 = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == treatment.HOSPITALIZE_DEPARTMENT_ID);
+			if (hIS_DEPARTMENT != null)
 			{
-				executeDepartmentName = executeDepartment.DEPARTMENT_NAME;
+				executeDepartmentName = hIS_DEPARTMENT.DEPARTMENT_NAME;
 			}
-			if (hospitalizeDepartment != null)
+			if (hIS_DEPARTMENT2 != null)
 			{
-				hospitalizeDepartmentCode = hospitalizeDepartment.DEPARTMENT_CODE;
-				hospitalizeDepartmentName = hospitalizeDepartment.DEPARTMENT_NAME;
+				hospitalizeDepartmentCode = hIS_DEPARTMENT2.DEPARTMENT_CODE;
+				hospitalizeDepartmentName = hIS_DEPARTMENT2.DEPARTMENT_NAME;
 			}
 			string levelCode = BackendDataWorker.Get<HIS_BRANCH>().FirstOrDefault((HIS_BRANCH o) => o.ID == WorkPlace.GetBranchId())?.HEIN_LEVEL_CODE;
-			string ratio_text = "";
+			string ratioText = "";
 			if (patientTypeAlter != null)
 			{
-				ratio_text = GetDefaultHeinRatioForView(patientTypeAlter.HEIN_CARD_NUMBER, patientTypeAlter.HEIN_TREATMENT_TYPE_CODE, levelCode, patientTypeAlter.RIGHT_ROUTE_CODE);
+				ratioText = GetDefaultHeinRatioForView(patientTypeAlter.HEIN_CARD_NUMBER, patientTypeAlter.HEIN_TREATMENT_TYPE_CODE, levelCode, patientTypeAlter.RIGHT_ROUTE_CODE);
 			}
 			MPS.Processor.Mps000007.PDO.SingleKeyValue singleKeyValue = new MPS.Processor.Mps000007.PDO.SingleKeyValue();
-			singleKeyValue.ExecuteRoomName = executeRoomName;
+			singleKeyValue.ExecuteRoomName = text;
 			singleKeyValue.ExecuteDepartmentName = executeDepartmentName;
-			singleKeyValue.RatioText = ratio_text;
+			singleKeyValue.RatioText = ratioText;
 			singleKeyValue.LoginName = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
 			singleKeyValue.Username = ClientTokenManagerStore.ClientTokenManager.GetUserName();
 			singleKeyValue.HospitalizeDepartmentCode = hospitalizeDepartmentCode;
@@ -22862,41 +22864,41 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				singleKeyValue.Icd_Name = treatment.ICD_NAME;
 			}
-			List<V_HIS_EXECUTE_ROOM> ExamRoomList = (from o in BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>()
+			List<V_HIS_EXECUTE_ROOM> source2 = (from o in BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>()
 				where o.IS_EXAM == 1
 				select o).ToList();
-			List<V_HIS_EXP_MEST_BLOOD> ExpMestBloodList = new List<V_HIS_EXP_MEST_BLOOD>();
-			List<V_HIS_EXP_MEST_BLTY_REQ> ExpMestBltyReqList = new List<V_HIS_EXP_MEST_BLTY_REQ>();
-			List<V_HIS_EXP_MEST_MEDICINE> ExpMestMedicineList = new List<V_HIS_EXP_MEST_MEDICINE>();
-			List<V_HIS_EXP_MEST_MATERIAL> ExpMestMaterialList = new List<V_HIS_EXP_MEST_MATERIAL>();
-			HisExpMestFilter expMestFilter = new HisExpMestFilter();
-			expMestFilter.REQ_ROOM_IDs = ExamRoomList.Select((V_HIS_EXECUTE_ROOM o) => o.ROOM_ID).Distinct().ToList();
-			expMestFilter.TDL_TREATMENT_ID = treatment.ID;
-			expMestFilter.EXP_MEST_STT_ID = 5L;
-			List<HIS_EXP_MEST> expMestList = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestFilter, null);
-			if (expMestList != null && expMestList.Count > 0)
+			List<V_HIS_EXP_MEST_BLOOD> expMestBloodList = new List<V_HIS_EXP_MEST_BLOOD>();
+			List<V_HIS_EXP_MEST_BLTY_REQ> expMestBltyReqlist = new List<V_HIS_EXP_MEST_BLTY_REQ>();
+			List<V_HIS_EXP_MEST_MEDICINE> expMestMedicineList = new List<V_HIS_EXP_MEST_MEDICINE>();
+			List<V_HIS_EXP_MEST_MATERIAL> expMestMaterialList = new List<V_HIS_EXP_MEST_MATERIAL>();
+			HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+			hisExpMestFilter.REQ_ROOM_IDs = source2.Select((V_HIS_EXECUTE_ROOM o) => o.ROOM_ID).Distinct().ToList();
+			hisExpMestFilter.TDL_TREATMENT_ID = treatment.ID;
+			hisExpMestFilter.EXP_MEST_STT_ID = 5L;
+			List<HIS_EXP_MEST> list2 = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, null);
+			if (list2 != null && list2.Count > 0)
 			{
-				HisExpMestBloodViewFilter expMestBloodFilter = new HisExpMestBloodViewFilter();
-				expMestBloodFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestBloodList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLOOD>>("api/HisExpMestBlood/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestBloodFilter, null);
-				HisExpMestBltyReqViewFilter expMestBltyReqFilter = new HisExpMestBltyReqViewFilter();
-				expMestBltyReqFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestBltyReqList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLTY_REQ>>("api/HisExpMestBltyReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestBltyReqFilter, null);
-				HisExpMestMedicineViewFilter expMestMedicineFilter = new HisExpMestMedicineViewFilter();
-				expMestMedicineFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestMedicineList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMedicineFilter, null);
-				HisExpMestMaterialViewFilter expMestMaterialFilter = new HisExpMestMaterialViewFilter();
-				expMestMaterialFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestMaterialList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMaterialFilter, null);
+				HisExpMestBloodViewFilter hisExpMestBloodViewFilter = new HisExpMestBloodViewFilter();
+				hisExpMestBloodViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestBloodList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLOOD>>("api/HisExpMestBlood/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestBloodViewFilter, null);
+				HisExpMestBltyReqViewFilter hisExpMestBltyReqViewFilter = new HisExpMestBltyReqViewFilter();
+				hisExpMestBltyReqViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestBltyReqlist = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLTY_REQ>>("api/HisExpMestBltyReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestBltyReqViewFilter, null);
+				HisExpMestMedicineViewFilter hisExpMestMedicineViewFilter = new HisExpMestMedicineViewFilter();
+				hisExpMestMedicineViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestMedicineList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineViewFilter, null);
+				HisExpMestMaterialViewFilter hisExpMestMaterialViewFilter = new HisExpMestMaterialViewFilter();
+				hisExpMestMaterialViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestMaterialList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMaterialViewFilter, null);
 			}
 			WaitingManager.Hide();
-			Mps000007PDO rdo = new Mps000007PDO(patient, patientTypeAlter, departmentTrans, HisServiceReqView, dhst, ViewTreatment, ClsSereServ, singleKeyValue, ExpMestBloodList, ExpMestBltyReqList, ExpMestMedicineList, ExpMestMaterialList);
-			MPS.ProcessorBase.PrintConfig.PreviewType PreviewType = ((chkTreatmentFinish.Checked && IsActionButtonSave) ? ((IsPrintExam && IsSignExam) ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : ((!IsSignExam) ? MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow : MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow)) : (isPrintSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : (isSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow : MPS.ProcessorBase.PrintConfig.PreviewType.Show)));
+			Mps000007PDO data = new Mps000007PDO(patient, patientTypeAlter, departmentTrans, HisServiceReqView, dhst, ViewTreatment, ClsSereServ, singleKeyValue, expMestBloodList, expMestBltyReqlist, expMestMedicineList, expMestMaterialList);
+			MPS.ProcessorBase.PrintConfig.PreviewType previewType = ((chkTreatmentFinish.Checked && IsActionButtonSave) ? ((IsPrintExam && IsSignExam) ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : ((!IsSignExam) ? MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow : MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow)) : (isPrintSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : (isSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow : MPS.ProcessorBase.PrintConfig.PreviewType.Show)));
 			IsActionButtonSave = false;
-			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
-			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, rdo, PreviewType, "")
+			InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
+			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, previewType, "")
 			{
-				EmrInputADO = inputADO
+				EmrInputADO = emrInputADO
 			});
 		}
 		catch (Exception ex)
@@ -22916,77 +22918,77 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			WaitingManager.Show();
-			List<Action> methods = new List<Action>();
-			methods.Add(ReloadTreatment);
-			methods.Add(LoadClsSereServ);
-			methods.Add(LoadDepartmentTran);
-			methods.Add(LoadPatient);
-			methods.Add(LoadDHST);
-			methods.Add(LoadServiceReqView);
-			ThreadCustomManager.MultipleThreadWithJoin(methods);
+			List<Action> list = new List<Action>();
+			list.Add(ReloadTreatment);
+			list.Add(LoadClsSereServ);
+			list.Add(LoadDepartmentTran);
+			list.Add(LoadPatient);
+			list.Add(LoadDHST);
+			list.Add(LoadServiceReqView);
+			ThreadCustomManager.MultipleThreadWithJoin(list);
 			LoadPatientTypeAlter();
 			string userName = ClientTokenManagerStore.ClientTokenManager.GetUserName();
-			string executeRoomName = "";
+			string text = "";
 			string executeDepartmentName = "";
-			executeRoomName = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).RoomName;
-			HIS_DEPARTMENT executeDepartment = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.EXECUTE_DEPARTMENT_ID);
-			if (executeDepartment != null)
+			text = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).RoomName;
+			HIS_DEPARTMENT hIS_DEPARTMENT = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.EXECUTE_DEPARTMENT_ID);
+			if (hIS_DEPARTMENT != null)
 			{
-				executeDepartmentName = executeDepartment.DEPARTMENT_NAME;
+				executeDepartmentName = hIS_DEPARTMENT.DEPARTMENT_NAME;
 			}
 			string levelCode = BackendDataWorker.Get<HIS_BRANCH>().FirstOrDefault((HIS_BRANCH o) => o.ID == WorkPlace.GetBranchId())?.HEIN_LEVEL_CODE;
-			string ratio_text = "";
+			string ratioText = "";
 			if (patientTypeAlter != null)
 			{
-				ratio_text = GetDefaultHeinRatioForView(patientTypeAlter.HEIN_CARD_NUMBER, patientTypeAlter.HEIN_TREATMENT_TYPE_CODE, levelCode, patientTypeAlter.RIGHT_ROUTE_CODE);
+				ratioText = GetDefaultHeinRatioForView(patientTypeAlter.HEIN_CARD_NUMBER, patientTypeAlter.HEIN_TREATMENT_TYPE_CODE, levelCode, patientTypeAlter.RIGHT_ROUTE_CODE);
 			}
 			MPS.Processor.Mps000374.PDO.SingleKeyValue singleKeyValue = new MPS.Processor.Mps000374.PDO.SingleKeyValue();
-			singleKeyValue.ExecuteRoomName = executeRoomName;
+			singleKeyValue.ExecuteRoomName = text;
 			singleKeyValue.ExecuteDepartmentName = executeDepartmentName;
-			singleKeyValue.RatioText = ratio_text;
+			singleKeyValue.RatioText = ratioText;
 			singleKeyValue.LoginName = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
 			singleKeyValue.Username = ClientTokenManagerStore.ClientTokenManager.GetUserName();
 			if (treatment.ICD_NAME != null)
 			{
 				singleKeyValue.Icd_Name = treatment.ICD_NAME;
 			}
-			List<V_HIS_EXECUTE_ROOM> ExamRoomList = (from o in BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>()
+			List<V_HIS_EXECUTE_ROOM> source = (from o in BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>()
 				where o.IS_EXAM == 1
 				select o).ToList();
-			List<V_HIS_EXP_MEST_BLOOD> ExpMestBloodList = new List<V_HIS_EXP_MEST_BLOOD>();
-			List<V_HIS_EXP_MEST_BLTY_REQ> ExpMestBltyReqList = new List<V_HIS_EXP_MEST_BLTY_REQ>();
-			List<V_HIS_EXP_MEST_MEDICINE> ExpMestMedicineList = new List<V_HIS_EXP_MEST_MEDICINE>();
-			List<V_HIS_EXP_MEST_MATERIAL> ExpMestMaterialList = new List<V_HIS_EXP_MEST_MATERIAL>();
-			HisExpMestFilter expMestFilter = new HisExpMestFilter();
-			expMestFilter.REQ_ROOM_IDs = ExamRoomList.Select((V_HIS_EXECUTE_ROOM o) => o.ROOM_ID).Distinct().ToList();
-			expMestFilter.TDL_TREATMENT_ID = treatment.ID;
-			expMestFilter.EXP_MEST_STT_ID = 5L;
-			List<HIS_EXP_MEST> expMestList = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestFilter, null);
-			if (expMestList != null && expMestList.Count > 0)
+			List<V_HIS_EXP_MEST_BLOOD> expMestBloodList = new List<V_HIS_EXP_MEST_BLOOD>();
+			List<V_HIS_EXP_MEST_BLTY_REQ> expMestBltyReqlist = new List<V_HIS_EXP_MEST_BLTY_REQ>();
+			List<V_HIS_EXP_MEST_MEDICINE> expMestMedicineList = new List<V_HIS_EXP_MEST_MEDICINE>();
+			List<V_HIS_EXP_MEST_MATERIAL> expMestMaterialList = new List<V_HIS_EXP_MEST_MATERIAL>();
+			HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+			hisExpMestFilter.REQ_ROOM_IDs = source.Select((V_HIS_EXECUTE_ROOM o) => o.ROOM_ID).Distinct().ToList();
+			hisExpMestFilter.TDL_TREATMENT_ID = treatment.ID;
+			hisExpMestFilter.EXP_MEST_STT_ID = 5L;
+			List<HIS_EXP_MEST> list2 = new BackendAdapter(new CommonParam()).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, null);
+			if (list2 != null && list2.Count > 0)
 			{
-				HisExpMestBloodViewFilter expMestBloodFilter = new HisExpMestBloodViewFilter();
-				expMestBloodFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestBloodList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLOOD>>("api/HisExpMestBlood/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestBloodFilter, null);
-				HisExpMestBltyReqViewFilter expMestBltyReqFilter = new HisExpMestBltyReqViewFilter();
-				expMestBltyReqFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestBltyReqList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLTY_REQ>>("api/HisExpMestBltyReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestBltyReqFilter, null);
-				HisExpMestMedicineViewFilter expMestMedicineFilter = new HisExpMestMedicineViewFilter();
-				expMestMedicineFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestMedicineList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMedicineFilter, null);
-				HisExpMestMaterialViewFilter expMestMaterialFilter = new HisExpMestMaterialViewFilter();
-				expMestMaterialFilter.EXP_MEST_IDs = expMestList.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				ExpMestMaterialList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMaterialFilter, null);
+				HisExpMestBloodViewFilter hisExpMestBloodViewFilter = new HisExpMestBloodViewFilter();
+				hisExpMestBloodViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestBloodList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLOOD>>("api/HisExpMestBlood/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestBloodViewFilter, null);
+				HisExpMestBltyReqViewFilter hisExpMestBltyReqViewFilter = new HisExpMestBltyReqViewFilter();
+				hisExpMestBltyReqViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestBltyReqlist = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_BLTY_REQ>>("api/HisExpMestBltyReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestBltyReqViewFilter, null);
+				HisExpMestMedicineViewFilter hisExpMestMedicineViewFilter = new HisExpMestMedicineViewFilter();
+				hisExpMestMedicineViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestMedicineList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineViewFilter, null);
+				HisExpMestMaterialViewFilter hisExpMestMaterialViewFilter = new HisExpMestMaterialViewFilter();
+				hisExpMestMaterialViewFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				expMestMaterialList = new BackendAdapter(new CommonParam()).Get<List<V_HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMaterialViewFilter, null);
 			}
 			LogSystem.Debug("Load Stat -------------------------");
 			WaitingManager.Show();
-			CommonParam param = new CommonParam();
-			List<long> trackingIds = new List<long>();
-			HisTrackingViewFilter trackingFilter = new HisTrackingViewFilter();
-			trackingFilter.TREATMENT_ID = treatmentId;
-			trackingFilter.ORDER_FIELD = "TRACKING_TIME";
-			trackingFilter.ORDER_DIRECTION = "DESC";
-			List<V_HIS_TRACKING> vHisTrackingPrint = new BackendAdapter(new CommonParam()).Get<List<V_HIS_TRACKING>>("api/HisTracking/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, trackingFilter, null);
-			if (vHisTrackingPrint != null && vHisTrackingPrint.Count > 0)
+			CommonParam commonParam = new CommonParam();
+			List<long> list3 = new List<long>();
+			HisTrackingViewFilter hisTrackingViewFilter = new HisTrackingViewFilter();
+			hisTrackingViewFilter.TREATMENT_ID = treatmentId;
+			hisTrackingViewFilter.ORDER_FIELD = "TRACKING_TIME";
+			hisTrackingViewFilter.ORDER_DIRECTION = "DESC";
+			List<V_HIS_TRACKING> list4 = new BackendAdapter(new CommonParam()).Get<List<V_HIS_TRACKING>>("api/HisTracking/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTrackingViewFilter, null);
+			if (list4 != null && list4.Count > 0)
 			{
 				long? finishTime = null;
 				if (HisServiceReqResult != null && HisServiceReqResult.ServiceReq != null)
@@ -22997,18 +22999,18 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				{
 					finishTime = HisServiceReqView.FINISH_TIME;
 				}
-				vHisTrackingPrint = vHisTrackingPrint.Where((V_HIS_TRACKING o) => o.ROOM_ID == moduleData.RoomId && (!finishTime.HasValue || (finishTime.HasValue && o.TRACKING_TIME <= finishTime))).ToList();
+				list4 = list4.Where((V_HIS_TRACKING o) => o.ROOM_ID == moduleData.RoomId && (!finishTime.HasValue || (finishTime.HasValue && o.TRACKING_TIME <= finishTime))).ToList();
 			}
-			trackingIds = ((vHisTrackingPrint != null && vHisTrackingPrint.Count > 0) ? vHisTrackingPrint.Select((V_HIS_TRACKING p) => p.ID).ToList() : new List<long>());
+			list3 = ((list4 != null && list4.Count > 0) ? list4.Select((V_HIS_TRACKING p) => p.ID).ToList() : new List<long>());
 			_TrackingPrints = new List<HIS_TRACKING>();
-			if (vHisTrackingPrint != null && vHisTrackingPrint.Count > 0)
+			if (list4 != null && list4.Count > 0)
 			{
-				foreach (V_HIS_TRACKING item in vHisTrackingPrint)
+				foreach (V_HIS_TRACKING item in list4)
 				{
-					HIS_TRACKING ado = new HIS_TRACKING();
+					HIS_TRACKING hIS_TRACKING = new HIS_TRACKING();
 					Mapper.CreateMap<V_HIS_TRACKING, HIS_TRACKING>();
-					ado = Mapper.Map<V_HIS_TRACKING, HIS_TRACKING>(item);
-					_TrackingPrints.Add(ado);
+					hIS_TRACKING = Mapper.Map<V_HIS_TRACKING, HIS_TRACKING>(item);
+					_TrackingPrints.Add(hIS_TRACKING);
 				}
 			}
 			_TrackingPrints = ((_TrackingPrints != null && _TrackingPrints.Count > 0) ? _TrackingPrints.OrderBy((HIS_TRACKING p) => p.TRACKING_TIME).ToList() : _TrackingPrints);
@@ -23034,74 +23036,74 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				CreateThreadLoadData(treatmentId);
 			}
-			int start = 0;
-			for (int count = _ServiceReqs.Count; count > 0; count -= 100)
+			int num = 0;
+			for (int num2 = _ServiceReqs.Count; num2 > 0; num2 -= 100)
 			{
-				int limit = ((count <= 100) ? count : 100);
-				List<HIS_SERVICE_REQ> listSub = _ServiceReqs.Skip(start).Take(limit).ToList();
-				List<long> _serviceReqIds = new List<long>();
-				_serviceReqIds = listSub.Select((HIS_SERVICE_REQ p) => p.ID).Distinct().ToList();
-				CreateThreadByServiceReq(_serviceReqIds);
-				start += 100;
+				int count = ((num2 <= 100) ? num2 : 100);
+				List<HIS_SERVICE_REQ> source2 = _ServiceReqs.Skip(num).Take(count).ToList();
+				List<long> list5 = new List<long>();
+				list5 = source2.Select((HIS_SERVICE_REQ p) => p.ID).Distinct().ToList();
+				CreateThreadByServiceReq(list5);
+				num += 100;
 			}
-			List<long> expMestIds = new List<long>();
+			List<long> list6 = new List<long>();
 			if (_ExpMests != null && _ExpMests.Count > 0)
 			{
-				expMestIds = _ExpMests.Select((HIS_EXP_MEST p) => p.ID).Distinct().ToList();
-				CreateThreadLoadDataExpMest(expMestIds);
+				list6 = _ExpMests.Select((HIS_EXP_MEST p) => p.ID).Distinct().ToList();
+				CreateThreadLoadDataExpMest(list6);
 			}
 			if (_SereServs != null && _SereServs.Count > 0)
 			{
-				int startSS = 0;
-				for (int countSS = _SereServs.Count; countSS > 0; countSS -= 100)
+				int num3 = 0;
+				for (int num4 = _SereServs.Count; num4 > 0; num4 -= 100)
 				{
-					int limit2 = ((countSS <= 100) ? countSS : 100);
-					List<HIS_SERE_SERV> listSub2 = _SereServs.Skip(startSS).Take(limit2).ToList();
-					List<long> _sereServIds = new List<long>();
-					_sereServIds = listSub2.Select((HIS_SERE_SERV p) => p.ID).Distinct().ToList();
-					HisSereServExtFilter sereServExtFilter = new HisSereServExtFilter();
-					sereServExtFilter.SERE_SERV_IDs = _sereServIds;
-					List<HIS_SERE_SERV_EXT> dataSS_EXTs = new BackendAdapter(param).Get<List<HIS_SERE_SERV_EXT>>("/api/HisSereServExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sereServExtFilter, param);
-					if (dataSS_EXTs != null && dataSS_EXTs.Count > 0)
+					int count2 = ((num4 <= 100) ? num4 : 100);
+					List<HIS_SERE_SERV> source3 = _SereServs.Skip(num3).Take(count2).ToList();
+					List<long> list7 = new List<long>();
+					list7 = source3.Select((HIS_SERE_SERV p) => p.ID).Distinct().ToList();
+					HisSereServExtFilter hisSereServExtFilter = new HisSereServExtFilter();
+					hisSereServExtFilter.SERE_SERV_IDs = list7;
+					List<HIS_SERE_SERV_EXT> list8 = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV_EXT>>("/api/HisSereServExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServExtFilter, commonParam);
+					if (list8 != null && list8.Count > 0)
 					{
-						_SereServExts.AddRange(dataSS_EXTs);
+						_SereServExts.AddRange(list8);
 					}
-					startSS += 100;
+					num3 += 100;
 				}
 			}
 			long keyVienTim = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsNumberByMedicineType"));
-			HisDhstFilter dhstFilter = new HisDhstFilter();
-			dhstFilter.TRACKING_IDs = trackingIds;
-			List<HIS_DHST> _Dhsts = new BackendAdapter(param).Get<List<HIS_DHST>>("api/HisDhst/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, dhstFilter, param);
-			List<HIS_CARE> _Cares = new List<HIS_CARE>();
-			List<V_HIS_CARE_DETAIL> _CareDetails = new List<V_HIS_CARE_DETAIL>();
-			foreach (long itemTrackingId in trackingIds)
+			HisDhstFilter hisDhstFilter = new HisDhstFilter();
+			hisDhstFilter.TRACKING_IDs = list3;
+			List<HIS_DHST> dhsts = new BackendAdapter(commonParam).Get<List<HIS_DHST>>("api/HisDhst/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDhstFilter, commonParam);
+			List<HIS_CARE> list9 = new List<HIS_CARE>();
+			List<V_HIS_CARE_DETAIL> list10 = new List<V_HIS_CARE_DETAIL>();
+			foreach (long item2 in list3)
 			{
-				HisCareFilter careFilter = new HisCareFilter();
-				careFilter.TRACKING_ID = itemTrackingId;
-				HIS_CARE care = new BackendAdapter(param).Get<List<HIS_CARE>>("api/HisCare/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, careFilter, param).FirstOrDefault();
-				if (care != null)
+				HisCareFilter hisCareFilter = new HisCareFilter();
+				hisCareFilter.TRACKING_ID = item2;
+				HIS_CARE hIS_CARE = new BackendAdapter(commonParam).Get<List<HIS_CARE>>("api/HisCare/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisCareFilter, commonParam).FirstOrDefault();
+				if (hIS_CARE != null)
 				{
-					_Cares.Add(care);
-					HisCareDetailViewFilter careDetailFilter = new HisCareDetailViewFilter();
-					careDetailFilter.CARE_ID = care.ID;
-					List<V_HIS_CARE_DETAIL> careDetail = new BackendAdapter(param).Get<List<V_HIS_CARE_DETAIL>>("api/HisCareDetail/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, careDetailFilter, param);
-					_CareDetails.AddRange(careDetail);
+					list9.Add(hIS_CARE);
+					HisCareDetailViewFilter hisCareDetailViewFilter = new HisCareDetailViewFilter();
+					hisCareDetailViewFilter.CARE_ID = hIS_CARE.ID;
+					List<V_HIS_CARE_DETAIL> collection = new BackendAdapter(commonParam).Get<List<V_HIS_CARE_DETAIL>>("api/HisCareDetail/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisCareDetailViewFilter, commonParam);
+					list10.AddRange(collection);
 				}
 			}
-			WorkPlaceSDO _workPlaceSDO = WorkPlace.WorkPlaceSDO.SingleOrDefault((WorkPlaceSDO p) => p.RoomId == moduleData.RoomId);
-			Mps000374SingleKey singleKey = new Mps000374SingleKey(_workPlaceSDO);
-			singleKey.LOGIN_NAME = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
-			singleKey.USER_NAME = ClientTokenManagerStore.ClientTokenManager.GetUserName();
-			singleKey.IsShowMedicineLine = HisConfigs.Get<string>("HIS.Desktop.Plugins.Library.Bordereau.IsShowMedicineLine") == "1";
-			singleKey.IsOrderByType = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.TrackingPrint.OderOption"));
+			WorkPlaceSDO data = WorkPlace.WorkPlaceSDO.SingleOrDefault((WorkPlaceSDO p) => p.RoomId == moduleData.RoomId);
+			Mps000374SingleKey mps000374SingleKey = new Mps000374SingleKey(data);
+			mps000374SingleKey.LOGIN_NAME = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
+			mps000374SingleKey.USER_NAME = ClientTokenManagerStore.ClientTokenManager.GetUserName();
+			mps000374SingleKey.IsShowMedicineLine = HisConfigs.Get<string>("HIS.Desktop.Plugins.Library.Bordereau.IsShowMedicineLine") == "1";
+			mps000374SingleKey.IsOrderByType = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.TrackingPrint.OderOption"));
 			WaitingManager.Hide();
-			Mps000374PDO rdo = new Mps000374PDO(treatment, _TreatmentBedRoom, _TrackingPrints, _Dhsts, dicServiceReqs, dicSereServs, dicExpMests, dicExpMestMedicines, dicExpMestMaterials, dicServiceReqMetys, dicServiceReqMatys, _Cares, _CareDetails, singleKey, BackendDataWorker.Get<HIS_ICD>(), BackendDataWorker.Get<V_HIS_MEDICINE_TYPE>(), BackendDataWorker.Get<V_HIS_MATERIAL_TYPE>(), BackendDataWorker.Get<HIS_SERVICE_TYPE>(), keyVienTim, _ImpMests_input, _ImpMestMedis, _ImpMestMates, _SereServExts, BackendDataWorker.Get<HIS_MEDICINE_USE_FORM>(), patient, patientTypeAlter, departmentTrans, HisServiceReqView, dhst, ClsSereServ, singleKeyValue, ExpMestBloodList, ExpMestBltyReqList, ExpMestMedicineList, ExpMestMaterialList);
-			MPS.ProcessorBase.PrintConfig.PreviewType PreviewType = (isPrintSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : (isSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow : MPS.ProcessorBase.PrintConfig.PreviewType.Show));
-			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
-			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, rdo, PreviewType, "")
+			Mps000374PDO data2 = new Mps000374PDO(treatment, _TreatmentBedRoom, _TrackingPrints, dhsts, dicServiceReqs, dicSereServs, dicExpMests, dicExpMestMedicines, dicExpMestMaterials, dicServiceReqMetys, dicServiceReqMatys, list9, list10, mps000374SingleKey, BackendDataWorker.Get<HIS_ICD>(), BackendDataWorker.Get<V_HIS_MEDICINE_TYPE>(), BackendDataWorker.Get<V_HIS_MATERIAL_TYPE>(), BackendDataWorker.Get<HIS_SERVICE_TYPE>(), keyVienTim, _ImpMests_input, _ImpMestMedis, _ImpMestMates, _SereServExts, BackendDataWorker.Get<HIS_MEDICINE_USE_FORM>(), patient, patientTypeAlter, departmentTrans, HisServiceReqView, dhst, ClsSereServ, singleKeyValue, expMestBloodList, expMestBltyReqlist, expMestMedicineList, expMestMaterialList);
+			MPS.ProcessorBase.PrintConfig.PreviewType previewType = (isPrintSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : (isSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow : MPS.ProcessorBase.PrintConfig.PreviewType.Show));
+			InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
+			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data2, previewType, "")
 			{
-				EmrInputADO = inputADO
+				EmrInputADO = emrInputADO
 			});
 		}
 		catch (Exception ex)
@@ -23119,34 +23121,34 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			if (IsValidForSave)
 			{
 				WaitingManager.Show();
-				List<Action> methods = new List<Action>();
-				methods.Add(ReloadTreatment);
-				methods.Add(LoadClsSereServ);
-				methods.Add(LoadDepartmentTran);
-				methods.Add(LoadPatient);
-				methods.Add(LoadDHST);
-				methods.Add(LoadServiceReqView);
-				ThreadCustomManager.MultipleThreadWithJoin(methods);
+				List<Action> list = new List<Action>();
+				list.Add(ReloadTreatment);
+				list.Add(LoadClsSereServ);
+				list.Add(LoadDepartmentTran);
+				list.Add(LoadPatient);
+				list.Add(LoadDHST);
+				list.Add(LoadServiceReqView);
+				ThreadCustomManager.MultipleThreadWithJoin(list);
 				LoadPatientTypeAlter();
 				string userName = ClientTokenManagerStore.ClientTokenManager.GetUserName();
-				string executeRoomName = "";
+				string text = "";
 				string executeDepartmentName = "";
-				executeRoomName = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).RoomName;
-				HIS_DEPARTMENT executeDepartment = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.EXECUTE_DEPARTMENT_ID);
-				if (executeDepartment != null)
+				text = WorkPlace.WorkPlaceSDO.FirstOrDefault((WorkPlaceSDO o) => o.RoomId == moduleData.RoomId).RoomName;
+				HIS_DEPARTMENT hIS_DEPARTMENT = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.EXECUTE_DEPARTMENT_ID);
+				if (hIS_DEPARTMENT != null)
 				{
-					executeDepartmentName = executeDepartment.DEPARTMENT_NAME;
+					executeDepartmentName = hIS_DEPARTMENT.DEPARTMENT_NAME;
 				}
 				string levelCode = BackendDataWorker.Get<HIS_BRANCH>().FirstOrDefault((HIS_BRANCH o) => o.ID == WorkPlace.GetBranchId())?.HEIN_LEVEL_CODE;
-				string ratio_text = "";
+				string ratioText = "";
 				if (patientTypeAlter != null)
 				{
-					ratio_text = GetDefaultHeinRatioForView(patientTypeAlter.HEIN_CARD_NUMBER, patientTypeAlter.HEIN_TREATMENT_TYPE_CODE, levelCode, patientTypeAlter.RIGHT_ROUTE_CODE);
+					ratioText = GetDefaultHeinRatioForView(patientTypeAlter.HEIN_CARD_NUMBER, patientTypeAlter.HEIN_TREATMENT_TYPE_CODE, levelCode, patientTypeAlter.RIGHT_ROUTE_CODE);
 				}
 				MPS.Processor.Mps000362.PDO.SingleKeyValue singleKeyValue = new MPS.Processor.Mps000362.PDO.SingleKeyValue();
-				singleKeyValue.ExecuteRoomName = executeRoomName;
+				singleKeyValue.ExecuteRoomName = text;
 				singleKeyValue.ExecuteDepartmentName = executeDepartmentName;
-				singleKeyValue.RatioText = ratio_text;
+				singleKeyValue.RatioText = ratioText;
 				singleKeyValue.LoginName = ClientTokenManagerStore.ClientTokenManager.GetLoginName();
 				singleKeyValue.Username = ClientTokenManagerStore.ClientTokenManager.GetUserName();
 				if (treatment.ICD_NAME != null)
@@ -23154,12 +23156,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					singleKeyValue.Icd_Name = treatment.ICD_NAME;
 				}
 				WaitingManager.Hide();
-				Mps000362PDO rdo = new Mps000362PDO(patient, patientTypeAlter, HisServiceReqView, dhst, treatment, singleKeyValue);
-				MPS.ProcessorBase.PrintConfig.PreviewType PreviewType = (isPrintSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : (isSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow : MPS.ProcessorBase.PrintConfig.PreviewType.Show));
-				InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, rdo, PreviewType, "")
+				Mps000362PDO data = new Mps000362PDO(patient, patientTypeAlter, HisServiceReqView, dhst, treatment, singleKeyValue);
+				MPS.ProcessorBase.PrintConfig.PreviewType previewType = (isPrintSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignAndPrintNow : (isSign ? MPS.ProcessorBase.PrintConfig.PreviewType.EmrSignNow : MPS.ProcessorBase.PrintConfig.PreviewType.Show));
+				InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, previewType, "")
 				{
-					EmrInputADO = inputADO
+					EmrInputADO = emrInputADO
 				});
 			}
 		}
@@ -23173,13 +23175,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentFilter treatmentFilter = new HisTreatmentFilter();
-			treatmentFilter.ID = treatmentId;
-			List<HIS_TREATMENT> aipResult = new BackendAdapter(param).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, param);
-			if (aipResult != null)
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = treatmentId;
+			List<HIS_TREATMENT> list = new BackendAdapter(commonParam).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, commonParam);
+			if (list != null)
 			{
-				treatment = aipResult.FirstOrDefault();
+				treatment = list.FirstOrDefault();
 				if (treatment != null)
 				{
 					UpdateNeedSickLeaveCertControl(treatment.NEED_SICK_LEAVE_CERT);
@@ -23196,13 +23198,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentViewFilter treatmentFilter = new HisTreatmentViewFilter();
-			treatmentFilter.ID = treatmentId;
-			List<V_HIS_TREATMENT> aipResult = new BackendAdapter(param).Get<List<V_HIS_TREATMENT>>("api/HisTreatment/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, param);
-			if (aipResult != null)
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentViewFilter hisTreatmentViewFilter = new HisTreatmentViewFilter();
+			hisTreatmentViewFilter.ID = treatmentId;
+			List<V_HIS_TREATMENT> list = new BackendAdapter(commonParam).Get<List<V_HIS_TREATMENT>>("api/HisTreatment/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentViewFilter, commonParam);
+			if (list != null)
 			{
-				ViewTreatment = aipResult.FirstOrDefault();
+				ViewTreatment = list.FirstOrDefault();
 			}
 		}
 		catch (Exception ex)
@@ -23215,12 +23217,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisTreatmentFilter treatmentFilter = new HisTreatmentFilter();
-			treatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
-			HIS_TREATMENT treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, new CommonParam()).FirstOrDefault();
-			HIS_SERVICE_REQ ServiceReq = new HIS_SERVICE_REQ();
-			DataObjectMapper.Map<HIS_SERVICE_REQ>(ServiceReq, HisServiceReqView);
-			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(treatment, ServiceReq, (long?)((currentModuleBase != null) ? currentModuleBase.RoomId : 0));
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
+			HIS_TREATMENT hIS_TREATMENT = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, new CommonParam()).FirstOrDefault();
+			HIS_SERVICE_REQ hIS_SERVICE_REQ = new HIS_SERVICE_REQ();
+			DataObjectMapper.Map<HIS_SERVICE_REQ>(hIS_SERVICE_REQ, HisServiceReqView);
+			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(hIS_TREATMENT, hIS_SERVICE_REQ, (long?)((currentModuleBase != null) ? currentModuleBase.RoomId : 0));
 			printTreatmentFinishProcessor.Print("Mps000010", PrintNow: false);
 		}
 		catch (Exception ex)
@@ -23233,12 +23235,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisTreatmentFilter treatmentFilter = new HisTreatmentFilter();
-			treatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
-			HIS_TREATMENT treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, new CommonParam()).FirstOrDefault();
-			HIS_SERVICE_REQ ServiceReq = new HIS_SERVICE_REQ();
-			DataObjectMapper.Map<HIS_SERVICE_REQ>(ServiceReq, HisServiceReqView);
-			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(treatment, ServiceReq, (long?)((currentModuleBase != null) ? currentModuleBase.RoomId : 0));
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
+			HIS_TREATMENT hIS_TREATMENT = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, new CommonParam()).FirstOrDefault();
+			HIS_SERVICE_REQ hIS_SERVICE_REQ = new HIS_SERVICE_REQ();
+			DataObjectMapper.Map<HIS_SERVICE_REQ>(hIS_SERVICE_REQ, HisServiceReqView);
+			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(hIS_TREATMENT, hIS_SERVICE_REQ, (long?)((currentModuleBase != null) ? currentModuleBase.RoomId : 0));
 			printTreatmentFinishProcessor.Print("Mps000011", PrintNow: false);
 		}
 		catch (Exception ex)
@@ -23251,10 +23253,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisTreatmentFilter treatmentFilter = new HisTreatmentFilter();
-			treatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
-			HIS_TREATMENT treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, new CommonParam()).FirstOrDefault();
-			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(treatment, (currentModuleBase != null) ? currentModuleBase.RoomId : 0);
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
+			HIS_TREATMENT his_Treatment = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, new CommonParam()).FirstOrDefault();
+			PrintTreatmentFinishProcessor printTreatmentFinishProcessor = new PrintTreatmentFinishProcessor(his_Treatment, (currentModuleBase != null) ? currentModuleBase.RoomId : 0);
 			printTreatmentFinishProcessor.Print("Mps000008", PrintNow: false);
 		}
 		catch (Exception ex)
@@ -23273,45 +23275,45 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			WaitingManager.Show();
-			List<Action> methods = new List<Action>();
-			methods.Add(LoadPatient);
-			methods.Add(LoadPatientTypeAlter);
-			methods.Add(LoadDepartmentTran);
-			methods.Add(LoadExpMest);
-			methods.Add(LoadDHST);
-			ThreadCustomManager.MultipleThreadWithJoin(methods);
-			List<long> expMestIds = ((expMests != null) ? expMests.Select((HIS_EXP_MEST o) => o.ID).ToList() : null);
-			HisExpMestMedicineViewFilter medicineFilter = new HisExpMestMedicineViewFilter();
-			medicineFilter.EXP_MEST_IDs = expMestIds;
-			CommonParam param = new CommonParam();
-			List<V_HIS_EXP_MEST_MEDICINE> expMestMedicines = new BackendAdapter(param).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, medicineFilter, param);
+			List<Action> list = new List<Action>();
+			list.Add(LoadPatient);
+			list.Add(LoadPatientTypeAlter);
+			list.Add(LoadDepartmentTran);
+			list.Add(LoadExpMest);
+			list.Add(LoadDHST);
+			ThreadCustomManager.MultipleThreadWithJoin(list);
+			List<long> eXP_MEST_IDs = ((expMests != null) ? expMests.Select((HIS_EXP_MEST o) => o.ID).ToList() : null);
+			HisExpMestMedicineViewFilter hisExpMestMedicineViewFilter = new HisExpMestMedicineViewFilter();
+			hisExpMestMedicineViewFilter.EXP_MEST_IDs = eXP_MEST_IDs;
+			CommonParam commonParam = new CommonParam();
+			List<V_HIS_EXP_MEST_MEDICINE> expMestMedicines = new BackendAdapter(commonParam).Get<List<V_HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineViewFilter, commonParam);
 			List<HIS_ICD> icds = BackendDataWorker.Get<HIS_ICD>();
-			string requestDepartmentName = "";
-			requestDepartmentName = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.REQUEST_DEPARTMENT_ID).DEPARTMENT_NAME;
-			Mps000174PDO.Mps000174ADO ado = new Mps000174PDO.Mps000174ADO();
+			string text = "";
+			text = BackendDataWorker.Get<HIS_DEPARTMENT>().FirstOrDefault((HIS_DEPARTMENT o) => o.ID == HisServiceReqView.REQUEST_DEPARTMENT_ID).DEPARTMENT_NAME;
+			Mps000174PDO.Mps000174ADO mps000174ADO = new Mps000174PDO.Mps000174ADO();
 			if (treatment.TREATMENT_RESULT_ID.HasValue)
 			{
-				HIS_TREATMENT_RESULT treatmentResult = BackendDataWorker.Get<HIS_TREATMENT_RESULT>().FirstOrDefault((HIS_TREATMENT_RESULT o) => o.ID == treatment.TREATMENT_RESULT_ID.Value);
-				ado.TREATMENT_RESULT_CODE = ((treatmentResult != null) ? treatmentResult.TREATMENT_RESULT_CODE : "");
-				ado.TREATMENT_RESULT_NAME = ((treatmentResult != null) ? treatmentResult.TREATMENT_RESULT_NAME : "");
+				HIS_TREATMENT_RESULT hIS_TREATMENT_RESULT = BackendDataWorker.Get<HIS_TREATMENT_RESULT>().FirstOrDefault((HIS_TREATMENT_RESULT o) => o.ID == treatment.TREATMENT_RESULT_ID.Value);
+				mps000174ADO.TREATMENT_RESULT_CODE = ((hIS_TREATMENT_RESULT != null) ? hIS_TREATMENT_RESULT.TREATMENT_RESULT_CODE : "");
+				mps000174ADO.TREATMENT_RESULT_NAME = ((hIS_TREATMENT_RESULT != null) ? hIS_TREATMENT_RESULT.TREATMENT_RESULT_NAME : "");
 			}
 			List<V_HIS_EXECUTE_ROOM> executeRoomIsExam = (from o in BackendDataWorker.Get<V_HIS_EXECUTE_ROOM>()
 				where o.IS_EXAM == 1
 				select o).ToList();
-			HisSereServFilter sereServFilter = new HisSereServFilter();
-			sereServFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-			sereServFilter.TDL_SERVICE_REQ_TYPE_IDs = new List<long> { 10L, 4L };
-			List<HIS_SERE_SERV> sereServList = new BackendAdapter(new CommonParam()).Get<List<HIS_SERE_SERV>>("/api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sereServFilter, null);
-			if (sereServList != null && sereServList.Count > 0 && executeRoomIsExam != null && executeRoomIsExam.Count > 0)
+			HisSereServFilter hisSereServFilter = new HisSereServFilter();
+			hisSereServFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
+			hisSereServFilter.TDL_SERVICE_REQ_TYPE_IDs = new List<long> { 10L, 4L };
+			List<HIS_SERE_SERV> list2 = new BackendAdapter(new CommonParam()).Get<List<HIS_SERE_SERV>>("/api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, null);
+			if (list2 != null && list2.Count > 0 && executeRoomIsExam != null && executeRoomIsExam.Count > 0)
 			{
-				sereServList = sereServList.Where((HIS_SERE_SERV o) => executeRoomIsExam.Select((V_HIS_EXECUTE_ROOM p) => p.ROOM_ID).Contains(o.TDL_REQUEST_ROOM_ID)).ToList();
+				list2 = list2.Where((HIS_SERE_SERV o) => executeRoomIsExam.Select((V_HIS_EXECUTE_ROOM p) => p.ROOM_ID).Contains(o.TDL_REQUEST_ROOM_ID)).ToList();
 			}
 			WaitingManager.Hide();
-			Mps000174PDO rdo = new Mps000174PDO(patient, departmentTrans, patientTypeAlter, HisServiceReqView, dhst, treatment, icds, expMests, expMestMedicines, requestDepartmentName, ado, sereServList);
-			InputADO inputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
-			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, rdo, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "")
+			Mps000174PDO data = new Mps000174PDO(patient, departmentTrans, patientTypeAlter, HisServiceReqView, dhst, treatment, icds, expMests, expMestMedicines, text, mps000174ADO, list2);
+			InputADO emrInputADO = new EmrGenerateProcessor().GenerateInputADOWithPrintTypeCode((treatment != null) ? treatment.TREATMENT_CODE : "", printTypeCode, currentModuleBase.RoomId);
+			result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.Show, "")
 			{
-				EmrInputADO = inputADO
+				EmrInputADO = emrInputADO
 			});
 		}
 		catch (Exception ex)
@@ -23327,11 +23329,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (patient == null || patient.ID == 0)
 			{
-				CommonParam param = new CommonParam();
-				HisPatientViewFilter patientFilter = new HisPatientViewFilter();
-				patientFilter.ID = treatment.PATIENT_ID;
-				List<V_HIS_PATIENT> patients = new BackendAdapter(param).Get<List<V_HIS_PATIENT>>("api/HisPatient/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, patientFilter, param);
-				patient = patients.FirstOrDefault();
+				CommonParam commonParam = new CommonParam();
+				HisPatientViewFilter hisPatientViewFilter = new HisPatientViewFilter();
+				hisPatientViewFilter.ID = treatment.PATIENT_ID;
+				List<V_HIS_PATIENT> source = new BackendAdapter(commonParam).Get<List<V_HIS_PATIENT>>("api/HisPatient/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientViewFilter, commonParam);
+				patient = source.FirstOrDefault();
 			}
 		}
 		catch (Exception ex)
@@ -23346,10 +23348,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (HisServiceReqView.DHST_ID.HasValue)
 			{
-				CommonParam param = new CommonParam();
-				HisDhstFilter dhstFilter = new HisDhstFilter();
-				dhstFilter.ID = HisServiceReqView.DHST_ID;
-				dhst = new BackendAdapter(param).Get<List<HIS_DHST>>("api/HisDHST/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, dhstFilter, param).FirstOrDefault();
+				CommonParam commonParam = new CommonParam();
+				HisDhstFilter hisDhstFilter = new HisDhstFilter();
+				hisDhstFilter.ID = HisServiceReqView.DHST_ID;
+				dhst = new BackendAdapter(commonParam).Get<List<HIS_DHST>>("api/HisDHST/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDhstFilter, commonParam).FirstOrDefault();
 			}
 		}
 		catch (Exception ex)
@@ -23360,28 +23362,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void LoadServiceReqView()
 	{
-		CommonParam param = new CommonParam();
-		HisServiceReqViewFilter examServiceReqFilter = new HisServiceReqViewFilter();
-		examServiceReqFilter.ID = HisServiceReqView.ID;
-		HisServiceReqView = new BackendAdapter(param).Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, examServiceReqFilter, param).FirstOrDefault();
+		CommonParam commonParam = new CommonParam();
+		HisServiceReqViewFilter hisServiceReqViewFilter = new HisServiceReqViewFilter();
+		hisServiceReqViewFilter.ID = HisServiceReqView.ID;
+		HisServiceReqView = new BackendAdapter(commonParam).Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqViewFilter, commonParam).FirstOrDefault();
 	}
 
 	private void LoadPatientTypeAlter()
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisPatientTypeAlterViewFilter filterPatienTypeAlter = new HisPatientTypeAlterViewFilter();
-			filterPatienTypeAlter.TREATMENT_ID = treatment.ID;
-			patientTypeAlter = (from o in new BackendAdapter(param).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filterPatienTypeAlter, param)
+			CommonParam commonParam = new CommonParam();
+			HisPatientTypeAlterViewFilter hisPatientTypeAlterViewFilter = new HisPatientTypeAlterViewFilter();
+			hisPatientTypeAlterViewFilter.TREATMENT_ID = treatment.ID;
+			patientTypeAlter = (from o in new BackendAdapter(commonParam).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewFilter, commonParam)
 				orderby o.LOG_TIME descending
 				select o).FirstOrDefault();
-			HIS_TREATMENT_TYPE treatmentType = BackendDataWorker.Get<HIS_TREATMENT_TYPE>().FirstOrDefault((HIS_TREATMENT_TYPE o) => o.ID == (treatment.IN_TREATMENT_TYPE_ID ?? 0));
-			if (treatmentType != null && patientTypeAlter != null)
+			HIS_TREATMENT_TYPE hIS_TREATMENT_TYPE = BackendDataWorker.Get<HIS_TREATMENT_TYPE>().FirstOrDefault((HIS_TREATMENT_TYPE o) => o.ID == (treatment.IN_TREATMENT_TYPE_ID ?? 0));
+			if (hIS_TREATMENT_TYPE != null && patientTypeAlter != null)
 			{
-				patientTypeAlter.TREATMENT_TYPE_ID = treatmentType.ID;
-				patientTypeAlter.TREATMENT_TYPE_CODE = treatmentType.TREATMENT_TYPE_CODE;
-				patientTypeAlter.TREATMENT_TYPE_NAME = treatmentType.TREATMENT_TYPE_NAME;
+				patientTypeAlter.TREATMENT_TYPE_ID = hIS_TREATMENT_TYPE.ID;
+				patientTypeAlter.TREATMENT_TYPE_CODE = hIS_TREATMENT_TYPE.TREATMENT_TYPE_CODE;
+				patientTypeAlter.TREATMENT_TYPE_NAME = hIS_TREATMENT_TYPE.TREATMENT_TYPE_NAME;
 			}
 		}
 		catch (Exception ex)
@@ -23394,10 +23396,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisDepartmentTranViewFilter departmentTranFilter = new HisDepartmentTranViewFilter();
-			departmentTranFilter.TREATMENT_ID = treatmentId;
-			departmentTrans = new BackendAdapter(param).Get<List<V_HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, departmentTranFilter, param);
+			CommonParam commonParam = new CommonParam();
+			HisDepartmentTranViewFilter hisDepartmentTranViewFilter = new HisDepartmentTranViewFilter();
+			hisDepartmentTranViewFilter.TREATMENT_ID = treatmentId;
+			departmentTrans = new BackendAdapter(commonParam).Get<List<V_HIS_DEPARTMENT_TRAN>>("api/HisDepartmentTran/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDepartmentTranViewFilter, commonParam);
 		}
 		catch (Exception ex)
 		{
@@ -23409,10 +23411,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisExpMestFilter expMestFilter = new HisExpMestFilter();
-			expMestFilter.TDL_TREATMENT_ID = treatmentId;
-			expMests = new BackendAdapter(param).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestFilter, param);
+			CommonParam commonParam = new CommonParam();
+			HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+			hisExpMestFilter.TDL_TREATMENT_ID = treatmentId;
+			expMests = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, commonParam);
 		}
 		catch (Exception ex)
 		{
@@ -23424,10 +23426,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisSereServView5Filter sereServFilter = new HisSereServView5Filter();
-			sereServFilter.TDL_TREATMENT_ID = treatment.ID;
-			sereServMedis = (from o in new BackendAdapter(param).Get<List<V_HIS_SERE_SERV_5>>("api/HisSereServ/GetView5", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sereServFilter, param)
+			CommonParam commonParam = new CommonParam();
+			HisSereServView5Filter hisSereServView5Filter = new HisSereServView5Filter();
+			hisSereServView5Filter.TDL_TREATMENT_ID = treatment.ID;
+			sereServMedis = (from o in new BackendAdapter(commonParam).Get<List<V_HIS_SERE_SERV_5>>("api/HisSereServ/GetView5", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServView5Filter, commonParam)
 				where o.MEDICINE_ID.HasValue
 				select o).ToList();
 		}
@@ -23443,10 +23445,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			if (SereServ8s == null || SereServ8s.Count == 0)
 			{
-				CommonParam param = new CommonParam();
-				HisSereServFilter sereServFilter = new HisSereServFilter();
-				sereServFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-				SereServ8s = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("api/HisSereServ/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, sereServFilter, param);
+				CommonParam commonParam = new CommonParam();
+				HisSereServFilter hisSereServFilter = new HisSereServFilter();
+				hisSereServFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
+				SereServ8s = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("api/HisSereServ/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, commonParam);
 			}
 		}
 		catch (Exception ex)
@@ -23457,55 +23459,55 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private List<V_HIS_TREATMENT_FEE> LoadTreatmentFee()
 	{
-		List<V_HIS_TREATMENT_FEE> treatmentFees = null;
+		List<V_HIS_TREATMENT_FEE> list = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentFeeViewFilter treatmentFeeFilter = new HisTreatmentFeeViewFilter();
-			treatmentFeeFilter.ID = treatment.ID;
-			treatmentFees = new BackendAdapter(param).Get<List<V_HIS_TREATMENT_FEE>>("api/HisTreatment/GetFeeView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFeeFilter, param);
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentFeeViewFilter hisTreatmentFeeViewFilter = new HisTreatmentFeeViewFilter();
+			hisTreatmentFeeViewFilter.ID = treatment.ID;
+			list = new BackendAdapter(commonParam).Get<List<V_HIS_TREATMENT_FEE>>("api/HisTreatment/GetFeeView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFeeViewFilter, commonParam);
 		}
 		catch (Exception ex)
 		{
-			treatmentFees = null;
+			list = null;
 			LogSystem.Warn(ex);
 		}
-		return treatmentFees;
+		return list;
 	}
 
 	private V_HIS_TREATMENT_FEE_4 GetTreatmentFee4()
 	{
-		V_HIS_TREATMENT_FEE_4 treatmentFee = null;
+		V_HIS_TREATMENT_FEE_4 v_HIS_TREATMENT_FEE_ = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentFeeView4Filter treatmentFeeFilter = new HisTreatmentFeeView4Filter();
-			treatmentFeeFilter.ID = HisServiceReqView.TREATMENT_ID;
-			treatmentFee = new BackendAdapter(param).Get<List<V_HIS_TREATMENT_FEE_4>>("api/HisTreatment/GetFeeView4", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFeeFilter, param).FirstOrDefault();
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentFeeView4Filter hisTreatmentFeeView4Filter = new HisTreatmentFeeView4Filter();
+			hisTreatmentFeeView4Filter.ID = HisServiceReqView.TREATMENT_ID;
+			v_HIS_TREATMENT_FEE_ = new BackendAdapter(commonParam).Get<List<V_HIS_TREATMENT_FEE_4>>("api/HisTreatment/GetFeeView4", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFeeView4Filter, commonParam).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
-			treatmentFee = null;
+			v_HIS_TREATMENT_FEE_ = null;
 			LogSystem.Warn(ex);
 		}
-		return treatmentFee;
+		return v_HIS_TREATMENT_FEE_;
 	}
 
 	private V_HIS_TREATMENT LoadTreatmentView()
 	{
-		V_HIS_TREATMENT treatment = null;
+		V_HIS_TREATMENT result = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentViewFilter treatmentFilter = new HisTreatmentViewFilter();
-			treatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
-			treatment = new BackendAdapter(param).Get<List<V_HIS_TREATMENT>>("api/HisTreatment/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, param).FirstOrDefault();
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentViewFilter hisTreatmentViewFilter = new HisTreatmentViewFilter();
+			hisTreatmentViewFilter.ID = HisServiceReqView.TREATMENT_ID;
+			result = new BackendAdapter(commonParam).Get<List<V_HIS_TREATMENT>>("api/HisTreatment/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentViewFilter, commonParam).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Warn(ex);
 		}
-		return treatment;
+		return result;
 	}
 
 	private void CheckBordereauType(ref bool isPhoiBHYT, ref bool isPhoiVienPhi)
@@ -23517,12 +23519,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				return;
 			}
 			long patientTypeIdBHYT = HisPatientTypeCFG.PATIENT_TYPE_ID__BHYT;
-			List<HIS_SERE_SERV> sereServ_BHYT = SereServ8s.Where((HIS_SERE_SERV o) => o.PATIENT_TYPE_ID == patientTypeIdBHYT).ToList();
-			if (sereServ_BHYT != null && sereServ_BHYT.Count > 0)
+			List<HIS_SERE_SERV> list = SereServ8s.Where((HIS_SERE_SERV o) => o.PATIENT_TYPE_ID == patientTypeIdBHYT).ToList();
+			if (list != null && list.Count > 0)
 			{
 				isPhoiBHYT = true;
 			}
-			List<HIS_SERE_SERV> sereServ_VienPhi = SereServ8s.Where(delegate(HIS_SERE_SERV o)
+			List<HIS_SERE_SERV> list2 = SereServ8s.Where(delegate(HIS_SERE_SERV o)
 			{
 				decimal? num;
 				int result;
@@ -23556,7 +23558,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				result = ((num2.GetValueOrDefault() > default(decimal) && num2.HasValue) ? 1 : 0);
 				goto IL_012f;
 			}).ToList();
-			if (sereServ_VienPhi != null && sereServ_VienPhi.Count > 0)
+			if (list2 != null && list2.Count > 0)
 			{
 				isPhoiVienPhi = true;
 			}
@@ -23569,39 +23571,39 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private Dictionary<string, List<HIS_SERE_SERV>> GroupSereServByPatyAlterBhyt(List<HIS_SERE_SERV> listSereServ)
 	{
-		Dictionary<string, List<HIS_SERE_SERV>> dicSereServ = new Dictionary<string, List<HIS_SERE_SERV>>();
+		Dictionary<string, List<HIS_SERE_SERV>> dictionary = new Dictionary<string, List<HIS_SERE_SERV>>();
 		try
 		{
-			foreach (HIS_SERE_SERV s in listSereServ)
+			foreach (HIS_SERE_SERV item in listSereServ)
 			{
-				if (s.PATIENT_TYPE_ID != HisPatientTypeCFG.PATIENT_TYPE_ID__BHYT || s.JSON_PATIENT_TYPE_ALTER == null)
+				if (item.PATIENT_TYPE_ID != HisPatientTypeCFG.PATIENT_TYPE_ID__BHYT || item.JSON_PATIENT_TYPE_ALTER == null)
 				{
 					continue;
 				}
-				HIS_PATIENT_TYPE_ALTER patyAlter = JsonConvert.DeserializeObject<HIS_PATIENT_TYPE_ALTER>(s.JSON_PATIENT_TYPE_ALTER);
-				if (patyAlter != null)
+				HIS_PATIENT_TYPE_ALTER hIS_PATIENT_TYPE_ALTER = JsonConvert.DeserializeObject<HIS_PATIENT_TYPE_ALTER>(item.JSON_PATIENT_TYPE_ALTER);
+				if (hIS_PATIENT_TYPE_ALTER != null)
 				{
-					string key = ToString(patyAlter);
+					string text = ToString(hIS_PATIENT_TYPE_ALTER);
 					List<HIS_SERE_SERV> list;
-					if (dicSereServ.ContainsKey(key))
+					if (dictionary.ContainsKey(text))
 					{
-						list = dicSereServ[key];
+						list = dictionary[text];
 					}
 					else
 					{
 						list = new List<HIS_SERE_SERV>();
-						dicSereServ.Add(key, list);
+						dictionary.Add(text, list);
 					}
-					list.Add(s);
+					list.Add(item);
 				}
 			}
 		}
 		catch (Exception ex)
 		{
-			dicSereServ = null;
+			dictionary = null;
 			LogSystem.Warn(ex);
 		}
-		return dicSereServ;
+		return dictionary;
 	}
 
 	private string ToString(HIS_PATIENT_TYPE_ALTER patyAlter)
@@ -23744,16 +23746,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private HIS_TREATMENT GetTreatmentById(long id)
 	{
-		HIS_TREATMENT rs = null;
+		HIS_TREATMENT result = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentFilter filter = new HisTreatmentFilter();
-			filter.ID = id;
-			List<HIS_TREATMENT> rsApi = new BackendAdapter(param).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
-			if (rsApi != null && rsApi.Count > 0)
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = id;
+			List<HIS_TREATMENT> list = new BackendAdapter(commonParam).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, commonParam);
+			if (list != null && list.Count > 0)
 			{
-				rs = rsApi.FirstOrDefault();
+				result = list.FirstOrDefault();
 			}
 		}
 		catch (Exception ex)
@@ -23761,18 +23763,18 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			LogSystem.Warn(ex);
 			return null;
 		}
-		return rs;
+		return result;
 	}
 
 	private List<HIS_TREATMENT_END_TYPE_EXT> GetTreatmentEndTypeExt()
 	{
-		List<HIS_TREATMENT_END_TYPE_EXT> rs = null;
+		List<HIS_TREATMENT_END_TYPE_EXT> list = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentEndTypeExtFilter filter = new HisTreatmentEndTypeExtFilter();
-			filter.IS_ACTIVE = (short)1;
-			return new BackendAdapter(param).Get<List<HIS_TREATMENT_END_TYPE_EXT>>("api/HisTreatmentEndTypeExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentEndTypeExtFilter hisTreatmentEndTypeExtFilter = new HisTreatmentEndTypeExtFilter();
+			hisTreatmentEndTypeExtFilter.IS_ACTIVE = (short)1;
+			return new BackendAdapter(commonParam).Get<List<HIS_TREATMENT_END_TYPE_EXT>>("api/HisTreatmentEndTypeExt/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentEndTypeExtFilter, commonParam);
 		}
 		catch (Exception ex)
 		{
@@ -23783,7 +23785,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private List<HIS_SERE_SERV> GetSereServWithMinDuration(long patientId, List<long> serviceIds)
 	{
-		List<HIS_SERE_SERV> results = new List<HIS_SERE_SERV>();
+		List<HIS_SERE_SERV> list = new List<HIS_SERE_SERV>();
 		try
 		{
 			if (serviceIds == null || serviceIds.Count == 0)
@@ -23791,42 +23793,42 @@ public class ExamServiceReqExecuteControl : UserControlBase
 				LogSystem.Debug("Khong truyen danh sach serviceids");
 				return null;
 			}
-			List<V_HIS_SERVICE> services = (from o in BackendDataWorker.Get<V_HIS_SERVICE>()
+			List<V_HIS_SERVICE> list2 = (from o in BackendDataWorker.Get<V_HIS_SERVICE>()
 				where serviceIds.Contains(o.ID) && o.MIN_DURATION.HasValue
 				select o).ToList();
-			if (services == null)
+			if (list2 == null)
 			{
 				return null;
 			}
-			List<ServiceDuration> serviceDurations = new List<ServiceDuration>();
-			foreach (V_HIS_SERVICE item in services)
+			List<ServiceDuration> list3 = new List<ServiceDuration>();
+			foreach (V_HIS_SERVICE item in list2)
 			{
-				ServiceDuration sd = new ServiceDuration();
-				sd.MinDuration = item.MIN_DURATION.Value;
-				sd.ServiceId = item.ID;
-				serviceDurations.Add(sd);
+				ServiceDuration serviceDuration = new ServiceDuration();
+				serviceDuration.MinDuration = item.MIN_DURATION.Value;
+				serviceDuration.ServiceId = item.ID;
+				list3.Add(serviceDuration);
 			}
-			CommonParam param = new CommonParam();
+			CommonParam commonParam = new CommonParam();
 			HisSereServMinDurationFilter hisSereServMinDurationFilter = new HisSereServMinDurationFilter();
-			hisSereServMinDurationFilter.ServiceDurations = serviceDurations;
+			hisSereServMinDurationFilter.ServiceDurations = list3;
 			hisSereServMinDurationFilter.PatientId = patientId;
 			hisSereServMinDurationFilter.InstructionTime = Inventec.Common.DateTime.Convert.SystemDateTimeToTimeNumber(DateTime.Now) ?? 0;
-			results = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("api/HisSereServ/GetExceedMinDuration", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServMinDurationFilter, param);
-			if (results != null && results.Count > 0)
+			list = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("api/HisSereServ/GetExceedMinDuration", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServMinDurationFilter, commonParam);
+			if (list != null && list.Count > 0)
 			{
-				IEnumerable<HIS_SERE_SERV> listSereServResultTemp = from SereServResult in results
+				IEnumerable<HIS_SERE_SERV> source = from SereServResult in list
 					group SereServResult by SereServResult.SERVICE_ID into g
 					orderby g.Key
 					select g.FirstOrDefault();
-				results = listSereServResultTemp.ToList();
+				list = source.ToList();
 			}
 		}
 		catch (Exception ex)
 		{
-			results = null;
+			list = null;
 			LogSystem.Warn(ex);
 		}
-		return results;
+		return list;
 	}
 
 	private bool IsLessThan1YearOldOr6YearOld(long dob)
@@ -23835,13 +23837,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			IsRequiredWeightOption = HisConfigs.Get<long>("HIS.Desktop.Plugins.ExamServiceReqExecute.IsRequiredWeightOption");
-			DateTime dtNgSinh = Parse.ToDateTime(Inventec.Common.DateTime.Convert.TimeNumberToTimeString(dob));
-			double tongSoNgay = (DateTime.Now - dtNgSinh).TotalDays;
-			if (tongSoNgay < 366.0 && IsRequiredWeightOption == 1)
+			DateTime dateTime = Parse.ToDateTime(Inventec.Common.DateTime.Convert.TimeNumberToTimeString(dob));
+			double totalDays = (DateTime.Now - dateTime).TotalDays;
+			if (totalDays < 366.0 && IsRequiredWeightOption == 1)
 			{
 				return true;
 			}
-			if (tongSoNgay < 2196.0 && IsRequiredWeightOption == 2)
+			if (totalDays < 2196.0 && IsRequiredWeightOption == 2)
 			{
 				return true;
 			}
@@ -23858,10 +23860,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		bool result = false;
 		try
 		{
-			DateTime dtNgSinh = Parse.ToDateTime(Inventec.Common.DateTime.Convert.TimeNumberToTimeString(dob));
-			long tongsogiay = (DateTime.Now - dtNgSinh).Ticks;
-			int nam = new DateTime(tongsogiay).Year - 1;
-			if (nam > 16)
+			DateTime dateTime = Parse.ToDateTime(Inventec.Common.DateTime.Convert.TimeNumberToTimeString(dob));
+			long ticks = (DateTime.Now - dateTime).Ticks;
+			int num = new DateTime(ticks).Year - 1;
+			if (num > 16)
 			{
 				result = true;
 			}
@@ -23878,8 +23880,8 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		bool result = false;
 		try
 		{
-			long nam = long.Parse(treatment.IN_TIME.ToString().Substring(0, 4)) - long.Parse(treatment.TDL_PATIENT_DOB.ToString().Substring(0, 4));
-			if (nam < 16)
+			long num = long.Parse(treatment.IN_TIME.ToString().Substring(0, 4)) - long.Parse(treatment.TDL_PATIENT_DOB.ToString().Substring(0, 4));
+			if (num < 16)
 			{
 				result = true;
 			}
@@ -24092,20 +24094,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisTreatmentLView2Filter treatmentFilter = new HisTreatmentLView2Filter();
-			treatmentFilter.PATIENT_ID = HisServiceReqView.TDL_PATIENT_ID;
-			treatmentByPatients = new BackendAdapter(param).Get<List<L_HIS_TREATMENT_2>>("api/HisTreatment/GetLView2", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatmentFilter, param);
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentLView2Filter hisTreatmentLView2Filter = new HisTreatmentLView2Filter();
+			hisTreatmentLView2Filter.PATIENT_ID = HisServiceReqView.TDL_PATIENT_ID;
+			treatmentByPatients = new BackendAdapter(commonParam).Get<List<L_HIS_TREATMENT_2>>("api/HisTreatment/GetLView2", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentLView2Filter, commonParam);
 			ltreatment2 = treatmentByPatients.FirstOrDefault((L_HIS_TREATMENT_2 o) => o.ID == HisServiceReqView.TREATMENT_ID);
-			HisTreatmentFilter treatment = new HisTreatmentFilter();
-			treatment.ID = HisServiceReqView.TREATMENT_ID;
-			this.treatment = new BackendAdapter(param).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, treatment, param).FirstOrDefault();
-			if (this.treatment != null)
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = HisServiceReqView.TREATMENT_ID;
+			treatment = new BackendAdapter(commonParam).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, commonParam).FirstOrDefault();
+			if (treatment != null)
 			{
-				UpdateNeedSickLeaveCertControl(this.treatment.NEED_SICK_LEAVE_CERT);
-				icdDefaultFinish.ICD_CODE = this.treatment.ICD_CODE;
-				icdDefaultFinish.ICD_NAME = this.treatment.ICD_NAME;
-				if (this.treatment.TREATMENT_END_TYPE_EXT_ID == 4)
+				UpdateNeedSickLeaveCertControl(treatment.NEED_SICK_LEAVE_CERT);
+				icdDefaultFinish.ICD_CODE = treatment.ICD_CODE;
+				icdDefaultFinish.ICD_NAME = treatment.ICD_NAME;
+				if (treatment.TREATMENT_END_TYPE_EXT_ID == 4)
 				{
 					ReLoadPrintTreatmentEndTypeExt(PrintType.IN_PHIEU_HEN_MO);
 				}
@@ -24143,22 +24145,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			List<L_HIS_TREATMENT_2> treatmentHTs = (from o in treatmentByPatients
+			List<L_HIS_TREATMENT_2> list = (from o in treatmentByPatients
 				where o.ID != HisServiceReqView.TREATMENT_ID && o.TDL_FIRST_EXAM_ROOM_ID.HasValue
 				orderby o.IN_TIME descending
 				select o).ToList();
-			if (treatmentHTs == null || treatmentHTs.Count <= 0)
+			if (list == null || list.Count <= 0)
 			{
 				return;
 			}
-			List<HIS_EXECUTE_ROOM> executeRooms = BackendDataWorker.Get<HIS_EXECUTE_ROOM>();
-			foreach (L_HIS_TREATMENT_2 item in treatmentHTs)
+			List<HIS_EXECUTE_ROOM> source = BackendDataWorker.Get<HIS_EXECUTE_ROOM>();
+			foreach (L_HIS_TREATMENT_2 item in list)
 			{
 				Mapper.CreateMap<L_HIS_TREATMENT_2, TreatmentExamADO>();
-				TreatmentExamADO treatmentHistoryADO = Mapper.Map<L_HIS_TREATMENT_2, TreatmentExamADO>(item);
-				HIS_EXECUTE_ROOM executeRoom = executeRooms.FirstOrDefault((HIS_EXECUTE_ROOM o) => o.ROOM_ID == item.TDL_FIRST_EXAM_ROOM_ID);
-				treatmentHistoryADO.FIRST_EXAM_ROOM_NAME = ((executeRoom != null) ? executeRoom.EXECUTE_ROOM_NAME : "");
-				TreatmentHistorys.Add(treatmentHistoryADO);
+				TreatmentExamADO treatmentExamADO = Mapper.Map<L_HIS_TREATMENT_2, TreatmentExamADO>(item);
+				HIS_EXECUTE_ROOM hIS_EXECUTE_ROOM = source.FirstOrDefault((HIS_EXECUTE_ROOM o) => o.ROOM_ID == item.TDL_FIRST_EXAM_ROOM_ID);
+				treatmentExamADO.FIRST_EXAM_ROOM_NAME = ((hIS_EXECUTE_ROOM != null) ? hIS_EXECUTE_ROOM.EXECUTE_ROOM_NAME : "");
+				TreatmentHistorys.Add(treatmentExamADO);
 			}
 		}
 		catch (Exception ex)
@@ -24213,23 +24215,23 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		{
 			LogSystem.Debug("LoadTreatmentInfomation .Start!");
 			Mapper.CreateMap<V_HIS_SERVICE_REQ, HIS_SERVICE_REQ>();
-			HIS_SERVICE_REQ serviceReq = Mapper.Map<V_HIS_SERVICE_REQ, HIS_SERVICE_REQ>(HisServiceReqView);
-			if (HisServiceReqView != null && HisConfigCFG.IsAutoSetExamInforByPreviousTreatmentInCaseOfOutPatient && serviceReq.START_TIME.HasValue && (serviceReq.START_TIME == serviceReq.MODIFY_TIME || serviceReq.START_TIME + 1 == serviceReq.MODIFY_TIME))
+			HIS_SERVICE_REQ hIS_SERVICE_REQ = Mapper.Map<V_HIS_SERVICE_REQ, HIS_SERVICE_REQ>(HisServiceReqView);
+			if (HisServiceReqView != null && HisConfigCFG.IsAutoSetExamInforByPreviousTreatmentInCaseOfOutPatient && hIS_SERVICE_REQ.START_TIME.HasValue && (hIS_SERVICE_REQ.START_TIME == hIS_SERVICE_REQ.MODIFY_TIME || hIS_SERVICE_REQ.START_TIME + 1 == hIS_SERVICE_REQ.MODIFY_TIME))
 			{
-				HIS_TREATMENT treatment = this.treatment;
-				LogSystem.Debug(LogUtil.TraceData("treatment", treatment));
-				LogSystem.Debug(LogUtil.TraceData("treatment.TDL_TREATMENT_TYPE_ID", treatment.TDL_TREATMENT_TYPE_ID));
-				if (treatment != null && treatment.TDL_TREATMENT_TYPE_ID == 2)
+				HIS_TREATMENT hIS_TREATMENT = treatment;
+				LogSystem.Debug(LogUtil.TraceData("treatment", hIS_TREATMENT));
+				LogSystem.Debug(LogUtil.TraceData("treatment.TDL_TREATMENT_TYPE_ID", hIS_TREATMENT.TDL_TREATMENT_TYPE_ID));
+				if (hIS_TREATMENT != null && hIS_TREATMENT.TDL_TREATMENT_TYPE_ID == 2)
 				{
-					HIS_TREATMENT previousTreatment = GetPreviousTreatmentByPatientID(serviceReq.TDL_PATIENT_ID, treatment.ID);
-					LogSystem.Debug(LogUtil.TraceData("previousTreatment", previousTreatment));
-					if (previousTreatment != null && previousTreatment.TDL_TREATMENT_TYPE_ID == 2)
+					HIS_TREATMENT previousTreatmentByPatientID = GetPreviousTreatmentByPatientID(hIS_SERVICE_REQ.TDL_PATIENT_ID, hIS_TREATMENT.ID);
+					LogSystem.Debug(LogUtil.TraceData("previousTreatment", previousTreatmentByPatientID));
+					if (previousTreatmentByPatientID != null && previousTreatmentByPatientID.TDL_TREATMENT_TYPE_ID == 2)
 					{
-						V_HIS_SERVICE_REQ serviceReq_KhamChinh = GetServiceReq_KhamChinh_ByTreatmentID(previousTreatment.ID);
-						LogSystem.Debug(LogUtil.TraceData("serviceReq_KhamChinh", serviceReq_KhamChinh));
-						if (serviceReq_KhamChinh != null)
+						V_HIS_SERVICE_REQ serviceReq_KhamChinh_ByTreatmentID = GetServiceReq_KhamChinh_ByTreatmentID(previousTreatmentByPatientID.ID);
+						LogSystem.Debug(LogUtil.TraceData("serviceReq_KhamChinh", serviceReq_KhamChinh_ByTreatmentID));
+						if (serviceReq_KhamChinh_ByTreatmentID != null)
 						{
-							SetExamInforByPreviousTreatmentInCaseOfOutPatient(serviceReq_KhamChinh);
+							SetExamInforByPreviousTreatmentInCaseOfOutPatient(serviceReq_KhamChinh_ByTreatmentID);
 						}
 					}
 				}
@@ -24349,12 +24351,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return null;
 			}
-			HisTreatmentFilter filter = new HisTreatmentFilter();
-			filter.PATIENT_ID = patientID;
-			List<HIS_TREATMENT> apiResult = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, new CommonParam());
-			if (apiResult != null && apiResult.Count() > 0)
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.PATIENT_ID = patientID;
+			List<HIS_TREATMENT> list = new BackendAdapter(new CommonParam()).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, new CommonParam());
+			if (list != null && list.Count() > 0)
 			{
-				result = (from o in apiResult
+				result = (from o in list
 					where o.ID != currentTreatmentID
 					select o into s
 					orderby s.OUT_TIME descending
@@ -24378,14 +24380,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return null;
 			}
-			HisServiceReqViewFilter filter = new HisServiceReqViewFilter();
-			filter.IS_ACTIVE = 1;
-			filter.TREATMENT_ID = treatmentID;
-			filter.SERVICE_REQ_TYPE_ID = 1L;
-			List<V_HIS_SERVICE_REQ> apiResult = new BackendAdapter(new CommonParam()).Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, new CommonParam());
-			if (apiResult != null && apiResult.Count() > 0)
+			HisServiceReqViewFilter hisServiceReqViewFilter = new HisServiceReqViewFilter();
+			hisServiceReqViewFilter.IS_ACTIVE = 1;
+			hisServiceReqViewFilter.TREATMENT_ID = treatmentID;
+			hisServiceReqViewFilter.SERVICE_REQ_TYPE_ID = 1L;
+			List<V_HIS_SERVICE_REQ> list = new BackendAdapter(new CommonParam()).Get<List<V_HIS_SERVICE_REQ>>("api/HisServiceReq/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqViewFilter, new CommonParam());
+			if (list != null && list.Count() > 0)
 			{
-				result = apiResult.Where((V_HIS_SERVICE_REQ o) => o.IS_MAIN_EXAM == 1).FirstOrDefault();
+				result = list.Where((V_HIS_SERVICE_REQ o) => o.IS_MAIN_EXAM == 1).FirstOrDefault();
 			}
 		}
 		catch (Exception ex)
@@ -24401,12 +24403,12 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			WaitingManager.Show();
-			HisSereServFilter ClsSereServFilter = new HisSereServFilter();
-			ClsSereServFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
-			ClsSereServFilter.TDL_SERVICE_TYPE_IDs = new List<long> { 2L, 3L, 9L, 10L, 5L };
-			ClsSereServFilter.HAS_EXECUTE = true;
-			CommonParam param = new CommonParam();
-			ClsSereServ = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, ClsSereServFilter, param);
+			HisSereServFilter hisSereServFilter = new HisSereServFilter();
+			hisSereServFilter.TREATMENT_ID = HisServiceReqView.TREATMENT_ID;
+			hisSereServFilter.TDL_SERVICE_TYPE_IDs = new List<long> { 2L, 3L, 9L, 10L, 5L };
+			hisSereServFilter.HAS_EXECUTE = true;
+			CommonParam commonParam = new CommonParam();
+			ClsSereServ = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, commonParam);
 			WaitingManager.Hide();
 		}
 		catch (Exception ex)
@@ -24691,13 +24693,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			LogSystem.Debug("FillDataToControlEditor: ");
-			CommonParam param = new CommonParam();
-			HisTreatmentFilter filter = new HisTreatmentFilter();
-			filter.ID = id;
-			List<HIS_TREATMENT> treatment = new BackendAdapter(param).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param).ToList();
-			if (treatment != null && treatment.Count > 0)
+			CommonParam commonParam = new CommonParam();
+			HisTreatmentFilter hisTreatmentFilter = new HisTreatmentFilter();
+			hisTreatmentFilter.ID = id;
+			List<HIS_TREATMENT> list = new BackendAdapter(commonParam).Get<List<HIS_TREATMENT>>("api/HisTreatment/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentFilter, commonParam).ToList();
+			if (list != null && list.Count > 0)
 			{
-				txtHospitalizationReason.Text = treatment.FirstOrDefault().HOSPITALIZATION_REASON;
+				txtHospitalizationReason.Text = list.FirstOrDefault().HOSPITALIZATION_REASON;
 			}
 		}
 		catch (Exception ex)
@@ -24898,10 +24900,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		HIS_SERVICE_REQ result = null;
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisServiceReqFilter serviceReqFilter = new HisServiceReqFilter();
-			serviceReqFilter.ID = HisServiceReqView.ID;
-			result = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqFilter, param).FirstOrDefault();
+			CommonParam commonParam = new CommonParam();
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.ID = HisServiceReqView.ID;
+			result = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, commonParam).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
@@ -25441,123 +25443,123 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			richEditorMain = new RichEditorStore(HIS.Desktop.ApiConsumer.ApiConsumers.SarConsumer, ConfigSystems.URI_API_SAR, LanguageManager.GetLanguage(), Inventec.Desktop.Common.LocalStorage.Location.PrintStoreLocation.PrintTemplatePath);
-			DXPopupMenu menu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
-			if (menu == null || menu.Items == null || menu.Items.Count == 0)
+			DXPopupMenu dXPopupMenu = btnPrint_ExamService.DropDownControl as DXPopupMenu;
+			if (dXPopupMenu == null || dXPopupMenu.Items == null || dXPopupMenu.Items.Count == 0)
 			{
-				menu = new DXPopupMenu();
-				DXMenuItem itemKhamBenhVaoVien = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_KHAM_BENH_VAO_VIEN", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemKhamBenhVaoVien.Tag = PrintType.KHAM_BENH_VAO_VIEN;
-				menu.Items.Add(itemKhamBenhVaoVien);
-				DXMenuItem itemBenhAnNgoaiTru = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BENH_AN_NGOAI_TRU", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemBenhAnNgoaiTru.Tag = PrintType.BENH_AN_NGOAI_TRU;
-				menu.Items.Add(itemBenhAnNgoaiTru);
-				DXSubMenuItem itemBieuMauKhac = new DXSubMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BIEU_MAU_KHAC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()));
-				DXMenuItem itemPhieuPTTT = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_PTTT", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuPTTT.Tag = PrintType.BIEU_MAU_KHAC_PHIEU_PTTT;
-				itemBieuMauKhac.Items.Add(itemPhieuPTTT);
-				DXMenuItem itemPhieuTuVan = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_TU_VAN", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuTuVan.Tag = PrintType.PHIEU_TU_VAN;
-				itemBieuMauKhac.Items.Add(itemPhieuTuVan);
-				DXMenuItem itemPhieuXacNhanXNHIV = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XAC_NHAN_DONG_Y_XET_NGHIEM_HIV_MPS401", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuXacNhanXNHIV.Tag = PrintType.PHIEU_XAC_NHAN_DONG_Y_XET_NGHIEM_HIV_MPS401;
-				itemBieuMauKhac.Items.Add(itemPhieuXacNhanXNHIV);
-				DXMenuItem itemPhieuXNVKLAO = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XET_NGHIEM_VI_KHUAN_LAO_MPS436", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuXNVKLAO.Tag = PrintType.PHIEU_XET_NGHIEM_VI_KHUAN_LAO_MPS436;
-				itemBieuMauKhac.Items.Add(itemPhieuXNVKLAO);
-				DXMenuItem itemPXNXPertXPressSARsnCoV2 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XET_NGHIEM_XPertXPressSARsnCOV2_MPS437", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPXNXPertXPressSARsnCoV2.Tag = PrintType.PHIEU_XET_NGHIEM_XPertXPressSARsnCOV2_MPS437;
-				itemBieuMauKhac.Items.Add(itemPXNXPertXPressSARsnCoV2);
-				DXMenuItem itemPhieuXNDom = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XET_NGHIEM_DOM_MPS438", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuXNDom.Tag = PrintType.PHIEU_XET_NGHIEM_DOM_MPS438;
-				itemBieuMauKhac.Items.Add(itemPhieuXNDom);
-				DXMenuItem itemPhieuKBChuyenKhamPhongPTTT = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_KB_CHUYEN_KHAM_PHONG_PTTT", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuKBChuyenKhamPhongPTTT.Tag = PrintType.PHIEU_KHAM_BENH_CHUYEN_KHAM_PHONG_PTTT;
-				itemBieuMauKhac.Items.Add(itemPhieuKBChuyenKhamPhongPTTT);
-				DXMenuItem itemBenhAnNgoaiTruPTTTPhongKhamPTTT = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemBenhAnNgoaiTruPTTTPhongKhamPTTT.Tag = PrintType.BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT;
-				itemBieuMauKhac.Items.Add(itemBenhAnNgoaiTruPTTTPhongKhamPTTT);
-				DXMenuItem itemBangTracNghiemCoVaCamGiac = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BANG_TRAC_NGHIEM_CO_VA_CAM_GIAC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemBangTracNghiemCoVaCamGiac.Tag = PrintType.BANG_TRAC_NGHIEM_CO_VA_CAM_GIAC;
-				itemBieuMauKhac.Items.Add(itemBangTracNghiemCoVaCamGiac);
-				DXMenuItem itemPhieuKiemTraKhamSucKhoeDinhKy = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_KIEM_TRA_KHAM_SUC_KHOE_DINH_KY", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemPhieuKiemTraKhamSucKhoeDinhKy.Tag = PrintType.PHIEU_KIEM_TRA_KHAM_SUC_KHOE_DINH_KY;
-				itemBieuMauKhac.Items.Add(itemPhieuKiemTraKhamSucKhoeDinhKy);
-				menu.Items.Add(itemBieuMauKhac);
-				DXMenuItem itemXetNghiem = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_PHIEU_XET_NGHIEM", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemXetNghiem);
-				itemXetNghiem.Tag = PrintType.KET_QUA_XET_NGHIEM_TONG_HOP;
-				menu.Items.Add(itemXetNghiem);
-				DXMenuItem itemGopDonThuoc = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_GOP_DON_THUOC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemInGopDonThuoc);
-				itemGopDonThuoc.Tag = PrintType.GOP_DON_THUOC;
-				menu.Items.Add(itemGopDonThuoc);
-				DXMenuItem itemTrichLuc = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_TRICH_LUC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemTrichLuc);
-				itemTrichLuc.Tag = PrintType.TRICH_LUC;
-				menu.Items.Add(itemTrichLuc);
+				dXPopupMenu = new DXPopupMenu();
+				DXMenuItem dXMenuItem = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_KHAM_BENH_VAO_VIEN", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem.Tag = PrintType.KHAM_BENH_VAO_VIEN;
+				dXPopupMenu.Items.Add(dXMenuItem);
+				DXMenuItem dXMenuItem2 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BENH_AN_NGOAI_TRU", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem2.Tag = PrintType.BENH_AN_NGOAI_TRU;
+				dXPopupMenu.Items.Add(dXMenuItem2);
+				DXSubMenuItem dXSubMenuItem = new DXSubMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BIEU_MAU_KHAC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()));
+				DXMenuItem dXMenuItem3 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_PTTT", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem3.Tag = PrintType.BIEU_MAU_KHAC_PHIEU_PTTT;
+				dXSubMenuItem.Items.Add(dXMenuItem3);
+				DXMenuItem dXMenuItem4 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_TU_VAN", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem4.Tag = PrintType.PHIEU_TU_VAN;
+				dXSubMenuItem.Items.Add(dXMenuItem4);
+				DXMenuItem dXMenuItem5 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XAC_NHAN_DONG_Y_XET_NGHIEM_HIV_MPS401", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem5.Tag = PrintType.PHIEU_XAC_NHAN_DONG_Y_XET_NGHIEM_HIV_MPS401;
+				dXSubMenuItem.Items.Add(dXMenuItem5);
+				DXMenuItem dXMenuItem6 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XET_NGHIEM_VI_KHUAN_LAO_MPS436", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem6.Tag = PrintType.PHIEU_XET_NGHIEM_VI_KHUAN_LAO_MPS436;
+				dXSubMenuItem.Items.Add(dXMenuItem6);
+				DXMenuItem dXMenuItem7 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XET_NGHIEM_XPertXPressSARsnCOV2_MPS437", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem7.Tag = PrintType.PHIEU_XET_NGHIEM_XPertXPressSARsnCOV2_MPS437;
+				dXSubMenuItem.Items.Add(dXMenuItem7);
+				DXMenuItem dXMenuItem8 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_XET_NGHIEM_DOM_MPS438", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem8.Tag = PrintType.PHIEU_XET_NGHIEM_DOM_MPS438;
+				dXSubMenuItem.Items.Add(dXMenuItem8);
+				DXMenuItem dXMenuItem9 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_KB_CHUYEN_KHAM_PHONG_PTTT", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem9.Tag = PrintType.PHIEU_KHAM_BENH_CHUYEN_KHAM_PHONG_PTTT;
+				dXSubMenuItem.Items.Add(dXMenuItem9);
+				DXMenuItem dXMenuItem10 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem10.Tag = PrintType.BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT;
+				dXSubMenuItem.Items.Add(dXMenuItem10);
+				DXMenuItem dXMenuItem11 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BANG_TRAC_NGHIEM_CO_VA_CAM_GIAC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem11.Tag = PrintType.BANG_TRAC_NGHIEM_CO_VA_CAM_GIAC;
+				dXSubMenuItem.Items.Add(dXMenuItem11);
+				DXMenuItem dXMenuItem12 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_PHIEU_KIEM_TRA_KHAM_SUC_KHOE_DINH_KY", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem12.Tag = PrintType.PHIEU_KIEM_TRA_KHAM_SUC_KHOE_DINH_KY;
+				dXSubMenuItem.Items.Add(dXMenuItem12);
+				dXPopupMenu.Items.Add(dXSubMenuItem);
+				DXMenuItem dXMenuItem13 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_PHIEU_XET_NGHIEM", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemXetNghiem);
+				dXMenuItem13.Tag = PrintType.KET_QUA_XET_NGHIEM_TONG_HOP;
+				dXPopupMenu.Items.Add(dXMenuItem13);
+				DXMenuItem dXMenuItem14 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_GOP_DON_THUOC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemInGopDonThuoc);
+				dXMenuItem14.Tag = PrintType.GOP_DON_THUOC;
+				dXPopupMenu.Items.Add(dXMenuItem14);
+				DXMenuItem dXMenuItem15 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_TRICH_LUC", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemTrichLuc);
+				dXMenuItem15.Tag = PrintType.TRICH_LUC;
+				dXPopupMenu.Items.Add(dXMenuItem15);
 				if (treatment != null && treatment.IS_PAUSE == 1)
 				{
-					DXMenuItem itemDonPhongKhamTongHop2 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_DON_PHONG_KHAM_TONG_HOP", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemInDonPhongKhamTongHop);
-					itemDonPhongKhamTongHop2.Tag = PrintType.DON_PHONG_KHAM_TONG_HOP;
-					menu.Items.Add(itemDonPhongKhamTongHop2);
+					DXMenuItem dXMenuItem16 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_DON_PHONG_KHAM_TONG_HOP", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemInDonPhongKhamTongHop);
+					dXMenuItem16.Tag = PrintType.DON_PHONG_KHAM_TONG_HOP;
+					dXPopupMenu.Items.Add(dXMenuItem16);
 				}
-				DXMenuItem itemBenhAnNgoaiChan = new DXMenuItem(Inventec.Common.Resource.Get.Value("ExamServiceReqExecuteControl.btnBANgoaiChan.Text", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemBenhAnNgoaiChan.Tag = PrintType.IN_BENH_AN_NGOAI_CHAN;
-				menu.Items.Add(itemBenhAnNgoaiChan);
-				DXMenuItem itemBenhAnCapCuu = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BENH_AN_CAP_CUU", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
-				itemBenhAnCapCuu.Tag = PrintType.BENH_AN_CAP_CUU_MPS374;
-				menu.Items.Add(itemBenhAnCapCuu);
-				DXMenuItem itemDonthuoc = new DXMenuItem("In đơn thuốc", clickInDonthuoc);
-				itemDonthuoc.Tag = PrintType.IN_DON_THUOC;
-				menu.Items.Add(itemDonthuoc);
-				DXMenuItem Mps000478Item = new DXMenuItem("Tóm tắt y lệnh phẫu thuật thủ thuật và đơn thuốc", clickTomTatYLenhPTTTVaDonThuoc);
-				Mps000478Item.Tag = PrintType.TOM_TAT_Y_LENH_PTTT_VA_DON_THUOC;
-				menu.Items.Add(Mps000478Item);
-				DXMenuItem Mps000178Item = new DXMenuItem("In thẻ bệnh nhân", clickInTheBn);
-				Mps000178Item.Tag = PrintType.IN_THE_BN;
-				menu.Items.Add(Mps000178Item);
+				DXMenuItem dXMenuItem17 = new DXMenuItem(Inventec.Common.Resource.Get.Value("ExamServiceReqExecuteControl.btnBANgoaiChan.Text", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem17.Tag = PrintType.IN_BENH_AN_NGOAI_CHAN;
+				dXPopupMenu.Items.Add(dXMenuItem17);
+				DXMenuItem dXMenuItem18 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_BENH_AN_CAP_CUU", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), onClickInPhieuKhamBenh);
+				dXMenuItem18.Tag = PrintType.BENH_AN_CAP_CUU_MPS374;
+				dXPopupMenu.Items.Add(dXMenuItem18);
+				DXMenuItem dXMenuItem19 = new DXMenuItem("In đơn thuốc", clickInDonthuoc);
+				dXMenuItem19.Tag = PrintType.IN_DON_THUOC;
+				dXPopupMenu.Items.Add(dXMenuItem19);
+				DXMenuItem dXMenuItem20 = new DXMenuItem("Tóm tắt y lệnh phẫu thuật thủ thuật và đơn thuốc", clickTomTatYLenhPTTTVaDonThuoc);
+				dXMenuItem20.Tag = PrintType.TOM_TAT_Y_LENH_PTTT_VA_DON_THUOC;
+				dXPopupMenu.Items.Add(dXMenuItem20);
+				DXMenuItem dXMenuItem21 = new DXMenuItem("In thẻ bệnh nhân", clickInTheBn);
+				dXMenuItem21.Tag = PrintType.IN_THE_BN;
+				dXPopupMenu.Items.Add(dXMenuItem21);
 			}
 			else
 			{
 				if (treatment != null && treatment.IS_PAUSE == 1)
 				{
-					DXMenuItem itemDonPhongKhamTongHop = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_DON_PHONG_KHAM_TONG_HOP", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemInDonPhongKhamTongHop);
-					itemDonPhongKhamTongHop.Tag = PrintType.DON_PHONG_KHAM_TONG_HOP;
-					bool isExist = false;
-					foreach (DXMenuItem item in menu.Items)
+					DXMenuItem dXMenuItem22 = new DXMenuItem(Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_DON_PHONG_KHAM_TONG_HOP", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture()), clickItemInDonPhongKhamTongHop);
+					dXMenuItem22.Tag = PrintType.DON_PHONG_KHAM_TONG_HOP;
+					bool flag = false;
+					foreach (DXMenuItem item in dXPopupMenu.Items)
 					{
-						if (item.Tag == itemDonPhongKhamTongHop.Tag)
+						if (item.Tag == dXMenuItem22.Tag)
 						{
-							isExist = true;
+							flag = true;
 						}
 					}
-					if (!isExist)
+					if (!flag)
 					{
-						menu.Items.Add(itemDonPhongKhamTongHop);
+						dXPopupMenu.Items.Add(dXMenuItem22);
 					}
 				}
 				if (HisServiceReqResult != null && HisServiceReqResult.TreatmentFinishResult != null && HisServiceReqResult.TreatmentFinishResult.TREATMENT_END_TYPE_ID == 1)
 				{
-					DXMenuItem itemNNTV = new DXMenuItem("Phiếu chẩn đoán nguyên nhân tử vong", clickItemNguyenNhanTuVong);
-					itemNNTV.Tag = PrintType.PHIEU_CHAN_DOAN_NGUYEN_NHAN_TU_VONG;
-					bool isExistNNTV = false;
-					foreach (DXMenuItem item2 in menu.Items)
+					DXMenuItem dXMenuItem24 = new DXMenuItem("Phiếu chẩn đoán nguyên nhân tử vong", clickItemNguyenNhanTuVong);
+					dXMenuItem24.Tag = PrintType.PHIEU_CHAN_DOAN_NGUYEN_NHAN_TU_VONG;
+					bool flag2 = false;
+					foreach (DXMenuItem item2 in dXPopupMenu.Items)
 					{
-						if (item2.Tag == itemNNTV.Tag)
+						if (item2.Tag == dXMenuItem24.Tag)
 						{
-							isExistNNTV = true;
+							flag2 = true;
 						}
 					}
-					if (!isExistNNTV)
+					if (!flag2)
 					{
-						menu.Items.Add(itemNNTV);
+						dXPopupMenu.Items.Add(dXMenuItem24);
 					}
 				}
 			}
-			btnPrint_ExamService.DropDownControl = menu;
-			ContextMenuStrip strip = new ContextMenuStrip();
-			ToolStripItem item3 = new ToolStripMenuItem();
-			item3.Text = Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_PHIEU_YEU_CAU_KHAM", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture());
-			item3.Click += clickItemKham;
-			item3.Tag = PrintType.IN_PHIEU_YEU_CAU;
-			strip.Show(Cursor.Position.X, Cursor.Position.Y);
+			btnPrint_ExamService.DropDownControl = dXPopupMenu;
+			ContextMenuStrip contextMenuStrip = new ContextMenuStrip();
+			ToolStripItem toolStripItem = new ToolStripMenuItem();
+			toolStripItem.Text = Inventec.Common.Resource.Get.Value("IVT_LANGUAGE_KEY_EXAM_SERVICE_REQ_EXCUTE_CONTROL_IN_PHIEU_YEU_CAU_KHAM", ResourceLangManager.LanguageUCExamServiceReqExecute, LanguageManager.GetCulture());
+			toolStripItem.Click += clickItemKham;
+			toolStripItem.Tag = PrintType.IN_PHIEU_YEU_CAU;
+			contextMenuStrip.Show(Cursor.Position.X, Cursor.Position.Y);
 		}
 		catch (Exception ex)
 		{
@@ -25617,9 +25619,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HIS_SERVICE_REQ req = new HIS_SERVICE_REQ();
-			DataObjectMapper.Map<HIS_SERVICE_REQ>(req, HisServiceReqView);
-			new PrintTestTotalProcessor(req)?.Print("Mps000316");
+			HIS_SERVICE_REQ objDestination = new HIS_SERVICE_REQ();
+			DataObjectMapper.Map<HIS_SERVICE_REQ>(objDestination, HisServiceReqView);
+			new PrintTestTotalProcessor(objDestination)?.Print("Mps000316");
 		}
 		catch (Exception ex)
 		{
@@ -25642,37 +25644,37 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisServiceReqFilter serviceReqFilter = new HisServiceReqFilter();
-			serviceReqFilter.TREATMENT_ID = treatmentId;
-			serviceReqFilter.SERVICE_REQ_TYPE_IDs = new List<long> { 6L };
-			List<HIS_SERVICE_REQ> serviceReqs = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqFilter, param);
-			if (serviceReqs == null || serviceReqs.Count == 0)
+			CommonParam commonParam = new CommonParam();
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.TREATMENT_ID = treatmentId;
+			hisServiceReqFilter.SERVICE_REQ_TYPE_IDs = new List<long> { 6L };
+			List<HIS_SERVICE_REQ> list = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, commonParam);
+			if (list == null || list.Count == 0)
 			{
 				return;
 			}
-			HisExpMestFilter expMestFilter = new HisExpMestFilter();
-			expMestFilter.SERVICE_REQ_IDs = serviceReqs.Select((HIS_SERVICE_REQ o) => o.ID).ToList();
-			List<HIS_EXP_MEST> expMests = new BackendAdapter(param).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestFilter, param);
-			if (expMests != null && expMests.Count != 0)
+			HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+			hisExpMestFilter.SERVICE_REQ_IDs = list.Select((HIS_SERVICE_REQ o) => o.ID).ToList();
+			List<HIS_EXP_MEST> list2 = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, commonParam);
+			if (list2 != null && list2.Count != 0)
 			{
-				HisExpMestMedicineFilter expMestMedicineFilter = new HisExpMestMedicineFilter();
-				expMestMedicineFilter.EXP_MEST_IDs = expMests.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				List<HIS_EXP_MEST_MEDICINE> expMestMedicines = new BackendAdapter(param).Get<List<HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMedicineFilter, param);
-				HisExpMestMaterialFilter expMestMaterialFilter = new HisExpMestMaterialFilter();
-				expMestMaterialFilter.EXP_MEST_IDs = expMests.Select((HIS_EXP_MEST o) => o.ID).ToList();
-				List<HIS_EXP_MEST_MATERIAL> expMestMaterials = new BackendAdapter(param).Get<List<HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestMaterialFilter, param);
-				List<OutPatientPresResultSDO> OutPatientPresResultSDOForPrints = new List<OutPatientPresResultSDO>();
-				if ((expMestMedicines != null && expMestMedicines.Count > 0) || (expMestMaterials != null && expMestMaterials.Count > 0))
+				HisExpMestMedicineFilter hisExpMestMedicineFilter = new HisExpMestMedicineFilter();
+				hisExpMestMedicineFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				List<HIS_EXP_MEST_MEDICINE> list3 = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineFilter, commonParam);
+				HisExpMestMaterialFilter hisExpMestMaterialFilter = new HisExpMestMaterialFilter();
+				hisExpMestMaterialFilter.EXP_MEST_IDs = list2.Select((HIS_EXP_MEST o) => o.ID).ToList();
+				List<HIS_EXP_MEST_MATERIAL> list4 = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMaterialFilter, commonParam);
+				List<OutPatientPresResultSDO> list5 = new List<OutPatientPresResultSDO>();
+				if ((list3 != null && list3.Count > 0) || (list4 != null && list4.Count > 0))
 				{
 					OutPatientPresResultSDO outPatientPresResultSDO = new OutPatientPresResultSDO();
-					outPatientPresResultSDO.ExpMests = expMests;
-					outPatientPresResultSDO.ServiceReqs = serviceReqs;
-					outPatientPresResultSDO.Medicines = expMestMedicines;
-					outPatientPresResultSDO.Materials = expMestMaterials;
-					OutPatientPresResultSDOForPrints.Add(outPatientPresResultSDO);
+					outPatientPresResultSDO.ExpMests = list2;
+					outPatientPresResultSDO.ServiceReqs = list;
+					outPatientPresResultSDO.Medicines = list3;
+					outPatientPresResultSDO.Materials = list4;
+					list5.Add(outPatientPresResultSDO);
 				}
-				PrintPrescriptionProcessor printPrescriptionProcessor = new PrintPrescriptionProcessor(OutPatientPresResultSDOForPrints, moduleData);
+				PrintPrescriptionProcessor printPrescriptionProcessor = new PrintPrescriptionProcessor(list5, moduleData);
 				printPrescriptionProcessor.Print("Mps000234", PrintNow: false);
 			}
 		}
@@ -25698,9 +25700,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			ToolStripItem bbtnItem1 = sender as ToolStripItem;
-			PrintType type = (PrintType)bbtnItem1.Tag;
-			PrintProcess(type);
+			ToolStripItem toolStripItem = sender as ToolStripItem;
+			PrintType printType = (PrintType)toolStripItem.Tag;
+			PrintProcess(printType);
 		}
 		catch (Exception ex)
 		{
@@ -25712,9 +25714,9 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			DXMenuItem bbtnItem = sender as DXMenuItem;
-			PrintType type = (PrintType)bbtnItem.Tag;
-			PrintProcess(type);
+			DXMenuItem dXMenuItem = sender as DXMenuItem;
+			PrintType printType = (PrintType)dXMenuItem.Tag;
+			PrintProcess(printType);
 		}
 		catch (Exception ex)
 		{
@@ -25807,22 +25809,22 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			}
 			if (resultEPayment != null)
 			{
-				HisSereServFilter ssFilter = new HisSereServFilter();
-				ssFilter.IDs = resultEPayment.SereServs.Select((V_HIS_SERE_SERV o) => o.ID).ToList();
-				List<HIS_SERE_SERV> hisSereServs = new BackendAdapter(new CommonParam()).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, ssFilter, null);
-				V_HIS_PATIENT_TYPE_ALTER patientAlter = new V_HIS_PATIENT_TYPE_ALTER();
+				HisSereServFilter hisSereServFilter = new HisSereServFilter();
+				hisSereServFilter.IDs = resultEPayment.SereServs.Select((V_HIS_SERE_SERV o) => o.ID).ToList();
+				List<HIS_SERE_SERV> listSereServ = new BackendAdapter(new CommonParam()).Get<List<HIS_SERE_SERV>>("api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, null);
+				V_HIS_PATIENT_TYPE_ALTER v_HIS_PATIENT_TYPE_ALTER = new V_HIS_PATIENT_TYPE_ALTER();
 				if (patient != null)
 				{
-					HisPatientTypeAlterViewFilter ft = new HisPatientTypeAlterViewFilter();
-					ft.TDL_PATIENT_ID = patient.ID;
-					patientAlter = new BackendAdapter(new CommonParam()).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, ft, null).FirstOrDefault();
+					HisPatientTypeAlterViewFilter hisPatientTypeAlterViewFilter = new HisPatientTypeAlterViewFilter();
+					hisPatientTypeAlterViewFilter.TDL_PATIENT_ID = patient.ID;
+					v_HIS_PATIENT_TYPE_ALTER = new BackendAdapter(new CommonParam()).Get<List<V_HIS_PATIENT_TYPE_ALTER>>("api/HisPatientTypeAlter/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisPatientTypeAlterViewFilter, null).FirstOrDefault();
 				}
-				HisDepartmentTranLastFilter departLastFilter = new HisDepartmentTranLastFilter();
-				departLastFilter.TREATMENT_ID = resultEPayment.Transaction.TREATMENT_ID.Value;
-				departLastFilter.BEFORE_LOG_TIME = System.Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmmss"));
-				V_HIS_DEPARTMENT_TRAN departmentTran = new BackendAdapter(new CommonParam()).Get<V_HIS_DEPARTMENT_TRAN>("api/HisDepartmentTran/GetLastByTreatmentId", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, departLastFilter, null);
-				Mps000111PDO pdo = new Mps000111PDO(resultEPayment.Transaction, patient, null, hisSereServs, departmentTran, patientAlter, treatment.TDL_PATIENT_TYPE_ID.Value);
-				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, pdo, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName));
+				HisDepartmentTranLastFilter hisDepartmentTranLastFilter = new HisDepartmentTranLastFilter();
+				hisDepartmentTranLastFilter.TREATMENT_ID = resultEPayment.Transaction.TREATMENT_ID.Value;
+				hisDepartmentTranLastFilter.BEFORE_LOG_TIME = System.Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmmss"));
+				V_HIS_DEPARTMENT_TRAN departmentTran = new BackendAdapter(new CommonParam()).Get<V_HIS_DEPARTMENT_TRAN>("api/HisDepartmentTran/GetLastByTreatmentId", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisDepartmentTranLastFilter, null);
+				Mps000111PDO data = new Mps000111PDO(resultEPayment.Transaction, patient, null, listSereServ, departmentTran, v_HIS_PATIENT_TYPE_ALTER, treatment.TDL_PATIENT_TYPE_ID.Value);
+				result = MpsPrinter.Run(new PrintData(printTypeCode, fileName, data, MPS.ProcessorBase.PrintConfig.PreviewType.PrintNow, printerName));
 			}
 		}
 		catch (Exception ex)
@@ -25968,14 +25970,14 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			PrintOtherInputADO ado = new PrintOtherInputADO();
-			ado.ServiceReqId = HisServiceReqView.ID;
-			ado.TreatmentId = HisServiceReqView.TREATMENT_ID;
-			ado.DhstId = HisServiceReqView.DHST_ID;
-			ado.RoomId = currentModuleBase.RoomId;
-			ado.PatientId = HisServiceReqView.TDL_PATIENT_ID;
-			PrintOtherFormProcessor printProcess = new PrintOtherFormProcessor(ado, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
-			printProcess.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000407_PHIEU_KHAM_BENH_CHUYEN_KHAM_PHONG_PTTT);
+			PrintOtherInputADO printOtherInputADO = new PrintOtherInputADO();
+			printOtherInputADO.ServiceReqId = HisServiceReqView.ID;
+			printOtherInputADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
+			printOtherInputADO.DhstId = HisServiceReqView.DHST_ID;
+			printOtherInputADO.RoomId = currentModuleBase.RoomId;
+			printOtherInputADO.PatientId = HisServiceReqView.TDL_PATIENT_ID;
+			PrintOtherFormProcessor printOtherFormProcessor = new PrintOtherFormProcessor(printOtherInputADO, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
+			printOtherFormProcessor.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000407_PHIEU_KHAM_BENH_CHUYEN_KHAM_PHONG_PTTT);
 		}
 		catch (Exception ex)
 		{
@@ -25987,11 +25989,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			PrintOtherInputADO ado = new PrintOtherInputADO();
-			ado.TreatmentId = HisServiceReqView.TREATMENT_ID;
-			ado.DhstId = HisServiceReqView.DHST_ID;
-			PrintOtherFormProcessor printProcess = new PrintOtherFormProcessor(ado, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
-			printProcess.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000410_BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT);
+			PrintOtherInputADO printOtherInputADO = new PrintOtherInputADO();
+			printOtherInputADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
+			printOtherInputADO.DhstId = HisServiceReqView.DHST_ID;
+			PrintOtherFormProcessor printOtherFormProcessor = new PrintOtherFormProcessor(printOtherInputADO, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
+			printOtherFormProcessor.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000410_BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT);
 		}
 		catch (Exception ex)
 		{
@@ -26003,10 +26005,10 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			PrintOtherInputADO ado = new PrintOtherInputADO();
-			ado.TreatmentId = HisServiceReqView.TREATMENT_ID;
-			PrintOtherFormProcessor printProcess = new PrintOtherFormProcessor(ado, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
-			printProcess.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000412_BANG_TRAC_NGHIEM_CO_VA_CAM_GIAC);
+			PrintOtherInputADO printOtherInputADO = new PrintOtherInputADO();
+			printOtherInputADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
+			PrintOtherFormProcessor printOtherFormProcessor = new PrintOtherFormProcessor(printOtherInputADO, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
+			printOtherFormProcessor.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000412_BANG_TRAC_NGHIEM_CO_VA_CAM_GIAC);
 		}
 		catch (Exception ex)
 		{
@@ -26018,11 +26020,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			PrintOtherInputADO ado = new PrintOtherInputADO();
-			ado.TreatmentId = HisServiceReqView.TREATMENT_ID;
-			ado.DhstId = HisServiceReqView.DHST_ID;
-			PrintOtherFormProcessor printProcess = new PrintOtherFormProcessor(ado, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
-			printProcess.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000410_BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT);
+			PrintOtherInputADO printOtherInputADO = new PrintOtherInputADO();
+			printOtherInputADO.TreatmentId = HisServiceReqView.TREATMENT_ID;
+			printOtherInputADO.DhstId = HisServiceReqView.DHST_ID;
+			PrintOtherFormProcessor printOtherFormProcessor = new PrintOtherFormProcessor(printOtherInputADO, UpdateType.TYPE.OPEN_OTHER_ASS_TREATMENT);
+			printOtherFormProcessor.Print(HIS.Desktop.Plugins.Library.PrintOtherForm.Base.PrintType.TYPE.MPS000410_BENH_AN_DIEU_TRI_NGOAI_TRU_PTTT_PHONG_KHAM_PTTT);
 		}
 		catch (Exception)
 		{
@@ -26032,20 +26034,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void CreateThreadLoadData(object param)
 	{
-		Thread threadTreatment = new Thread(LoadDataTreatmentNewThread);
-		Thread threadServiceReq = new Thread(LoadDataServiceReqNewThread);
+		Thread thread = new Thread(LoadDataTreatmentNewThread);
+		Thread thread2 = new Thread(LoadDataServiceReqNewThread);
 		try
 		{
-			threadServiceReq.Start(param);
-			threadTreatment.Start(param);
-			threadTreatment.Join();
-			threadServiceReq.Join();
+			thread2.Start(param);
+			thread.Start(param);
+			thread.Join();
+			thread2.Join();
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
-			threadTreatment.Abort();
-			threadServiceReq.Abort();
+			thread.Abort();
+			thread2.Abort();
 		}
 	}
 
@@ -26065,11 +26067,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			HisTreatmentBedRoomViewFilter bedFilter = new HisTreatmentBedRoomViewFilter();
-			bedFilter.TREATMENT_ID = treatmentId;
-			bedFilter.ORDER_FIELD = "CREATE_TIME";
-			bedFilter.ORDER_DIRECTION = "DESC";
-			_TreatmentBedRoom = new BackendAdapter(param).Get<List<V_HIS_TREATMENT_BED_ROOM>>("/api/HisTreatmentBedRoom/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, bedFilter, param).FirstOrDefault();
+			HisTreatmentBedRoomViewFilter hisTreatmentBedRoomViewFilter = new HisTreatmentBedRoomViewFilter();
+			hisTreatmentBedRoomViewFilter.TREATMENT_ID = treatmentId;
+			hisTreatmentBedRoomViewFilter.ORDER_FIELD = "CREATE_TIME";
+			hisTreatmentBedRoomViewFilter.ORDER_DIRECTION = "DESC";
+			_TreatmentBedRoom = new BackendAdapter(param).Get<List<V_HIS_TREATMENT_BED_ROOM>>("/api/HisTreatmentBedRoom/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisTreatmentBedRoomViewFilter, param).FirstOrDefault();
 		}
 		catch (Exception ex)
 		{
@@ -26093,20 +26095,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisServiceReqFilter serviceReqFilterVT = new HisServiceReqFilter();
-			serviceReqFilterVT.TREATMENT_ID = treatmentId;
-			_ServiceReqs = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, serviceReqFilterVT, param);
+			CommonParam commonParam = new CommonParam();
+			HisServiceReqFilter hisServiceReqFilter = new HisServiceReqFilter();
+			hisServiceReqFilter.TREATMENT_ID = treatmentId;
+			_ServiceReqs = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ>>("api/HisServiceReq/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqFilter, commonParam);
 			if (_ServiceReqs == null || _ServiceReqs.Count <= 0)
 			{
 				return;
 			}
-			foreach (HIS_SERVICE_REQ item in _ServiceReqs)
+			foreach (HIS_SERVICE_REQ serviceReq in _ServiceReqs)
 			{
-				if (!dicServiceReqs.ContainsKey(item.ID))
+				if (!dicServiceReqs.ContainsKey(serviceReq.ID))
 				{
-					dicServiceReqs[item.ID] = new HIS_SERVICE_REQ();
-					dicServiceReqs[item.ID] = item;
+					dicServiceReqs[serviceReq.ID] = new HIS_SERVICE_REQ();
+					dicServiceReqs[serviceReq.ID] = serviceReq;
 				}
 			}
 		}
@@ -26118,24 +26120,24 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void CreateThreadLoadDataExpMest(object param)
 	{
-		Thread threadMedicine = new Thread(LoadDataExpMestMedicineNewThread);
-		Thread threadMaterial = new Thread(LoadDataExpMestMaterialNewThread);
-		Thread threadImpMest = new Thread(LoadImpMestNewThread);
+		Thread thread = new Thread(LoadDataExpMestMedicineNewThread);
+		Thread thread2 = new Thread(LoadDataExpMestMaterialNewThread);
+		Thread thread3 = new Thread(LoadImpMestNewThread);
 		try
 		{
-			threadMedicine.Start(param);
-			threadMaterial.Start(param);
-			threadImpMest.Start(param);
-			threadMedicine.Join();
-			threadMaterial.Join();
-			threadImpMest.Join();
+			thread.Start(param);
+			thread2.Start(param);
+			thread3.Start(param);
+			thread.Join();
+			thread2.Join();
+			thread3.Join();
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
-			threadMedicine.Abort();
-			threadMaterial.Abort();
-			threadImpMest.Abort();
+			thread.Abort();
+			thread2.Abort();
+			thread3.Abort();
 		}
 	}
 
@@ -26155,31 +26157,31 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisExpMestMedicineFilter filter = new HisExpMestMedicineFilter();
-			filter.EXP_MEST_IDs = _expMestIds;
-			_ExpMestMedicines = new BackendAdapter(param).Get<List<HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
+			CommonParam commonParam = new CommonParam();
+			HisExpMestMedicineFilter hisExpMestMedicineFilter = new HisExpMestMedicineFilter();
+			hisExpMestMedicineFilter.EXP_MEST_IDs = _expMestIds;
+			_ExpMestMedicines = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST_MEDICINE>>("api/HisExpMestMedicine/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMedicineFilter, commonParam);
 			if (_ExpMestMedicines == null || _ExpMestMedicines.Count <= 0)
 			{
 				return;
 			}
-			List<List<HIS_EXP_MEST_MEDICINE>> dataGroups = (from p in _ExpMestMedicines
+			List<List<HIS_EXP_MEST_MEDICINE>> list = (from p in _ExpMestMedicines
 				where p.IS_NOT_PRES != 1
 				group p by new { p.TDL_MEDICINE_TYPE_ID, p.EXP_MEST_ID } into p
 				select p.ToList()).ToList();
-			foreach (List<HIS_EXP_MEST_MEDICINE> item in dataGroups)
+			foreach (List<HIS_EXP_MEST_MEDICINE> item in list)
 			{
-				HIS_EXP_MEST_MEDICINE ado = new HIS_EXP_MEST_MEDICINE();
-				DataObjectMapper.Map<HIS_EXP_MEST_MEDICINE>(ado, item[0]);
-				ado.AMOUNT = item.Sum((HIS_EXP_MEST_MEDICINE p) => p.AMOUNT);
-				if (!dicExpMestMedicines.ContainsKey(ado.EXP_MEST_ID ?? 0))
+				HIS_EXP_MEST_MEDICINE hIS_EXP_MEST_MEDICINE = new HIS_EXP_MEST_MEDICINE();
+				DataObjectMapper.Map<HIS_EXP_MEST_MEDICINE>(hIS_EXP_MEST_MEDICINE, item[0]);
+				hIS_EXP_MEST_MEDICINE.AMOUNT = item.Sum((HIS_EXP_MEST_MEDICINE p) => p.AMOUNT);
+				if (!dicExpMestMedicines.ContainsKey(hIS_EXP_MEST_MEDICINE.EXP_MEST_ID ?? 0))
 				{
-					dicExpMestMedicines[ado.EXP_MEST_ID ?? 0] = new List<HIS_EXP_MEST_MEDICINE>();
-					dicExpMestMedicines[ado.EXP_MEST_ID ?? 0].Add(ado);
+					dicExpMestMedicines[hIS_EXP_MEST_MEDICINE.EXP_MEST_ID ?? 0] = new List<HIS_EXP_MEST_MEDICINE>();
+					dicExpMestMedicines[hIS_EXP_MEST_MEDICINE.EXP_MEST_ID ?? 0].Add(hIS_EXP_MEST_MEDICINE);
 				}
 				else
 				{
-					dicExpMestMedicines[item[0].EXP_MEST_ID ?? 0].Add(ado);
+					dicExpMestMedicines[item[0].EXP_MEST_ID ?? 0].Add(hIS_EXP_MEST_MEDICINE);
 				}
 			}
 		}
@@ -26205,37 +26207,37 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			long configQY7 = 0L;
-			configQY7 = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsMaterial"));
-			if (configQY7 != 1)
+			long num = 0L;
+			num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsMaterial"));
+			if (num != 1)
 			{
 				return;
 			}
-			CommonParam param = new CommonParam();
-			HisExpMestMaterialFilter filter = new HisExpMestMaterialFilter();
-			filter.EXP_MEST_IDs = _expMestIds;
-			_ExpMestMaterials = new BackendAdapter(param).Get<List<HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, filter, param);
+			CommonParam commonParam = new CommonParam();
+			HisExpMestMaterialFilter hisExpMestMaterialFilter = new HisExpMestMaterialFilter();
+			hisExpMestMaterialFilter.EXP_MEST_IDs = _expMestIds;
+			_ExpMestMaterials = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST_MATERIAL>>("api/HisExpMestMaterial/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestMaterialFilter, commonParam);
 			if (_ExpMestMaterials == null || _ExpMestMaterials.Count <= 0)
 			{
 				return;
 			}
-			List<List<HIS_EXP_MEST_MATERIAL>> dataGroups = (from p in _ExpMestMaterials
+			List<List<HIS_EXP_MEST_MATERIAL>> list = (from p in _ExpMestMaterials
 				where p.IS_NOT_PRES != 1
 				group p by new { p.TDL_MATERIAL_TYPE_ID, p.EXP_MEST_ID } into p
 				select p.ToList()).ToList();
-			foreach (List<HIS_EXP_MEST_MATERIAL> item in dataGroups)
+			foreach (List<HIS_EXP_MEST_MATERIAL> item in list)
 			{
-				HIS_EXP_MEST_MATERIAL ado = new HIS_EXP_MEST_MATERIAL();
-				DataObjectMapper.Map<HIS_EXP_MEST_MATERIAL>(ado, item[0]);
-				ado.AMOUNT = item.Sum((HIS_EXP_MEST_MATERIAL p) => p.AMOUNT);
-				if (!dicExpMestMaterials.ContainsKey(ado.EXP_MEST_ID ?? 0))
+				HIS_EXP_MEST_MATERIAL hIS_EXP_MEST_MATERIAL = new HIS_EXP_MEST_MATERIAL();
+				DataObjectMapper.Map<HIS_EXP_MEST_MATERIAL>(hIS_EXP_MEST_MATERIAL, item[0]);
+				hIS_EXP_MEST_MATERIAL.AMOUNT = item.Sum((HIS_EXP_MEST_MATERIAL p) => p.AMOUNT);
+				if (!dicExpMestMaterials.ContainsKey(hIS_EXP_MEST_MATERIAL.EXP_MEST_ID ?? 0))
 				{
-					dicExpMestMaterials[ado.EXP_MEST_ID ?? 0] = new List<HIS_EXP_MEST_MATERIAL>();
-					dicExpMestMaterials[ado.EXP_MEST_ID ?? 0].Add(ado);
+					dicExpMestMaterials[hIS_EXP_MEST_MATERIAL.EXP_MEST_ID ?? 0] = new List<HIS_EXP_MEST_MATERIAL>();
+					dicExpMestMaterials[hIS_EXP_MEST_MATERIAL.EXP_MEST_ID ?? 0].Add(hIS_EXP_MEST_MATERIAL);
 				}
 				else
 				{
-					dicExpMestMaterials[item[0].EXP_MEST_ID ?? 0].Add(ado);
+					dicExpMestMaterials[item[0].EXP_MEST_ID ?? 0].Add(hIS_EXP_MEST_MATERIAL);
 				}
 			}
 		}
@@ -26247,28 +26249,28 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void CreateThreadByServiceReq(object param)
 	{
-		Thread threadExpMest = new Thread(LoadDataExpMestNewThread);
-		Thread threadServiceReqMety = new Thread(LoadDataServiceReqMetyNewThread);
-		Thread threadServiceReqMaty = new Thread(LoadDataServiceReqMatyNewThread);
-		Thread threadSereServ = new Thread(LoadDataSereServNewThread);
+		Thread thread = new Thread(LoadDataExpMestNewThread);
+		Thread thread2 = new Thread(LoadDataServiceReqMetyNewThread);
+		Thread thread3 = new Thread(LoadDataServiceReqMatyNewThread);
+		Thread thread4 = new Thread(LoadDataSereServNewThread);
 		try
 		{
-			threadExpMest.Start(param);
-			threadServiceReqMety.Start(param);
-			threadServiceReqMaty.Start(param);
-			threadSereServ.Start(param);
-			threadExpMest.Join();
-			threadServiceReqMety.Join();
-			threadServiceReqMaty.Join();
-			threadSereServ.Join();
+			thread.Start(param);
+			thread2.Start(param);
+			thread3.Start(param);
+			thread4.Start(param);
+			thread.Join();
+			thread2.Join();
+			thread3.Join();
+			thread4.Join();
 		}
 		catch (Exception ex)
 		{
 			LogSystem.Error(ex);
-			threadExpMest.Abort();
-			threadServiceReqMety.Abort();
-			threadServiceReqMaty.Abort();
-			threadSereServ.Abort();
+			thread.Abort();
+			thread2.Abort();
+			thread3.Abort();
+			thread4.Abort();
 		}
 	}
 
@@ -26288,13 +26290,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			CommonParam param = new CommonParam();
-			HisExpMestFilter expMestFilter = new HisExpMestFilter();
-			expMestFilter.SERVICE_REQ_IDs = _serviceReqIds;
-			List<HIS_EXP_MEST> expMestDatas = new BackendAdapter(param).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, expMestFilter, param);
-			if (expMestDatas != null && expMestDatas.Count > 0)
+			CommonParam commonParam = new CommonParam();
+			HisExpMestFilter hisExpMestFilter = new HisExpMestFilter();
+			hisExpMestFilter.SERVICE_REQ_IDs = _serviceReqIds;
+			List<HIS_EXP_MEST> list = new BackendAdapter(commonParam).Get<List<HIS_EXP_MEST>>("api/HisExpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisExpMestFilter, commonParam);
+			if (list != null && list.Count > 0)
 			{
-				foreach (HIS_EXP_MEST item in expMestDatas)
+				foreach (HIS_EXP_MEST item in list)
 				{
 					if (!dicExpMests.ContainsKey(item.SERVICE_REQ_ID ?? 0))
 					{
@@ -26307,7 +26309,7 @@ public class ExamServiceReqExecuteControl : UserControlBase
 					}
 				}
 			}
-			_ExpMests.AddRange(expMestDatas);
+			_ExpMests.AddRange(list);
 		}
 		catch (Exception ex)
 		{
@@ -26335,15 +26337,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			CommonParam param = new CommonParam();
-			HisServiceReqMetyFilter metyFIlter = new HisServiceReqMetyFilter();
-			metyFIlter.SERVICE_REQ_IDs = _serviceReqIds;
-			List<HIS_SERVICE_REQ_METY> metyDatas = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ_METY>>("api/HisServiceReqMety/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, metyFIlter, param);
-			if (metyDatas == null || metyDatas.Count <= 0)
+			CommonParam commonParam = new CommonParam();
+			HisServiceReqMetyFilter hisServiceReqMetyFilter = new HisServiceReqMetyFilter();
+			hisServiceReqMetyFilter.SERVICE_REQ_IDs = _serviceReqIds;
+			List<HIS_SERVICE_REQ_METY> list = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ_METY>>("api/HisServiceReqMety/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqMetyFilter, commonParam);
+			if (list == null || list.Count <= 0)
 			{
 				return;
 			}
-			foreach (HIS_SERVICE_REQ_METY item in metyDatas)
+			foreach (HIS_SERVICE_REQ_METY item in list)
 			{
 				if (!dicServiceReqMetys.ContainsKey(item.SERVICE_REQ_ID))
 				{
@@ -26382,15 +26384,15 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			CommonParam param = new CommonParam();
-			HisServiceReqMatyFilter matyFIlter = new HisServiceReqMatyFilter();
-			matyFIlter.SERVICE_REQ_IDs = _serviceReqIds;
-			List<HIS_SERVICE_REQ_MATY> matyDatas = new BackendAdapter(param).Get<List<HIS_SERVICE_REQ_MATY>>("api/HisServiceReqMaty/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, matyFIlter, param);
-			if (matyDatas == null || matyDatas.Count <= 0)
+			CommonParam commonParam = new CommonParam();
+			HisServiceReqMatyFilter hisServiceReqMatyFilter = new HisServiceReqMatyFilter();
+			hisServiceReqMatyFilter.SERVICE_REQ_IDs = _serviceReqIds;
+			List<HIS_SERVICE_REQ_MATY> list = new BackendAdapter(commonParam).Get<List<HIS_SERVICE_REQ_MATY>>("api/HisServiceReqMaty/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisServiceReqMatyFilter, commonParam);
+			if (list == null || list.Count <= 0)
 			{
 				return;
 			}
-			foreach (HIS_SERVICE_REQ_MATY item in matyDatas)
+			foreach (HIS_SERVICE_REQ_MATY item in list)
 			{
 				if (!dicServiceReqMatys.ContainsKey(item.SERVICE_REQ_ID))
 				{
@@ -26429,16 +26431,16 @@ public class ExamServiceReqExecuteControl : UserControlBase
 			{
 				return;
 			}
-			CommonParam param = new CommonParam();
-			HisSereServFilter hisSereServFilterVT = new HisSereServFilter();
-			hisSereServFilterVT.SERVICE_REQ_IDs = _serviceReqIds;
-			List<HIS_SERE_SERV> datas = new BackendAdapter(param).Get<List<HIS_SERE_SERV>>("/api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilterVT, param);
-			if (datas == null || datas.Count <= 0)
+			CommonParam commonParam = new CommonParam();
+			HisSereServFilter hisSereServFilter = new HisSereServFilter();
+			hisSereServFilter.SERVICE_REQ_IDs = _serviceReqIds;
+			List<HIS_SERE_SERV> list = new BackendAdapter(commonParam).Get<List<HIS_SERE_SERV>>("/api/HisSereServ/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisSereServFilter, commonParam);
+			if (list == null || list.Count <= 0)
 			{
 				return;
 			}
-			_SereServs.AddRange(datas);
-			foreach (HIS_SERE_SERV item in datas)
+			_SereServs.AddRange(list);
+			foreach (HIS_SERE_SERV item in list)
 			{
 				if (!dicSereServs.ContainsKey(item.SERVICE_REQ_ID ?? 0))
 				{
@@ -26473,29 +26475,29 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			long keyViewMediMateTH = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsMediMateTH"));
-			if (keyViewMediMateTH != 1)
+			long num = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsMediMateTH"));
+			if (num != 1)
 			{
 				return;
 			}
-			CommonParam param = new CommonParam();
+			CommonParam commonParam = new CommonParam();
 			_ImpMests_input = new List<HIS_IMP_MEST>();
-			HisImpMestFilter impMestFilter = new HisImpMestFilter();
-			impMestFilter.MOBA_EXP_MEST_IDs = _expMestIds;
-			_ImpMests_input = new BackendAdapter(param).Get<List<HIS_IMP_MEST>>("api/HisImpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, impMestFilter, SessionManager.ActionLostToken, param);
+			HisImpMestFilter hisImpMestFilter = new HisImpMestFilter();
+			hisImpMestFilter.MOBA_EXP_MEST_IDs = _expMestIds;
+			_ImpMests_input = new BackendAdapter(commonParam).Get<List<HIS_IMP_MEST>>("api/HisImpMest/Get", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisImpMestFilter, SessionManager.ActionLostToken, commonParam);
 			if (_ImpMests_input == null || _ImpMests_input.Count <= 0)
 			{
 				return;
 			}
-			HisImpMestMedicineViewFilter impMestMediFilter = new HisImpMestMedicineViewFilter();
-			impMestMediFilter.IMP_MEST_IDs = _ImpMests_input.Select((HIS_IMP_MEST p) => p.ID).ToList();
-			_ImpMestMedis = new BackendAdapter(param).Get<List<V_HIS_IMP_MEST_MEDICINE>>("api/HisImpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, impMestMediFilter, SessionManager.ActionLostToken, param);
-			long configQY7 = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsMaterial"));
-			if (configQY7 == 1)
+			HisImpMestMedicineViewFilter hisImpMestMedicineViewFilter = new HisImpMestMedicineViewFilter();
+			hisImpMestMedicineViewFilter.IMP_MEST_IDs = _ImpMests_input.Select((HIS_IMP_MEST p) => p.ID).ToList();
+			_ImpMestMedis = new BackendAdapter(commonParam).Get<List<V_HIS_IMP_MEST_MEDICINE>>("api/HisImpMestMedicine/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisImpMestMedicineViewFilter, SessionManager.ActionLostToken, commonParam);
+			long num2 = Parse.ToInt64(HisConfigs.Get<string>("HIS.Desktop.Plugins.Tracking.IsMaterial"));
+			if (num2 == 1)
 			{
-				HisImpMestMaterialViewFilter impMestMateFilter = new HisImpMestMaterialViewFilter();
-				impMestMateFilter.IMP_MEST_IDs = _ImpMests_input.Select((HIS_IMP_MEST p) => p.ID).ToList();
-				_ImpMestMates = new BackendAdapter(param).Get<List<V_HIS_IMP_MEST_MATERIAL>>("api/HisImpMestMaterial/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, impMestMateFilter, SessionManager.ActionLostToken, param);
+				HisImpMestMaterialViewFilter hisImpMestMaterialViewFilter = new HisImpMestMaterialViewFilter();
+				hisImpMestMaterialViewFilter.IMP_MEST_IDs = _ImpMests_input.Select((HIS_IMP_MEST p) => p.ID).ToList();
+				_ImpMestMates = new BackendAdapter(commonParam).Get<List<V_HIS_IMP_MEST_MATERIAL>>("api/HisImpMestMaterial/GetView", HIS.Desktop.ApiConsumer.ApiConsumers.MosConsumer, hisImpMestMaterialViewFilter, SessionManager.ActionLostToken, commonParam);
 			}
 		}
 		catch (Exception ex)
@@ -26525,13 +26527,13 @@ public class ExamServiceReqExecuteControl : UserControlBase
 	{
 		try
 		{
-			BenhPhuValidationRule mainRule = new BenhPhuValidationRule();
-			mainRule.maBenhPhuTxt = txtIcdSubCode;
-			mainRule.tenBenhPhuTxt = txtIcdText;
-			mainRule.getIcdMain = GetIcdMainCode;
-			mainRule.listIcd = currentIcds;
-			mainRule.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(txtIcdSubCode, mainRule);
+			BenhPhuValidationRule benhPhuValidationRule = new BenhPhuValidationRule();
+			benhPhuValidationRule.maBenhPhuTxt = txtIcdSubCode;
+			benhPhuValidationRule.tenBenhPhuTxt = txtIcdText;
+			benhPhuValidationRule.getIcdMain = GetIcdMainCode;
+			benhPhuValidationRule.listIcd = currentIcds;
+			benhPhuValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(txtIcdSubCode, benhPhuValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -26544,11 +26546,11 @@ public class ExamServiceReqExecuteControl : UserControlBase
 		try
 		{
 			lblCaptionPathologicalProcess.AppearanceItemCaption.ForeColor = Color.Maroon;
-			ControlEditValidationRule icdExam = new ControlEditValidationRule();
-			icdExam.editor = txtPathologicalProcess;
-			icdExam.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
-			icdExam.ErrorType = ErrorType.Warning;
-			dxValidationProviderForLeftPanel.SetValidationRule(txtPathologicalProcess, icdExam);
+			ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+			controlEditValidationRule.editor = txtPathologicalProcess;
+			controlEditValidationRule.ErrorText = Inventec.Desktop.Common.LibraryMessage.MessageUtil.GetMessage(Inventec.Desktop.Common.LibraryMessage.Message.Enum.HeThongTBTruongDuLieuBatBuocPhaiNhap);
+			controlEditValidationRule.ErrorType = ErrorType.Warning;
+			dxValidationProviderForLeftPanel.SetValidationRule(txtPathologicalProcess, controlEditValidationRule);
 		}
 		catch (Exception ex)
 		{
@@ -26610,20 +26612,20 @@ public class ExamServiceReqExecuteControl : UserControlBase
 
 	private void ValidationControlMaxLength(BaseEdit control, int? maxLength, [Optional] bool IsRequest)
 	{
-		ControlMaxLengthValidationRule validate = new ControlMaxLengthValidationRule();
-		validate.editor = control;
-		validate.maxLength = maxLength;
-		validate.IsRequired = IsRequest;
-		validate.ErrorType = ErrorType.Warning;
-		dxValidationProviderForLeftPanel.SetValidationRule(control, validate);
+		ControlMaxLengthValidationRule controlMaxLengthValidationRule = new ControlMaxLengthValidationRule();
+		controlMaxLengthValidationRule.editor = control;
+		controlMaxLengthValidationRule.maxLength = maxLength;
+		controlMaxLengthValidationRule.IsRequired = IsRequest;
+		controlMaxLengthValidationRule.ErrorType = ErrorType.Warning;
+		dxValidationProviderForLeftPanel.SetValidationRule(control, controlMaxLengthValidationRule);
 	}
 
 	private void ValidationSingleControl(BaseEdit control)
 	{
-		ControlEditValidationRule validate = new ControlEditValidationRule();
-		validate.editor = control;
-		validate.ErrorText = "Trường dữ liệu bắt buộc nhập";
-		validate.ErrorType = ErrorType.Warning;
-		dxValidationProviderForLeftPanel.SetValidationRule(control, validate);
+		ControlEditValidationRule controlEditValidationRule = new ControlEditValidationRule();
+		controlEditValidationRule.editor = control;
+		controlEditValidationRule.ErrorText = "Trường dữ liệu bắt buộc nhập";
+		controlEditValidationRule.ErrorType = ErrorType.Warning;
+		dxValidationProviderForLeftPanel.SetValidationRule(control, controlEditValidationRule);
 	}
 }
