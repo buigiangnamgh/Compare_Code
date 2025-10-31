@@ -111,6 +111,9 @@
     <Reference Include="HIS.Desktop.Plugins.Library.PrintServiceReq">
       <HintPath>..\..\..\..\..\..\RELEASE\HIS\HIS.Desktop.Plugins.Library.PrintPrescription\HIS.Desktop.Plugins.Library.PrintServiceReq.dll</HintPath>
     </Reference>
+    <Reference Include="HIS.Desktop.Utility">
+      <HintPath>..\..\..\..\..\..\..\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\HIS.Desktop.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="His.EventLog">
       <HintPath>..\..\..\..\..\..\..\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\His.EventLog.dll</HintPath>
     </Reference>
@@ -337,7 +340,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\HIS.Desktop.ADO\HIS.Desktop.ADO.csproj">
       <Project>{808c25cd-0925-417f-bbf9-caf9604da879}</Project>
@@ -391,89 +393,85 @@
       <Project>{aeeca321-fd65-407a-8d70-ba5362883b87}</Project>
       <Name>HIS.Desktop.Print</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\HIS.Desktop.Utility\HIS.Desktop.Utilities.csproj">
-      <Project>{2aad22db-2166-4be8-ae52-335b21dc03fc}</Project>
-      <Name>HIS.Desktop.Utilities</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HIS.Desktop.Library.CacheClient\HIS.Desktop.Library.CacheClient.csproj">
       <Project>{64837e01-803d-4f1e-9dfc-d34b38ea78f9}</Project>
       <Name>HIS.Desktop.Library.CacheClient</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\AcsUserADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\DmvADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\EkipUsersADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\IcdADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\IcdUtil.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\ImageADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\PrintTypeCodeWorker.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\PtttMethodADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\ResourceLangManager.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\SkinSurgeryDesADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Base\ThreadChiDinhDichVuADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Config\ControlStateConstant.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Config\HisConfigCFG.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Config\HisConfigKeys.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Delegate\RefeshData.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Delegate\SelectRowOnLoadHanler.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Delegate\UpdatePatientStatus.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.EkipTemp\frmEkipTemp.cs">
+    <Compile Include="Base\AcsUserADO.cs" />
+    <Compile Include="Base\DmvADO.cs" />
+    <Compile Include="Base\EkipUsersADO.cs" />
+    <Compile Include="Base\IcdADO.cs" />
+    <Compile Include="Base\IcdUtil.cs" />
+    <Compile Include="Base\ImageADO.cs" />
+    <Compile Include="Base\PrintTypeCodeWorker.cs" />
+    <Compile Include="Base\PtttMethodADO.cs" />
+    <Compile Include="Base\ResourceLangManager.cs" />
+    <Compile Include="Base\SkinSurgeryDesADO.cs" />
+    <Compile Include="Base\ThreadChiDinhDichVuADO.cs" />
+    <Compile Include="Config\ControlStateConstant.cs" />
+    <Compile Include="Config\HisConfigCFG.cs" />
+    <Compile Include="Config\HisConfigKeys.cs" />
+    <Compile Include="Delegate\RefeshData.cs" />
+    <Compile Include="Delegate\SelectRowOnLoadHanler.cs" />
+    <Compile Include="Delegate\UpdatePatientStatus.cs" />
+    <Compile Include="EkipTemp\frmEkipTemp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.FormSurgAssignAndCopy\frmMultiIntructonTime.cs">
+    <Compile Include="FormSurgAssignAndCopy\frmMultiIntructonTime.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.FormSurgAssignAndCopy\frmSurgAssignAndCopy.cs">
+    <Compile Include="FormSurgAssignAndCopy\frmSurgAssignAndCopy.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Properties\Resources.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Properties\Settings.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.PtttMethod\FormEkipUser.cs">
+    <Compile Include="Properties\Resources.cs" />
+    <Compile Include="Properties\Settings.cs" />
+    <Compile Include="PtttMethod\FormEkipUser.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.PtttMethod\FormPtttMethod.cs">
+    <Compile Include="PtttMethod\FormPtttMethod.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.PtttTemp\FormPtttTemp.cs">
+    <Compile Include="PtttTemp\FormPtttTemp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Resources\ResourceLanguageManager.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Resources\ResourceMessage.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\FinishTimeValidationRule.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\ICDValidationRuleControl.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\InstructionDateCalendarValidationRule.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\InstructionDateFromValidationRule.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\StartTimeValidationRule.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\ValidMaxlength.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.Validate.ValidationRule\ValidTimeSpan.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.ViewImage\FormImageTemp.cs">
+    <Compile Include="Resources\ResourceLanguageManager.cs" />
+    <Compile Include="Resources\ResourceMessage.cs" />
+    <Compile Include="Validate.ValidationRule\FinishTimeValidationRule.cs" />
+    <Compile Include="Validate.ValidationRule\ICDValidationRuleControl.cs" />
+    <Compile Include="Validate.ValidationRule\InstructionDateCalendarValidationRule.cs" />
+    <Compile Include="Validate.ValidationRule\InstructionDateFromValidationRule.cs" />
+    <Compile Include="Validate.ValidationRule\StartTimeValidationRule.cs" />
+    <Compile Include="Validate.ValidationRule\ValidMaxlength.cs" />
+    <Compile Include="Validate.ValidationRule\ValidTimeSpan.cs" />
+    <Compile Include="ViewImage\FormImageTemp.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute.ViewImage\FormViewImage.cs">
+    <Compile Include="ViewImage\FormViewImage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\ConfigKeys.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\DelegateSelectMultiDate.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\ERMADO.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\frmInputDetail.cs">
+    <Compile Include="ConfigKeys.cs" />
+    <Compile Include="DelegateSelectMultiDate.cs" />
+    <Compile Include="ERMADO.cs" />
+    <Compile Include="frmInputDetail.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\frmMediMate.cs">
+    <Compile Include="frmMediMate.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\KeyboardWorker.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\RequestUriStore.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\SurgServiceReqExecuteControl.cs">
+    <Compile Include="KeyboardWorker.cs" />
+    <Compile Include="RequestUriStore.cs" />
+    <Compile Include="SurgServiceReqExecuteControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\SurgServiceReqExecuteProcessor.cs" />
-    <Compile Include="HIS.Desktop.Plugins.SurgServiceReqExecute\UCEkipUser.cs">
+    <Compile Include="SurgServiceReqExecuteProcessor.cs" />
+    <Compile Include="UCEkipUser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Inventec.Desktop.Plugins.SurgServiceReqExecute.SurgServiceReqExecute\ISurgServiceReqExecute.cs" />
-    <Compile Include="Inventec.Desktop.Plugins.SurgServiceReqExecute.SurgServiceReqExecute\SurgServiceReqExecuteBehavior.cs" />
-    <Compile Include="Inventec.Desktop.Plugins.SurgServiceReqExecute.SurgServiceReqExecute\SurgServiceReqExecuteFactory.cs" />
+    <Compile Include="SurgServiceReqExecute\ISurgServiceReqExecute.cs" />
+    <Compile Include="SurgServiceReqExecute\SurgServiceReqExecuteBehavior.cs" />
+    <Compile Include="SurgServiceReqExecute\SurgServiceReqExecuteFactory.cs" />
     <Compile Include="MultiColumnFilterTest\CustomGridLookUpEditNew.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -481,6 +479,14 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="SurgServiceReqExecuteControl.resx">
+      <DependentUpon>SurgServiceReqExecuteControl.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
