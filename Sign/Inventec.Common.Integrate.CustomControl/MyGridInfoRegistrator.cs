@@ -1,0 +1,30 @@
+using DevExpress.XtraGrid;
+using DevExpress.XtraGrid.Registrator;
+using DevExpress.XtraGrid.Views.Base;
+
+namespace Inventec.Common.Integrate.CustomControl
+{
+	internal class MyGridInfoRegistrator : GridInfoRegistrator
+	{
+		public override bool IsInternalView
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		public override string ViewName
+		{
+			get
+			{
+				return MyGridView.ViewNameValue;
+			}
+		}
+
+		public override BaseView CreateView(GridControl grid)
+		{
+			return new MyGridView(grid);
+		}
+	}
+}
