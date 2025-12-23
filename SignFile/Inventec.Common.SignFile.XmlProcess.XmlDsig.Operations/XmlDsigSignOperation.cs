@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
@@ -75,10 +74,10 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations
 				string hashData = Convert.ToBase64String(File.ReadAllBytes(signParameters.InputPath));
 				dataServerHsmResponse = signParameters.DlgGetHSMServerResponseData(hashData, ref errMessage);
 				SharedUtils.ByteToFile(Convert.FromBase64String(dataServerHsmResponse), signParameters.OutputPath);
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => dataServerHsmResponse)), (object)dataServerHsmResponse));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => dataServerHsmResponse), dataServerHsmResponse));
 				xmlDocument2 = new XmlDocument();
 				xmlDocument2.Load(signParameters.OutputPath);
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => signParameters.OutputPath)), (object)signParameters.OutputPath));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => signParameters.OutputPath), signParameters.OutputPath));
 				if (!string.IsNullOrEmpty(signParameters.XPathNodeToSign))
 				{
 					XmlNamespaceManager xmlNamespaceManager = new XmlNamespaceManager(xmlDocument2.NameTable);
@@ -100,7 +99,7 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations
 				xmlDocument2 = new XmlDocument();
 				xmlDocument2.Load(signParameters.OutputPath);
 				signParameters.InputXml = xmlDocument2;
-				LogSystem.Info(LogUtil.TraceData("xmlDocument.InnerXml", (object)xmlDocument2.InnerXml));
+				LogSystem.Info(LogUtil.TraceData("xmlDocument.InnerXml", xmlDocument2.InnerXml));
 				LogSystem.Info("SignAndGetXml.4");
 			}
 			else
@@ -216,12 +215,11 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations
 			xmlElement.SetAttribute("Id", "signatureProperties");
 			dataObject.Data = xmlElement.SelectNodes(".");
 			signedXml.AddObject(dataObject);
-			Reference reference = new Reference
-			{
-				Uri = "#signatureProperties",
-				Type = "http://www.w3.org/2000/09/xmldsig#SignatureProperties"
-			};
-			signedXml.AddReference(reference);
+			Reference reference = new Reference();
+			reference.Uri = "#signatureProperties";
+			reference.Type = "http://www.w3.org/2000/09/xmldsig#SignatureProperties";
+			Reference reference2 = reference;
+			signedXml.AddReference(reference2);
 			return xmlElement;
 		}
 

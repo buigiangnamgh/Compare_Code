@@ -34,7 +34,8 @@ namespace Inventec.Common.SignFile.XmlProcess.Utils
 			if (array != null)
 			{
 				object[] array3 = array;
-				foreach (object obj in array3)
+				object[] array4 = array3;
+				foreach (object obj in array4)
 				{
 					action(obj);
 				}

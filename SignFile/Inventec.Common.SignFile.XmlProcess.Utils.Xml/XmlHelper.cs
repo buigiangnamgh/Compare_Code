@@ -79,17 +79,16 @@ namespace Inventec.Common.SignFile.XmlProcess.Utils.Xml
 		public static void ValidateFromSchemas(string inputPath, params string[] schemas)
 		{
 			XmlTextReader reader = new XmlTextReader(inputPath);
-			XmlReaderSettings xmlReaderSettings = new XmlReaderSettings
-			{
-				ProhibitDtd = false,
-				ValidationType = ValidationType.Schema
-			};
-			xmlReaderSettings.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
+			XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+			xmlReaderSettings.ProhibitDtd = false;
+			xmlReaderSettings.ValidationType = ValidationType.Schema;
+			XmlReaderSettings xmlReaderSettings2 = xmlReaderSettings;
+			xmlReaderSettings2.ValidationFlags |= XmlSchemaValidationFlags.ReportValidationWarnings;
 			foreach (string text in schemas)
 			{
-				xmlReaderSettings.Schemas.Add(text, SignatureSchemas.Get(text));
+				xmlReaderSettings2.Schemas.Add(text, SignatureSchemas.Get(text));
 			}
-			using (XmlReader xmlReader = XmlReader.Create(reader, xmlReaderSettings))
+			using (XmlReader xmlReader = XmlReader.Create(reader, xmlReaderSettings2))
 			{
 				while (xmlReader.Read())
 				{

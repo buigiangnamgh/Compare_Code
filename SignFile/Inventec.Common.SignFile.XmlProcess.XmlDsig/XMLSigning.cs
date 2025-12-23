@@ -4,7 +4,6 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Security.Cryptography.Xml;
 using System.Xml;
-using Org.BouncyCastle.Asn1;
 using Org.BouncyCastle.Asn1.X509;
 
 namespace Inventec.Common.SignFile.XmlProcess.XmlDsig
@@ -13,16 +12,13 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig
 	{
 		public static string createHash(string xmlRaw, string SignedTagId, string SigningTagId, string namespacePrefix, X509Certificate2 certificate2, out string xmlWithHashInfo, string path, bool isSignTagName)
 		{
-			//IL_003a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0040: Expected O, but got Unknown
-			//IL_0042: Unknown result type (might be due to invalid IL or missing references)
 			XmlDocument xmlDocument = new XmlDocument();
 			xmlDocument.PreserveWhitespace = false;
 			xmlDocument.LoadXml(xmlRaw);
-			byte[] array = DsigSignatureHelper.HashForRemote(xmlDocument, SignedTagId, SigningTagId, namespacePrefix, certificate2, path, isSignTagName);
+			byte[] digest = DsigSignatureHelper.HashForRemote(xmlDocument, SignedTagId, SigningTagId, namespacePrefix, certificate2, path, isSignTagName);
 			xmlWithHashInfo = xmlDocument.OuterXml;
-			AlgorithmIdentifier val = new AlgorithmIdentifier(CryptoConfig.MapNameToOID("SHA1"));
-			return Convert.ToBase64String(((Asn1Encodable)new DigestInfo(val, array)).GetEncoded());
+			AlgorithmIdentifier algID = new AlgorithmIdentifier(CryptoConfig.MapNameToOID("SHA1"));
+			return Convert.ToBase64String(new DigestInfo(algID, digest).GetEncoded());
 		}
 
 		public static string wrapSignature(string xml, string signatureB64, string tagId)
@@ -78,9 +74,6 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig
 
 		public static byte[] Hash(XmlDocument xmlDoc)
 		{
-			//IL_00c2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c9: Expected O, but got Unknown
-			//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
 			XmlNodeList elementsByTagName = xmlDoc.GetElementsByTagName("SignedInfo");
 			XmlDocument xmlDocument = new XmlDocument();
 			xmlDocument.LoadXml(elementsByTagName[0].OuterXml);
@@ -98,9 +91,9 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig
 				}
 				array = memoryStream.ToArray();
 			}
-			byte[] array2 = new SHA1Managed().ComputeHash(array);
-			AlgorithmIdentifier val = new AlgorithmIdentifier(CryptoConfig.MapNameToOID("SHA1"));
-			string s = Convert.ToBase64String(((Asn1Encodable)new DigestInfo(val, array2)).GetEncoded());
+			byte[] digest = new SHA1Managed().ComputeHash(array);
+			AlgorithmIdentifier algID = new AlgorithmIdentifier(CryptoConfig.MapNameToOID("SHA1"));
+			string s = Convert.ToBase64String(new DigestInfo(algID, digest).GetEncoded());
 			return Convert.FromBase64String(s);
 		}
 	}

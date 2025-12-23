@@ -19,10 +19,9 @@ namespace Inventec.Common.SignFile.XmlProcess.Schemas
 			LoadSchemasIfNeeded();
 			if (Schemas.ContainsKey(schemaUri))
 			{
-				XmlReaderSettings settings = new XmlReaderSettings
-				{
-					ProhibitDtd = false
-				};
+				XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+				xmlReaderSettings.ProhibitDtd = false;
+				XmlReaderSettings settings = xmlReaderSettings;
 				return XmlReader.Create(new StringReader(Schemas[schemaUri]), settings);
 			}
 			return null;

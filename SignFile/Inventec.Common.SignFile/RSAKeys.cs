@@ -12,15 +12,9 @@ namespace Inventec.Common.SignFile
 	{
 		public static RSACryptoServiceProvider ImportPrivateKey(string pem)
 		{
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000d: Expected O, but got Unknown
-			//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0019: Expected O, but got Unknown
-			//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0029: Expected O, but got Unknown
-			PemReader val = new PemReader((TextReader)new StringReader(pem));
-			AsymmetricCipherKeyPair val2 = (AsymmetricCipherKeyPair)val.ReadObject();
-			RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)val2.Private);
+			PemReader pemReader = new PemReader(new StringReader(pem));
+			AsymmetricCipherKeyPair asymmetricCipherKeyPair = (AsymmetricCipherKeyPair)pemReader.ReadObject();
+			RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaPrivateCrtKeyParameters)asymmetricCipherKeyPair.Private);
 			RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider();
 			rSACryptoServiceProvider.ImportParameters(parameters);
 			return rSACryptoServiceProvider;
@@ -28,15 +22,9 @@ namespace Inventec.Common.SignFile
 
 		public static RSACryptoServiceProvider ImportPublicKey(string pem)
 		{
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000d: Expected O, but got Unknown
-			//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0019: Expected O, but got Unknown
-			//IL_001a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0024: Expected O, but got Unknown
-			PemReader val = new PemReader((TextReader)new StringReader(pem));
-			AsymmetricKeyParameter val2 = (AsymmetricKeyParameter)val.ReadObject();
-			RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaKeyParameters)val2);
+			PemReader pemReader = new PemReader(new StringReader(pem));
+			AsymmetricKeyParameter asymmetricKeyParameter = (AsymmetricKeyParameter)pemReader.ReadObject();
+			RSAParameters parameters = DotNetUtilities.ToRSAParameters((RsaKeyParameters)asymmetricKeyParameter);
 			RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider();
 			rSACryptoServiceProvider.ImportParameters(parameters);
 			return rSACryptoServiceProvider;

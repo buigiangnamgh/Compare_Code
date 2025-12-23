@@ -51,7 +51,7 @@ namespace Inventec.Common.SignFile
 
 		private int numberPageSign = 1;
 
-		private Rectangle pageSize = PageSize.A4;
+		private Rectangle pageSize = iTextSharp.text.PageSize.A4;
 
 		private string pathImage;
 
@@ -531,21 +531,20 @@ namespace Inventec.Common.SignFile
 
 		public static DisplayConfig generateDisplayConfigImage(int numberPageSign, float coorX, float coorY, float width, float height, string contact, string reason, string location, byte[] bImage)
 		{
-			return new DisplayConfig
-			{
-				IsDisplaySignature = true,
-				TypeDisplay = Constans.DISPLAY_IMAGE_STAMP,
-				NumberPageSign = numberPageSign,
-				CoorXRectangle = coorX,
-				CoorYRectangle = coorY,
-				WidthRectangle = width,
-				HeightRectangle = height,
-				Contact = contact,
-				Reason = reason,
-				Location = location,
-				BImage = bImage,
-				SignDate = DateTime.Now
-			};
+			DisplayConfig displayConfig = new DisplayConfig();
+			displayConfig.IsDisplaySignature = true;
+			displayConfig.TypeDisplay = Constans.DISPLAY_IMAGE_STAMP;
+			displayConfig.NumberPageSign = numberPageSign;
+			displayConfig.CoorXRectangle = coorX;
+			displayConfig.CoorYRectangle = coorY;
+			displayConfig.WidthRectangle = width;
+			displayConfig.HeightRectangle = height;
+			displayConfig.Contact = contact;
+			displayConfig.Reason = reason;
+			displayConfig.Location = location;
+			displayConfig.BImage = bImage;
+			displayConfig.SignDate = DateTime.Now;
+			return displayConfig;
 		}
 
 		public static DisplayConfig generateDisplayConfigImage_ExistedSignatureField(int numberPageSign, float coorX, float coorY, float width, float height, string contact, string reason, string location, byte[] bImage)
@@ -557,18 +556,17 @@ namespace Inventec.Common.SignFile
 
 		public static DisplayConfig generateDisplayConfigImageDefault(int numberPageSign, float coorX, float coorY, float width, float height, byte[] bImage)
 		{
-			return new DisplayConfig
-			{
-				IsDisplaySignature = true,
-				TypeDisplay = Constans.DISPLAY_IMAGE_STAMP,
-				NumberPageSign = numberPageSign,
-				CoorXRectangle = coorX,
-				CoorYRectangle = coorY,
-				WidthRectangle = width,
-				HeightRectangle = height,
-				BImage = bImage,
-				SignDate = DateTime.Now
-			};
+			DisplayConfig displayConfig = new DisplayConfig();
+			displayConfig.IsDisplaySignature = true;
+			displayConfig.TypeDisplay = Constans.DISPLAY_IMAGE_STAMP;
+			displayConfig.NumberPageSign = numberPageSign;
+			displayConfig.CoorXRectangle = coorX;
+			displayConfig.CoorYRectangle = coorY;
+			displayConfig.WidthRectangle = width;
+			displayConfig.HeightRectangle = height;
+			displayConfig.BImage = bImage;
+			displayConfig.SignDate = DateTime.Now;
+			return displayConfig;
 		}
 
 		public static DisplayConfig generateDisplayConfigImageDefault_ExistedSignatureField(int numberPageSign, float coorX, float coorY, float width, float height, byte[] bImage)
@@ -580,48 +578,46 @@ namespace Inventec.Common.SignFile
 
 		public static DisplayConfig generateDisplayConfigRectangleText(int numberPageSign, float coorX, float coorY, float width, float height, string displayText, string formatRectangleText, string contact, string reason, string location, string dateFormatstring)
 		{
-			return new DisplayConfig
-			{
-				IsDisplaySignature = true,
-				TypeDisplay = Constans.DISPLAY_RECTANGLE_TEXT,
-				NumberPageSign = numberPageSign,
-				CoorXRectangle = coorX,
-				CoorYRectangle = coorY,
-				WidthRectangle = width,
-				HeightRectangle = height,
-				DisplayText = displayText,
-				FormatRectangleText = formatRectangleText,
-				Contact = contact,
-				Reason = reason,
-				Location = location,
-				DateFormatstring = dateFormatstring,
-				SignDate = DateTime.Now
-			};
+			DisplayConfig displayConfig = new DisplayConfig();
+			displayConfig.IsDisplaySignature = true;
+			displayConfig.TypeDisplay = Constans.DISPLAY_RECTANGLE_TEXT;
+			displayConfig.NumberPageSign = numberPageSign;
+			displayConfig.CoorXRectangle = coorX;
+			displayConfig.CoorYRectangle = coorY;
+			displayConfig.WidthRectangle = width;
+			displayConfig.HeightRectangle = height;
+			displayConfig.DisplayText = displayText;
+			displayConfig.FormatRectangleText = formatRectangleText;
+			displayConfig.Contact = contact;
+			displayConfig.Reason = reason;
+			displayConfig.Location = location;
+			displayConfig.DateFormatstring = dateFormatstring;
+			displayConfig.SignDate = DateTime.Now;
+			return displayConfig;
 		}
 
 		public static DisplayConfig generateDisplayConfigRectangleText(int typeDisplay, int sizeFont, Constans.TEXT_POSITON textPosition, string imagepath, byte[] bImage, int numberPageSign, float coorX, float coorY, float width, float height, string displayText, string formatRectangleText, string contact, string reason, string location, string dateFormatstring)
 		{
-			return new DisplayConfig
-			{
-				IsDisplaySignature = true,
-				TypeDisplay = ((typeDisplay > 0) ? typeDisplay : Constans.DISPLAY_RECTANGLE_TEXT),
-				SizeFont = ((sizeFont > 0) ? sizeFont : 11),
-				TextPosition = ((textPosition > Constans.TEXT_POSITON.x100) ? textPosition : Constans.TEXT_POSITON.x100),
-				PathImage = imagepath,
-				BImage = bImage,
-				NumberPageSign = numberPageSign,
-				CoorXRectangle = coorX,
-				CoorYRectangle = coorY,
-				WidthRectangle = width,
-				HeightRectangle = height,
-				DisplayText = displayText,
-				FormatRectangleText = (string.IsNullOrEmpty(formatRectangleText) ? Constans.SIGN_TEXT_FORMAT_3_1 : formatRectangleText),
-				Contact = contact,
-				Reason = reason,
-				Location = location,
-				DateFormatstring = dateFormatstring,
-				SignDate = DateTime.Now
-			};
+			DisplayConfig displayConfig = new DisplayConfig();
+			displayConfig.IsDisplaySignature = true;
+			displayConfig.TypeDisplay = ((typeDisplay > 0) ? typeDisplay : Constans.DISPLAY_RECTANGLE_TEXT);
+			displayConfig.SizeFont = ((sizeFont > 0) ? sizeFont : 11);
+			displayConfig.TextPosition = ((textPosition > Constans.TEXT_POSITON.x100) ? textPosition : Constans.TEXT_POSITON.x100);
+			displayConfig.PathImage = imagepath;
+			displayConfig.BImage = bImage;
+			displayConfig.NumberPageSign = numberPageSign;
+			displayConfig.CoorXRectangle = coorX;
+			displayConfig.CoorYRectangle = coorY;
+			displayConfig.WidthRectangle = width;
+			displayConfig.HeightRectangle = height;
+			displayConfig.DisplayText = displayText;
+			displayConfig.FormatRectangleText = (string.IsNullOrEmpty(formatRectangleText) ? Constans.SIGN_TEXT_FORMAT_3_1 : formatRectangleText);
+			displayConfig.Contact = contact;
+			displayConfig.Reason = reason;
+			displayConfig.Location = location;
+			displayConfig.DateFormatstring = dateFormatstring;
+			displayConfig.SignDate = DateTime.Now;
+			return displayConfig;
 		}
 
 		public static DisplayConfig generateDisplayConfigRectangleText_ExistedSignatureField(int numberPageSign, float coorX, float coorY, float width, float height, string displayText, string formatRectangleText, string contact, string reason, string location, string dateFormatString)
@@ -633,15 +629,14 @@ namespace Inventec.Common.SignFile
 
 		public static DisplayConfig generateDisplayConfigRectangleTextDefault(string contact, string reason, string location)
 		{
-			return new DisplayConfig
-			{
-				IsDisplaySignature = true,
-				TypeDisplay = Constans.DISPLAY_RECTANGLE_TEXT,
-				Contact = contact,
-				Reason = reason,
-				Location = location,
-				SignDate = DateTime.Now
-			};
+			DisplayConfig displayConfig = new DisplayConfig();
+			displayConfig.IsDisplaySignature = true;
+			displayConfig.TypeDisplay = Constans.DISPLAY_RECTANGLE_TEXT;
+			displayConfig.Contact = contact;
+			displayConfig.Reason = reason;
+			displayConfig.Location = location;
+			displayConfig.SignDate = DateTime.Now;
+			return displayConfig;
 		}
 
 		public static DisplayConfig generateDisplayConfigRectangleTextDefault_ExistSignatureFieldDefault(string contact, string reason, string location)
@@ -653,17 +648,16 @@ namespace Inventec.Common.SignFile
 
 		public static DisplayConfig generateDisplayConfigTable(int totalPageSign, string[] titles, float[] widthsPercen, int[] alignmentArray, string[] textArray)
 		{
-			return new DisplayConfig
-			{
-				IsDisplaySignature = true,
-				TypeDisplay = Constans.DISPLAY_TABLE,
-				TotalPageSign = totalPageSign,
-				Titles = titles,
-				WidthsPercen = widthsPercen,
-				AlignmentArray = alignmentArray,
-				TextArray = textArray,
-				SignDate = DateTime.Now
-			};
+			DisplayConfig displayConfig = new DisplayConfig();
+			displayConfig.IsDisplaySignature = true;
+			displayConfig.TypeDisplay = Constans.DISPLAY_TABLE;
+			displayConfig.TotalPageSign = totalPageSign;
+			displayConfig.Titles = titles;
+			displayConfig.WidthsPercen = widthsPercen;
+			displayConfig.AlignmentArray = alignmentArray;
+			displayConfig.TextArray = textArray;
+			displayConfig.SignDate = DateTime.Now;
+			return displayConfig;
 		}
 
 		public static DisplayConfig generateDisplayConfigTableDefault(int totalPageSign, string[] textArray)

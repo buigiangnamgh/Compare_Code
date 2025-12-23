@@ -137,7 +137,7 @@ namespace Inventec.Common.SignFile
 			}
 		}
 
-		public static X509Certificate GetX509Cert(X509Certificate cert)
+		public static Org.BouncyCastle.X509.X509Certificate GetX509Cert(System.Security.Cryptography.X509Certificates.X509Certificate cert)
 		{
 			try
 			{
@@ -150,12 +150,12 @@ namespace Inventec.Common.SignFile
 			}
 		}
 
-		public static X509Certificate GetX509Cert(string CertStr)
+		public static Org.BouncyCastle.X509.X509Certificate GetX509Cert(string CertStr)
 		{
 			try
 			{
 				byte[] bytes = SharedUtils.GetBytes(CertStr);
-				X509Certificate x509Certificate = new X509Certificate();
+				System.Security.Cryptography.X509Certificates.X509Certificate x509Certificate = new System.Security.Cryptography.X509Certificates.X509Certificate();
 				x509Certificate.Import(bytes);
 				return DotNetUtilities.FromX509Certificate(x509Certificate);
 			}
@@ -166,18 +166,14 @@ namespace Inventec.Common.SignFile
 			}
 		}
 
-		public static X509Certificate[] GetX509CertChain(X509Certificate2 cert)
+		public static Org.BouncyCastle.X509.X509Certificate[] GetX509CertChain(X509Certificate2 cert)
 		{
-			List<X509Certificate> list = new List<X509Certificate>();
-			X509Chain x509Chain = new X509Chain
-			{
-				ChainPolicy = 
-				{
-					RevocationMode = X509RevocationMode.Online
-				}
-			};
-			x509Chain.Build(cert);
-			X509ChainElementEnumerator enumerator = x509Chain.ChainElements.GetEnumerator();
+			List<System.Security.Cryptography.X509Certificates.X509Certificate> list = new List<System.Security.Cryptography.X509Certificates.X509Certificate>();
+			X509Chain x509Chain = new X509Chain();
+			x509Chain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
+			X509Chain x509Chain2 = x509Chain;
+			x509Chain2.Build(cert);
+			X509ChainElementEnumerator enumerator = x509Chain2.ChainElements.GetEnumerator();
 			while (enumerator.MoveNext())
 			{
 				X509ChainElement current = enumerator.Current;
@@ -190,13 +186,13 @@ namespace Inventec.Common.SignFile
 			return null;
 		}
 
-		public static X509Certificate[] GetX509CertChain(X509Certificate[] certChain)
+		public static Org.BouncyCastle.X509.X509Certificate[] GetX509CertChain(System.Security.Cryptography.X509Certificates.X509Certificate[] certChain)
 		{
 			if (certChain == null || certChain.Length == 0)
 			{
 				return null;
 			}
-			X509Certificate[] array = (X509Certificate[])(object)new X509Certificate[certChain.Length];
+			Org.BouncyCastle.X509.X509Certificate[] array = (Org.BouncyCastle.X509.X509Certificate[])(object)new System.Security.Cryptography.X509Certificates.X509Certificate[certChain.Length];
 			try
 			{
 				for (int i = 0; i < certChain.Length; i++)
@@ -214,8 +210,6 @@ namespace Inventec.Common.SignFile
 
 		public static BigInteger HexadecimalStringToBigInt(string input)
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000a: Expected O, but got Unknown
 			return new BigInteger(input, 16);
 		}
 
@@ -281,7 +275,7 @@ namespace Inventec.Common.SignFile
 			cspParameters.ProviderType = rsa.CspKeyContainerInfo.ProviderType;
 			cspParameters.KeyPassword = SharedUtils.GetSecurePin(pinCode);
 			cspParameters.Flags = CspProviderFlags.NoPrompt;
-			LogSystem.Info(LogUtil.TraceData("cspp", (object)cspParameters));
+			LogSystem.Info(LogUtil.TraceData("cspp", cspParameters));
 			RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider(cspParameters);
 		}
 	}

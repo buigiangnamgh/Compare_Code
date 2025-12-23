@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 
+[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyTitle("Inventec.Common.SignFile")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -13,5 +14,4 @@ using System.Runtime.Versioning;
 [assembly: AssemblyTrademark("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("17ec6928-a6e7-41c8-bbbd-d33346ec7824")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: AssemblyVersion("1.0.0.0")]

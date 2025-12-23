@@ -16,11 +16,10 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations.Signers
 			{
 				throw new InvalidParameterException("Input path cannot be null");
 			}
-			Reference reference = new Reference
-			{
-				Uri = "file://" + inputPath.Replace("\\", "/")
-			};
-			signedXml.AddReference(reference);
+			Reference reference = new Reference();
+			reference.Uri = "file://" + inputPath.Replace("\\", "/");
+			Reference reference2 = reference;
+			signedXml.AddReference(reference2);
 		}
 	}
 }

@@ -9,9 +9,9 @@ namespace Inventec.Common.SignFile.XmlProcess.Common
 	{
 		public const string XmlDsigSignatureProperties = "http://www.w3.org/2000/09/xmldsig#SignatureProperties";
 
-		private readonly List<DataObject> _dataObjects = new List<DataObject>();
-
 		public const string XmlDSigTimestampNamespace = "http://xadesnet.codeplex.com/#timestamp";
+
+		private readonly List<DataObject> _dataObjects = new List<DataObject>();
 
 		public XmlElement PropertiesNode { get; set; }
 

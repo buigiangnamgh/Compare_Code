@@ -16,12 +16,11 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations.Signers
 			{
 				xpathToNodeToSign = "";
 			}
-			Reference reference = new Reference
-			{
-				Uri = xpathToNodeToSign
-			};
-			reference.AddTransform(new XmlDsigEnvelopedSignatureTransform());
-			signedXml.AddReference(reference);
+			Reference reference = new Reference();
+			reference.Uri = xpathToNodeToSign;
+			Reference reference2 = reference;
+			reference2.AddTransform(new XmlDsigEnvelopedSignatureTransform());
+			signedXml.AddReference(reference2);
 		}
 
 		protected override XmlDocument BuildFinalSignedXmlDocument(XmlDocument inputXml, XmlElement signatureXml)

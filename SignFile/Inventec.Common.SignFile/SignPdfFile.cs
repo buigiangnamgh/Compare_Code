@@ -69,7 +69,43 @@ namespace Inventec.Common.SignFile
 			public X509Certificate2 cert;
 		}
 
-		private X509Certificate[] chain;
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass0
+		{
+			public string inFile;
+
+			public bool isSignElectronic;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass2
+		{
+			public string inFile;
+
+			public bool isSignElectronic;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClassa
+		{
+			public _003C_003Ec__DisplayClass23_0 CS_0024_003C_003E8__locals29;
+
+			public string jsonFile;
+
+			public DisplayConfig displayConfig;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass1c
+		{
+			public _003C_003Ec__DisplayClass30_0 CS_0024_003C_003E8__locals17;
+
+			public string reason;
+
+			public DisplayConfig displayConfig;
+		}
+
+		private Org.BouncyCastle.X509.X509Certificate[] chain;
 
 		private string fieldName;
 
@@ -254,17 +290,19 @@ namespace Inventec.Common.SignFile
 
 		public bool SignPDF(X509Certificate2 cert, string inFile, Stream outStream, string reason, string location, TimestampConfig timestampConfig, DisplayConfig displayConfig, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage, bool isSignElectronic = false)
 		{
-			_003C_003Ec__DisplayClass18_0 CS_0024_003C_003E8__locals9 = new _003C_003Ec__DisplayClass18_0();
-			CS_0024_003C_003E8__locals9.isSignElectronic = isSignElectronic;
-			CS_0024_003C_003E8__locals9.inFile = inFile;
+			_003C_003Ec__DisplayClass0 CS_0024_003C_003E8__locals8 = new _003C_003Ec__DisplayClass0();
+			CS_0024_003C_003E8__locals8.inFile = inFile;
+			CS_0024_003C_003E8__locals8.isSignElectronic = isSignElectronic;
+			bool isSignElectronic2 = CS_0024_003C_003E8__locals8.isSignElectronic;
+			string inFile2 = CS_0024_003C_003E8__locals8.inFile;
 			try
 			{
-				LogSystem.Debug("SignPDF____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => CS_0024_003C_003E8__locals9.isSignElectronic)), (object)CS_0024_003C_003E8__locals9.isSignElectronic) + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals9, typeof(_003C_003Ec__DisplayClass18_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals9.inFile));
-				if (CS_0024_003C_003E8__locals9.isSignElectronic)
+				LogSystem.Debug("SignPDF____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals8.isSignElectronic), CS_0024_003C_003E8__locals8.isSignElectronic) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals8), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals8.inFile));
+				if (isSignElectronic2)
 				{
-					return SignPDFElectronic(CS_0024_003C_003E8__locals9.inFile, outStream, reason, location, displayConfig, ref errMessage);
+					return SignPDFElectronic(inFile2, outStream, reason, location, displayConfig, ref errMessage);
 				}
-				return SignPDFDigital(cert, CS_0024_003C_003E8__locals9.inFile, outStream, reason, location, timestampConfig, displayConfig, dlgGetHSMServerResponseData, ref errMessage);
+				return SignPDFDigital(cert, inFile2, outStream, reason, location, timestampConfig, displayConfig, dlgGetHSMServerResponseData, ref errMessage);
 			}
 			catch (Exception ex)
 			{
@@ -275,17 +313,19 @@ namespace Inventec.Common.SignFile
 
 		public bool SignPDF(X509Certificate2 cert, string inFile, Stream outStream, string reason, string location, TimestampConfig timestampConfig, DisplayConfig displayConfig, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage, bool hasHashPkcsServer, bool isSignElectronic = false)
 		{
-			_003C_003Ec__DisplayClass19_0 CS_0024_003C_003E8__locals9 = new _003C_003Ec__DisplayClass19_0();
-			CS_0024_003C_003E8__locals9.isSignElectronic = isSignElectronic;
-			CS_0024_003C_003E8__locals9.inFile = inFile;
+			_003C_003Ec__DisplayClass2 CS_0024_003C_003E8__locals8 = new _003C_003Ec__DisplayClass2();
+			CS_0024_003C_003E8__locals8.inFile = inFile;
+			CS_0024_003C_003E8__locals8.isSignElectronic = isSignElectronic;
+			bool isSignElectronic2 = CS_0024_003C_003E8__locals8.isSignElectronic;
+			string inFile2 = CS_0024_003C_003E8__locals8.inFile;
 			try
 			{
-				LogSystem.Debug("SignPDF____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => CS_0024_003C_003E8__locals9.isSignElectronic)), (object)CS_0024_003C_003E8__locals9.isSignElectronic) + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals9, typeof(_003C_003Ec__DisplayClass19_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals9.inFile));
-				if (CS_0024_003C_003E8__locals9.isSignElectronic)
+				LogSystem.Debug("SignPDF____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals8.isSignElectronic), CS_0024_003C_003E8__locals8.isSignElectronic) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals8), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals8.inFile));
+				if (isSignElectronic2)
 				{
-					return SignPDFElectronic(CS_0024_003C_003E8__locals9.inFile, outStream, reason, location, displayConfig, ref errMessage);
+					return SignPDFElectronic(inFile2, outStream, reason, location, displayConfig, ref errMessage);
 				}
-				return SignPDFDigital(cert, CS_0024_003C_003E8__locals9.inFile, outStream, reason, location, timestampConfig, displayConfig, dlgGetHSMServerResponseData, ref errMessage, hasHashPkcsServer);
+				return SignPDFDigital(cert, inFile2, outStream, reason, location, timestampConfig, displayConfig, dlgGetHSMServerResponseData, ref errMessage, hasHashPkcsServer);
 			}
 			catch (Exception ex)
 			{
@@ -322,7 +362,7 @@ namespace Inventec.Common.SignFile
 			bool success = false;
 			try
 			{
-				LogSystem.Debug("SignXml. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<XmlConfig>((Expression<Func<XmlConfig>>)(() => xmlConfig)), (object)xmlConfig));
+				LogSystem.Debug("SignXml. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => xmlConfig), xmlConfig));
 				string outFilePath = "";
 				SharedUtils.SaveNewFileFromReader(bInFile, ref outFilePath, ".xml");
 				if (!string.IsNullOrEmpty(outFilePath))
@@ -337,7 +377,7 @@ namespace Inventec.Common.SignFile
 					signDSL.WithProperty(string.IsNullOrEmpty(xmlConfig.Reason) ? "SigningTime" : "SigningTimeReason", string.IsNullOrEmpty(xmlConfig.Reason) ? text : string.Format("{0} - {1}", text, xmlConfig.Reason), "http://xades.codeplex.com/#properties");
 					signDSL.SignToFile(outFile, pinCode);
 					VerificationResults VerificationResults = XmlDsigHelper.Verify(outFile).PerformAndGetResults();
-					LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => outFile)), (object)outFile) + LogUtil.TraceData(LogUtil.GetMemberName<VerificationResults>((Expression<Func<VerificationResults>>)(() => VerificationResults)), (object)VerificationResults));
+					LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => outFile), outFile) + LogUtil.TraceData(LogUtil.GetMemberName(() => VerificationResults), VerificationResults));
 					if (!string.IsNullOrEmpty(outFile) && File.Exists(outFile))
 					{
 						success = true;
@@ -346,7 +386,7 @@ namespace Inventec.Common.SignFile
 					{
 						outFile = "";
 					}
-					LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => success)), (object)success) + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => outFile)), (object)outFile));
+					LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => success), success) + LogUtil.TraceData(LogUtil.GetMemberName(() => outFile), outFile));
 				}
 				LogSystem.Debug("SignXml. 2");
 			}
@@ -362,14 +402,14 @@ namespace Inventec.Common.SignFile
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("VerifySignedXml. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => xmlSignedFile)), (object)xmlSignedFile));
+				LogSystem.Debug("VerifySignedXml. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => xmlSignedFile), xmlSignedFile));
 				if (!string.IsNullOrEmpty(xmlSignedFile))
 				{
 					VerificationResults verificationResults = XmlDsigHelper.Verify(xmlSignedFile).PerformAndGetResults();
 					if (verificationResults != null && verificationResults.SigningCertificate != null && verificationResults.OriginalDocument != null)
 					{
 						result = true;
-						X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(verificationResults.SigningCertificate);
+						Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(verificationResults.SigningCertificate);
 						signedInfoData = string.Format("{0} - {1}", SharedUtils.GetCN(x509CertChain[0]), verificationResults.Timestamp);
 					}
 				}
@@ -384,33 +424,31 @@ namespace Inventec.Common.SignFile
 
 		public bool SignJson(X509Certificate2 cert, string jsonFile, Stream outStream, string reason, string location, DisplayConfig displayConfig, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage, string pinCode)
 		{
-			//IL_0726: Unknown result type (might be due to invalid IL or missing references)
-			//IL_072d: Expected O, but got Unknown
-			//IL_0795: Unknown result type (might be due to invalid IL or missing references)
-			//IL_079f: Expected O, but got Unknown
-			//IL_00ed: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f4: Expected O, but got Unknown
-			_003C_003Ec__DisplayClass23_0 CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass23_0();
-			CS_0024_003C_003E8__locals29.displayConfig = displayConfig;
-			CS_0024_003C_003E8__locals29.jsonFile = jsonFile;
-			CS_0024_003C_003E8__locals29.cert = cert;
+			_003C_003Ec__DisplayClassa CS_0024_003C_003E8__locals36 = new _003C_003Ec__DisplayClassa();
+			CS_0024_003C_003E8__locals36.jsonFile = jsonFile;
+			CS_0024_003C_003E8__locals36.displayConfig = displayConfig;
+			CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass23_0();
+			CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig = CS_0024_003C_003E8__locals36.displayConfig;
+			CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.jsonFile = CS_0024_003C_003E8__locals36.jsonFile;
+			CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert = cert;
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<DisplayConfig>((Expression<Func<DisplayConfig>>)(() => CS_0024_003C_003E8__locals29.displayConfig)), (object)CS_0024_003C_003E8__locals29.displayConfig) + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals29, typeof(_003C_003Ec__DisplayClass23_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals29.jsonFile));
-				displayConfigParam = CS_0024_003C_003E8__locals29.displayConfig;
-				if (!string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.jsonFile))
+				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals36.displayConfig), CS_0024_003C_003E8__locals36.displayConfig) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals36), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals36.jsonFile));
+				displayConfigParam = CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig;
+				if (!string.IsNullOrEmpty(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.jsonFile))
 				{
-					string text = (File.Exists(CS_0024_003C_003E8__locals29.jsonFile) ? File.ReadAllText(CS_0024_003C_003E8__locals29.jsonFile) : "");
+					string text = (File.Exists(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.jsonFile) ? File.ReadAllText(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.jsonFile) : "");
 					string text2 = "";
-					JwtSecurityTokenHandler val = new JwtSecurityTokenHandler();
+					JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
 					DateTime utcNow = DateTime.UtcNow;
 					string text3 = "";
 					string text4 = "";
 					if (text.Contains("<SignatureCertificate>") && text.Contains("</SignatureCertificate>"))
 					{
+						_003C_003Ec__DisplayClassa _003C_003Ec__DisplayClassa = CS_0024_003C_003E8__locals36;
 						string[] arrDataSigned = text.Split(new string[2] { "<SignatureCertificate>", "</SignatureCertificate>" }, StringSplitOptions.None);
-						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string[]>((Expression<Func<string[]>>)(() => arrDataSigned)), (object)arrDataSigned));
+						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => arrDataSigned), arrDataSigned));
 						if (arrDataSigned != null && arrDataSigned.Length > 1)
 						{
 							text4 = arrDataSigned[1].Replace("</SignatureCertificate>", "");
@@ -454,19 +492,19 @@ namespace Inventec.Common.SignFile
 					{
 						text3 = SharedUtils.GetFileContentHash(text);
 					}
-					LogSystem.Info("cert is " + ((CS_0024_003C_003E8__locals29.cert != null) ? "not null" : "null"));
-					CS_0024_003C_003E8__locals29.displayConfig.SignDate = DateTime.Now;
-					DateTime dateTime = CS_0024_003C_003E8__locals29.displayConfig.SignDate;
-					string strDate = string.Format(CS_0024_003C_003E8__locals29.displayConfig.DateFormatstring, dateTime);
-					if ("".Equals(CS_0024_003C_003E8__locals29.displayConfig.Contact) && CS_0024_003C_003E8__locals29.cert != null)
+					LogSystem.Info("cert is " + ((CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert != null) ? "not null" : "null"));
+					CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig.SignDate = DateTime.Now;
+					DateTime dateTime = CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig.SignDate;
+					string strDate = string.Format(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig.DateFormatstring, dateTime);
+					if ("".Equals(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig.Contact) && CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert != null)
 					{
-						X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(CS_0024_003C_003E8__locals29.cert);
-						CS_0024_003C_003E8__locals29.displayConfig.Contact = SharedUtils.GetCN(x509CertChain[0]);
+						Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert);
+						CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig.Contact = SharedUtils.GetCN(x509CertChain[0]);
 					}
-					CS_0024_003C_003E8__locals29.displayConfig.Reason = reason;
-					text5 += SignPdfAsynchronous.GetDisplayText(CS_0024_003C_003E8__locals29.displayConfig, strDate).Replace("\r\n", " - ");
+					CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig.Reason = reason;
+					text5 += SignPdfAsynchronous.GetDisplayText(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.displayConfig, strDate).Replace("\r\n", " - ");
 					string value2 = "";
-					byte[] array2 = EncodeData(SharedUtils.FileToByte(CS_0024_003C_003E8__locals29.jsonFile), SignPdfAsynchronous.HASH_ALG);
+					byte[] array2 = EncodeData(SharedUtils.FileToByte(CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.jsonFile), SignPdfAsynchronous.HASH_ALG);
 					if (dlgGetHSMServerResponseData != null)
 					{
 						string hashData = ByteArrayToHexString(array2);
@@ -478,17 +516,18 @@ namespace Inventec.Common.SignFile
 						{
 						}
 					}
-					else if (CS_0024_003C_003E8__locals29.cert != null && CS_0024_003C_003E8__locals29.cert.PrivateKey != null)
+					else if (CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert != null && CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert.PrivateKey != null)
 					{
-						RSACryptoServiceProvider rSACryptoServiceProvider = (RSACryptoServiceProvider)CS_0024_003C_003E8__locals29.cert.PrivateKey;
+						RSACryptoServiceProvider rSACryptoServiceProvider = (RSACryptoServiceProvider)CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert.PrivateKey;
 						LogSystem.Debug((!string.IsNullOrEmpty(pinCode)) ? "pinCode has set" : "pinCode not set");
 						if (!string.IsNullOrEmpty(pinCode))
 						{
 							LogSystem.Debug("pinCode has set");
 							try
 							{
+								_003C_003Ec__DisplayClassa _003C_003Ec__DisplayClassa2 = CS_0024_003C_003E8__locals36;
 								string preSerialNumber = KeyStore.GetValue("SERIALNUMBER");
-								if (!string.IsNullOrEmpty(preSerialNumber) && preSerialNumber != CS_0024_003C_003E8__locals29.cert.SerialNumber)
+								if (!string.IsNullOrEmpty(preSerialNumber) && preSerialNumber != CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert.SerialNumber)
 								{
 									KeyStore.SetValue("CHANGE_USB", "1");
 									pinCode = "";
@@ -499,15 +538,15 @@ namespace Inventec.Common.SignFile
 									KeyStore.SetValue("CHANGE_USB", "0");
 									LogSystem.Info("check preSerialNumber => 2");
 								}
-								LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => preSerialNumber)), (object)preSerialNumber) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals29.cert.SerialNumber)), (object)CS_0024_003C_003E8__locals29.cert.SerialNumber));
+								LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => preSerialNumber), preSerialNumber) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert.SerialNumber), CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert.SerialNumber));
 								CspParameters cspParameters = new CspParameters();
 								cspParameters.KeyContainerName = rSACryptoServiceProvider.CspKeyContainerInfo.KeyContainerName;
 								cspParameters.ProviderName = rSACryptoServiceProvider.CspKeyContainerInfo.ProviderName;
 								cspParameters.ProviderType = rSACryptoServiceProvider.CspKeyContainerInfo.ProviderType;
 								cspParameters.KeyPassword = SharedUtils.GetSecurePin(pinCode);
-								LogSystem.Info(LogUtil.TraceData("cspp", (object)cspParameters));
+								LogSystem.Info(LogUtil.TraceData("cspp", cspParameters));
 								RSACryptoServiceProvider rSACryptoServiceProvider2 = new RSACryptoServiceProvider(cspParameters);
-								KeyStore.SetValue("SERIALNUMBER", CS_0024_003C_003E8__locals29.cert.SerialNumber);
+								KeyStore.SetValue("SERIALNUMBER", CS_0024_003C_003E8__locals36.CS_0024_003C_003E8__locals29.cert.SerialNumber);
 							}
 							catch (Exception ex2)
 							{
@@ -520,18 +559,18 @@ namespace Inventec.Common.SignFile
 						value2 = Convert.ToBase64String(rSACryptoServiceProvider.SignHash(Convert.FromBase64String(s), CryptoConfig.MapNameToOID(SignPdfAsynchronous.HASH_ALG)));
 						LogSystem.Debug("SignJson.1.2");
 					}
-					SecurityTokenDescriptor val2 = new SecurityTokenDescriptor();
-					val2.Subject = new ClaimsIdentity(new Claim[3]
+					SecurityTokenDescriptor securityTokenDescriptor = new SecurityTokenDescriptor();
+					securityTokenDescriptor.Subject = new ClaimsIdentity(new Claim[3]
 					{
 						new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier", text3),
 						new Claim("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name", text5),
 						new Claim("http://schemas.microsoft.com/ws/2008/06/identity/claims/userdata", value2)
 					});
-					val2.Expires = utcNow.AddYears(10);
-					val2.SigningCredentials = new SigningCredentials((SecurityKey)(object)GetRsaKey(SharedUtils.CertManager.Certificate), "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256");
-					SecurityTokenDescriptor val3 = val2;
-					SecurityToken val4 = ((SecurityTokenHandler)val).CreateToken(val3);
-					string text6 = ((SecurityTokenHandler)val).WriteToken(val4);
+					securityTokenDescriptor.Expires = utcNow.AddYears(10);
+					securityTokenDescriptor.SigningCredentials = new SigningCredentials(GetRsaKey(SharedUtils.CertManager.Certificate), "http://www.w3.org/2001/04/xmldsig-more#rsa-sha256");
+					SecurityTokenDescriptor tokenDescriptor = securityTokenDescriptor;
+					SecurityToken token = jwtSecurityTokenHandler.CreateToken(tokenDescriptor);
+					string text6 = jwtSecurityTokenHandler.WriteToken(token);
 					if (!string.IsNullOrEmpty(text6))
 					{
 						result = true;
@@ -568,7 +607,7 @@ namespace Inventec.Common.SignFile
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => jsonSignedData)), (object)jsonSignedData));
+				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => jsonSignedData), jsonSignedData));
 				if (!string.IsNullOrEmpty(jsonSignedData))
 				{
 					ClaimsPrincipal principal = GetPrincipal(jsonSignedData, cert);
@@ -602,25 +641,23 @@ namespace Inventec.Common.SignFile
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => jsonSignedData)), (object)jsonSignedData));
+				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => jsonSignedData), jsonSignedData));
 				if (!string.IsNullOrEmpty(jsonSignedData))
 				{
-					_003C_003Ec__DisplayClass25_1 CS_0024_003C_003E8__locals8 = new _003C_003Ec__DisplayClass25_1();
-					CS_0024_003C_003E8__locals8.jwtData = "";
+					string jwtData = "";
 					if (jsonSignedData.Contains("<SignatureCertificate>") && jsonSignedData.Contains("</SignatureCertificate>"))
 					{
 						string[] arrDataSigned = jsonSignedData.Split(new string[2] { "<SignatureCertificate>", "</SignatureCertificate>" }, StringSplitOptions.None);
-						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string[]>((Expression<Func<string[]>>)(() => arrDataSigned)), (object)arrDataSigned));
+						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => arrDataSigned), arrDataSigned));
 						if (arrDataSigned != null && arrDataSigned.Length > 1)
 						{
-							CS_0024_003C_003E8__locals8.jwtData = arrDataSigned[1].Replace("</SignatureCertificate>", "");
+							jwtData = arrDataSigned[1].Replace("</SignatureCertificate>", "");
 						}
 					}
-					ClaimsPrincipal claimsPrincipal = ((!string.IsNullOrEmpty(CS_0024_003C_003E8__locals8.jwtData)) ? GetPrincipal(CS_0024_003C_003E8__locals8.jwtData, SharedUtils.CertManager.Certificate) : null);
+					ClaimsPrincipal claimsPrincipal = ((!string.IsNullOrEmpty(jwtData)) ? GetPrincipal(jwtData, SharedUtils.CertManager.Certificate) : null);
 					if (claimsPrincipal == null)
 					{
 						errMessage = "Verify thất bại";
-						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals8.jwtData)), (object)CS_0024_003C_003E8__locals8.jwtData) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals8, typeof(_003C_003Ec__DisplayClass25_1)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals8.jwtData));
 					}
 					else
 					{
@@ -652,7 +689,7 @@ namespace Inventec.Common.SignFile
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<DisplayConfig>((Expression<Func<DisplayConfig>>)(() => displayConfig)), (object)displayConfig));
+				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => displayConfig), displayConfig));
 				displayConfigParam = displayConfig;
 				if (!string.IsNullOrEmpty(jsonData))
 				{
@@ -682,7 +719,7 @@ namespace Inventec.Common.SignFile
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => jsonSignedFile)), (object)jsonSignedFile));
+				LogSystem.Debug("SignJson. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => jsonSignedFile), jsonSignedFile));
 				if (!string.IsNullOrEmpty(jsonSignedFile))
 				{
 					string jsonDataSigned = File.ReadAllText(jsonSignedFile);
@@ -707,184 +744,151 @@ namespace Inventec.Common.SignFile
 
 		internal bool SignPDFElectronic(string inFile, string outFile, string reason, string location, DisplayConfig displayConfig, ref string errMessage)
 		{
-			//IL_0076: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007c: Expected O, but got Unknown
-			//IL_01f6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01fd: Expected O, but got Unknown
-			//IL_0309: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0310: Expected O, but got Unknown
-			//IL_038d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0394: Expected O, but got Unknown
-			//IL_07bf: Unknown result type (might be due to invalid IL or missing references)
-			//IL_07c6: Expected O, but got Unknown
-			//IL_0424: Unknown result type (might be due to invalid IL or missing references)
-			//IL_042b: Expected O, but got Unknown
-			//IL_0463: Unknown result type (might be due to invalid IL or missing references)
-			//IL_046a: Expected O, but got Unknown
-			//IL_05f5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05fc: Expected O, but got Unknown
-			//IL_04a2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_04a9: Expected O, but got Unknown
-			//IL_04e1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_04e8: Expected O, but got Unknown
-			//IL_0520: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0527: Expected O, but got Unknown
-			//IL_055f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0566: Expected O, but got Unknown
-			//IL_059b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05a2: Expected O, but got Unknown
-			//IL_06f8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_06ff: Expected O, but got Unknown
-			//IL_06ff: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0706: Expected O, but got Unknown
-			//IL_05d7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05de: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
-				LogSystem.Debug("SignPDFElectronic. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<DisplayConfig>((Expression<Func<DisplayConfig>>)(() => displayConfig)), (object)displayConfig));
+				LogSystem.Debug("SignPDFElectronic. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => displayConfig), displayConfig));
 				displayConfig.Reason = reason;
 				displayConfigParam = displayConfig;
-				PdfReader val = new PdfReader(inFile);
-				int numberOfPages = val.NumberOfPages;
+				PdfReader pdfReader = new PdfReader(inFile);
+				int numberOfPages = pdfReader.NumberOfPages;
 				if (!string.IsNullOrEmpty(displayConfig.Contact))
 				{
 					displayConfig.Contact = displayConfig.Contact.ToUpper();
 				}
-				Image val2 = null;
+				Image image = null;
 				if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP_WITH_TEXT || displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP)
 				{
 					if (!string.IsNullOrEmpty(displayConfig.PathImage) && File.Exists(displayConfig.PathImage))
 					{
-						val2 = Image.GetInstance(displayConfig.PathImage);
+						image = Image.GetInstance(displayConfig.PathImage);
 					}
 					else if (displayConfig.BImage != null)
 					{
-						val2 = Image.GetInstance(displayConfig.BImage);
+						image = Image.GetInstance(displayConfig.BImage);
 					}
 				}
-				float num = displayConfig.CoorXRectangle - displayConfig.WidthRectangle / 2f;
+				float xPos = displayConfig.CoorXRectangle - displayConfig.WidthRectangle / 2f;
 				float coorYRectangle = displayConfig.CoorYRectangle;
 				float widthRectangle = displayConfig.WidthRectangle;
 				float heightRectangle = displayConfig.HeightRectangle;
 				string strDate = string.Format(displayConfig.DateFormatstring, (displayConfig.SignDate == DateTime.MinValue) ? DateTime.Now : displayConfig.SignDate);
 				SignPdfAsynchronous.ProcessFontSizeFit(displayConfig);
-				using (FileStream fileStream = File.Open(outFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+				using (FileStream os = File.Open(outFile, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
 				{
-					PdfStamper val3 = new PdfStamper(val, (Stream)fileStream);
-					try
+					using (PdfStamper pdfStamper = new PdfStamper(pdfReader, os))
 					{
-						for (int num2 = 1; num2 <= numberOfPages; num2++)
+						for (int num = 1; num <= numberOfPages; num++)
 						{
-							if (num2 != displayConfig.NumberPageSign)
+							if (num != displayConfig.NumberPageSign)
 							{
 								continue;
 							}
-							Rectangle pageSize = val.GetPageSize(num2);
-							PdfContentByte overContent = val3.GetOverContent(num2);
+							Rectangle pageSize = pdfReader.GetPageSize(num);
+							PdfContentByte overContent = pdfStamper.GetOverContent(num);
 							LogSystem.Debug("SignPDFElectronic____PageNUm=" + displayConfig.NumberPageSign + "__WidthRectangle=" + displayConfig.WidthRectangle + "__HeightRectangle=" + displayConfig.HeightRectangle + "__CoorXRectangle=" + displayConfig.CoorXRectangle + "__CoorYRectangle=" + displayConfig.CoorYRectangle);
 							result = true;
-							if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP && val2 != null)
+							if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP && image != null)
 							{
-								PdfPCell val4 = new PdfPCell();
-								if (val2 != null)
+								PdfPCell pdfPCell = new PdfPCell();
+								if (image != null)
 								{
-									val2.Alignment = 1;
+									image.Alignment = 1;
 									float plusH = SignPdfAsynchronous.ProcessHeightPlus(100f, displayConfig);
-									val2.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, val2, displayConfig.SignaltureImageWidth, 100f, plusH);
-									val4.AddElement((IElement)(object)val2);
-									val4.HorizontalAlignment = 1;
-									val4.VerticalAlignment = 5;
-									((Rectangle)val4).Border = 0;
-									val4.MinimumHeight = heightRectangle;
+									image.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, image, displayConfig.SignaltureImageWidth, 100f, plusH);
+									pdfPCell.AddElement(image);
+									pdfPCell.HorizontalAlignment = 1;
+									pdfPCell.VerticalAlignment = 5;
+									pdfPCell.Border = 0;
+									pdfPCell.MinimumHeight = heightRectangle;
 								}
-								PdfPTable val5 = new PdfPTable(1);
-								val5.TotalWidth = widthRectangle;
-								val5.LockedWidth = true;
-								val5.AddCell(val4);
-								val5.WriteSelectedRows(0, -1, num, coorYRectangle + val5.TotalHeight / 2f, overContent);
+								PdfPTable pdfPTable = new PdfPTable(1);
+								pdfPTable.TotalWidth = widthRectangle;
+								pdfPTable.LockedWidth = true;
+								pdfPTable.AddCell(pdfPCell);
+								pdfPTable.WriteSelectedRows(0, -1, xPos, coorYRectangle + pdfPTable.TotalHeight / 2f, overContent);
 							}
 							else if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP_WITH_TEXT)
 							{
 								float totalWidth = widthRectangle;
 								string displayText = SignPdfAsynchronous.GetDisplayText(displayConfig, strDate);
 								float widthImagePercent = 0f;
-								PdfPTable val6 = null;
+								PdfPTable pdfPTable2 = null;
 								if (displayConfig.TextPosition == Constans.TEXT_POSITON.x100)
 								{
-									val6 = new PdfPTable(1);
+									pdfPTable2 = new PdfPTable(1);
 									widthImagePercent = 100f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x25x75)
 								{
-									val6 = new PdfPTable(new float[2] { 25f, 75f });
+									pdfPTable2 = new PdfPTable(new float[2] { 25f, 75f });
 									widthImagePercent = 25f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x30x70)
 								{
-									val6 = new PdfPTable(new float[2] { 30f, 70f });
+									pdfPTable2 = new PdfPTable(new float[2] { 30f, 70f });
 									widthImagePercent = 30f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x40x60)
 								{
-									val6 = new PdfPTable(new float[2] { 40f, 60f });
+									pdfPTable2 = new PdfPTable(new float[2] { 40f, 60f });
 									widthImagePercent = 40f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x50x50)
 								{
-									val6 = new PdfPTable(new float[2] { 50f, 50f });
+									pdfPTable2 = new PdfPTable(new float[2] { 50f, 50f });
 									widthImagePercent = 50f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x60x40)
 								{
-									val6 = new PdfPTable(new float[2] { 60f, 40f });
+									pdfPTable2 = new PdfPTable(new float[2] { 60f, 40f });
 									widthImagePercent = 40f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x70x30)
 								{
-									val6 = new PdfPTable(new float[2] { 70f, 30f });
+									pdfPTable2 = new PdfPTable(new float[2] { 70f, 30f });
 									widthImagePercent = 30f;
 								}
 								else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x75x25)
 								{
-									val6 = new PdfPTable(new float[2] { 75f, 25f });
+									pdfPTable2 = new PdfPTable(new float[2] { 75f, 25f });
 									widthImagePercent = 25f;
 								}
 								float plusH2 = SignPdfAsynchronous.ProcessHeightPlus(widthImagePercent, displayConfig);
-								PdfPCell val7 = new PdfPCell();
-								if (val2 != null)
+								PdfPCell pdfPCell2 = new PdfPCell();
+								if (image != null)
 								{
-									val2.Alignment = 1;
-									val2.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, val2, displayConfig.SignaltureImageWidth, widthImagePercent, plusH2);
-									val7.AddElement((IElement)(object)val2);
-									val7.HorizontalAlignment = 1;
-									val7.VerticalAlignment = 5;
-									((Rectangle)val7).Border = 0;
+									image.Alignment = 1;
+									image.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, image, displayConfig.SignaltureImageWidth, widthImagePercent, plusH2);
+									pdfPCell2.AddElement(image);
+									pdfPCell2.HorizontalAlignment = 1;
+									pdfPCell2.VerticalAlignment = 5;
+									pdfPCell2.Border = 0;
 								}
 								PdfPCell textCell = GetTextCell(displayText, displayConfig);
-								val6.TotalWidth = totalWidth;
-								val6.LockedWidth = true;
+								pdfPTable2.TotalWidth = totalWidth;
+								pdfPTable2.LockedWidth = true;
 								if (displayConfig.TextPosition == Constans.TEXT_POSITON.x100 || displayConfig.TextPosition == Constans.TEXT_POSITON.x25x75 || displayConfig.TextPosition == Constans.TEXT_POSITON.x30x70 || displayConfig.TextPosition == Constans.TEXT_POSITON.x40x60 || displayConfig.TextPosition == Constans.TEXT_POSITON.x50x50)
 								{
-									val6.AddCell(val7);
-									val6.AddCell(textCell);
+									pdfPTable2.AddCell(pdfPCell2);
+									pdfPTable2.AddCell(textCell);
 								}
 								else
 								{
-									val6.AddCell(textCell);
-									val6.AddCell(val7);
+									pdfPTable2.AddCell(textCell);
+									pdfPTable2.AddCell(pdfPCell2);
 								}
-								PdfPTable val8 = new PdfPTable(1);
-								PdfPCell val9 = new PdfPCell();
-								val9.AddElement((IElement)(object)val6);
-								val9.HorizontalAlignment = 1;
-								val9.VerticalAlignment = 5;
-								((Rectangle)val9).Border = 0;
-								val9.MinimumHeight = heightRectangle;
-								val8.TotalWidth = totalWidth;
-								val8.LockedWidth = true;
-								val8.AddCell(val9);
-								val8.WriteSelectedRows(0, -1, num, coorYRectangle + val8.TotalHeight / 2f, overContent);
+								PdfPTable pdfPTable3 = new PdfPTable(1);
+								PdfPCell pdfPCell3 = new PdfPCell();
+								pdfPCell3.AddElement(pdfPTable2);
+								pdfPCell3.HorizontalAlignment = 1;
+								pdfPCell3.VerticalAlignment = 5;
+								pdfPCell3.Border = 0;
+								pdfPCell3.MinimumHeight = heightRectangle;
+								pdfPTable3.TotalWidth = totalWidth;
+								pdfPTable3.LockedWidth = true;
+								pdfPTable3.AddCell(pdfPCell3);
+								pdfPTable3.WriteSelectedRows(0, -1, xPos, coorYRectangle + pdfPTable3.TotalHeight / 2f, overContent);
 							}
 							else if (displayConfig.TypeDisplay == Constans.DISPLAY_RECTANGLE_TEXT)
 							{
@@ -892,25 +896,18 @@ namespace Inventec.Common.SignFile
 								string displayText2 = SignPdfAsynchronous.GetDisplayText(displayConfig, strDate);
 								PdfPCell textCell2 = GetTextCell(displayText2, displayConfig);
 								textCell2.MinimumHeight = heightRectangle;
-								PdfPTable val10 = new PdfPTable(1);
-								val10.TotalWidth = totalWidth2;
-								val10.LockedWidth = true;
-								val10.HorizontalAlignment = 1;
-								val10.AddCell(textCell2);
-								val10.CompleteRow();
-								val10.WriteSelectedRows(0, -1, num, coorYRectangle + val10.TotalHeight / 2f, overContent);
+								PdfPTable pdfPTable4 = new PdfPTable(1);
+								pdfPTable4.TotalWidth = totalWidth2;
+								pdfPTable4.LockedWidth = true;
+								pdfPTable4.HorizontalAlignment = 1;
+								pdfPTable4.AddCell(textCell2);
+								pdfPTable4.CompleteRow();
+								pdfPTable4.WriteSelectedRows(0, -1, xPos, coorYRectangle + pdfPTable4.TotalHeight / 2f, overContent);
 							}
 						}
 					}
-					finally
-					{
-						if (val3 != null)
-						{
-							((IDisposable)val3).Dispose();
-						}
-					}
 				}
-				val.Close();
+				pdfReader.Close();
 				LogSystem.Debug("SignPDFElectronic. 2");
 			}
 			catch (Exception ex)
@@ -946,38 +943,42 @@ namespace Inventec.Common.SignFile
 
 		internal bool SignPDFDigital(X509Certificate2 cert, string inFile, string outFile, string reason, string location, TimestampConfig timestampConfig, DisplayConfig displayConfig, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage, string pinCode)
 		{
-			_003C_003Ec__DisplayClass30_0 CS_0024_003C_003E8__locals17 = new _003C_003Ec__DisplayClass30_0();
-			CS_0024_003C_003E8__locals17.displayConfig = displayConfig;
-			CS_0024_003C_003E8__locals17.reason = reason;
-			CS_0024_003C_003E8__locals17.cert = cert;
+			_003C_003Ec__DisplayClass1c CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass1c();
+			CS_0024_003C_003E8__locals23.reason = reason;
+			CS_0024_003C_003E8__locals23.displayConfig = displayConfig;
+			CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17 = new _003C_003Ec__DisplayClass30_0();
+			CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.displayConfig = CS_0024_003C_003E8__locals23.displayConfig;
+			CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.reason = CS_0024_003C_003E8__locals23.reason;
+			CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert = cert;
 			try
 			{
-				LogSystem.Debug("SignPDFDigital. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<DisplayConfig>((Expression<Func<DisplayConfig>>)(() => CS_0024_003C_003E8__locals17.displayConfig)), (object)CS_0024_003C_003E8__locals17.displayConfig) + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals17, typeof(_003C_003Ec__DisplayClass30_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals17.reason));
-				displayConfigParam = CS_0024_003C_003E8__locals17.displayConfig;
-				CertUtil.GetX509Cert(CS_0024_003C_003E8__locals17.cert);
-				X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(CS_0024_003C_003E8__locals17.cert);
+				LogSystem.Debug("SignPDFDigital. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals23.displayConfig), CS_0024_003C_003E8__locals23.displayConfig) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals23.reason));
+				displayConfigParam = CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.displayConfig;
+				CertUtil.GetX509Cert(CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert);
+				Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert);
 				string text = "";
-				byte[] hashTypeRectangleText = GetHashTypeRectangleText(inFile, x509CertChain, CS_0024_003C_003E8__locals17.reason, location, CS_0024_003C_003E8__locals17.displayConfig.IsDisplaySignNote);
+				byte[] hashTypeRectangleText = GetHashTypeRectangleText(inFile, x509CertChain, CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.reason, location, CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.displayConfig.IsDisplaySignNote);
 				if (dlgGetHSMServerResponseData != null)
 				{
 					string text2 = ByteArrayToHexString(hashTypeRectangleText);
-					string text3 = Convert.ToBase64String(hashTypeRectangleText);
-					LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("ByteArrayToHexString.s", (object)text2));
-					LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("base64S", (object)text3));
+					string data = Convert.ToBase64String(hashTypeRectangleText);
+					LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("ByteArrayToHexString.s", text2));
+					LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("base64S", data));
 					text = dlgGetHSMServerResponseData(text2, ref errMessage);
-					LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("extSig", (object)text));
+					LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("extSig", text));
 				}
 				else
 				{
-					RSACryptoServiceProvider rSACryptoServiceProvider = (RSACryptoServiceProvider)CS_0024_003C_003E8__locals17.cert.PrivateKey;
+					RSACryptoServiceProvider rSACryptoServiceProvider = (RSACryptoServiceProvider)CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert.PrivateKey;
 					LogSystem.Debug((!string.IsNullOrEmpty(pinCode)) ? "pinCode has set" : "pinCode not set");
 					if (!string.IsNullOrEmpty(pinCode))
 					{
 						LogSystem.Debug("pinCode has set");
 						try
 						{
+							_003C_003Ec__DisplayClass1c _003C_003Ec__DisplayClass1c = CS_0024_003C_003E8__locals23;
 							string preSerialNumber = KeyStore.GetValue("SERIALNUMBER");
-							if (!string.IsNullOrEmpty(preSerialNumber) && preSerialNumber != CS_0024_003C_003E8__locals17.cert.SerialNumber)
+							if (!string.IsNullOrEmpty(preSerialNumber) && preSerialNumber != CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert.SerialNumber)
 							{
 								KeyStore.SetValue("CHANGE_USB", "1");
 								pinCode = "";
@@ -988,15 +989,15 @@ namespace Inventec.Common.SignFile
 								KeyStore.SetValue("CHANGE_USB", "0");
 								LogSystem.Info("check preSerialNumber => 2");
 							}
-							LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => preSerialNumber)), (object)preSerialNumber) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals17.cert.SerialNumber)), (object)CS_0024_003C_003E8__locals17.cert.SerialNumber));
+							LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => preSerialNumber), preSerialNumber) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert.SerialNumber), CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert.SerialNumber));
 							CspParameters cspParameters = new CspParameters();
 							cspParameters.KeyContainerName = rSACryptoServiceProvider.CspKeyContainerInfo.KeyContainerName;
 							cspParameters.ProviderName = rSACryptoServiceProvider.CspKeyContainerInfo.ProviderName;
 							cspParameters.ProviderType = rSACryptoServiceProvider.CspKeyContainerInfo.ProviderType;
 							cspParameters.KeyPassword = SharedUtils.GetSecurePin(pinCode);
-							LogSystem.Info(LogUtil.TraceData("cspp", (object)cspParameters));
+							LogSystem.Info(LogUtil.TraceData("cspp", cspParameters));
 							RSACryptoServiceProvider rSACryptoServiceProvider2 = new RSACryptoServiceProvider(cspParameters);
-							KeyStore.SetValue("SERIALNUMBER", CS_0024_003C_003E8__locals17.cert.SerialNumber);
+							KeyStore.SetValue("SERIALNUMBER", CS_0024_003C_003E8__locals23.CS_0024_003C_003E8__locals17.cert.SerialNumber);
 						}
 						catch (Exception ex)
 						{
@@ -1030,7 +1031,7 @@ namespace Inventec.Common.SignFile
 			try
 			{
 				CertUtil.GetX509Cert(cert);
-				X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
+				Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
 				displayConfigParam = displayConfig;
 				string text = "";
 				byte[] hashTypeRectangleText = GetHashTypeRectangleText(inFile, x509CertChain, reason, location, displayConfig.IsDisplaySignNote);
@@ -1072,7 +1073,7 @@ namespace Inventec.Common.SignFile
 			try
 			{
 				CertUtil.GetX509Cert(cert);
-				X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
+				Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
 				displayConfigParam = displayConfig;
 				if (hasHashPkcsServer)
 				{
@@ -1086,13 +1087,13 @@ namespace Inventec.Common.SignFile
 					{
 						string text2 = ByteArrayToHexString(hashTypeRectangleText);
 						text = dlgGetHSMServerResponseData(text2, ref errMessage);
-						string text3 = Convert.ToBase64String(hashTypeRectangleText);
-						LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("hexHash", (object)text2));
-						LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("base64S", (object)text3));
-						LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("extSig", (object)text));
+						string data = Convert.ToBase64String(hashTypeRectangleText);
+						LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("hexHash", text2));
+						LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("base64S", data));
+						LogSystem.Debug("SignPDFDigital.1.0____" + LogUtil.TraceData("extSig", text));
 						if (string.IsNullOrEmpty(text) || !string.IsNullOrEmpty(errMessage))
 						{
-							LogSystem.Debug(LogUtil.TraceData("errMessage", (object)errMessage) + "____extSig!=null=" + (text != null));
+							LogSystem.Debug(LogUtil.TraceData("errMessage", errMessage) + "____extSig!=null=" + (text != null));
 						}
 					}
 					else
@@ -1123,7 +1124,7 @@ namespace Inventec.Common.SignFile
 				string outFilePath = "";
 				SharedUtils.SaveNewFileFromReader(inStream, ref outFilePath);
 				CertUtil.GetX509Cert(cert);
-				X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
+				Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
 				displayConfigParam = displayConfig;
 				byte[] hashTypeRectangleText = GetHashTypeRectangleText(outFilePath, x509CertChain, reason, location, displayConfig.IsDisplaySignNote);
 				result = ((hashTypeRectangleText != null && hashTypeRectangleText.Length != 0) ? Convert.ToBase64String(hashTypeRectangleText) : string.Empty);
@@ -1241,15 +1242,13 @@ namespace Inventec.Common.SignFile
 
 		internal bool SignPDFDigitalAllPage(X509Certificate2 cert, ref string inFile, Stream outStream, string reason, string location, TimestampConfig timestampConfig, DisplayConfig displayConfig, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage, bool hasHashPkcsServer = false, bool isAutoChangeSignLocation = false)
 		{
-			//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0064: Expected O, but got Unknown
-			PdfReader val = null;
+			PdfReader pdfReader = null;
 			try
 			{
-				LogSystem.Debug("SignPDFDigitalAllPage. 1____" + LogUtil.TraceData(LogUtil.GetMemberName<DisplayConfig>((Expression<Func<DisplayConfig>>)(() => displayConfig)), (object)displayConfig));
-				val = new PdfReader(inFile);
-				int numberOfPages = val.NumberOfPages;
-				X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
+				LogSystem.Debug("SignPDFDigitalAllPage. 1____" + LogUtil.TraceData(LogUtil.GetMemberName(() => displayConfig), displayConfig));
+				pdfReader = new PdfReader(inFile);
+				int numberOfPages = pdfReader.NumberOfPages;
+				Org.BouncyCastle.X509.X509Certificate[] x509CertChain = CertUtil.GetX509CertChain(cert);
 				for (int num = 1; num <= numberOfPages; num++)
 				{
 					fieldName = "";
@@ -1261,7 +1260,7 @@ namespace Inventec.Common.SignFile
 					float num3 = displayConfig.CoorYRectangle;
 					if (isAutoChangeSignLocation)
 					{
-						Rectangle pageSizeWithRotation = val.GetPageSizeWithRotation(num);
+						Rectangle pageSizeWithRotation = pdfReader.GetPageSizeWithRotation(num);
 						num2 = displayConfig.CoorXRectangle / PageSize.A4.Width * pageSizeWithRotation.Width;
 						num3 = displayConfig.CoorYRectangle / PageSize.A4.Height * pageSizeWithRotation.Height;
 						if (num2 <= displayConfig.WidthRectangle / 2f)
@@ -1302,7 +1301,7 @@ namespace Inventec.Common.SignFile
 								text = dlgGetHSMServerResponseData(hashData, ref errMessage);
 								if (string.IsNullOrEmpty(text) || !string.IsNullOrEmpty(errMessage))
 								{
-									LogSystem.Debug(LogUtil.TraceData("errMessage", (object)errMessage) + "____extSig!=null=" + (text != null));
+									LogSystem.Debug(LogUtil.TraceData("errMessage", errMessage) + "____extSig!=null=" + (text != null));
 								}
 							}
 							else
@@ -1338,10 +1337,10 @@ namespace Inventec.Common.SignFile
 			}
 			finally
 			{
-				if (val != null)
+				if (pdfReader != null)
 				{
-					val.Close();
-					val.Dispose();
+					pdfReader.Close();
+					pdfReader.Dispose();
 				}
 			}
 			return false;
@@ -1349,11 +1348,6 @@ namespace Inventec.Common.SignFile
 
 		internal static PdfPCell GetTextCell(string displayText, DisplayConfig displayConfig)
 		{
-			//IL_005d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0062: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006b: Expected O, but got Unknown
-			//IL_006c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0072: Expected O, but got Unknown
 			int num = 1;
 			if (displayConfig.TextFormat != null)
 			{
@@ -1377,21 +1371,18 @@ namespace Inventec.Common.SignFile
 				}
 			}
 			Font fontByConfig = GetFontByConfig(displayConfig);
-			Paragraph val = new Paragraph(displayText, fontByConfig)
-			{
-				Alignment = num
-			};
-			PdfPCell val2 = new PdfPCell((Phrase)(object)val);
-			val2.HorizontalAlignment = num;
-			val2.VerticalAlignment = 4;
-			((Rectangle)val2).Border = 0;
-			return val2;
+			Paragraph paragraph = new Paragraph(displayText, fontByConfig);
+			paragraph.Alignment = num;
+			Paragraph paragraph2 = paragraph;
+			PdfPCell pdfPCell = new PdfPCell(paragraph2);
+			pdfPCell.HorizontalAlignment = num;
+			pdfPCell.VerticalAlignment = 4;
+			pdfPCell.Border = 0;
+			return pdfPCell;
 		}
 
 		internal static Font GetFontByConfig(DisplayConfig displayConfig)
 		{
-			//IL_0101: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0107: Expected O, but got Unknown
 			int num = 0;
 			string text = null;
 			if (displayConfig.TextFormat != null)
@@ -1410,55 +1401,46 @@ namespace Inventec.Common.SignFile
 					num += 4;
 				}
 			}
-			BaseFont val = null;
+			BaseFont baseFont = null;
 			if (!string.IsNullOrWhiteSpace(text))
 			{
 				try
 				{
-					string text2 = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), string.Format("{0}.ttf", text));
-					val = BaseFont.CreateFont(text2, "Identity-H", true) ?? BaseFont.CreateFont(displayConfig.FontPath, "Identity-H", true);
+					string name = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), string.Format("{0}.ttf", text));
+					baseFont = BaseFont.CreateFont(name, "Identity-H", true) ?? BaseFont.CreateFont(displayConfig.FontPath, "Identity-H", true);
 				}
 				catch (Exception ex)
 				{
 					LogSystem.Warn(ex);
-					val = BaseFont.CreateFont(displayConfig.FontPath, "Identity-H", true);
+					baseFont = BaseFont.CreateFont(displayConfig.FontPath, "Identity-H", true);
 				}
 			}
 			else
 			{
-				val = BaseFont.CreateFont(displayConfig.FontPath, "Identity-H", true);
+				baseFont = BaseFont.CreateFont(displayConfig.FontPath, "Identity-H", true);
 			}
-			return new Font(val, (float)displayConfig.SizeFont, num);
+			return new Font(baseFont, displayConfig.SizeFont, num);
 		}
 
 		private ClaimsPrincipal GetPrincipal(string jsonDataSigned, X509Certificate2 cert)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Expected O, but got Unknown
-			//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0029: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0050: Expected O, but got Unknown
 			try
 			{
-				JwtSecurityTokenHandler val = new JwtSecurityTokenHandler();
-				SecurityToken obj = ((SecurityTokenHandler)val).ReadToken(jsonDataSigned);
-				JwtSecurityToken val2 = (JwtSecurityToken)(object)((obj is JwtSecurityToken) ? obj : null);
-				if (val2 == null)
+				JwtSecurityTokenHandler jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+				SecurityToken securityToken = jwtSecurityTokenHandler.ReadToken(jsonDataSigned);
+				JwtSecurityToken jwtSecurityToken = (JwtSecurityToken)((securityToken is JwtSecurityToken) ? securityToken : null);
+				if (jwtSecurityToken == null)
 				{
 					return null;
 				}
-				TokenValidationParameters val3 = new TokenValidationParameters
-				{
-					RequireExpirationTime = true,
-					ValidateIssuer = false,
-					ValidateAudience = false,
-					IssuerSigningKey = (SecurityKey)(object)GetRsaKey(cert)
-				};
-				SecurityToken val4 = default(SecurityToken);
-				return ((SecurityTokenHandler)val).ValidateToken(jsonDataSigned, val3, ref val4);
+				TokenValidationParameters tokenValidationParameters = new TokenValidationParameters();
+				tokenValidationParameters.RequireExpirationTime = true;
+				tokenValidationParameters.ValidateIssuer = false;
+				tokenValidationParameters.ValidateAudience = false;
+				tokenValidationParameters.IssuerSigningKey = GetRsaKey(cert);
+				TokenValidationParameters validationParameters = tokenValidationParameters;
+				SecurityToken validatedToken = null;
+				return jwtSecurityTokenHandler.ValidateToken(jsonDataSigned, validationParameters, out validatedToken);
 			}
 			catch (Exception ex)
 			{
@@ -1469,10 +1451,8 @@ namespace Inventec.Common.SignFile
 
 		private RsaSecurityKey GetRsaKey(X509Certificate2 certificate)
 		{
-			//IL_000e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0014: Expected O, but got Unknown
-			RSACryptoServiceProvider rSACryptoServiceProvider = (RSACryptoServiceProvider)certificate.PrivateKey;
-			return new RsaSecurityKey((RSA)rSACryptoServiceProvider);
+			RSACryptoServiceProvider rsa = (RSACryptoServiceProvider)certificate.PrivateKey;
+			return new RsaSecurityKey(rsa);
 		}
 
 		private void SignXmlProcess(XmlDocument xmlDoc, X509Certificate2 cert)
@@ -1503,79 +1483,55 @@ namespace Inventec.Common.SignFile
 
 		private void AddPageEmpty(string src, string dest, DisplayConfig config)
 		{
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000d: Expected O, but got Unknown
-			//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001d: Expected O, but got Unknown
-			//IL_0129: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0130: Expected O, but got Unknown
-			//IL_00bd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c4: Expected O, but got Unknown
-			//IL_00fc: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0106: Expected O, but got Unknown
-			//IL_0101: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0106: Unknown result type (might be due to invalid IL or missing references)
-			//IL_010f: Expected O, but got Unknown
-			//IL_0168: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0172: Expected O, but got Unknown
-			//IL_016d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0172: Unknown result type (might be due to invalid IL or missing references)
-			//IL_017b: Expected O, but got Unknown
-			//IL_017b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0182: Expected O, but got Unknown
-			//IL_01c8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01cf: Expected O, but got Unknown
-			PdfReader val = null;
+			PdfReader pdfReader = null;
 			FileStream fileStream = null;
 			try
 			{
-				val = new PdfReader(src);
+				pdfReader = new PdfReader(src);
 				fileStream = new FileStream(dest, FileMode.Append);
-				PdfStamper val2 = new PdfStamper(val, (Stream)fileStream);
+				PdfStamper pdfStamper = new PdfStamper(pdfReader, fileStream);
 				for (int i = 0; i < config.NumberPageSign; i++)
 				{
-					val2.InsertPage(i, config.PageSize);
+					pdfStamper.InsertPage(i, config.PageSize);
 				}
-				PdfContentByte underContent = val2.GetUnderContent(1);
+				PdfContentByte underContent = pdfStamper.GetUnderContent(1);
 				float width = config.PageSize.Width;
 				float marginRight = config.MarginRight;
 				float num = config.PageSize.Height - config.MarginTop - config.HeightTitle;
 				float heightTitle = config.HeightTitle;
 				float num2 = width - config.MarginRight * 2f;
-				BaseFont val3 = BaseFont.CreateFont(config.FontPath, "Identity-H", true);
+				BaseFont bf = BaseFont.CreateFont(config.FontPath, "Identity-H", true);
 				if (config.IsDisplayTitlePageSign)
 				{
-					ColumnText val4 = new ColumnText(underContent);
-					val4.SetSimpleColumn(marginRight, num + config.HeightTitle, marginRight + num2, num + config.HeightTitle + config.HeightRowTitlePageSign);
-					Paragraph val5 = new Paragraph(config.TitlePageSign, new Font(val3, (float)config.FontSizeTitlePageSign, 1))
-					{
-						Alignment = 1
-					};
-					val4.AddElement((IElement)(object)val5);
-					val4.Go();
+					ColumnText columnText = new ColumnText(underContent);
+					columnText.SetSimpleColumn(marginRight, num + config.HeightTitle, marginRight + num2, num + config.HeightTitle + config.HeightRowTitlePageSign);
+					Paragraph paragraph = new Paragraph(config.TitlePageSign, new Font(bf, config.FontSizeTitlePageSign, 1));
+					paragraph.Alignment = 1;
+					Paragraph paragraph2 = paragraph;
+					columnText.AddElement(paragraph2);
+					columnText.Go();
 				}
-				PdfPTable val6 = new PdfPTable(config.WidthsPercen.Length);
-				val6.SetWidths(config.WidthsPercen);
-				val6.WidthPercentage = 100f;
+				PdfPTable pdfPTable = new PdfPTable(config.WidthsPercen.Length);
+				pdfPTable.SetWidths(config.WidthsPercen);
+				pdfPTable.WidthPercentage = 100f;
 				string[] titles = config.Titles;
 				for (int j = 0; j < titles.Length; j++)
 				{
-					Paragraph val5 = new Paragraph(titles[j], new Font(val3, (float)config.SizeFont, 1))
-					{
-						Alignment = 1
-					};
-					PdfPCell val7 = new PdfPCell();
-					val7.AddElement((IElement)(object)val5);
-					val7.FixedHeight = config.HeightTitle;
-					((Rectangle)val7).BackgroundColor = config.BackgroundColorTitle;
-					val6.AddCell(val7);
+					Paragraph paragraph3 = new Paragraph(titles[j], new Font(bf, config.SizeFont, 1));
+					paragraph3.Alignment = 1;
+					Paragraph paragraph2 = paragraph3;
+					PdfPCell pdfPCell = new PdfPCell();
+					pdfPCell.AddElement(paragraph2);
+					pdfPCell.FixedHeight = config.HeightTitle;
+					pdfPCell.BackgroundColor = config.BackgroundColorTitle;
+					pdfPTable.AddCell(pdfPCell);
 				}
-				ColumnText val8 = new ColumnText(underContent);
-				val8.SetSimpleColumn(marginRight, num, marginRight + num2, num + config.HeightTitle);
-				val8.AddElement((IElement)(object)val6);
-				val8.Go();
-				val2.Close();
-				val.Close();
+				ColumnText columnText2 = new ColumnText(underContent);
+				columnText2.SetSimpleColumn(marginRight, num, marginRight + num2, num + config.HeightTitle);
+				columnText2.AddElement(pdfPTable);
+				columnText2.Go();
+				pdfStamper.Close();
+				pdfReader.Close();
 			}
 			catch (Exception ex)
 			{
@@ -1591,17 +1547,17 @@ namespace Inventec.Common.SignFile
 					}
 					catch (IOException ex2)
 					{
-						LogSystem.Warn((Exception)ex2);
+						LogSystem.Warn(ex2);
 					}
 				}
-				if (val != null)
+				if (pdfReader != null)
 				{
-					val.Close();
+					pdfReader.Close();
 				}
 			}
 		}
 
-		private byte[] CreateHash(string filePath, X509Certificate[] chain, DisplayConfig displayConfig)
+		private byte[] CreateHash(string filePath, Org.BouncyCastle.X509.X509Certificate[] chain, DisplayConfig displayConfig)
 		{
 			try
 			{
@@ -1626,63 +1582,12 @@ namespace Inventec.Common.SignFile
 			}
 		}
 
-		private bool EmptySignatureHashPkcsServer(string inFile, Stream outStream, string fieldName, string reason, string location, X509Certificate cert, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage)
+		private bool EmptySignatureHashPkcsServer(string inFile, Stream outStream, string fieldName, string reason, string location, Org.BouncyCastle.X509.X509Certificate cert, GetHSMServerResponseData dlgGetHSMServerResponseData, ref string errMessage)
 		{
-			//IL_0208: Unknown result type (might be due to invalid IL or missing references)
-			//IL_020e: Expected O, but got Unknown
-			//IL_0c4c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0c58: Expected O, but got Unknown
-			//IL_0c7d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0c82: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0c90: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0c9e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0cac: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0cb4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0cbe: Expected O, but got Unknown
-			//IL_0cc4: Expected O, but got Unknown
-			//IL_0560: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0567: Expected O, but got Unknown
-			//IL_0d48: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0d4f: Expected O, but got Unknown
-			//IL_0d58: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05e7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05ee: Expected O, but got Unknown
-			//IL_05ee: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05f5: Expected O, but got Unknown
-			//IL_0674: Unknown result type (might be due to invalid IL or missing references)
-			//IL_067b: Expected O, but got Unknown
-			//IL_0b86: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0b8d: Expected O, but got Unknown
-			//IL_0bd1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0bd8: Expected O, but got Unknown
-			//IL_0717: Unknown result type (might be due to invalid IL or missing references)
-			//IL_071e: Expected O, but got Unknown
-			//IL_0757: Unknown result type (might be due to invalid IL or missing references)
-			//IL_075e: Expected O, but got Unknown
-			//IL_0924: Unknown result type (might be due to invalid IL or missing references)
-			//IL_092b: Expected O, but got Unknown
-			//IL_092b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0932: Expected O, but got Unknown
-			//IL_0797: Unknown result type (might be due to invalid IL or missing references)
-			//IL_079e: Expected O, but got Unknown
-			//IL_07d7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_07de: Expected O, but got Unknown
-			//IL_0817: Unknown result type (might be due to invalid IL or missing references)
-			//IL_081e: Expected O, but got Unknown
-			//IL_0857: Unknown result type (might be due to invalid IL or missing references)
-			//IL_085e: Expected O, but got Unknown
-			//IL_0894: Unknown result type (might be due to invalid IL or missing references)
-			//IL_089b: Expected O, but got Unknown
-			//IL_0a9a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0aa1: Expected O, but got Unknown
-			//IL_0aa1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0aa8: Expected O, but got Unknown
-			//IL_08d1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_08d8: Expected O, but got Unknown
 			FileStream fileStream = null;
 			bool result = false;
 			string text = "";
-			PdfReader val = null;
+			PdfReader pdfReader = null;
 			try
 			{
 				DisplayConfig displayConfig;
@@ -1699,25 +1604,25 @@ namespace Inventec.Common.SignFile
 					displayConfig = DisplayConfig.generateDisplayConfigRectangleText(1, 10f, 10f, 320f, 140f, null, Constans.SIGN_TEXT_FORMAT_3_1, SharedUtils.GetCN(cert), reason, location, "{0:dd/MM/yyyy HH:mm:ss}");
 				}
 				text = SharedUtils.GenerateTempFile();
-				val = new PdfReader(inFile);
-				int numberOfPages = val.NumberOfPages;
+				pdfReader = new PdfReader(inFile);
+				int numberOfPages = pdfReader.NumberOfPages;
 				int num = displayConfig.NumberPageSign;
 				if (num < 1 || num > numberOfPages)
 				{
 					num = 1;
 				}
 				fileStream = new FileStream(text, FileMode.Create);
-				bool flag = val.IsRebuilt();
-				PdfSignatureAppearance val2 = null;
+				bool flag = pdfReader.IsRebuilt();
+				PdfSignatureAppearance pdfSignatureAppearance = null;
 				if (flag)
 				{
-					val.Catalog.Remove(PdfName.PERMS);
-					val.RemoveUsageRights();
-					val2 = PdfStamper.CreateSignature(val, (Stream)fileStream, '\0', (string)null).SignatureAppearance;
+					pdfReader.Catalog.Remove(PdfName.PERMS);
+					pdfReader.RemoveUsageRights();
+					pdfSignatureAppearance = PdfStamper.CreateSignature(pdfReader, fileStream, '\0', null).SignatureAppearance;
 				}
 				else
 				{
-					val2 = PdfStamper.CreateSignature(val, (Stream)fileStream, '\0', (string)null, true).SignatureAppearance;
+					pdfSignatureAppearance = PdfStamper.CreateSignature(pdfReader, fileStream, '\0', null, true).SignatureAppearance;
 				}
 				displayConfig.SignDate = DateTime.Now;
 				DateTime dateTime = displayConfig.SignDate;
@@ -1725,12 +1630,12 @@ namespace Inventec.Common.SignFile
 				{
 					displayConfig.Contact = SharedUtils.GetCN(cert);
 				}
-				val2.Contact = displayConfig.Contact;
-				val2.SignDate = dateTime;
-				val2.Reason = displayConfig.Reason;
-				val2.Location = displayConfig.Location;
+				pdfSignatureAppearance.Contact = displayConfig.Contact;
+				pdfSignatureAppearance.SignDate = dateTime;
+				pdfSignatureAppearance.Reason = displayConfig.Reason;
+				pdfSignatureAppearance.Location = displayConfig.Location;
 				string strDate = string.Format(displayConfig.DateFormatstring, dateTime);
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<DisplayConfig>((Expression<Func<DisplayConfig>>)(() => displayConfig)), (object)displayConfig));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => displayConfig), displayConfig));
 				if (displayConfig.IsDisplaySignature)
 				{
 					float num2 = displayConfig.CoorXRectangle - displayConfig.WidthRectangle / 2f;
@@ -1740,202 +1645,202 @@ namespace Inventec.Common.SignFile
 					SignPdfAsynchronous.ProcessFontSizeFit(displayConfig);
 					float num4 = 0f;
 					float num5 = 0f;
-					Image val3 = null;
+					Image image = null;
 					if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP_WITH_TEXT)
 					{
 						if (!string.IsNullOrEmpty(displayConfig.PathImage) && File.Exists(displayConfig.PathImage))
 						{
-							val3 = Image.GetInstance(displayConfig.PathImage);
+							image = Image.GetInstance(displayConfig.PathImage);
 						}
 						else if (displayConfig.BImage != null)
 						{
-							val3 = Image.GetInstance(displayConfig.BImage);
+							image = Image.GetInstance(displayConfig.BImage);
 						}
 					}
 					else if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP)
 					{
 						if (!string.IsNullOrEmpty(displayConfig.PathImage) && File.Exists(displayConfig.PathImage))
 						{
-							val3 = Image.GetInstance(displayConfig.PathImage);
+							image = Image.GetInstance(displayConfig.PathImage);
 						}
 						else if (displayConfig.BImage != null)
 						{
-							val3 = Image.GetInstance(displayConfig.BImage);
+							image = Image.GetInstance(displayConfig.BImage);
 						}
 					}
 					if (displayConfig.SignType == Constans.SIGN_TYPE_CREATE_NEW_EMPTY_SIGNATURE_FIELD)
 					{
-						Rectangle val4 = new Rectangle(num2, num3, num2 + widthRectangle + num4, num3 + heightRectangle + num5);
-						val2.SetVisibleSignature(val4, num, fieldName);
+						Rectangle pageRect = new Rectangle(num2, num3, num2 + widthRectangle + num4, num3 + heightRectangle + num5);
+						pdfSignatureAppearance.SetVisibleSignature(pageRect, num, fieldName);
 					}
 					else
 					{
-						val2.SetVisibleSignature(fieldName);
+						pdfSignatureAppearance.SetVisibleSignature(fieldName);
 					}
 					if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP)
 					{
 						float totalWidth = widthRectangle;
-						PdfTemplate layer = val2.GetLayer(2);
+						PdfTemplate layer = pdfSignatureAppearance.GetLayer(2);
 						float left = layer.BoundingBox.Left;
 						float bottom = layer.BoundingBox.Bottom;
 						float width = layer.BoundingBox.Width;
 						float height = layer.BoundingBox.Height;
-						ColumnText val5 = new ColumnText((PdfContentByte)(object)layer);
-						PdfPCell val6 = new PdfPCell();
-						if (val3 != null)
+						ColumnText columnText = new ColumnText(layer);
+						PdfPCell pdfPCell = new PdfPCell();
+						if (image != null)
 						{
-							val3.Alignment = 1;
+							image.Alignment = 1;
 							float plusH = SignPdfAsynchronous.ProcessHeightPlus(100f, displayConfig);
-							val3.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, val3, displayConfig.SignaltureImageWidth, 100f, plusH);
-							val6.AddElement((IElement)(object)val3);
-							val6.HorizontalAlignment = 1;
-							val6.VerticalAlignment = 5;
-							((Rectangle)val6).Border = 0;
-							val6.MinimumHeight = heightRectangle;
+							image.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, image, displayConfig.SignaltureImageWidth, 100f, plusH);
+							pdfPCell.AddElement(image);
+							pdfPCell.HorizontalAlignment = 1;
+							pdfPCell.VerticalAlignment = 5;
+							pdfPCell.Border = 0;
+							pdfPCell.MinimumHeight = heightRectangle;
 						}
-						PdfPTable val7 = new PdfPTable(1);
-						val7.TotalWidth = totalWidth;
-						val7.LockedWidth = true;
-						val7.AddCell(val6);
-						val5.AddElement((IElement)(object)val7);
-						val5.SetSimpleColumn(left, bottom, width, height);
-						val5.Alignment = 1;
-						val5.Go();
+						PdfPTable pdfPTable = new PdfPTable(1);
+						pdfPTable.TotalWidth = totalWidth;
+						pdfPTable.LockedWidth = true;
+						pdfPTable.AddCell(pdfPCell);
+						columnText.AddElement(pdfPTable);
+						columnText.SetSimpleColumn(left, bottom, width, height);
+						columnText.Alignment = 1;
+						columnText.Go();
 					}
 					else if (displayConfig.TypeDisplay == Constans.DISPLAY_IMAGE_STAMP_WITH_TEXT)
 					{
 						string displayText = SignPdfAsynchronous.GetDisplayText(displayConfig, strDate);
 						float widthImagePercent = 0f;
-						PdfPTable val8 = null;
+						PdfPTable pdfPTable2 = null;
 						if (displayConfig.TextPosition == Constans.TEXT_POSITON.x100)
 						{
-							val8 = new PdfPTable(1);
+							pdfPTable2 = new PdfPTable(1);
 							widthImagePercent = 100f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x25x75)
 						{
-							val8 = new PdfPTable(new float[2] { 25f, 75f });
+							pdfPTable2 = new PdfPTable(new float[2] { 25f, 75f });
 							widthImagePercent = 25f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x30x70)
 						{
-							val8 = new PdfPTable(new float[2] { 30f, 70f });
+							pdfPTable2 = new PdfPTable(new float[2] { 30f, 70f });
 							widthImagePercent = 30f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x40x60)
 						{
-							val8 = new PdfPTable(new float[2] { 40f, 60f });
+							pdfPTable2 = new PdfPTable(new float[2] { 40f, 60f });
 							widthImagePercent = 40f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x50x50)
 						{
-							val8 = new PdfPTable(new float[2] { 50f, 50f });
+							pdfPTable2 = new PdfPTable(new float[2] { 50f, 50f });
 							widthImagePercent = 50f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x60x40)
 						{
-							val8 = new PdfPTable(new float[2] { 60f, 40f });
+							pdfPTable2 = new PdfPTable(new float[2] { 60f, 40f });
 							widthImagePercent = 40f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x70x30)
 						{
-							val8 = new PdfPTable(new float[2] { 70f, 30f });
+							pdfPTable2 = new PdfPTable(new float[2] { 70f, 30f });
 							widthImagePercent = 30f;
 						}
 						else if (displayConfig.TextPosition == Constans.TEXT_POSITON.x75x25)
 						{
-							val8 = new PdfPTable(new float[2] { 75f, 25f });
+							pdfPTable2 = new PdfPTable(new float[2] { 75f, 25f });
 							widthImagePercent = 25f;
 						}
-						PdfTemplate layer2 = val2.GetLayer(2);
+						PdfTemplate layer2 = pdfSignatureAppearance.GetLayer(2);
 						float left2 = layer2.BoundingBox.Left;
 						float bottom2 = layer2.BoundingBox.Bottom;
 						float width2 = layer2.BoundingBox.Width;
 						float height2 = layer2.BoundingBox.Height;
-						ColumnText val9 = new ColumnText((PdfContentByte)(object)layer2);
-						PdfPCell val10 = new PdfPCell();
-						if (val3 != null)
+						ColumnText columnText2 = new ColumnText(layer2);
+						PdfPCell pdfPCell2 = new PdfPCell();
+						if (image != null)
 						{
-							val3.Alignment = 1;
+							image.Alignment = 1;
 							float plusH2 = SignPdfAsynchronous.ProcessHeightPlus(widthImagePercent, displayConfig);
-							val3.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, val3, displayConfig.SignaltureImageWidth, widthImagePercent, plusH2);
-							val10.AddElement((IElement)(object)val3);
-							val10.HorizontalAlignment = 1;
-							val10.VerticalAlignment = 5;
-							((Rectangle)val10).Border = 0;
-							LogSystem.Info(LogUtil.TraceData("instance.WidthPercentage", (object)val3.WidthPercentage) + LogUtil.TraceData("instance.Width", (object)((Rectangle)val3).Width) + LogUtil.TraceData("displayConfig.SignaltureImageWidth", (object)displayConfig.SignaltureImageWidth));
+							image.WidthPercentage = SharedUtils.CalculateWidthPercent(widthRectangle, heightRectangle, image, displayConfig.SignaltureImageWidth, widthImagePercent, plusH2);
+							pdfPCell2.AddElement(image);
+							pdfPCell2.HorizontalAlignment = 1;
+							pdfPCell2.VerticalAlignment = 5;
+							pdfPCell2.Border = 0;
+							LogSystem.Info(LogUtil.TraceData("instance.WidthPercentage", image.WidthPercentage) + LogUtil.TraceData("instance.Width", image.Width) + LogUtil.TraceData("displayConfig.SignaltureImageWidth", displayConfig.SignaltureImageWidth));
 						}
 						PdfPCell textCell = GetTextCell(displayText, displayConfig);
-						val8.TotalWidth = widthRectangle;
-						val8.LockedWidth = true;
+						pdfPTable2.TotalWidth = widthRectangle;
+						pdfPTable2.LockedWidth = true;
 						if (displayConfig.TextPosition == Constans.TEXT_POSITON.x100 || displayConfig.TextPosition == Constans.TEXT_POSITON.x25x75 || displayConfig.TextPosition == Constans.TEXT_POSITON.x30x70 || displayConfig.TextPosition == Constans.TEXT_POSITON.x40x60 || displayConfig.TextPosition == Constans.TEXT_POSITON.x50x50)
 						{
-							val8.AddCell(val10);
-							val8.AddCell(textCell);
+							pdfPTable2.AddCell(pdfPCell2);
+							pdfPTable2.AddCell(textCell);
 						}
 						else
 						{
-							val8.AddCell(textCell);
-							val8.AddCell(val10);
+							pdfPTable2.AddCell(textCell);
+							pdfPTable2.AddCell(pdfPCell2);
 						}
-						PdfPTable val11 = new PdfPTable(1);
-						PdfPCell val12 = new PdfPCell();
-						val12.AddElement((IElement)(object)val8);
-						val12.HorizontalAlignment = 1;
-						val12.VerticalAlignment = 5;
-						((Rectangle)val12).Border = 0;
-						val12.MinimumHeight = heightRectangle;
-						val11.TotalWidth = widthRectangle;
-						val11.LockedWidth = true;
-						val11.AddCell(val12);
-						val9.AddElement((IElement)(object)val11);
-						val9.SetSimpleColumn(left2, bottom2, width2, height2);
-						val9.Alignment = 1;
-						val9.Go();
+						PdfPTable pdfPTable3 = new PdfPTable(1);
+						PdfPCell pdfPCell3 = new PdfPCell();
+						pdfPCell3.AddElement(pdfPTable2);
+						pdfPCell3.HorizontalAlignment = 1;
+						pdfPCell3.VerticalAlignment = 5;
+						pdfPCell3.Border = 0;
+						pdfPCell3.MinimumHeight = heightRectangle;
+						pdfPTable3.TotalWidth = widthRectangle;
+						pdfPTable3.LockedWidth = true;
+						pdfPTable3.AddCell(pdfPCell3);
+						columnText2.AddElement(pdfPTable3);
+						columnText2.SetSimpleColumn(left2, bottom2, width2, height2);
+						columnText2.Alignment = 1;
+						columnText2.Go();
 					}
 					else if (displayConfig.TypeDisplay == Constans.DISPLAY_RECTANGLE_TEXT)
 					{
-						PdfTemplate layer3 = val2.GetLayer(2);
+						PdfTemplate layer3 = pdfSignatureAppearance.GetLayer(2);
 						float left3 = layer3.BoundingBox.Left;
 						float bottom3 = layer3.BoundingBox.Bottom;
 						float width3 = layer3.BoundingBox.Width;
 						float height3 = layer3.BoundingBox.Height;
-						ColumnText val13 = new ColumnText((PdfContentByte)(object)layer3);
-						val13.SetSimpleColumn(left3, bottom3, width3, height3);
-						val13.Alignment = 5;
+						ColumnText columnText3 = new ColumnText(layer3);
+						columnText3.SetSimpleColumn(left3, bottom3, width3, height3);
+						columnText3.Alignment = 5;
 						string displayText2 = SignPdfAsynchronous.GetDisplayText(displayConfig, strDate);
 						PdfPCell textCell2 = GetTextCell(displayText2, displayConfig);
 						textCell2.MinimumHeight = heightRectangle;
-						PdfPTable val14 = new PdfPTable(1);
-						val14.TotalWidth = widthRectangle;
-						val14.HorizontalAlignment = 1;
-						val14.LockedWidth = true;
-						val14.AddCell(textCell2);
-						val14.CompleteRow();
-						val13.AddElement((IElement)(object)val14);
-						val13.Go();
+						PdfPTable pdfPTable4 = new PdfPTable(1);
+						pdfPTable4.TotalWidth = widthRectangle;
+						pdfPTable4.HorizontalAlignment = 1;
+						pdfPTable4.LockedWidth = true;
+						pdfPTable4.AddCell(textCell2);
+						pdfPTable4.CompleteRow();
+						columnText3.AddElement(pdfPTable4);
+						columnText3.Go();
 					}
 				}
 				else if (displayConfig.SignType == Constans.SIGN_TYPE_CREATE_NEW_EMPTY_SIGNATURE_FIELD)
 				{
-					val2.SetVisibleSignature(new Rectangle(0f, 0f, 0f, 0f), 1, fieldName);
+					pdfSignatureAppearance.SetVisibleSignature(new Rectangle(0f, 0f, 0f, 0f), 1, fieldName);
 				}
 				else
 				{
-					val2.SetVisibleSignature(fieldName);
+					pdfSignatureAppearance.SetVisibleSignature(fieldName);
 				}
-				val2.Certificate = cert;
-				val2.CryptoDictionary = (PdfDictionary)new PdfSignature(PdfName.ADOBE_PPKLITE, PdfName.ADBE_PKCS7_DETACHED)
+				pdfSignatureAppearance.Certificate = cert;
+				pdfSignatureAppearance.CryptoDictionary = new PdfSignature(PdfName.ADOBE_PPKLITE, PdfName.ADBE_PKCS7_DETACHED)
 				{
-					Reason = val2.Reason,
-					Location = val2.Location,
-					Contact = val2.Contact,
-					Date = new PdfDate(val2.SignDate)
+					Reason = pdfSignatureAppearance.Reason,
+					Location = pdfSignatureAppearance.Location,
+					Contact = pdfSignatureAppearance.Contact,
+					Date = new PdfDate(pdfSignatureAppearance.SignDate)
 				};
 				Dictionary<PdfName, int> dictionary = new Dictionary<PdfName, int>();
 				dictionary.Add(PdfName.CONTENTS, 16386);
-				val2.PreClose(dictionary);
-				byte[] array = DigestAlgorithms.Digest(val2.GetRangeStream(), SignPdfAsynchronous.HASH_ALG);
+				pdfSignatureAppearance.PreClose(dictionary);
+				byte[] array = DigestAlgorithms.Digest(pdfSignatureAppearance.GetRangeStream(), SignPdfAsynchronous.HASH_ALG);
 				if (dlgGetHSMServerResponseData != null && array != null)
 				{
 					string hashData = ByteArrayToHexString(array);
@@ -1943,9 +1848,9 @@ namespace Inventec.Common.SignFile
 					byte[] array2 = Convert.FromBase64String(s);
 					byte[] array3 = new byte[8192];
 					array2.CopyTo(array3, 0);
-					PdfDictionary val15 = new PdfDictionary();
-					val15.Put(PdfName.CONTENTS, (PdfObject)(object)new PdfString(array3).SetHexWriting(true));
-					val2.Close(val15);
+					PdfDictionary pdfDictionary = new PdfDictionary();
+					pdfDictionary.Put(PdfName.CONTENTS, new PdfString(array3).SetHexWriting(true));
+					pdfSignatureAppearance.Close(pdfDictionary);
 					MemoryStream memoryStream = new MemoryStream(SharedUtils.FileToByte(text));
 					if (memoryStream != null)
 					{
@@ -1963,9 +1868,9 @@ namespace Inventec.Common.SignFile
 			}
 			finally
 			{
-				if (val != null)
+				if (pdfReader != null)
 				{
-					val.Close();
+					pdfReader.Close();
 				}
 				if (fileStream != null)
 				{
@@ -2004,7 +1909,7 @@ namespace Inventec.Common.SignFile
 			return stringBuilder.ToString();
 		}
 
-		private string CreateHashExistedSignatureField(string filePath, X509Certificate[] chain, DisplayConfig displayConfig, string fieldName)
+		private string CreateHashExistedSignatureField(string filePath, Org.BouncyCastle.X509.X509Certificate[] chain, DisplayConfig displayConfig, string fieldName)
 		{
 			try
 			{
@@ -2047,7 +1952,7 @@ namespace Inventec.Common.SignFile
 			return result;
 		}
 
-		private byte[] GetHashTypeRectangleText(string src, X509Certificate[] certChain, string reason, string location)
+		private byte[] GetHashTypeRectangleText(string src, Org.BouncyCastle.X509.X509Certificate[] certChain, string reason, string location)
 		{
 			DisplayConfig displayConfig;
 			if (displayConfigParam != null)
@@ -2056,7 +1961,7 @@ namespace Inventec.Common.SignFile
 				displayConfig.IsDisplaySignature = displayConfigParam.IsDisplaySignature;
 				displayConfig.SignaltureImageWidth = displayConfigParam.SignaltureImageWidth;
 				displayConfig.TextFormat = displayConfigParam.TextFormat;
-				DateTime signDate2 = displayConfigParam.SignDate;
+				DateTime dateTime = displayConfigParam.SignDate;
 				if (displayConfigParam.SignDate != DateTime.MinValue)
 				{
 					displayConfig.SignDate = displayConfigParam.SignDate;
@@ -2074,7 +1979,7 @@ namespace Inventec.Common.SignFile
 			return CreateHash(src, certChain, displayConfig);
 		}
 
-		private byte[] GetHashTypeRectangleText(string src, X509Certificate[] certChain, string reason, string location, bool? isDisplaySignNote)
+		private byte[] GetHashTypeRectangleText(string src, Org.BouncyCastle.X509.X509Certificate[] certChain, string reason, string location, bool? isDisplaySignNote)
 		{
 			DisplayConfig displayConfig;
 			if (displayConfigParam != null)
@@ -2084,7 +1989,7 @@ namespace Inventec.Common.SignFile
 				displayConfig.SignaltureImageWidth = displayConfigParam.SignaltureImageWidth;
 				displayConfig.IsDisplaySignNote = (displayConfigParam.IsDisplaySignNote.HasValue ? displayConfigParam.IsDisplaySignNote : new bool?(false));
 				displayConfig.TextFormat = displayConfigParam.TextFormat;
-				DateTime signDate2 = displayConfigParam.SignDate;
+				DateTime dateTime = displayConfigParam.SignDate;
 				if (displayConfigParam.SignDate != DateTime.MinValue)
 				{
 					displayConfig.SignDate = displayConfigParam.SignDate;

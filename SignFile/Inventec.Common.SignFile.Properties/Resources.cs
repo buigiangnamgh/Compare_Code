@@ -8,8 +8,8 @@ using System.Runtime.CompilerServices;
 namespace Inventec.Common.SignFile.Properties
 {
 	[GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
-	[DebuggerNonUserCode]
 	[CompilerGenerated]
+	[DebuggerNonUserCode]
 	internal class Resources
 	{
 		private static ResourceManager resourceMan;

@@ -26,12 +26,11 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations
 		{
 			try
 			{
-				XmlDocument xmlDocument = new XmlDocument
-				{
-					PreserveWhitespace = true
-				};
-				xmlDocument.LoadXml(File.ReadAllText(parameters.InputPath));
-				string outerXml = xmlDocument.OuterXml;
+				XmlDocument xmlDocument = new XmlDocument();
+				xmlDocument.PreserveWhitespace = true;
+				XmlDocument xmlDocument2 = xmlDocument;
+				xmlDocument2.LoadXml(File.ReadAllText(parameters.InputPath));
+				string outerXml = xmlDocument2.OuterXml;
 				return PerformValidationFromXml(outerXml, parameters);
 			}
 			catch (Exception)
@@ -42,17 +41,16 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations
 
 		private static VerificationResults PerformValidationFromXml(string xml, VerificationParameters validationParameters)
 		{
-			XmlDocument xmlDocument = new XmlDocument
-			{
-				PreserveWhitespace = false
-			};
-			xmlDocument.LoadXml(xml);
-			ExtendedSignedXml extendedSignedXml = new ExtendedSignedXml(xmlDocument);
-			if (xmlDocument.DocumentElement == null)
+			XmlDocument xmlDocument = new XmlDocument();
+			xmlDocument.PreserveWhitespace = false;
+			XmlDocument xmlDocument2 = xmlDocument;
+			xmlDocument2.LoadXml(xml);
+			ExtendedSignedXml extendedSignedXml = new ExtendedSignedXml(xmlDocument2);
+			if (xmlDocument2.DocumentElement == null)
 			{
 				throw new InvalidDocumentException("Document has no root element");
 			}
-			XmlElement signatureNode = XmlDsigNodesHelper.GetSignatureNode(xmlDocument);
+			XmlElement signatureNode = XmlDsigNodesHelper.GetSignatureNode(xmlDocument2);
 			extendedSignedXml.LoadXml(signatureNode);
 			X509Certificate2 verificationCertificate = GetVerificationCertificate(extendedSignedXml, validationParameters);
 			if (verificationCertificate == null)
@@ -63,12 +61,11 @@ namespace Inventec.Common.SignFile.XmlProcess.XmlDsig.Operations
 			{
 				LogSystem.Warn("Gọi hàm SignedXml.CheckSignature: Signature is invalid. Nguyên nhân do node cha có chứa Attribute đặc biệt");
 			}
-			return new VerificationResults
-			{
-				Timestamp = GetTimeStampFromSignature(xmlDocument),
-				OriginalDocument = GetDocumentFromSignature(xmlDocument),
-				SigningCertificate = GetCertificateFromSignature(xmlDocument)
-			};
+			VerificationResults verificationResults = new VerificationResults();
+			verificationResults.Timestamp = GetTimeStampFromSignature(xmlDocument2);
+			verificationResults.OriginalDocument = GetDocumentFromSignature(xmlDocument2);
+			verificationResults.SigningCertificate = GetCertificateFromSignature(xmlDocument2);
+			return verificationResults;
 		}
 
 		private static X509Certificate2 GetVerificationCertificate(SignedXml signedXml, VerificationParameters verificationParameters)

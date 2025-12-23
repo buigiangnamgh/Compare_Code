@@ -46,11 +46,10 @@ namespace Inventec.Common.SignFile.XmlProcess.Xades.Operations
 
 		private static void CreateReferenceToSignedProperties(ExtendedSignedXml signedXml, XmlElement signedPropertiesNode)
 		{
-			Reference reference = new Reference("#" + signedPropertiesNode.GetAttribute("Id"))
-			{
-				Type = "http://www.w3.org/2000/09/xmldsig#SignatureProperties"
-			};
-			signedXml.AddReference(reference);
+			Reference reference = new Reference("#" + signedPropertiesNode.GetAttribute("Id"));
+			reference.Type = "http://www.w3.org/2000/09/xmldsig#SignatureProperties";
+			Reference reference2 = reference;
+			signedXml.AddReference(reference2);
 		}
 
 		private static XmlElement AddQualifyingPropertiesNode(ExtendedSignedXml signedXml, XmlDocument document)
@@ -116,18 +115,17 @@ namespace Inventec.Common.SignFile.XmlProcess.Xades.Operations
 
 		private static XmlDsigSignParameters CreateXmlDSigParametersFrom(XadesSignParameters xadesSignParameters)
 		{
-			return new XmlDsigSignParameters
-			{
-				IncludeCertificateInSignature = xadesSignParameters.IncludeCertificateInSignature,
-				IncludeTimestamp = false,
-				InputPath = xadesSignParameters.InputPath,
-				InputXml = xadesSignParameters.InputXml,
-				OutputPath = xadesSignParameters.OutputPath,
-				Properties = xadesSignParameters.Properties,
-				PropertyBuilders = xadesSignParameters.PropertyBuilders,
-				SignatureCertificate = xadesSignParameters.SignatureCertificate,
-				SignatureFormat = XmlDsigSignatureFormat.Enveloped
-			};
+			XmlDsigSignParameters xmlDsigSignParameters = new XmlDsigSignParameters();
+			xmlDsigSignParameters.IncludeCertificateInSignature = xadesSignParameters.IncludeCertificateInSignature;
+			xmlDsigSignParameters.IncludeTimestamp = false;
+			xmlDsigSignParameters.InputPath = xadesSignParameters.InputPath;
+			xmlDsigSignParameters.InputXml = xadesSignParameters.InputXml;
+			xmlDsigSignParameters.OutputPath = xadesSignParameters.OutputPath;
+			xmlDsigSignParameters.Properties = xadesSignParameters.Properties;
+			xmlDsigSignParameters.PropertyBuilders = xadesSignParameters.PropertyBuilders;
+			xmlDsigSignParameters.SignatureCertificate = xadesSignParameters.SignatureCertificate;
+			xmlDsigSignParameters.SignatureFormat = XmlDsigSignatureFormat.Enveloped;
+			return xmlDsigSignParameters;
 		}
 	}
 }

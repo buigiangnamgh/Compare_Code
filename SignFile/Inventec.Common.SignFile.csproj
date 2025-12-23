@@ -9,18 +9,24 @@
     <LangVersion>5</LangVersion>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup>
-    <RootNamespace />
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemGroup />
   <ItemGroup>
-    <Reference Include="itextsharp" />
-    <Reference Include="System.Xml" />
     <Reference Include="System.Security" />
-    <Reference Include="System.IdentityModel.Tokens.Jwt" />
-    <Reference Include="Microsoft.IdentityModel.Tokens" />
+    <Reference Include="System.Xml" />
+    <Reference Include="itextsharp">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.IdentityModel.Tokens">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Microsoft.IdentityModel.Tokens.dll</HintPath>
+    </Reference>
+    <Reference Include="Inventec.Common.Logging">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.Common.Logging.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="Inventec.Common.Logging" />
     <Reference Include="System.Configuration" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
