@@ -36,8 +36,6 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_DOCUMENT_TYPE> Get()
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000a: Expected O, but got Unknown
 			List<EMR_DOCUMENT_TYPE> list = null;
 			try
 			{
@@ -53,18 +51,14 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal EMR_DOCUMENT_TYPE GetByCode(string code)
 		{
-			//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Expected O, but got Unknown
 			EMR_DOCUMENT_TYPE result = null;
 			try
 			{
 				if (!string.IsNullOrEmpty(code))
 				{
-					EmrDocumentTypeFilter filter = new EmrDocumentTypeFilter
-					{
-						DOCUMENT_TYPE_CODE__EXACT = code
-					};
+					EmrDocumentTypeFilter emrDocumentTypeFilter = new EmrDocumentTypeFilter();
+					emrDocumentTypeFilter.DOCUMENT_TYPE_CODE__EXACT = code;
+					EmrDocumentTypeFilter filter = emrDocumentTypeFilter;
 					result = Get(filter).FirstOrDefault();
 				}
 			}
@@ -81,8 +75,8 @@ namespace Inventec.Common.SignLibrary.Api
 			bool flag = false;
 			try
 			{
-				EMR_DOCUMENT_TYPE val = ((!string.IsNullOrEmpty(documentTypeCode)) ? DocumentTypeProperty(documentTypeCode) : null);
-				return val != null && val.IS_MULTI_SIGN == 1;
+				EMR_DOCUMENT_TYPE eMR_DOCUMENT_TYPE = ((!string.IsNullOrEmpty(documentTypeCode)) ? DocumentTypeProperty(documentTypeCode) : null);
+				return eMR_DOCUMENT_TYPE != null && eMR_DOCUMENT_TYPE.IS_MULTI_SIGN == 1;
 			}
 			catch (Exception ex)
 			{
@@ -95,9 +89,9 @@ namespace Inventec.Common.SignLibrary.Api
 		{
 			try
 			{
-				EMR_DOCUMENT_TYPE val = ((!string.IsNullOrEmpty(documentTypeCode)) ? DocumentTypeProperty(documentTypeCode) : null);
-				isMultiSign = val != null && val.IS_MULTI_SIGN == 1;
-				isSignParanel = val != null && val.IS_SIGN_PARALLEL == 1;
+				EMR_DOCUMENT_TYPE eMR_DOCUMENT_TYPE = ((!string.IsNullOrEmpty(documentTypeCode)) ? DocumentTypeProperty(documentTypeCode) : null);
+				isMultiSign = eMR_DOCUMENT_TYPE != null && eMR_DOCUMENT_TYPE.IS_MULTI_SIGN == 1;
+				isSignParanel = eMR_DOCUMENT_TYPE != null && eMR_DOCUMENT_TYPE.IS_SIGN_PARALLEL == 1;
 			}
 			catch (Exception ex)
 			{
@@ -109,10 +103,10 @@ namespace Inventec.Common.SignLibrary.Api
 		{
 			try
 			{
-				EMR_DOCUMENT_TYPE val = ((!string.IsNullOrEmpty(documentTypeCode)) ? DocumentTypeProperty(documentTypeCode) : null);
-				isMultiSign = val != null && val.IS_MULTI_SIGN == 1;
-				isSignParanel = val != null && val.IS_SIGN_PARALLEL == 1;
-				documentTypeId = ((val != null) ? new long?(val.ID) : ((long?)null));
+				EMR_DOCUMENT_TYPE eMR_DOCUMENT_TYPE = ((!string.IsNullOrEmpty(documentTypeCode)) ? DocumentTypeProperty(documentTypeCode) : null);
+				isMultiSign = eMR_DOCUMENT_TYPE != null && eMR_DOCUMENT_TYPE.IS_MULTI_SIGN == 1;
+				isSignParanel = eMR_DOCUMENT_TYPE != null && eMR_DOCUMENT_TYPE.IS_SIGN_PARALLEL == 1;
+				documentTypeId = ((eMR_DOCUMENT_TYPE != null) ? new long?(eMR_DOCUMENT_TYPE.ID) : ((long?)null));
 			}
 			catch (Exception ex)
 			{
@@ -122,15 +116,11 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal EMR_DOCUMENT_TYPE DocumentTypeProperty(string documentTypeCode)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0007: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0010: Expected O, but got Unknown
 			try
 			{
-				EmrDocumentTypeFilter filter = new EmrDocumentTypeFilter
-				{
-					DOCUMENT_TYPE_CODE__EXACT = documentTypeCode
-				};
+				EmrDocumentTypeFilter emrDocumentTypeFilter = new EmrDocumentTypeFilter();
+				emrDocumentTypeFilter.DOCUMENT_TYPE_CODE__EXACT = documentTypeCode;
+				EmrDocumentTypeFilter filter = emrDocumentTypeFilter;
 				List<EMR_DOCUMENT_TYPE> list = Get(filter);
 				return (list != null && list.Count > 0) ? list.FirstOrDefault() : null;
 			}

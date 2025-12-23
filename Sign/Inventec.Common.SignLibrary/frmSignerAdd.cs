@@ -37,6 +37,14 @@ namespace Inventec.Common.SignLibrary
 			public List<EMR_SIGN_ORDER> signOrders;
 		}
 
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass25
+		{
+			public _003C_003Ec__DisplayClass39_0 _003C_003Ec__DisplayClass39_;
+		}
+
+		internal const long stepNumOrder = 1L;
+
 		private List<SignTDO> listSign;
 
 		private List<EMR_SIGNER> signers;
@@ -46,8 +54,6 @@ namespace Inventec.Common.SignLibrary
 		private Action<List<SignTDO>> actAfterSave;
 
 		private Action<bool> actAfterIsSignParanelCheckchanged;
-
-		internal const long stepNumOrder = 1L;
 
 		private bool isSignParanel;
 
@@ -173,7 +179,8 @@ namespace Inventec.Common.SignLibrary
 					{
 						CheckEdit checkEdit = chkISignParanel;
 						bool flag = (chkISignParanel.Enabled = false);
-						checkEdit.Checked = flag;
+						bool flag3 = flag;
+						checkEdit.Checked = flag3;
 					}
 				}
 				timerSign.Interval = 500;
@@ -211,14 +218,12 @@ namespace Inventec.Common.SignLibrary
 
 		private List<EMR_SIGN_TEMP> GetSignTemplate()
 		{
-			//IL_0001: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0007: Expected O, but got Unknown
-			EmrSignTempFilter val = new EmrSignTempFilter();
-			((FilterBase)val).IS_ACTIVE = (short)1;
-			((FilterBase)val).ORDER_DIRECTION = "ASC";
-			((FilterBase)val).ORDER_FIELD = "SIGN_TEMP_CODE";
-			((FilterBase)val).CREATOR = signer.LOGINNAME;
-			signTemplates = new EmrSignTemplate().Get(val);
+			EmrSignTempFilter emrSignTempFilter = new EmrSignTempFilter();
+			emrSignTempFilter.IS_ACTIVE = 1;
+			emrSignTempFilter.ORDER_DIRECTION = "ASC";
+			emrSignTempFilter.ORDER_FIELD = "SIGN_TEMP_CODE";
+			emrSignTempFilter.CREATOR = signer.LOGINNAME;
+			signTemplates = new EmrSignTemplate().Get(emrSignTempFilter);
 			return signTemplates;
 		}
 
@@ -338,8 +343,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnAdd_Click(object sender, EventArgs e)
 		{
-			//IL_0033: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0039: Expected O, but got Unknown
 			try
 			{
 				if (cboSigner.EditValue == null)
@@ -348,23 +351,23 @@ namespace Inventec.Common.SignLibrary
 					FocusShowpopup(cboSigner, false);
 					return;
 				}
-				SignTDO val = new SignTDO();
+				SignTDO signTDO = new SignTDO();
 				EMR_SIGNER signerById = GetSignerById((long)cboSigner.EditValue);
-				val.SignerId = signerById.ID;
-				val.Loginname = signerById.LOGINNAME;
-				val.Username = signerById.USERNAME;
-				val.FullName = signerById.USERNAME;
-				val.FirstName = signerById.USERNAME;
-				val.NumOrder = GetMaxNumOrder();
-				val.Title = signerById.TITLE;
-				val.DepartmentCode = signerById.DEPARTMENT_CODE;
-				val.DepartmentName = signerById.DEPARTMENT_NAME;
-				val.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
+				signTDO.SignerId = signerById.ID;
+				signTDO.Loginname = signerById.LOGINNAME;
+				signTDO.Username = signerById.USERNAME;
+				signTDO.FullName = signerById.USERNAME;
+				signTDO.FirstName = signerById.USERNAME;
+				signTDO.NumOrder = GetMaxNumOrder();
+				signTDO.Title = signerById.TITLE;
+				signTDO.DepartmentCode = signerById.DEPARTMENT_CODE;
+				signTDO.DepartmentName = signerById.DEPARTMENT_NAME;
+				signTDO.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
 				if (listSign == null)
 				{
 					listSign = new List<SignTDO>();
 				}
-				listSign.Add(val);
+				listSign.Add(signTDO);
 				gridView1.BeginUpdate();
 				gridView1.GridControl.DataSource = listSign.OrderBy((SignTDO o) => o.NumOrder).ToList();
 				gridView1.EndUpdate();
@@ -402,8 +405,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnAddPatient_Click(object sender, EventArgs e)
 		{
-			//IL_004a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0050: Expected O, but got Unknown
 			try
 			{
 				if (CheckExistsPatientSign())
@@ -415,30 +416,29 @@ namespace Inventec.Common.SignLibrary
 				{
 					listSign = new List<SignTDO>();
 				}
-				SignTDO val = new SignTDO();
-				val.Username = treatment.VIR_PATIENT_NAME;
+				SignTDO signTDO = new SignTDO();
+				signTDO.Username = treatment.VIR_PATIENT_NAME;
 				if (GlobalStore.EMR_EMR_DOCUMENT_PATIENT_SIGN_FIRST_OPTION == "1")
 				{
-					val.NumOrder = 1L;
+					signTDO.NumOrder = 1L;
 					if (listSign != null && listSign.Count > 0)
 					{
 						listSign.ForEach(delegate(SignTDO o)
 						{
-							long numOrder = o.NumOrder;
-							o.NumOrder = numOrder + 1;
+							o.NumOrder++;
 						});
 					}
 				}
 				else
 				{
-					val.NumOrder = GetMaxNumOrder();
+					signTDO.NumOrder = GetMaxNumOrder();
 				}
-				val.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
-				val.PatientCode = treatment.PATIENT_CODE;
-				val.FirstName = treatment.FIRST_NAME;
-				val.LastName = treatment.LAST_NAME;
-				val.FullName = treatment.VIR_PATIENT_NAME;
-				listSign.Add(val);
+				signTDO.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
+				signTDO.PatientCode = treatment.PATIENT_CODE;
+				signTDO.FirstName = treatment.FIRST_NAME;
+				signTDO.LastName = treatment.LAST_NAME;
+				signTDO.FullName = treatment.VIR_PATIENT_NAME;
+				listSign.Add(signTDO);
 				gridView1.BeginUpdate();
 				gridView1.GridControl.DataSource = listSign.OrderBy((SignTDO o) => o.NumOrder).ToList();
 				gridView1.EndUpdate();
@@ -451,8 +451,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void repositoryItemButtonEdit1_ButtonClick(object sender, ButtonPressedEventArgs e)
 		{
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0013: Expected O, but got Unknown
 			try
 			{
 				SignTDO item = (SignTDO)gridView1.GetFocusedRow();
@@ -472,16 +470,14 @@ namespace Inventec.Common.SignLibrary
 
 		private void gridView1_CustomUnboundColumnData(object sender, CustomColumnDataEventArgs e)
 		{
-			//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Expected O, but got Unknown
 			try
 			{
 				if (e.IsGetData && e.Column.UnboundType != UnboundColumnType.Bound)
 				{
-					SignTDO val = (SignTDO)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
-					if (val != null && e.Column.FieldName == "UsernameDisplay")
+					SignTDO signTDO = (SignTDO)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
+					if (signTDO != null && e.Column.FieldName == "UsernameDisplay")
 					{
-						e.Value = (string.IsNullOrEmpty(val.Loginname) ? (val.FullName + " (Bệnh nhân)") : val.Username);
+						e.Value = (string.IsNullOrEmpty(signTDO.Loginname) ? (signTDO.FullName + " (Bệnh nhân)") : signTDO.Username);
 					}
 				}
 			}
@@ -537,10 +533,10 @@ namespace Inventec.Common.SignLibrary
 				}
 				if (cboSigner.EditValue != null)
 				{
-					EMR_SIGNER val = signers.FirstOrDefault((EMR_SIGNER o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSigner.EditValue ?? "").ToString()));
-					if (val != null)
+					EMR_SIGNER eMR_SIGNER = signers.FirstOrDefault((EMR_SIGNER o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSigner.EditValue ?? "").ToString()));
+					if (eMR_SIGNER != null)
 					{
-						txtLoginName.Text = val.LOGINNAME;
+						txtLoginName.Text = eMR_SIGNER.LOGINNAME;
 					}
 				}
 				btnAdd.Focus();
@@ -559,10 +555,10 @@ namespace Inventec.Common.SignLibrary
 				{
 					if (cboSigner.EditValue != null)
 					{
-						EMR_SIGNER val = signers.FirstOrDefault((EMR_SIGNER o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSigner.EditValue ?? "").ToString()));
-						if (val != null)
+						EMR_SIGNER eMR_SIGNER = signers.FirstOrDefault((EMR_SIGNER o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSigner.EditValue ?? "").ToString()));
+						if (eMR_SIGNER != null)
 						{
-							txtLoginName.Text = val.LOGINNAME;
+							txtLoginName.Text = eMR_SIGNER.LOGINNAME;
 							btnAdd.Focus();
 						}
 					}
@@ -602,10 +598,10 @@ namespace Inventec.Common.SignLibrary
 				{
 					if (cboSignTemplate.EditValue != null)
 					{
-						EMR_SIGN_TEMP val = signTemplates.FirstOrDefault((EMR_SIGN_TEMP o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSignTemplate.EditValue ?? "").ToString()));
-						if (val != null)
+						EMR_SIGN_TEMP eMR_SIGN_TEMP = signTemplates.FirstOrDefault((EMR_SIGN_TEMP o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSignTemplate.EditValue ?? "").ToString()));
+						if (eMR_SIGN_TEMP != null)
 						{
-							ProcessSelectSignTemp(val);
+							ProcessSelectSignTemp(eMR_SIGN_TEMP);
 							btnAdd.Focus();
 						}
 					}
@@ -624,56 +620,60 @@ namespace Inventec.Common.SignLibrary
 
 		private void ProcessSelectSignTemp(EMR_SIGN_TEMP signTemp)
 		{
-			//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0083: Expected O, but got Unknown
-			_003C_003Ec__DisplayClass39_0 _003C_003Ec__DisplayClass39_ = new _003C_003Ec__DisplayClass39_0();
+			_003C_003Ec__DisplayClass25 _003C_003Ec__DisplayClass = new _003C_003Ec__DisplayClass25();
+			_003C_003Ec__DisplayClass._003C_003Ec__DisplayClass39_ = new _003C_003Ec__DisplayClass39_0();
 			gridControl1.DataSource = null;
 			listSign = new List<SignTDO>();
-			_003C_003Ec__DisplayClass39_.signOrders = new EmrSignOrder().GetByTemp(signTemp.ID);
-			if (_003C_003Ec__DisplayClass39_.signOrders == null || _003C_003Ec__DisplayClass39_.signOrders.Count <= 0)
+			_003C_003Ec__DisplayClass._003C_003Ec__DisplayClass39_.signOrders = new EmrSignOrder().GetByTemp(signTemp.ID);
+			if (_003C_003Ec__DisplayClass._003C_003Ec__DisplayClass39_.signOrders == null || _003C_003Ec__DisplayClass._003C_003Ec__DisplayClass39_.signOrders.Count <= 0)
 			{
 				return;
 			}
-			foreach (EMR_SIGN_ORDER item in _003C_003Ec__DisplayClass39_.signOrders)
+			using (List<EMR_SIGN_ORDER>.Enumerator enumerator = _003C_003Ec__DisplayClass._003C_003Ec__DisplayClass39_.signOrders.GetEnumerator())
 			{
-				SignTDO val = new SignTDO();
-				if (item.SIGNER_ID.HasValue && item.SIGNER_ID.Value > 0 && item.IS_PATIENT_SIGN != 1)
+				while (enumerator.MoveNext())
 				{
-					EMR_SIGNER signerById = GetSignerById(item.SIGNER_ID.Value);
-					if (signerById == null)
+					_003C_003Ec__DisplayClass25 _003C_003Ec__DisplayClass2 = _003C_003Ec__DisplayClass;
+					EMR_SIGN_ORDER item = enumerator.Current;
+					SignTDO signTDO = new SignTDO();
+					if (item.SIGNER_ID.HasValue && item.SIGNER_ID.Value > 0 && item.IS_PATIENT_SIGN != 1)
 					{
-						LogSystem.Info("ProcessSelectSignTemp: khong tim thay signer theo thong tin signorder____" + LogUtil.TraceData(LogUtil.GetMemberName<EMR_SIGN_ORDER>((Expression<Func<EMR_SIGN_ORDER>>)(() => item)), (object)item));
-						continue;
+						EMR_SIGNER signerById = GetSignerById(item.SIGNER_ID.Value);
+						if (signerById == null)
+						{
+							LogSystem.Info("ProcessSelectSignTemp: khong tim thay signer theo thong tin signorder____" + LogUtil.TraceData(LogUtil.GetMemberName(() => item), item));
+							continue;
+						}
+						signTDO.SignerId = signerById.ID;
+						signTDO.Loginname = signerById.LOGINNAME;
+						signTDO.Username = signerById.USERNAME;
+						signTDO.FullName = signerById.USERNAME;
+						signTDO.FirstName = signerById.USERNAME;
+						signTDO.Title = signerById.TITLE;
+						signTDO.DepartmentCode = signerById.DEPARTMENT_CODE;
+						signTDO.DepartmentName = signerById.DEPARTMENT_NAME;
 					}
-					val.SignerId = signerById.ID;
-					val.Loginname = signerById.LOGINNAME;
-					val.Username = signerById.USERNAME;
-					val.FullName = signerById.USERNAME;
-					val.FirstName = signerById.USERNAME;
-					val.Title = signerById.TITLE;
-					val.DepartmentCode = signerById.DEPARTMENT_CODE;
-					val.DepartmentName = signerById.DEPARTMENT_NAME;
-				}
-				else if (item.IS_PATIENT_SIGN.HasValue && item.IS_PATIENT_SIGN.Value == 1)
-				{
-					if (CheckExistsPatientSign())
+					else if (item.IS_PATIENT_SIGN.HasValue && item.IS_PATIENT_SIGN.Value == 1)
 					{
-						LogSystem.Info("ProcessSelectSignTemp.CheckExistsPatientSign: da co thiet lap benh nhan ky__du lieu bi trung lap__can kiem tra lai____" + LogUtil.TraceData(LogUtil.GetMemberName<EMR_SIGN_ORDER>((Expression<Func<EMR_SIGN_ORDER>>)(() => item)), (object)item) + LogUtil.TraceData(LogUtil.GetMemberName<List<EMR_SIGN_ORDER>>(Expression.Lambda<Func<List<EMR_SIGN_ORDER>>>(Expression.Field(Expression.Constant(_003C_003Ec__DisplayClass39_, typeof(_003C_003Ec__DisplayClass39_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)_003C_003Ec__DisplayClass39_.signOrders));
-						continue;
+						if (CheckExistsPatientSign())
+						{
+							LogSystem.Info("ProcessSelectSignTemp.CheckExistsPatientSign: da co thiet lap benh nhan ky__du lieu bi trung lap__can kiem tra lai____" + LogUtil.TraceData(LogUtil.GetMemberName(() => item), item) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<List<EMR_SIGN_ORDER>>>(Expression.Field(Expression.Field(Expression.Constant(_003C_003Ec__DisplayClass), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), _003C_003Ec__DisplayClass._003C_003Ec__DisplayClass39_.signOrders));
+							continue;
+						}
+						signTDO.Username = treatment.VIR_PATIENT_NAME;
+						signTDO.PatientCode = treatment.PATIENT_CODE;
+						signTDO.FirstName = treatment.FIRST_NAME;
+						signTDO.LastName = treatment.LAST_NAME;
+						signTDO.FullName = treatment.VIR_PATIENT_NAME;
 					}
-					val.Username = treatment.VIR_PATIENT_NAME;
-					val.PatientCode = treatment.PATIENT_CODE;
-					val.FirstName = treatment.FIRST_NAME;
-					val.LastName = treatment.LAST_NAME;
-					val.FullName = treatment.VIR_PATIENT_NAME;
+					signTDO.NumOrder = item.NUM_ORDER;
+					signTDO.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
+					if (listSign == null)
+					{
+						listSign = new List<SignTDO>();
+					}
+					listSign.Add(signTDO);
 				}
-				val.NumOrder = item.NUM_ORDER;
-				val.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
-				if (listSign == null)
-				{
-					listSign = new List<SignTDO>();
-				}
-				listSign.Add(val);
 			}
 			gridView1.BeginUpdate();
 			gridView1.GridControl.DataSource = listSign.OrderBy((SignTDO o) => o.NumOrder).ToList();
@@ -690,10 +690,10 @@ namespace Inventec.Common.SignLibrary
 				}
 				if (cboSignTemplate.EditValue != null)
 				{
-					EMR_SIGN_TEMP val = signTemplates.FirstOrDefault((EMR_SIGN_TEMP o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSignTemplate.EditValue ?? "").ToString()));
-					if (val != null)
+					EMR_SIGN_TEMP eMR_SIGN_TEMP = signTemplates.FirstOrDefault((EMR_SIGN_TEMP o) => o.IS_ACTIVE == 1 && o.ID == TypeConvertParse.ToInt64((cboSignTemplate.EditValue ?? "").ToString()));
+					if (eMR_SIGN_TEMP != null)
 					{
-						ProcessSelectSignTemp(val);
+						ProcessSelectSignTemp(eMR_SIGN_TEMP);
 					}
 				}
 				btnAdd.Focus();

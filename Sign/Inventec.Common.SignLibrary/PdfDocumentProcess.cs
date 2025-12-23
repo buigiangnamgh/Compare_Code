@@ -23,63 +23,44 @@ namespace Inventec.Common.SignLibrary
 	{
 		internal static bool ReplaceTextWithGemBox(List<string> replaceKeys, string sourceFile)
 		{
-			//IL_0158: Unknown result type (might be due to invalid IL or missing references)
-			//IL_015e: Expected O, but got Unknown
-			//IL_00bf: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00cd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0175: Unknown result type (might be due to invalid IL or missing references)
-			//IL_017c: Expected O, but got Unknown
-			//IL_01a6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01ad: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
 				if (replaceKeys != null && replaceKeys.Count > 0 && File.Exists(sourceFile))
 				{
-					PdfDocument val = PdfDocument.Load(sourceFile);
-					try
+					using (GemBox.Pdf.PdfDocument pdfDocument = GemBox.Pdf.PdfDocument.Load(sourceFile))
 					{
 						int num = 1;
-						foreach (PdfPage page in val.Pages)
+						foreach (GemBox.Pdf.PdfPage page in pdfDocument.Pages)
 						{
 							foreach (PdfTextContent item2 in (from element in page.Content.Elements.All()
-								where (int)element.ElementType == 0
+								where element.ElementType == PdfContentElementType.Text
 								select element).Cast<PdfTextContent>())
 							{
-								string item = ((object)item2).ToString();
-								PdfFont font = ((PdfVisualContentElement)item2).Format.Text.Font;
-								PdfColor color = ((PdfVisualContentElement)item2).Format.Fill.Color;
+								string item = item2.ToString();
+								GemBox.Pdf.Content.PdfFont font = item2.Format.Text.Font;
+								PdfColor color = item2.Format.Fill.Color;
 								PdfPoint location = item2.Location;
 								if (replaceKeys.Contains(item))
 								{
-									string text = ((PdfPoint)(ref location)).X + ":" + ((PdfPoint)(ref location)).Y;
+									string text = location.X + ":" + location.Y;
 								}
 							}
 							num++;
 						}
 					}
-					finally
-					{
-						if (val != null)
-						{
-							((IDisposable)val).Dispose();
-						}
-					}
-					Document val2 = new Document(sourceFile);
+					Aspose.Pdf.Document document = new Aspose.Pdf.Document(sourceFile);
 					foreach (string replaceKey in replaceKeys)
 					{
-						TextFragmentAbsorber val3 = new TextFragmentAbsorber(replaceKey);
-						val2.Pages.Accept(val3);
-						TextFragmentCollection textFragments = val3.TextFragments;
+						TextFragmentAbsorber textFragmentAbsorber = new TextFragmentAbsorber(replaceKey);
+						document.Pages.Accept(textFragmentAbsorber);
+						TextFragmentCollection textFragments = textFragmentAbsorber.TextFragments;
 						foreach (TextFragment item3 in textFragments)
 						{
-							TextFragment val4 = item3;
-							val4.Text = "";
+							item3.Text = "";
 						}
 					}
-					val2.Save(sourceFile);
+					document.Save(sourceFile);
 					result = true;
 				}
 			}
@@ -92,31 +73,24 @@ namespace Inventec.Common.SignLibrary
 
 		internal static bool ReplaceText(List<string> replaceKeys, string sourceFile)
 		{
-			//IL_0028: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002e: Expected O, but got Unknown
-			//IL_0044: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004b: Expected O, but got Unknown
-			//IL_0075: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007c: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
 				if (replaceKeys != null && replaceKeys.Count > 0 && File.Exists(sourceFile))
 				{
 					LicenceProcess.SetLicenseForAspose();
-					Document val = new Document(sourceFile);
+					Aspose.Pdf.Document document = new Aspose.Pdf.Document(sourceFile);
 					foreach (string replaceKey in replaceKeys)
 					{
-						TextFragmentAbsorber val2 = new TextFragmentAbsorber(replaceKey);
-						val.Pages.Accept(val2);
-						TextFragmentCollection textFragments = val2.TextFragments;
+						TextFragmentAbsorber textFragmentAbsorber = new TextFragmentAbsorber(replaceKey);
+						document.Pages.Accept(textFragmentAbsorber);
+						TextFragmentCollection textFragments = textFragmentAbsorber.TextFragments;
 						foreach (TextFragment item in textFragments)
 						{
-							TextFragment val3 = item;
-							val3.Text = "";
+							item.Text = "";
 						}
 					}
-					val.Save(sourceFile);
+					document.Save(sourceFile);
 					result = true;
 				}
 			}
@@ -129,29 +103,20 @@ namespace Inventec.Common.SignLibrary
 
 		internal static List<SignPositionADO> GetPositionBySearchKey(string sourceFile, string keySearch)
 		{
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Expected O, but got Unknown
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0016: Expected O, but got Unknown
-			//IL_003f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0046: Expected O, but got Unknown
-			//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0082: Expected O, but got Unknown
 			List<SignPositionADO> list = new List<SignPositionADO>();
 			try
 			{
-				Document val = new Document(sourceFile);
-				TextFragmentAbsorber val2 = new TextFragmentAbsorber(keySearch);
-				val.Pages.Accept(val2);
-				TextFragmentCollection textFragments = val2.TextFragments;
+				Aspose.Pdf.Document document = new Aspose.Pdf.Document(sourceFile);
+				TextFragmentAbsorber textFragmentAbsorber = new TextFragmentAbsorber(keySearch);
+				document.Pages.Accept(textFragmentAbsorber);
+				TextFragmentCollection textFragments = textFragmentAbsorber.TextFragments;
 				foreach (TextFragment item in textFragments)
 				{
-					TextFragment val3 = item;
-					Rectangle reactanle = new Rectangle((float)val3.Rectangle.LLX, (float)val3.Rectangle.LLY, (float)val3.Rectangle.URX, (float)val3.Rectangle.URY);
+					iTextSharp.text.Rectangle reactanle = new iTextSharp.text.Rectangle((float)item.Rectangle.LLX, (float)item.Rectangle.LLY, (float)item.Rectangle.URX, (float)item.Rectangle.URY);
 					list.Add(new SignPositionADO
 					{
-						PageNUm = val3.Page.Number,
-						Text = val3.Text,
+						PageNUm = item.Page.Number,
+						Text = item.Text,
 						Reactanle = reactanle
 					});
 				}
@@ -165,29 +130,20 @@ namespace Inventec.Common.SignLibrary
 
 		internal static List<SignPositionADO> GetPositionBySearchKey(Stream sourceStream, string keySearch)
 		{
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Expected O, but got Unknown
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0016: Expected O, but got Unknown
-			//IL_003f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0046: Expected O, but got Unknown
-			//IL_007b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0082: Expected O, but got Unknown
 			List<SignPositionADO> list = new List<SignPositionADO>();
 			try
 			{
-				Document val = new Document(sourceStream);
-				TextFragmentAbsorber val2 = new TextFragmentAbsorber(keySearch);
-				val.Pages.Accept(val2);
-				TextFragmentCollection textFragments = val2.TextFragments;
+				Aspose.Pdf.Document document = new Aspose.Pdf.Document(sourceStream);
+				TextFragmentAbsorber textFragmentAbsorber = new TextFragmentAbsorber(keySearch);
+				document.Pages.Accept(textFragmentAbsorber);
+				TextFragmentCollection textFragments = textFragmentAbsorber.TextFragments;
 				foreach (TextFragment item in textFragments)
 				{
-					TextFragment val3 = item;
-					Rectangle reactanle = new Rectangle((float)val3.Rectangle.LLX, (float)val3.Rectangle.LLY, (float)val3.Rectangle.URX, (float)val3.Rectangle.URY);
+					iTextSharp.text.Rectangle reactanle = new iTextSharp.text.Rectangle((float)item.Rectangle.LLX, (float)item.Rectangle.LLY, (float)item.Rectangle.URX, (float)item.Rectangle.URY);
 					list.Add(new SignPositionADO
 					{
-						PageNUm = val3.Page.Number,
-						Text = val3.Text,
+						PageNUm = item.Page.Number,
+						Text = item.Text,
 						Reactanle = reactanle
 					});
 				}
@@ -201,47 +157,41 @@ namespace Inventec.Common.SignLibrary
 
 		internal static void InsertPages(Stream sourceFile, List<Stream> streamListJoin, string desFileJoined)
 		{
-			//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0018: Expected O, but got Unknown
-			//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0038: Expected O, but got Unknown
-			//IL_00a5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ac: Expected O, but got Unknown
 			List<int> list = new List<int>();
-			Stream stream = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-			PdfConcatenate val = new PdfConcatenate(stream);
-			PdfReader val2 = null;
+			Stream os = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+			PdfConcatenate pdfConcatenate = new PdfConcatenate(os);
+			PdfReader pdfReader = null;
 			if (sourceFile != null && sourceFile.Length > 0)
 			{
-				val2 = new PdfReader(sourceFile);
-				for (int i = 0; i <= val2.NumberOfPages; i++)
+				pdfReader = new PdfReader(sourceFile);
+				for (int i = 0; i <= pdfReader.NumberOfPages; i++)
 				{
 					list.Add(i);
 				}
-				val2.SelectPages((ICollection<int>)list);
-				val.AddPages(val2);
+				pdfReader.SelectPages(list);
+				pdfConcatenate.AddPages(pdfReader);
 			}
 			if (streamListJoin != null && streamListJoin.Count > 0)
 			{
 				foreach (Stream item in streamListJoin)
 				{
-					PdfReader val3 = null;
-					val3 = new PdfReader(item);
+					PdfReader pdfReader2 = null;
+					pdfReader2 = new PdfReader(item);
 					list = new List<int>();
-					for (int j = 0; j <= val3.NumberOfPages; j++)
+					for (int j = 0; j <= pdfReader2.NumberOfPages; j++)
 					{
 						list.Add(j);
 					}
-					val3.SelectPages((ICollection<int>)list);
-					val.AddPages(val3);
-					val3.Close();
+					pdfReader2.SelectPages(list);
+					pdfConcatenate.AddPages(pdfReader2);
+					pdfReader2.Close();
 				}
 			}
 			try
 			{
-				if (val2 != null)
+				if (pdfReader != null)
 				{
-					val2.Close();
+					pdfReader.Close();
 				}
 			}
 			catch
@@ -256,7 +206,7 @@ namespace Inventec.Common.SignLibrary
 			}
 			try
 			{
-				val.Close();
+				pdfConcatenate.Close();
 			}
 			catch
 			{
@@ -265,25 +215,15 @@ namespace Inventec.Common.SignLibrary
 
 		internal static void InsertPage(Stream sourceFile, List<string> fileListJoin, string desFileJoined)
 		{
-			//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Expected O, but got Unknown
-			//IL_0065: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006c: Expected O, but got Unknown
-			//IL_0245: Unknown result type (might be due to invalid IL or missing references)
-			//IL_024c: Expected O, but got Unknown
-			//IL_00f9: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0100: Expected O, but got Unknown
-			//IL_02a9: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02b0: Expected O, but got Unknown
 			List<string> list = new List<string>();
 			if (fileListJoin == null || fileListJoin.Count <= 0)
 			{
 				return;
 			}
-			PdfReader val = new PdfReader(sourceFile);
-			int numberOfPages = val.NumberOfPages;
-			Rectangle pageSizeWithRotation = val.GetPageSizeWithRotation(val.NumberOfPages);
-			Rectangle val2 = new Rectangle(pageSizeWithRotation.Left, pageSizeWithRotation.Bottom, pageSizeWithRotation.Right, pageSizeWithRotation.Bottom + pageSizeWithRotation.Height, pageSizeWithRotation.Rotation);
+			PdfReader pdfReader = new PdfReader(sourceFile);
+			int numberOfPages = pdfReader.NumberOfPages;
+			iTextSharp.text.Rectangle pageSizeWithRotation = pdfReader.GetPageSizeWithRotation(pdfReader.NumberOfPages);
+			iTextSharp.text.Rectangle pageSize = new iTextSharp.text.Rectangle(pageSizeWithRotation.Left, pageSizeWithRotation.Bottom, pageSizeWithRotation.Right, pageSizeWithRotation.Bottom + pageSizeWithRotation.Height, pageSizeWithRotation.Rotation);
 			foreach (string item in fileListJoin)
 			{
 				int num = item.LastIndexOf(".");
@@ -293,27 +233,27 @@ namespace Inventec.Common.SignLibrary
 					MemoryStream file = FssFileDownload.GetFile(item);
 					file.Position = 0L;
 					string text2 = Utils.GenerateTempFileWithin();
-					Stream stream = new FileStream(text2, FileMode.Create, FileAccess.Write);
-					Document val3 = new Document(val2, 0f, 0f, 0f, 0f);
-					PdfWriter instance = PdfWriter.GetInstance(val3, stream);
-					val3.Open();
-					((DocWriter)instance).Open();
-					Image instance2 = Image.GetInstance((Stream)file);
-					if (((Rectangle)instance2).Height > ((Rectangle)instance2).Width)
+					Stream os = new FileStream(text2, FileMode.Create, FileAccess.Write);
+					iTextSharp.text.Document document = new iTextSharp.text.Document(pageSize, 0f, 0f, 0f, 0f);
+					PdfWriter instance = PdfWriter.GetInstance(document, os);
+					document.Open();
+					instance.Open();
+					iTextSharp.text.Image instance2 = iTextSharp.text.Image.GetInstance(file);
+					if (instance2.Height > instance2.Width)
 					{
 						float num2 = 0f;
-						num2 = pageSizeWithRotation.Height / ((Rectangle)instance2).Height;
+						num2 = pageSizeWithRotation.Height / instance2.Height;
 						instance2.ScalePercent(num2 * 100f);
 					}
 					else
 					{
 						float num3 = 0f;
-						num3 = pageSizeWithRotation.Width / ((Rectangle)instance2).Width;
+						num3 = pageSizeWithRotation.Width / instance2.Width;
 						instance2.ScalePercent(num3 * 100f);
 					}
-					val3.Add((IElement)(object)instance2);
-					val3.Close();
-					((DocWriter)instance).Close();
+					document.Add(instance2);
+					document.Close();
+					instance.Close();
 					list.Add(text2);
 				}
 				else
@@ -332,31 +272,31 @@ namespace Inventec.Common.SignLibrary
 					}
 				}
 			}
-			Stream stream2 = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-			PdfConcatenate val4 = new PdfConcatenate(stream2);
+			Stream os2 = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+			PdfConcatenate pdfConcatenate = new PdfConcatenate(os2);
 			List<int> list2 = new List<int>();
-			for (int i = 0; i <= val.NumberOfPages; i++)
+			for (int i = 0; i <= pdfReader.NumberOfPages; i++)
 			{
 				list2.Add(i);
 			}
-			val.SelectPages((ICollection<int>)list2);
-			val4.AddPages(val);
+			pdfReader.SelectPages(list2);
+			pdfConcatenate.AddPages(pdfReader);
 			foreach (string item2 in list)
 			{
-				PdfReader val5 = null;
-				val5 = new PdfReader(item2);
+				PdfReader pdfReader2 = null;
+				pdfReader2 = new PdfReader(item2);
 				list2 = new List<int>();
-				for (int j = 0; j <= val5.NumberOfPages; j++)
+				for (int j = 0; j <= pdfReader2.NumberOfPages; j++)
 				{
 					list2.Add(j);
 				}
-				val5.SelectPages((ICollection<int>)list2);
-				val4.AddPages(val5);
-				val5.Close();
+				pdfReader2.SelectPages(list2);
+				pdfConcatenate.AddPages(pdfReader2);
+				pdfReader2.Close();
 			}
 			try
 			{
-				val.Close();
+				pdfReader.Close();
 			}
 			catch
 			{
@@ -370,7 +310,7 @@ namespace Inventec.Common.SignLibrary
 			}
 			try
 			{
-				val4.Close();
+				pdfConcatenate.Close();
 			}
 			catch
 			{
@@ -389,34 +329,30 @@ namespace Inventec.Common.SignLibrary
 
 		public static void InsertPageExt(List<string> fileListJoin, string desFileJoined)
 		{
-			//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0036: Expected O, but got Unknown
-			//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0057: Expected O, but got Unknown
 			List<string> list = new List<string>();
 			if (fileListJoin == null || fileListJoin.Count <= 0)
 			{
 				return;
 			}
 			List<int> list2 = new List<int>();
-			Stream stream = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-			PdfConcatenate val = new PdfConcatenate(stream);
+			Stream os = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+			PdfConcatenate pdfConcatenate = new PdfConcatenate(os);
 			foreach (string item in fileListJoin)
 			{
-				PdfReader val2 = null;
-				val2 = new PdfReader(item);
+				PdfReader pdfReader = null;
+				pdfReader = new PdfReader(item);
 				list2 = new List<int>();
-				for (int i = 0; i <= val2.NumberOfPages; i++)
+				for (int i = 0; i <= pdfReader.NumberOfPages; i++)
 				{
 					list2.Add(i);
 				}
-				val2.SelectPages((ICollection<int>)list2);
-				val.AddPages(val2);
-				val2.Close();
+				pdfReader.SelectPages(list2);
+				pdfConcatenate.AddPages(pdfReader);
+				pdfReader.Close();
 			}
 			try
 			{
-				val.Close();
+				pdfConcatenate.Close();
 			}
 			catch
 			{
@@ -435,34 +371,30 @@ namespace Inventec.Common.SignLibrary
 
 		public static void InsertPageExt(List<MemoryStream> streamListJoin, string desFileJoined)
 		{
-			//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0036: Expected O, but got Unknown
-			//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0057: Expected O, but got Unknown
 			List<string> list = new List<string>();
 			if (streamListJoin == null || streamListJoin.Count <= 0)
 			{
 				return;
 			}
 			List<int> list2 = new List<int>();
-			Stream stream = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-			PdfConcatenate val = new PdfConcatenate(stream);
+			Stream os = File.Open(desFileJoined, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+			PdfConcatenate pdfConcatenate = new PdfConcatenate(os);
 			foreach (MemoryStream item in streamListJoin)
 			{
-				PdfReader val2 = null;
-				val2 = new PdfReader((Stream)item);
+				PdfReader pdfReader = null;
+				pdfReader = new PdfReader(item);
 				list2 = new List<int>();
-				for (int i = 0; i <= val2.NumberOfPages; i++)
+				for (int i = 0; i <= pdfReader.NumberOfPages; i++)
 				{
 					list2.Add(i);
 				}
-				val2.SelectPages((ICollection<int>)list2);
-				val.AddPages(val2);
-				val2.Close();
+				pdfReader.SelectPages(list2);
+				pdfConcatenate.AddPages(pdfReader);
+				pdfReader.Close();
 			}
 			try
 			{
-				val.Close();
+				pdfConcatenate.Close();
 			}
 			catch
 			{
@@ -481,14 +413,6 @@ namespace Inventec.Common.SignLibrary
 
 		internal static List<SignPositionADO> GetPositionWithAutoAddAnnotationBySearchKey(string sourceFile, string outFile, string keySearch)
 		{
-			//IL_0047: Unknown result type (might be due to invalid IL or missing references)
-			//IL_004e: Expected O, but got Unknown
-			//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0057: Expected O, but got Unknown
-			//IL_0088: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008f: Expected O, but got Unknown
-			//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d7: Expected O, but got Unknown
 			List<SignPositionADO> list = new List<SignPositionADO>();
 			try
 			{
@@ -498,23 +422,22 @@ namespace Inventec.Common.SignLibrary
 				{
 					foreach (string item in list2)
 					{
-						Document val = new Document(sourceFile);
-						TextFragmentAbsorber val2 = new TextFragmentAbsorber(item);
-						val.Pages.Accept(val2);
-						TextFragmentCollection textFragments = val2.TextFragments;
+						Aspose.Pdf.Document document = new Aspose.Pdf.Document(sourceFile);
+						TextFragmentAbsorber textFragmentAbsorber = new TextFragmentAbsorber(item);
+						document.Pages.Accept(textFragmentAbsorber);
+						TextFragmentCollection textFragments = textFragmentAbsorber.TextFragments;
 						int num = 1;
 						foreach (TextFragment item2 in textFragments)
 						{
-							TextFragment val3 = item2;
-							Rectangle reactanle = new Rectangle((float)val3.Position.XIndent, (float)val3.Position.YIndent, (float)val3.Position.XIndent + 2f, (float)val3.Position.YIndent + 2f);
-							num = val3.Page.Number;
+							iTextSharp.text.Rectangle reactanle = new iTextSharp.text.Rectangle((float)item2.Position.XIndent, (float)item2.Position.YIndent, (float)item2.Position.XIndent + 2f, (float)item2.Position.YIndent + 2f);
+							num = item2.Page.Number;
 							list.Add(new SignPositionADO
 							{
 								PageNUm = num,
-								Text = val3.Text,
+								Text = item2.Text,
 								Reactanle = reactanle
 							});
-							string[] array = val3.Text.Split(new string[1] { keySearch }, StringSplitOptions.RemoveEmptyEntries);
+							string[] array = item2.Text.Split(new string[1] { keySearch }, StringSplitOptions.RemoveEmptyEntries);
 							string text = "";
 							if (array.Length == 1)
 							{
@@ -525,7 +448,7 @@ namespace Inventec.Common.SignLibrary
 								text = array[array.Length - 1];
 							}
 							text = text.Replace(">", "").Replace("}", "");
-							Utils.AddTextAnnotation(outFile, text, num, val3.Position.XIndent, val3.Position.YIndent, 2, 2);
+							Utils.AddTextAnnotation(outFile, text, num, item2.Position.XIndent, item2.Position.YIndent, 2, 2);
 							num++;
 						}
 					}
@@ -540,25 +463,21 @@ namespace Inventec.Common.SignLibrary
 
 		internal static PageSettings GetPaperSize(string filePath)
 		{
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Expected O, but got Unknown
-			//IL_008e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0094: Expected O, but got Unknown
 			PageSettings pageSettings = new PageSettings();
 			try
 			{
-				Document val = new Document(filePath);
+				Aspose.Pdf.Document document = new Aspose.Pdf.Document(filePath);
 				pageSettings.PaperSize = new PaperSize();
-				pageSettings.PaperSize.Width = (int)Math.Round(val.PageInfo.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				pageSettings.PaperSize.Height = (int)Math.Round(val.PageInfo.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				pageSettings.PaperSize.Width = (int)Math.Round(document.PageInfo.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				pageSettings.PaperSize.Height = (int)Math.Round(document.PageInfo.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
 				pageSettings.PaperSize.RawKind = 0;
-				PdfPageEditor val2 = new PdfPageEditor();
-				((Facade)val2).BindPdf(filePath);
-				if (val2.GetPageSize(1).IsLandscape)
+				PdfPageEditor pdfPageEditor = new PdfPageEditor();
+				pdfPageEditor.BindPdf(filePath);
+				if (pdfPageEditor.GetPageSize(1).IsLandscape)
 				{
-					pageSettings.Landscape = val2.GetPageSize(1).IsLandscape;
+					pageSettings.Landscape = pdfPageEditor.GetPageSize(1).IsLandscape;
 				}
-				LogSystem.Debug(LogUtil.TraceData("pSettings.Landscape", (object)pageSettings.Landscape) + LogUtil.TraceData("pdfDocument.PageInfo.Width", (object)val.PageInfo.Width) + LogUtil.TraceData("pdfDocument.PageInfo.Height", (object)val.PageInfo.Height) + LogUtil.TraceData("pSettings.PaperSize.Width", (object)pageSettings.PaperSize.Width) + LogUtil.TraceData("pSettings.PaperSize.Height", (object)pageSettings.PaperSize.Height));
+				LogSystem.Debug(LogUtil.TraceData("pSettings.Landscape", pageSettings.Landscape) + LogUtil.TraceData("pdfDocument.PageInfo.Width", document.PageInfo.Width) + LogUtil.TraceData("pdfDocument.PageInfo.Height", document.PageInfo.Height) + LogUtil.TraceData("pSettings.PaperSize.Width", pageSettings.PaperSize.Width) + LogUtil.TraceData("pSettings.PaperSize.Height", pageSettings.PaperSize.Height));
 			}
 			catch (Exception ex)
 			{
@@ -569,46 +488,39 @@ namespace Inventec.Common.SignLibrary
 
 		public static void SplitOnePageToImageAndJoinToNewOnePdf(string sourceTempFilePath, float oginalHeight, ref string joinPdfFilePath, List<ImageOfPageDTO> imageFiles = null)
 		{
-			//IL_0020: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0026: Expected O, but got Unknown
-			//IL_005a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0060: Expected O, but got Unknown
-			//IL_0169: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0170: Expected O, but got Unknown
 			try
 			{
 				if (imageFiles == null || imageFiles.Count == 0)
 				{
 					imageFiles = ConvertPdfPageToListImage(sourceTempFilePath);
 				}
-				PdfReader val = new PdfReader(sourceTempFilePath);
-				int numberOfPages = val.NumberOfPages;
-				Rectangle pageSizeWithRotation = val.GetPageSizeWithRotation(val.NumberOfPages);
-				Rectangle val2 = new Rectangle(pageSizeWithRotation.Left, pageSizeWithRotation.Bottom, pageSizeWithRotation.Right, pageSizeWithRotation.Bottom + oginalHeight, pageSizeWithRotation.Rotation);
-				val2.BorderColor = pageSizeWithRotation.BorderColor;
-				val2.BackgroundColor = pageSizeWithRotation.BackgroundColor;
-				val2.Rotation = pageSizeWithRotation.Rotation;
-				val2.Border = pageSizeWithRotation.Border;
-				val2.BorderWidth = pageSizeWithRotation.BorderWidth;
-				val2.BorderColor = pageSizeWithRotation.BorderColor;
-				val2.BackgroundColor = pageSizeWithRotation.BackgroundColor;
-				val2.BorderColorLeft = pageSizeWithRotation.BorderColorLeft;
-				val2.BorderColorRight = pageSizeWithRotation.BorderColorRight;
-				val2.BorderColorTop = pageSizeWithRotation.BorderColorTop;
-				val2.BorderColorBottom = pageSizeWithRotation.BorderColorBottom;
-				val2.BorderWidthLeft = pageSizeWithRotation.BorderWidthLeft;
-				val2.BorderWidthRight = pageSizeWithRotation.BorderWidthRight;
-				val2.BorderWidthTop = pageSizeWithRotation.BorderWidthTop;
-				val2.BorderWidthBottom = pageSizeWithRotation.BorderWidthBottom;
-				val2.UseVariableBorders = pageSizeWithRotation.UseVariableBorders;
+				PdfReader pdfReader = new PdfReader(sourceTempFilePath);
+				int numberOfPages = pdfReader.NumberOfPages;
+				iTextSharp.text.Rectangle pageSizeWithRotation = pdfReader.GetPageSizeWithRotation(pdfReader.NumberOfPages);
+				iTextSharp.text.Rectangle rectangle = new iTextSharp.text.Rectangle(pageSizeWithRotation.Left, pageSizeWithRotation.Bottom, pageSizeWithRotation.Right, pageSizeWithRotation.Bottom + oginalHeight, pageSizeWithRotation.Rotation);
+				rectangle.BorderColor = pageSizeWithRotation.BorderColor;
+				rectangle.BackgroundColor = pageSizeWithRotation.BackgroundColor;
+				rectangle.Rotation = pageSizeWithRotation.Rotation;
+				rectangle.Border = pageSizeWithRotation.Border;
+				rectangle.BorderWidth = pageSizeWithRotation.BorderWidth;
+				rectangle.BorderColor = pageSizeWithRotation.BorderColor;
+				rectangle.BackgroundColor = pageSizeWithRotation.BackgroundColor;
+				rectangle.BorderColorLeft = pageSizeWithRotation.BorderColorLeft;
+				rectangle.BorderColorRight = pageSizeWithRotation.BorderColorRight;
+				rectangle.BorderColorTop = pageSizeWithRotation.BorderColorTop;
+				rectangle.BorderColorBottom = pageSizeWithRotation.BorderColorBottom;
+				rectangle.BorderWidthLeft = pageSizeWithRotation.BorderWidthLeft;
+				rectangle.BorderWidthRight = pageSizeWithRotation.BorderWidthRight;
+				rectangle.BorderWidthTop = pageSizeWithRotation.BorderWidthTop;
+				rectangle.BorderWidthBottom = pageSizeWithRotation.BorderWidthBottom;
+				rectangle.UseVariableBorders = pageSizeWithRotation.UseVariableBorders;
 				if (imageFiles != null && imageFiles.Count > 0)
 				{
 					joinPdfFilePath = Utils.GenerateTempFileWithin();
-					PdfReader tempReader = Utils.GetTempReader(val2);
-					using (FileStream fileStream = File.Open(joinPdfFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
+					PdfReader tempReader = Utils.GetTempReader(rectangle);
+					using (FileStream os = File.Open(joinPdfFilePath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite))
 					{
-						PdfStamper val3 = new PdfStamper(tempReader, (Stream)fileStream);
-						try
+						using (PdfStamper pdfStamper = new PdfStamper(tempReader, os))
 						{
 							int num = 1;
 							float num2 = 0f;
@@ -619,7 +531,7 @@ namespace Inventec.Common.SignLibrary
 								if (num2 + imageFile.Height > oginalHeight)
 								{
 									num++;
-									val3.InsertPage(num, val2);
+									pdfStamper.InsertPage(num, rectangle);
 									num2 = imageFile.Height;
 									num3 = 0f;
 									num4 = oginalHeight - num2;
@@ -631,28 +543,16 @@ namespace Inventec.Common.SignLibrary
 									num4 = oginalHeight - num2;
 								}
 								float num5 = 0f;
-								Image val4 = ((!string.IsNullOrEmpty(imageFile.Path)) ? Image.GetInstance(imageFile.Path) : Image.GetInstance(imageFile.ImageContent));
-								val4.SetAbsolutePosition(num3, num4);
-								float val5 = pageSizeWithRotation.Width / ((Rectangle)val4).Width;
-								float val6 = oginalHeight / ((Rectangle)val4).Height;
-								float num6 = Math.Min(val5, val6);
-								val4.ScalePercent(num6 * 100f);
-								float num7 = ((Rectangle)val4).Width * num6;
-								num3 = (pageSizeWithRotation.Width - num7) / 2f;
-								val4.SetAbsolutePosition(num3, num4);
-								val3.GetOverContent(num).AddImage(val4);
-							}
-						}
-						finally
-						{
-							if (val3 != null)
-							{
-								((IDisposable)val3).Dispose();
+								iTextSharp.text.Image image = ((!string.IsNullOrEmpty(imageFile.Path)) ? iTextSharp.text.Image.GetInstance(imageFile.Path) : iTextSharp.text.Image.GetInstance(imageFile.ImageContent));
+								image.SetAbsolutePosition(num3, num4);
+								num5 = pageSizeWithRotation.Width / image.Width;
+								image.ScalePercent(num5 * 100f);
+								pdfStamper.GetOverContent(num).AddImage(image);
 							}
 						}
 					}
 				}
-				val.Close();
+				pdfReader.Close();
 				try
 				{
 					if (imageFiles == null || imageFiles.Count <= 0)
@@ -660,13 +560,13 @@ namespace Inventec.Common.SignLibrary
 						return;
 					}
 					int count = imageFiles.Count;
-					for (int num8 = count - 1; num8 >= 0; num8--)
+					for (int num6 = count - 1; num6 >= 0; num6--)
 					{
 						try
 						{
-							if (!string.IsNullOrEmpty(imageFiles[num8].Path))
+							if (!string.IsNullOrEmpty(imageFiles[num6].Path))
 							{
-								File.Delete(imageFiles[num8].Path);
+								File.Delete(imageFiles[num6].Path);
 							}
 						}
 						catch
@@ -686,33 +586,27 @@ namespace Inventec.Common.SignLibrary
 
 		public static List<ImageOfPageDTO> ConvertPdfPageToListImage(string output_file)
 		{
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Expected O, but got Unknown
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0060: Expected O, but got Unknown
-			//IL_0064: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006b: Expected O, but got Unknown
 			List<ImageOfPageDTO> list = new List<ImageOfPageDTO>();
 			try
 			{
 				LicenceProcess.SetLicenseForAspose();
-				Document val = new Document(output_file);
-				for (int i = 1; i <= val.Pages.Count; i++)
+				Aspose.Pdf.Document document = new Aspose.Pdf.Document(output_file);
+				for (int i = 1; i <= document.Pages.Count; i++)
 				{
 					string filename = string.Format("splitimage{0:d}{1}.jpg", i, DateTime.Now.ToString("yyyyMMddHHmmssfff"));
 					string fullPathFile = Utils.GetFullPathFile(filename);
 					using (FileStream fileStream = new FileStream(fullPathFile, FileMode.Create))
 					{
-						Resolution val2 = new Resolution(300);
-						JpegDevice val3 = new JpegDevice(val2, 100);
-						((PageDevice)val3).Process(val.Pages[i], (Stream)fileStream);
+						Resolution resolution = new Resolution(300);
+						JpegDevice jpegDevice = new JpegDevice(resolution, 100);
+						jpegDevice.Process(document.Pages[i], fileStream);
 						fileStream.Close();
 						list.Add(new ImageOfPageDTO
 						{
 							Path = fullPathFile,
-							PageNumber = val.Pages[i].Number,
-							Width = (float)val.Pages[i].Rect.Width,
-							Height = (float)val.Pages[i].Rect.Height
+							PageNumber = document.Pages[i].Number,
+							Width = (float)document.Pages[i].Rect.Width,
+							Height = (float)document.Pages[i].Rect.Height
 						});
 					}
 				}

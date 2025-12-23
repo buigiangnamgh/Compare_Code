@@ -209,7 +209,7 @@ namespace Inventec.Common.Integrate
 				else
 				{
 					MessageBox.Show("Lưu cấu hình & truy cập vào hệ thống EMR thất bại");
-					LogSystem.Info("Tai khoan hoac mat khau truy cap vao he thong EMR khong chinh xac____" + LogUtil.TraceData("loginName", (object)loginName) + "____" + LogUtil.TraceData("appCode", (object)"HIS") + "____" + LogUtil.TraceData("ACS_BASE_URI", (object)ConstanIG.ACS_BASE_URI));
+					LogSystem.Info("Tai khoan hoac mat khau truy cap vao he thong EMR khong chinh xac____" + LogUtil.TraceData("loginName", loginName) + "____" + LogUtil.TraceData("appCode", "HIS") + "____" + LogUtil.TraceData("ACS_BASE_URI", ConstanIG.ACS_BASE_URI));
 				}
 			}
 			catch (Exception ex)

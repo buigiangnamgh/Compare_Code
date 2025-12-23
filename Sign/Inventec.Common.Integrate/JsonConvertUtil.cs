@@ -19,12 +19,9 @@ namespace Inventec.Common.Integrate
 
 		internal static string SerializeObject(object data)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Expected O, but got Unknown
-			return JsonConvert.SerializeObject(data, (Formatting)1, new JsonSerializerSettings
+			return JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
 			{
-				NullValueHandling = (NullValueHandling)1
+				NullValueHandling = NullValueHandling.Ignore
 			});
 		}
 

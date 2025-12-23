@@ -37,23 +37,21 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal EMR_VERSION GetSignedDocumentLast(long documentId)
 		{
-			//IL_000a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0010: Expected O, but got Unknown
-			EMR_VERSION val = null;
+			EMR_VERSION eMR_VERSION = null;
 			try
 			{
 				CommonParam commonParam = new CommonParam();
-				EmrVersionFilter val2 = new EmrVersionFilter();
-				val2.DOCUMENT_ID = documentId;
-				List<EMR_VERSION> list = GlobalStore.EmrConsumer.Get<List<EMR_VERSION>>("api/EmrVersion/Get", commonParam, val2, new object[0]);
-				val = ((list != null && list.Count > 0) ? list.OrderByDescending((EMR_VERSION o) => o.ID).FirstOrDefault() : null);
+				EmrVersionFilter emrVersionFilter = new EmrVersionFilter();
+				emrVersionFilter.DOCUMENT_ID = documentId;
+				List<EMR_VERSION> list = GlobalStore.EmrConsumer.Get<List<EMR_VERSION>>("api/EmrVersion/Get", commonParam, emrVersionFilter, new object[0]);
+				eMR_VERSION = ((list != null && list.Count > 0) ? list.OrderByDescending((EMR_VERSION o) => o.ID).FirstOrDefault() : null);
 			}
 			catch (Exception ex)
 			{
-				val = null;
+				eMR_VERSION = null;
 				LogSystem.Warn(ex);
 			}
-			return val;
+			return eMR_VERSION;
 		}
 	}
 }

@@ -50,7 +50,7 @@ namespace Inventec.Common.Integrate
 						CommonParam commonParam = new CommonParam();
 						apiParam.CommonParam = commonParam;
 						apiParam.ApiData = fileUrl;
-						HttpResponseMessage result3 = HttpClientExtensions.PostAsJsonAsync<ApiParam>(httpClient, dOWNLOAD_URI, apiParam).Result;
+						HttpResponseMessage result3 = httpClient.PostAsJsonAsync(dOWNLOAD_URI, apiParam).Result;
 						if (!result3.IsSuccessStatusCode)
 						{
 							throw new Exception("StatusCode:" + result3.StatusCode);

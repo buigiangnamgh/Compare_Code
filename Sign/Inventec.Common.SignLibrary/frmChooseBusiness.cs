@@ -158,14 +158,12 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnChoose_Click(object sender, EventArgs e)
 		{
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0013: Expected O, but got Unknown
 			try
 			{
-				EMR_BUSINESS val = (EMR_BUSINESS)gridView1.GetFocusedRow();
-				if (val != null)
+				EMR_BUSINESS eMR_BUSINESS = (EMR_BUSINESS)gridView1.GetFocusedRow();
+				if (eMR_BUSINESS != null)
 				{
-					actChoose(val);
+					actChoose(eMR_BUSINESS);
 					Close();
 				}
 			}

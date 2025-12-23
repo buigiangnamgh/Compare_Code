@@ -30,17 +30,15 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_SIGN_ORDER> GetByTemp(long signTemId)
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000a: Expected O, but got Unknown
 			List<EMR_SIGN_ORDER> list = null;
 			try
 			{
-				EmrSignOrderFilter val = new EmrSignOrderFilter();
-				((FilterBase)val).IS_ACTIVE = (short)1;
-				val.SIGN_TEMP_ID = signTemId;
-				((FilterBase)val).ORDER_DIRECTION = "ASC";
-				((FilterBase)val).ORDER_FIELD = "NUM_ORDER";
-				return Get(val);
+				EmrSignOrderFilter emrSignOrderFilter = new EmrSignOrderFilter();
+				emrSignOrderFilter.IS_ACTIVE = 1;
+				emrSignOrderFilter.SIGN_TEMP_ID = signTemId;
+				emrSignOrderFilter.ORDER_DIRECTION = "ASC";
+				emrSignOrderFilter.ORDER_FIELD = "NUM_ORDER";
+				return Get(emrSignOrderFilter);
 			}
 			catch (Exception ex)
 			{

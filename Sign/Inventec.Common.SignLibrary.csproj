@@ -12,51 +12,90 @@
   <PropertyGroup>
     <RootNamespace />
   </PropertyGroup>
-  <ItemGroup />
   <ItemGroup>
+    <None Remove="Inventec.Common.SignLibrary.dll.licenses" />
+    <EmbeddedResource Include="Inventec.Common.SignLibrary.dll.licenses" LogicalName="Inventec.Common.SignLibrary.dll.licenses" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EMR.EFMODEL">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\EMR.EFMODEL.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.XtraEditors.v15.2" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="DevExpress.Docs.v15.2" />
-    <Reference Include="Aspose.Cells" />
-    <Reference Include="DevExpress.RichEdit.v15.2.Core" />
-    <Reference Include="DevExpress.Printing.v15.2.Core" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="DevExpress.Utils.v15.2" />
     <Reference Include="DevExpress.XtraGrid.v15.2" />
     <Reference Include="DevExpress.Data.v15.2" />
-    <Reference Include="EMR.TDO" />
-    <Reference Include="EMR.EFMODEL" />
-    <Reference Include="DevExpress.XtraLayout.v15.2" />
-    <Reference Include="DevExpress.XtraTreeList.v15.2" />
-    <Reference Include="System.Core" />
-    <Reference Include="Inventec.Common.Controls.EditorLoader" />
-    <Reference Include="Inventec.Desktop.Common.Controls.ValidationRule" />
-    <Reference Include="DevExpress.XtraBars.v15.2" />
-    <Reference Include="Aspose.Pdf" />
-    <Reference Include="CARD.WCF.DCO" />
-    <Reference Include="CARD.WCF.Client.FingerprintClient" />
-    <Reference Include="EMR.Filter" />
-    <Reference Include="itextsharp" />
-    <Reference Include="EMR.SDO" />
-    <Reference Include="DevExpress.XtraPdfViewer.v15.2" />
-    <Reference Include="Microsoft.ReportViewer.WinForms" />
-    <Reference Include="DevExpress.Pdf.v15.2.Drawing" />
-    <Reference Include="GemBox.Pdf" />
-    <Reference Include="DevExpress.Pdf.v15.2.Core" />
-    <Reference Include="DevExpress.XtraRichEdit.v15.2" />
-    <Reference Include="Inventec.Common.SignFile">
-      <HintPath>..\..\New folder\Inventec.Common.SignFile.dll</HintPath>
-    </Reference>
-    <Reference Include="EMR.WCF.DCO" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="EMR.TDO">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\EMR.TDO.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Inventec.Common.SignFile">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.Common.SignFile.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http" />
+    <Reference Include="EMR.Filter">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\EMR.Filter.dll</HintPath>
+    </Reference>
+    <Reference Include="EMR.SDO">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\EMR.SDO.dll</HintPath>
+    </Reference>
+    <Reference Include="CARD.WCF.DCO">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\CARD.WCF.DCO.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraLayout.v15.2" />
+    <Reference Include="DevExpress.XtraBars.v15.2" />
+    <Reference Include="DevExpress.XtraTreeList.v15.2" />
+    <Reference Include="DevExpress.XtraPdfViewer.v15.2" />
+    <Reference Include="DevExpress.Pdf.v15.2.Drawing" />
+    <Reference Include="EMR.WCF.DCO">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\EMR.WCF.DCO.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Pdf.v15.2.Core" />
+    <Reference Include="DevExpress.Utils.v15.2" />
+    <Reference Include="DevExpress.XtraRichEdit.v15.2" />
     <Reference Include="System.Configuration" />
-    <Reference Include="Inventec.Common.Logging" />
-    <Reference Include="Newtonsoft.Json" />
-    <Reference Include="System.Net.Http.Formatting" />
+    <Reference Include="Inventec.Common.Logging">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="Inventec.UC.Login">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.UC.Login.dll</HintPath>
+    </Reference>
+    <Reference Include="Inventec.Token.ClientSystem">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.Token.ClientSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Docs.v15.2" />
     <Reference Include="DevExpress.Spreadsheet.v15.2.Core" />
+    <Reference Include="Aspose.Cells">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Aspose.Cells.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v15.2.Core" />
+    <Reference Include="DevExpress.Printing.v15.2.Core" />
+    <Reference Include="CARD.WCF.Client.FingerprintClient">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\CARD.WCF.Client.FingerprintClient.dll</HintPath>
+    </Reference>
+    <Reference Include="Inventec.Common.Controls.EditorLoader">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.Common.Controls.EditorLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="Inventec.Desktop.Common.Controls.ValidationRule">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Inventec.Desktop.Common.Controls.ValidationRule.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="Aspose.Pdf">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\Aspose.Pdf.dll</HintPath>
+    </Reference>
+    <Reference Include="GemBox.Pdf">
+      <HintPath>D:\DkNA\HIS\HIS 2.351.0\HIS DESKTOP 2.351.0\ReferencedAssemblies\GemBox.Pdf.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Images.v15.2" />
-    <Reference Include="Inventec.UC.Login" />
-    <Reference Include="Inventec.Token.ClientSystem" />
+    <Reference Include="Microsoft.ReportViewer.WinForms" />
   </ItemGroup>
 </Project>

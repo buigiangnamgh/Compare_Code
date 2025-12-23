@@ -11,9 +11,9 @@ namespace Inventec.Common.SignLibrary.Integrate
 {
 	public class MessageManager
 	{
-		public static int AutoFormDelay = 1000;
-
 		public const int DefaultFontSize = 12;
+
+		public static int AutoFormDelay = 1000;
 
 		public static void Show(CommonParam param, bool? success)
 		{

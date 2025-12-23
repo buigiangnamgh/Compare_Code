@@ -116,7 +116,7 @@ namespace Inventec.Common.Integrate
 
 		public static decimal ToDecimal(string inputValue)
 		{
-			decimal result = default(decimal);
+			decimal result = 0m;
 			if (!string.IsNullOrEmpty(inputValue))
 			{
 				decimal.TryParse(inputValue, out result);

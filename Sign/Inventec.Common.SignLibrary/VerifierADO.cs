@@ -43,7 +43,7 @@ namespace Inventec.Common.SignLibrary
 
 		private X509Certificate2 x509Cert2;
 
-		private X509Certificate x509CertBC;
+		private Org.BouncyCastle.X509.X509Certificate x509CertBC;
 
 		public SubjectDNADO SubjectDN { get; set; }
 
@@ -263,7 +263,7 @@ namespace Inventec.Common.SignLibrary
 			}
 		}
 
-		public X509Certificate X509CertBC
+		public Org.BouncyCastle.X509.X509Certificate X509CertBC
 		{
 			get
 			{
@@ -275,7 +275,7 @@ namespace Inventec.Common.SignLibrary
 			}
 		}
 
-		public VerifierADO(X509Certificate cert, X509Certificate2 cert2, string signerName, DateTime date, bool modified, string location)
+		public VerifierADO(Org.BouncyCastle.X509.X509Certificate cert, X509Certificate2 cert2, string signerName, DateTime date, bool modified, string location)
 		{
 			x509Cert2 = cert2;
 			x509CertBC = cert;

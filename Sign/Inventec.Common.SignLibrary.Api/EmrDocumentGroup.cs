@@ -36,8 +36,6 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_DOCUMENT_GROUP> Get()
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000a: Expected O, but got Unknown
 			List<EMR_DOCUMENT_GROUP> list = null;
 			try
 			{
@@ -53,16 +51,12 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal EMR_DOCUMENT_GROUP GetByCode(string code)
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0012: Expected O, but got Unknown
-			EMR_DOCUMENT_GROUP val = null;
+			EMR_DOCUMENT_GROUP eMR_DOCUMENT_GROUP = null;
 			try
 			{
-				EmrDocumentGroupFilter filter = new EmrDocumentGroupFilter
-				{
-					DOCUMENT_GROUP_CODE__EXACT = code
-				};
+				EmrDocumentGroupFilter emrDocumentGroupFilter = new EmrDocumentGroupFilter();
+				emrDocumentGroupFilter.DOCUMENT_GROUP_CODE__EXACT = code;
+				EmrDocumentGroupFilter filter = emrDocumentGroupFilter;
 				return Get(filter).FirstOrDefault();
 			}
 			catch (Exception ex)

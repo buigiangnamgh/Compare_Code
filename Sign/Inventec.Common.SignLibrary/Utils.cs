@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Text;
 using System.Windows.Forms;
 using Inventec.Common.Integrate;
@@ -20,51 +19,25 @@ namespace Inventec.Common.SignLibrary
 	{
 		public static byte[] SignPadImageData;
 
-		public static PdfReader GetTempReader(Rectangle pageSize = null)
+		public static PdfReader GetTempReader(iTextSharp.text.Rectangle pageSize = null)
 		{
-			//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0051: Expected O, but got Unknown
-			//IL_0012: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0018: Expected O, but got Unknown
-			//IL_0067: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0071: Expected O, but got Unknown
-			//IL_002e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0038: Expected O, but got Unknown
-			//IL_0087: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008e: Expected O, but got Unknown
 			MemoryStream memoryStream = new MemoryStream();
 			if (pageSize != null)
 			{
-				Document val = new Document(pageSize);
-				try
+				using (Document document = new Document(pageSize))
 				{
-					PdfWriter.GetInstance(val, (Stream)memoryStream);
-					val.Open();
-					val.Add((IElement)new Phrase(" "));
-				}
-				finally
-				{
-					if (val != null)
-					{
-						((IDisposable)val).Dispose();
-					}
+					PdfWriter.GetInstance(document, memoryStream);
+					document.Open();
+					document.Add(new Phrase("123"));
 				}
 			}
 			else
 			{
-				Document val2 = new Document();
-				try
+				using (Document document2 = new Document())
 				{
-					PdfWriter.GetInstance(val2, (Stream)memoryStream);
-					val2.Open();
-					val2.Add((IElement)new Phrase(" "));
-				}
-				finally
-				{
-					if (val2 != null)
-					{
-						((IDisposable)val2).Dispose();
-					}
+					PdfWriter.GetInstance(document2, memoryStream);
+					document2.Open();
+					document2.Add(new Phrase("123"));
 				}
 			}
 			return new PdfReader(memoryStream.ToArray());
@@ -80,7 +53,8 @@ namespace Inventec.Common.SignLibrary
 				if (Directory.Exists(text))
 				{
 					FileInfo[] files = directoryInfo.GetFiles();
-					foreach (FileInfo fileInfo in files)
+					FileInfo[] array = files;
+					foreach (FileInfo fileInfo in array)
 					{
 						try
 						{
@@ -113,7 +87,7 @@ namespace Inventec.Common.SignLibrary
 								}
 								catch (Exception ex2)
 								{
-									LogSystem.Warn("Xóa file theo đường dẫn thất bại____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => file.FullName)), (object)file.FullName));
+									LogSystem.Warn("Xóa file theo đường dẫn thất bại____" + LogUtil.TraceData(LogUtil.GetMemberName(() => file.FullName), file.FullName));
 									LogSystem.Warn(ex2);
 								}
 							}
@@ -123,7 +97,7 @@ namespace Inventec.Common.SignLibrary
 							}
 							catch (Exception ex3)
 							{
-								LogSystem.Warn("Xóa cả folder và các file bên trong theo đường dẫn thất bại____" + LogUtil.TraceData(LogUtil.GetMemberName<DirectoryInfo>((Expression<Func<DirectoryInfo>>)(() => dir)), (object)dir));
+								LogSystem.Warn("Xóa cả folder và các file bên trong theo đường dẫn thất bại____" + LogUtil.TraceData(LogUtil.GetMemberName(() => dir), dir));
 								LogSystem.Warn(ex3);
 							}
 						}
@@ -265,8 +239,8 @@ namespace Inventec.Common.SignLibrary
 
 		internal static BaseFont GetBaseFont()
 		{
-			string text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "tahoma.ttf");
-			return BaseFont.CreateFont(text, "Identity-H", false);
+			string name = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "tahoma.ttf");
+			return BaseFont.CreateFont(name, "Identity-H", false);
 		}
 
 		public static byte[] StreamToByte(Stream input)
@@ -508,53 +482,35 @@ namespace Inventec.Common.SignLibrary
 
 		internal static void AddTextAnnotation(string filePath, string contents, int pageNum, double x, double y, int width, int height)
 		{
-			//IL_0010: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0016: Expected O, but got Unknown
-			//IL_0031: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0037: Expected O, but got Unknown
-			//IL_0049: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0050: Expected O, but got Unknown
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0060: Expected O, but got Unknown
-			//IL_008a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0094: Expected O, but got Unknown
-			//IL_009c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00a6: Expected O, but got Unknown
-			//IL_00e2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ec: Expected O, but got Unknown
-			//IL_0125: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012f: Expected O, but got Unknown
-			//IL_0138: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0142: Expected O, but got Unknown
-			PdfReader val = null;
-			PdfStamper val2 = null;
+			PdfReader reader = null;
+			PdfStamper pdfStamper = null;
 			try
 			{
-				using (FileStream fileStream = new FileStream(filePath, FileMode.Open))
+				using (FileStream isp = new FileStream(filePath, FileMode.Open))
 				{
-					val = new PdfReader((Stream)fileStream);
+					reader = new PdfReader(isp);
 				}
-				using (FileStream fileStream2 = new FileStream(filePath, FileMode.Create))
+				using (FileStream os = new FileStream(filePath, FileMode.Create))
 				{
-					val2 = new PdfStamper(val, (Stream)fileStream2, '\0', true);
-					Rectangle val3 = new Rectangle((float)x, (float)y, (float)x + (float)width, (float)y + (float)height);
-					TextField val4 = new TextField(val2.Writer, val3, (string)null);
-					((BaseField)val4).Text = contents;
-					((BaseField)val4).FontSize = 8f;
-					((BaseField)val4).TextColor = BaseColor.DARK_GRAY;
-					((BaseField)val4).BackgroundColor = new BaseColor(Color.LightGoldenrodYellow);
-					((BaseField)val4).BorderColor = new BaseColor(Color.BurlyWood);
-					((BaseField)val4).Options = 4096;
-					val4.SetExtraMargin(2f, 2f);
-					((BaseField)val4).Alignment = 4;
-					PdfAppearance appearance = val4.GetAppearance();
-					PdfAnnotation val5 = PdfAnnotation.CreateFreeText(val2.Writer, val3, (string)null, new PdfContentByte((PdfWriter)null));
-					val5.SetAppearance(PdfName.N, (PdfTemplate)(object)appearance);
-					val5.Flags = 196;
-					((PdfDictionary)val5).Put(PdfName.NM, (PdfObject)new PdfString(Guid.NewGuid().ToString()));
-					((PdfDictionary)val5).Put(PdfName.CONTENTS, (PdfObject)new PdfString(contents));
-					val2.AddAnnotation(val5, pageNum);
-					val2.Close();
+					pdfStamper = new PdfStamper(reader, os, '\0', true);
+					iTextSharp.text.Rectangle rectangle = new iTextSharp.text.Rectangle((float)x, (float)y, (float)x + (float)width, (float)y + (float)height);
+					TextField textField = new TextField(pdfStamper.Writer, rectangle, null);
+					textField.Text = contents;
+					textField.FontSize = 8f;
+					textField.TextColor = BaseColor.DARK_GRAY;
+					textField.BackgroundColor = new BaseColor(Color.LightGoldenrodYellow);
+					textField.BorderColor = new BaseColor(Color.BurlyWood);
+					textField.Options = 4096;
+					textField.SetExtraMargin(2f, 2f);
+					textField.Alignment = 4;
+					PdfAppearance appearance = textField.GetAppearance();
+					PdfAnnotation pdfAnnotation = PdfAnnotation.CreateFreeText(pdfStamper.Writer, rectangle, null, new PdfContentByte(null));
+					pdfAnnotation.SetAppearance(PdfName.N, appearance);
+					pdfAnnotation.Flags = 196;
+					pdfAnnotation.Put(PdfName.NM, new PdfString(Guid.NewGuid().ToString()));
+					pdfAnnotation.Put(PdfName.CONTENTS, new PdfString(contents));
+					pdfStamper.AddAnnotation(pdfAnnotation, pageNum);
+					pdfStamper.Close();
 				}
 			}
 			catch (Exception ex)
@@ -565,12 +521,6 @@ namespace Inventec.Common.SignLibrary
 
 		internal static List<SignPositionADO> GetPdfSignPosition(PdfReader reader)
 		{
-			//IL_00fe: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0105: Expected O, but got Unknown
-			//IL_01a7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01ae: Expected O, but got Unknown
-			//IL_02cb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02d2: Expected O, but got Unknown
 			List<SignPositionADO> list = new List<SignPositionADO>();
 			try
 			{
@@ -586,25 +536,24 @@ namespace Inventec.Common.SignLibrary
 					for (int j = 0; j < asArray.Size; j++)
 					{
 						PdfDictionary asDict = asArray.GetAsDict(j);
-						PdfName val = ((asDict != null) ? asDict.GetAsName(PdfName.SUBTYPE) : null);
-						if (val != null && ((object)val).Equals((object)PdfName.TEXT))
+						PdfName pdfName = ((asDict != null) ? asDict.GetAsName(PdfName.SUBTYPE) : null);
+						if (pdfName != null && pdfName.Equals(PdfName.TEXT))
 						{
-							string text = ((object)asDict.GetAsString(PdfName.CONTENTS)).ToString();
+							string text = asDict.GetAsString(PdfName.CONTENTS).ToString();
 							PdfArray asArray2 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle = new Rectangle(asArray2.GetAsNumber(0).FloatValue, asArray2.GetAsNumber(1).FloatValue, asArray2.GetAsNumber(2).FloatValue, asArray2.GetAsNumber(3).FloatValue);
-							SignPositionADO item = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle,
-								Text = text
-							};
+							iTextSharp.text.Rectangle reactanle = new iTextSharp.text.Rectangle(asArray2.GetAsNumber(0).FloatValue, asArray2.GetAsNumber(1).FloatValue, asArray2.GetAsNumber(2).FloatValue, asArray2.GetAsNumber(3).FloatValue);
+							SignPositionADO signPositionADO = new SignPositionADO();
+							signPositionADO.PageNUm = i;
+							signPositionADO.Reactanle = reactanle;
+							signPositionADO.Text = text;
+							SignPositionADO item = signPositionADO;
 							list.Add(item);
 						}
-						else if (val != null && ((object)val).Equals((object)PdfName.SQUARE))
+						else if (pdfName != null && pdfName.Equals(PdfName.SQUARE))
 						{
-							string text2 = ((object)asDict.GetAsString(PdfName.CONTENTS)).ToString();
+							string text2 = asDict.GetAsString(PdfName.CONTENTS).ToString();
 							PdfArray asArray3 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle2 = new Rectangle(asArray3.GetAsNumber(0).FloatValue, asArray3.GetAsNumber(1).FloatValue, asArray3.GetAsNumber(2).FloatValue, asArray3.GetAsNumber(3).FloatValue);
+							iTextSharp.text.Rectangle reactanle2 = new iTextSharp.text.Rectangle(asArray3.GetAsNumber(0).FloatValue, asArray3.GetAsNumber(1).FloatValue, asArray3.GetAsNumber(2).FloatValue, asArray3.GetAsNumber(3).FloatValue);
 							string[] array = text2.Split(new string[2] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 							string text3 = "";
 							if (array.Length == 1)
@@ -615,27 +564,25 @@ namespace Inventec.Common.SignLibrary
 							{
 								text3 = array[array.Length - 1];
 							}
-							SignPositionADO item2 = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle2,
-								Text = text3
-							};
+							SignPositionADO signPositionADO2 = new SignPositionADO();
+							signPositionADO2.PageNUm = i;
+							signPositionADO2.Reactanle = reactanle2;
+							signPositionADO2.Text = text3;
+							SignPositionADO item2 = signPositionADO2;
 							list.Add(item2);
 						}
-						else if (val != null && ((object)val).Equals((object)PdfName.FREETEXT))
+						else if (pdfName != null && pdfName.Equals(PdfName.FREETEXT))
 						{
 							PdfString asString = asDict.GetAsString(PdfName.CONTENTS);
 							string text4 = ((asString != null) ? asString.ToUnicodeString() : "");
-							string text5 = ((asString != null) ? ((object)asString).ToString() : "");
+							string text5 = ((asString != null) ? asString.ToString() : "");
 							PdfArray asArray4 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle3 = new Rectangle(asArray4.GetAsNumber(0).FloatValue, asArray4.GetAsNumber(1).FloatValue, asArray4.GetAsNumber(2).FloatValue, asArray4.GetAsNumber(3).FloatValue);
-							SignPositionADO item3 = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle3,
-								Text = ((!string.IsNullOrEmpty(text4)) ? text4 : text5)
-							};
+							iTextSharp.text.Rectangle reactanle3 = new iTextSharp.text.Rectangle(asArray4.GetAsNumber(0).FloatValue, asArray4.GetAsNumber(1).FloatValue, asArray4.GetAsNumber(2).FloatValue, asArray4.GetAsNumber(3).FloatValue);
+							SignPositionADO signPositionADO3 = new SignPositionADO();
+							signPositionADO3.PageNUm = i;
+							signPositionADO3.Reactanle = reactanle3;
+							signPositionADO3.Text = ((!string.IsNullOrEmpty(text4)) ? text4 : text5);
+							SignPositionADO item3 = signPositionADO3;
 							list.Add(item3);
 						}
 					}
@@ -657,30 +604,31 @@ namespace Inventec.Common.SignLibrary
 						continue;
 					}
 					string[] array4 = array3;
-					foreach (string text6 in array4)
+					string[] array5 = array4;
+					foreach (string text6 in array5)
 					{
-						string[] array5 = text6.Split(new string[1] { ":" }, StringSplitOptions.RemoveEmptyEntries);
-						if (array5 != null && array5.Count() > 1)
+						string[] array6 = text6.Split(new string[1] { ":" }, StringSplitOptions.RemoveEmptyEntries);
+						if (array6 != null && array6.Count() > 1)
 						{
-							if (array5[0] == "d")
+							if (array6[0] == "d")
 							{
-								item4.TypeDisplay = TypeConvertParse.ToInt32(array5[1]);
+								item4.TypeDisplay = TypeConvertParse.ToInt32(array6[1]);
 							}
-							else if (array5[0] == "p")
+							else if (array6[0] == "p")
 							{
-								item4.TextPosition = (Constans.TEXT_POSITON)TypeConvertParse.ToInt32(array5[1]);
+								item4.TextPosition = (Constans.TEXT_POSITON)TypeConvertParse.ToInt32(array6[1]);
 							}
-							else if (array5[0] == "f")
+							else if (array6[0] == "f")
 							{
-								item4.SizeFont = TypeConvertParse.ToInt32(array5[1]);
+								item4.SizeFont = TypeConvertParse.ToInt32(array6[1]);
 							}
-							else if (array5[0] == "w")
+							else if (array6[0] == "w")
 							{
-								item4.WidthRectangle = TypeConvertParse.ToInt32(array5[1]);
+								item4.WidthRectangle = TypeConvertParse.ToInt32(array6[1]);
 							}
-							else if (array5[0] == "h")
+							else if (array6[0] == "h")
 							{
-								item4.HeightRectangle = TypeConvertParse.ToInt32(array5[1]);
+								item4.HeightRectangle = TypeConvertParse.ToInt32(array6[1]);
 							}
 						}
 					}
@@ -695,14 +643,6 @@ namespace Inventec.Common.SignLibrary
 
 		internal static List<SignPositionADO> GetPdfPatientSignPosition(PdfReader reader)
 		{
-			//IL_00fe: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0105: Expected O, but got Unknown
-			//IL_01a7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01ae: Expected O, but got Unknown
-			//IL_02cb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02d2: Expected O, but got Unknown
-			//IL_03a4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_03ab: Expected O, but got Unknown
 			List<SignPositionADO> list = new List<SignPositionADO>();
 			try
 			{
@@ -718,25 +658,24 @@ namespace Inventec.Common.SignLibrary
 					for (int j = 0; j < asArray.Size; j++)
 					{
 						PdfDictionary asDict = asArray.GetAsDict(j);
-						PdfName val = ((asDict != null) ? asDict.GetAsName(PdfName.SUBTYPE) : null);
-						if (val != null && ((object)val).Equals((object)PdfName.TEXT))
+						PdfName pdfName = ((asDict != null) ? asDict.GetAsName(PdfName.SUBTYPE) : null);
+						if (pdfName != null && pdfName.Equals(PdfName.TEXT))
 						{
-							string text = ((object)asDict.GetAsString(PdfName.CONTENTS)).ToString();
+							string text = asDict.GetAsString(PdfName.CONTENTS).ToString();
 							PdfArray asArray2 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle = new Rectangle(asArray2.GetAsNumber(0).FloatValue, asArray2.GetAsNumber(1).FloatValue, asArray2.GetAsNumber(2).FloatValue, asArray2.GetAsNumber(3).FloatValue);
-							SignPositionADO item = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle,
-								Text = text
-							};
+							iTextSharp.text.Rectangle reactanle = new iTextSharp.text.Rectangle(asArray2.GetAsNumber(0).FloatValue, asArray2.GetAsNumber(1).FloatValue, asArray2.GetAsNumber(2).FloatValue, asArray2.GetAsNumber(3).FloatValue);
+							SignPositionADO signPositionADO = new SignPositionADO();
+							signPositionADO.PageNUm = i;
+							signPositionADO.Reactanle = reactanle;
+							signPositionADO.Text = text;
+							SignPositionADO item = signPositionADO;
 							list.Add(item);
 						}
-						else if (val != null && ((object)val).Equals((object)PdfName.SQUARE))
+						else if (pdfName != null && pdfName.Equals(PdfName.SQUARE))
 						{
-							string text2 = ((object)asDict.GetAsString(PdfName.CONTENTS)).ToString();
+							string text2 = asDict.GetAsString(PdfName.CONTENTS).ToString();
 							PdfArray asArray3 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle2 = new Rectangle(asArray3.GetAsNumber(0).FloatValue, asArray3.GetAsNumber(1).FloatValue, asArray3.GetAsNumber(2).FloatValue, asArray3.GetAsNumber(3).FloatValue);
+							iTextSharp.text.Rectangle reactanle2 = new iTextSharp.text.Rectangle(asArray3.GetAsNumber(0).FloatValue, asArray3.GetAsNumber(1).FloatValue, asArray3.GetAsNumber(2).FloatValue, asArray3.GetAsNumber(3).FloatValue);
 							string[] array = text2.Split(new string[2] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
 							string text3 = "";
 							if (array.Length == 1)
@@ -747,42 +686,39 @@ namespace Inventec.Common.SignLibrary
 							{
 								text3 = array[array.Length - 1];
 							}
-							SignPositionADO item2 = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle2,
-								Text = text3
-							};
+							SignPositionADO signPositionADO2 = new SignPositionADO();
+							signPositionADO2.PageNUm = i;
+							signPositionADO2.Reactanle = reactanle2;
+							signPositionADO2.Text = text3;
+							SignPositionADO item2 = signPositionADO2;
 							list.Add(item2);
 						}
-						else if (val != null && ((object)val).Equals((object)PdfName.FREETEXT))
+						else if (pdfName != null && pdfName.Equals(PdfName.FREETEXT))
 						{
 							PdfString asString = asDict.GetAsString(PdfName.CONTENTS);
 							string text4 = ((asString != null) ? asString.ToUnicodeString() : "");
-							string text5 = ((asString != null) ? ((object)asString).ToString() : "");
+							string text5 = ((asString != null) ? asString.ToString() : "");
 							PdfArray asArray4 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle3 = new Rectangle(asArray4.GetAsNumber(0).FloatValue, asArray4.GetAsNumber(1).FloatValue, asArray4.GetAsNumber(2).FloatValue, asArray4.GetAsNumber(3).FloatValue);
-							SignPositionADO item3 = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle3,
-								Text = ((!string.IsNullOrEmpty(text4)) ? text4 : text5)
-							};
+							iTextSharp.text.Rectangle reactanle3 = new iTextSharp.text.Rectangle(asArray4.GetAsNumber(0).FloatValue, asArray4.GetAsNumber(1).FloatValue, asArray4.GetAsNumber(2).FloatValue, asArray4.GetAsNumber(3).FloatValue);
+							SignPositionADO signPositionADO3 = new SignPositionADO();
+							signPositionADO3.PageNUm = i;
+							signPositionADO3.Reactanle = reactanle3;
+							signPositionADO3.Text = ((!string.IsNullOrEmpty(text4)) ? text4 : text5);
+							SignPositionADO item3 = signPositionADO3;
 							list.Add(item3);
 						}
-						else if (val != null && ((object)val).Equals((object)PdfName.WIDGET))
+						else if (pdfName != null && pdfName.Equals(PdfName.WIDGET))
 						{
 							PdfString asString2 = asDict.GetAsString(PdfName.CONTENTS);
 							string text6 = ((asString2 != null) ? asString2.ToUnicodeString() : "");
-							string text7 = ((asString2 != null) ? ((object)asString2).ToString() : "");
+							string text7 = ((asString2 != null) ? asString2.ToString() : "");
 							PdfArray asArray5 = asDict.GetAsArray(PdfName.RECT);
-							Rectangle reactanle4 = new Rectangle(asArray5.GetAsNumber(0).FloatValue, asArray5.GetAsNumber(1).FloatValue, asArray5.GetAsNumber(2).FloatValue, asArray5.GetAsNumber(3).FloatValue);
-							SignPositionADO item4 = new SignPositionADO
-							{
-								PageNUm = i,
-								Reactanle = reactanle4,
-								Text = ((!string.IsNullOrEmpty(text6)) ? text6 : text7)
-							};
+							iTextSharp.text.Rectangle reactanle4 = new iTextSharp.text.Rectangle(asArray5.GetAsNumber(0).FloatValue, asArray5.GetAsNumber(1).FloatValue, asArray5.GetAsNumber(2).FloatValue, asArray5.GetAsNumber(3).FloatValue);
+							SignPositionADO signPositionADO4 = new SignPositionADO();
+							signPositionADO4.PageNUm = i;
+							signPositionADO4.Reactanle = reactanle4;
+							signPositionADO4.Text = ((!string.IsNullOrEmpty(text6)) ? text6 : text7);
+							SignPositionADO item4 = signPositionADO4;
 							list.Add(item4);
 						}
 					}

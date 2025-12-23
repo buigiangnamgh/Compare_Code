@@ -60,19 +60,19 @@ namespace Inventec.Common.Integrate.CustomControl
 
 		protected internal virtual void FillRowError(int handle, DevExpress.XtraEditors.DXErrorProvider.ErrorInfo errorInfo)
 		{
-			EventHandler<RowErrorEventArgs> eventHandler = this.CustomRowError;
-			if (eventHandler != null)
+			EventHandler<RowErrorEventArgs> customRowError = this.CustomRowError;
+			if (customRowError != null)
 			{
-				eventHandler(this, new RowErrorEventArgs(errorInfo, handle));
+				customRowError(this, new RowErrorEventArgs(errorInfo, handle));
 			}
 		}
 
 		protected internal virtual void FillRowColumnError(int handle, string column, DevExpress.XtraEditors.DXErrorProvider.ErrorInfo errorInfo)
 		{
-			EventHandler<RowColumnErrorEventArgs> eventHandler = this.CustomRowColumnError;
-			if (eventHandler != null)
+			EventHandler<RowColumnErrorEventArgs> customRowColumnError = this.CustomRowColumnError;
+			if (customRowColumnError != null)
 			{
-				eventHandler(this, new RowColumnErrorEventArgs(errorInfo, handle, column));
+				customRowColumnError(this, new RowColumnErrorEventArgs(errorInfo, handle, column));
 			}
 		}
 
@@ -89,7 +89,8 @@ namespace Inventec.Common.Integrate.CustomControl
 				Type type = row.GetType();
 				PropertyInfo[] properties = type.GetProperties();
 				PropertyInfo[] array = properties;
-				foreach (PropertyInfo propertyInfo in array)
+				PropertyInfo[] array2 = array;
+				foreach (PropertyInfo propertyInfo in array2)
 				{
 					if (propertyInfo.Name == text && propertyInfo.Name != "IsChecked")
 					{
@@ -128,14 +129,21 @@ namespace Inventec.Common.Integrate.CustomControl
 		public static IEnumerable<char> RemoveDiacriticsEnum(string src, bool compatNorm, Func<char, char> customFolding)
 		{
 			string text = src.Normalize(compatNorm ? NormalizationForm.FormKD : NormalizationForm.FormD);
-			foreach (char c in text)
+			try
 			{
-				UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
-				UnicodeCategory unicodeCategory2 = unicodeCategory;
-				if ((uint)(unicodeCategory2 - 5) > 2u)
+				string text2 = text;
+				foreach (char c in text2)
 				{
-					yield return customFolding(c);
+					UnicodeCategory unicodeCategory = CharUnicodeInfo.GetUnicodeCategory(c);
+					UnicodeCategory unicodeCategory2 = unicodeCategory;
+					if ((uint)(unicodeCategory2 - 5) > 2u)
+					{
+						yield return customFolding(c);
+					}
 				}
+			}
+			finally
+			{
 			}
 		}
 

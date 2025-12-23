@@ -20,8 +20,6 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_RELATION> Get()
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000c: Expected O, but got Unknown
 			return Get(new EmrRelationFilter());
 		}
 

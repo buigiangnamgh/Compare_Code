@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Windows.Forms;
 using DevExpress.Data;
 using DevExpress.Utils;
@@ -158,14 +157,12 @@ namespace Inventec.Common.SignLibrary
 
 		private void SetDefaultData()
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000e: Expected O, but got Unknown
 			try
 			{
 				CommonParam commonParam = new CommonParam();
-				EmrDocumentViewFilter val = new EmrDocumentViewFilter();
-				val.DOCUMENT_CODE__EXACT = DocumentCode;
-				List<V_EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, val, new object[0]);
+				EmrDocumentViewFilter emrDocumentViewFilter = new EmrDocumentViewFilter();
+				emrDocumentViewFilter.DOCUMENT_CODE__EXACT = DocumentCode;
+				List<V_EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, emrDocumentViewFilter, new object[0]);
 				if (list != null && list.Count > 0)
 				{
 					Document = list.FirstOrDefault();
@@ -183,16 +180,14 @@ namespace Inventec.Common.SignLibrary
 
 		private void loadgridView2(long documentID)
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000e: Expected O, but got Unknown
 			try
 			{
 				CommonParam commonParam = new CommonParam();
-				EmrAttachmentFilter val = new EmrAttachmentFilter();
-				((FilterBase)val).ORDER_DIRECTION = "ASC";
-				((FilterBase)val).ORDER_FIELD = "NUM_ORDER";
-				val.DOCUMENT_ID = documentID;
-				List<EMR_ATTACHMENT> dataSource = GlobalStore.EmrConsumer.Get<List<EMR_ATTACHMENT>>("api/EmrAttachment/Get", commonParam, val, new object[0]);
+				EmrAttachmentFilter emrAttachmentFilter = new EmrAttachmentFilter();
+				emrAttachmentFilter.ORDER_DIRECTION = "ASC";
+				emrAttachmentFilter.ORDER_FIELD = "NUM_ORDER";
+				emrAttachmentFilter.DOCUMENT_ID = documentID;
+				List<EMR_ATTACHMENT> dataSource = GlobalStore.EmrConsumer.Get<List<EMR_ATTACHMENT>>("api/EmrAttachment/Get", commonParam, emrAttachmentFilter, new object[0]);
 				WaitingManager.Hide();
 				gridView2.BeginUpdate();
 				gridView2.GridControl.DataSource = null;
@@ -209,12 +204,10 @@ namespace Inventec.Common.SignLibrary
 
 		private void gridView2_CustomUnboundColumnData(object sender, CustomColumnDataEventArgs e)
 		{
-			//IL_001d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0023: Expected O, but got Unknown
 			try
 			{
-				EMR_ATTACHMENT val = (EMR_ATTACHMENT)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
-				if (e.IsGetData && e.Column.UnboundType != UnboundColumnType.Bound && val != null)
+				EMR_ATTACHMENT eMR_ATTACHMENT = (EMR_ATTACHMENT)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
+				if (e.IsGetData && e.Column.UnboundType != UnboundColumnType.Bound && eMR_ATTACHMENT != null)
 				{
 					if (e.Column.FieldName == "STT")
 					{
@@ -224,7 +217,7 @@ namespace Inventec.Common.SignLibrary
 					{
 						try
 						{
-							e.Value = DateTimeConvert.TimeNumberToTimeString(val.CREATE_TIME.GetValueOrDefault());
+							e.Value = DateTimeConvert.TimeNumberToTimeString(eMR_ATTACHMENT.CREATE_TIME.GetValueOrDefault());
 						}
 						catch (Exception ex)
 						{
@@ -242,16 +235,14 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnG_DELETE_ButtonClick(object sender, ButtonPressedEventArgs e)
 		{
-			//IL_0013: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0019: Expected O, but got Unknown
 			try
 			{
 				CommonParam commonParam = new CommonParam();
-				EMR_ATTACHMENT val = (EMR_ATTACHMENT)gridView2.GetFocusedRow();
-				if (MessageBox.Show("Bạn có muốn xóa dữ liệu", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes && val != null)
+				EMR_ATTACHMENT eMR_ATTACHMENT = (EMR_ATTACHMENT)gridView2.GetFocusedRow();
+				if (MessageBox.Show("Bạn có muốn xóa dữ liệu", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes && eMR_ATTACHMENT != null)
 				{
 					bool flag = false;
-					flag = GlobalStore.EmrConsumer.Post<bool>("api/EmrAttachment/Delete", commonParam, val.ID, new object[0]);
+					flag = GlobalStore.EmrConsumer.Post<bool>("api/EmrAttachment/Delete", commonParam, eMR_ATTACHMENT.ID, new object[0]);
 					if (flag)
 					{
 						loadgridView2(Document.ID);
@@ -267,8 +258,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnChooseFile_Click(object sender, EventArgs e)
 		{
-			//IL_0107: Unknown result type (might be due to invalid IL or missing references)
-			//IL_010e: Expected O, but got Unknown
 			try
 			{
 				OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -281,19 +270,20 @@ namespace Inventec.Common.SignLibrary
 					if (fullfileNameAttack != null)
 					{
 						string[] array = fullfileNameAttack;
-						foreach (string text in array)
+						string[] array2 = array;
+						foreach (string text in array2)
 						{
 							int num = text.LastIndexOf("\\");
 							int num2 = text.LastIndexOf(".");
 							fileNameAttack = new AttackADO();
 							fileNameAttack.FILE_NAME = text.Substring((num > 0) ? (num + 1) : num);
-							((EMR_ATTACHMENT)fileNameAttack).EXTENSION = text.Substring((num2 > 0) ? (num2 + 1) : num2);
+							fileNameAttack.EXTENSION = text.Substring((num2 > 0) ? (num2 + 1) : num2);
 							string extension = Path.GetExtension(text);
 							if ((extension ?? "").ToLower() == ".pdf")
 							{
 								string joinPdfFilePath = "";
-								PdfReader val = new PdfReader(text);
-								float oginalHeight = val.GetPageSize(1).Height;
+								PdfReader pdfReader = new PdfReader(text);
+								float oginalHeight = pdfReader.GetPageSize(1).Height;
 								PdfDocumentProcess.SplitOnePageToImageAndJoinToNewOnePdf(text, oginalHeight, ref joinPdfFilePath);
 								LogSystem.Debug("joinPdfPathFile:" + joinPdfFilePath);
 								fileNameAttack.Base64Data = Utils.FileToBase64String(joinPdfFilePath);
@@ -366,8 +356,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnSave_Click(object sender, EventArgs e)
 		{
-			//IL_0054: Unknown result type (might be due to invalid IL or missing references)
-			//IL_005e: Expected O, but got Unknown
 			try
 			{
 				List<AttackADO> list = new List<AttackADO>();
@@ -378,7 +366,7 @@ namespace Inventec.Common.SignLibrary
 					{
 						EmrAttachmentSDO data = new EmrAttachmentSDO();
 						data.DocumentId = Document.ID;
-						data.Extension = ((EMR_ATTACHMENT)item).EXTENSION;
+						data.Extension = item.EXTENSION;
 						data.Base64Data = item.Base64Data;
 						data.AttachmentName = item.FILE_NAME;
 						string output = GeneratePdfFileFromImage(item.FullName);
@@ -395,7 +383,7 @@ namespace Inventec.Common.SignLibrary
 						{
 							list.Add(item);
 							text = text + data.AttachmentName + ",";
-							LogSystem.Debug("Goi api tao van ban " + ((apiData != null) ? "thanh cong" : "that bai") + "____Du lieu dau vao:" + LogUtil.TraceData(LogUtil.GetMemberName<EmrAttachmentSDO>((Expression<Func<EmrAttachmentSDO>>)(() => data)), (object)data) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => output)), (object)output) + "____Ket qua tra ve:" + LogUtil.TraceData(LogUtil.GetMemberName<EMR_ATTACHMENT>((Expression<Func<EMR_ATTACHMENT>>)(() => apiData)), (object)apiData) + "___" + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => commonParam)), (object)commonParam));
+							LogSystem.Debug("Goi api tao van ban " + ((apiData != null) ? "thanh cong" : "that bai") + "____Du lieu dau vao:" + LogUtil.TraceData(LogUtil.GetMemberName(() => data), data) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(() => output), output) + "____Ket qua tra ve:" + LogUtil.TraceData(LogUtil.GetMemberName(() => apiData), apiData) + "___" + LogUtil.TraceData(LogUtil.GetMemberName(() => commonParam), commonParam));
 						}
 					}
 					ListfileNameAttack = list;
@@ -446,37 +434,19 @@ namespace Inventec.Common.SignLibrary
 
 		private string GeneratePdfFileFromImage(string filename)
 		{
-			//IL_0021: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0027: Expected O, but got Unknown
 			try
 			{
-				Image instance = Image.GetInstance(Image.FromFile(filename), BaseColor.BLACK);
-				using (FileStream fileStream = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None))
+				iTextSharp.text.Image instance = iTextSharp.text.Image.GetInstance(System.Drawing.Image.FromFile(filename), BaseColor.BLACK);
+				using (FileStream os = new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None))
 				{
-					Document val = new Document((Rectangle)(object)instance);
-					try
+					using (Document document = new Document(instance))
 					{
-						PdfWriter instance2 = PdfWriter.GetInstance(val, (Stream)fileStream);
-						try
+						using (PdfWriter pdfWriter = PdfWriter.GetInstance(document, os))
 						{
-							val.Open();
+							document.Open();
 							instance.SetAbsolutePosition(0f, 0f);
-							instance2.DirectContent.AddImage(instance);
-							val.Close();
-						}
-						finally
-						{
-							if (instance2 != null)
-							{
-								((IDisposable)instance2).Dispose();
-							}
-						}
-					}
-					finally
-					{
-						if (val != null)
-						{
-							((IDisposable)val).Dispose();
+							pdfWriter.DirectContent.AddImage(instance);
+							document.Close();
 						}
 					}
 				}

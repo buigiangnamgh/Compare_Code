@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -23,7 +22,7 @@ namespace Inventec.Common.SignLibrary
 			{
 				string browserPath = GetPathToDefaultBrowser();
 				Process.Start(browserPath, urlSite);
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => browserPath)), (object)browserPath));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => browserPath), browserPath));
 			}
 			catch
 			{
@@ -57,16 +56,15 @@ namespace Inventec.Common.SignLibrary
 			}
 			if (!flag)
 			{
-				using (OpenFileDialog openFileDialog = new OpenFileDialog
+				OpenFileDialog openFileDialog = new OpenFileDialog();
+				openFileDialog.Filter = "Chrome browser|chrome.exe";
+				openFileDialog.CheckPathExists = true;
+				openFileDialog.Title = "Hãy chọn trình duyệt chrome";
+				using (OpenFileDialog openFileDialog2 = openFileDialog)
 				{
-					Filter = "Chrome browser|chrome.exe",
-					CheckPathExists = true,
-					Title = "Hãy chọn trình duyệt chrome"
-				})
-				{
-					if (openFileDialog.ShowDialog() == DialogResult.OK)
+					if (openFileDialog2.ShowDialog() == DialogResult.OK)
 					{
-						text = openFileDialog.FileName;
+						text = openFileDialog2.FileName;
 						flag = true;
 					}
 				}

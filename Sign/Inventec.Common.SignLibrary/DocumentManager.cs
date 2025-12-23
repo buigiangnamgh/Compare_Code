@@ -60,6 +60,38 @@ namespace Inventec.Common.SignLibrary
 			public bool isSigned;
 		}
 
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass2
+		{
+			public _003C_003Ec__DisplayClass8_0 CS_0024_003C_003E8__locals29;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass6
+		{
+			public _003C_003Ec__DisplayClass9_0 CS_0024_003C_003E8__locals29;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass8
+		{
+			public _003C_003Ec__DisplayClass10_0 CS_0024_003C_003E8__locals29;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass16
+		{
+			public decimal oginalHeight;
+
+			public string mergeCode;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass18
+		{
+			public _003C_003Ec__DisplayClass22_0 CS_0024_003C_003E8__locals23;
+		}
+
 		private SignToken signToken;
 
 		public DocumentManager()
@@ -75,7 +107,7 @@ namespace Inventec.Common.SignLibrary
 
 		private void InitParam(string dti)
 		{
-			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => dti)), (object)dti));
+			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => dti), dti));
 			if (string.IsNullOrEmpty(dti))
 			{
 				return;
@@ -136,14 +168,14 @@ namespace Inventec.Common.SignLibrary
 
 		private EMR_SIGNER GetSignerData()
 		{
-			EMR_SIGNER val = null;
-			val = ((signToken == null || signToken.Singer == null || signToken.Singer.ID <= 0) ? GlobalStore.Singer : signToken.Singer);
-			if (val != null && GlobalStore.EMR_HSM_INTEGRATE_OPTION == "5" && string.IsNullOrWhiteSpace(val.HSM_USER_CODE))
+			EMR_SIGNER eMR_SIGNER = null;
+			eMR_SIGNER = ((signToken == null || signToken.Singer == null || signToken.Singer.ID <= 0) ? GlobalStore.Singer : signToken.Singer);
+			if (eMR_SIGNER != null && GlobalStore.EMR_HSM_INTEGRATE_OPTION == "5" && string.IsNullOrWhiteSpace(eMR_SIGNER.HSM_USER_CODE))
 			{
-				frmUpdateSigner frmUpdateSigner = new frmUpdateSigner(val, 0);
+				frmUpdateSigner frmUpdateSigner = new frmUpdateSigner(eMR_SIGNER, 0);
 				frmUpdateSigner.ShowDialog();
 			}
-			return val;
+			return eMR_SIGNER;
 		}
 
 		private EMR_TREATMENT GetTreatmentData()
@@ -163,195 +195,199 @@ namespace Inventec.Common.SignLibrary
 
 		public bool IsDocumentSigned(DocumentSignedDTO documentSignedDTO, ref string base64FileGigned)
 		{
-			_003C_003Ec__DisplayClass8_0 CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass8_0();
-			CS_0024_003C_003E8__locals29.documentSignedDTO = documentSignedDTO;
-			CS_0024_003C_003E8__locals29.isSigned = false;
+			_003C_003Ec__DisplayClass2 CS_0024_003C_003E8__locals31 = new _003C_003Ec__DisplayClass2();
+			CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass8_0();
+			CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO = documentSignedDTO;
+			CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned = false;
 			try
 			{
-				if (CS_0024_003C_003E8__locals29.documentSignedDTO == null)
+				_003C_003Ec__DisplayClass2 _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals31;
+				if (CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO == null)
 				{
 					throw new ArgumentNullException("documentSignedDTO");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode))
 				{
 					throw new ArgumentNullException("DocumentTypeCode");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode) && string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode) && string.IsNullOrEmpty(CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode))
 				{
 					throw new ArgumentNullException("TreatmentCode && HisCode");
 				}
 				try
 				{
-					CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = string.Format("{0:00}", CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = string.Format("{0:00}", CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 				}
 				catch (Exception ex)
 				{
-					CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = ((CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode.Length == 1) ? ("0" + CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode) : CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = ((CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode.Length == 1) ? ("0" + CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode) : CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 					LogSystem.Warn(ex);
 				}
 				InitUri();
 				InputADO inputADO = new InputADO();
 				inputADO.Treatment = new TreatmentDTO();
-				inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode;
+				inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode;
 				if (CheckLogin())
 				{
 					Verify.VerifyTreatmentCode(inputADO, ref signToken);
-					EMR_DOCUMENT_TYPE byCode = new EmrDocumentType().GetByCode(CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					EMR_DOCUMENT_TYPE byCode = new EmrDocumentType().GetByCode(CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 					if (byCode != null)
 					{
 						base64FileGigned = "";
-						inputADO.DocumentTypeCode = CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode;
-						inputADO.HisCode = CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode;
+						inputADO.DocumentTypeCode = CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode;
+						inputADO.HisCode = CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode;
 						V_EMR_DOCUMENT documentData = null;
 						Verify.VerifyHisCode(inputADO, false, ref base64FileGigned, ref documentData);
 						if (!string.IsNullOrEmpty(base64FileGigned))
 						{
-							CS_0024_003C_003E8__locals29.isSigned = true;
+							CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned = true;
 						}
 						else
 						{
 							MessageManager.Show(MessageUitl.GetMessage("KhongTimThayDuLieuDaKyCuaHoSo"));
-							LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<InputADO>((Expression<Func<InputADO>>)(() => inputADO)), (object)inputADO) + "____" + LogUtil.TraceData("base64FileGigned", (object)base64FileGigned));
-							CS_0024_003C_003E8__locals29.isSigned = false;
+							LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => inputADO), inputADO) + "____" + LogUtil.TraceData("base64FileGigned", base64FileGigned));
+							CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned = false;
 						}
 					}
 					else
 					{
 						MessageManager.Show(MessageUitl.GetMessage("DuLieuKhongHopLe"));
 					}
-					LogSystem.Debug("IsDocumentSigned. Kiem tra van ban da ky chua____Input" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => CS_0024_003C_003E8__locals29.isSigned)), (object)CS_0024_003C_003E8__locals29.isSigned));
+					LogSystem.Debug("IsDocumentSigned. Kiem tra van ban da ky chua____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned), CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned));
 				}
 				else
 				{
-					LogSystem.Debug("IsDocumentSigned - Kiem tra trang thai van ban da ky chua. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>(Expression.Lambda<Func<bool>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals29, typeof(_003C_003Ec__DisplayClass8_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals29.isSigned));
+					LogSystem.Debug("IsDocumentSigned - Kiem tra trang thai van ban da ky chua. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<bool>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals31), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned));
 				}
 			}
 			catch (Exception ex2)
 			{
 				MessageManager.Show(MessageUitl.GetMessage("DuLieuKhongHopLe"));
-				LogSystem.Debug("Loai van ban truyen vao khong hop le____" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO), ex2);
+				LogSystem.Debug("Loai van ban truyen vao khong hop le____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.documentSignedDTO), ex2);
 			}
-			return CS_0024_003C_003E8__locals29.isSigned;
+			return CS_0024_003C_003E8__locals31.CS_0024_003C_003E8__locals29.isSigned;
 		}
 
 		public bool IsDocumentSigned(DocumentSignedDTO documentSignedDTO, ref string base64FileGigned, ref string documentCode)
 		{
-			_003C_003Ec__DisplayClass9_0 CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass9_0();
-			CS_0024_003C_003E8__locals29.documentSignedDTO = documentSignedDTO;
-			CS_0024_003C_003E8__locals29.isSigned = false;
+			_003C_003Ec__DisplayClass6 CS_0024_003C_003E8__locals30 = new _003C_003Ec__DisplayClass6();
+			CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass9_0();
+			CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO = documentSignedDTO;
+			CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned = false;
 			try
 			{
-				if (CS_0024_003C_003E8__locals29.documentSignedDTO == null)
+				if (CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO == null)
 				{
 					throw new ArgumentNullException("documentSignedDTO");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode))
 				{
 					throw new ArgumentNullException("DocumentTypeCode");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode) && string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode) && string.IsNullOrEmpty(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode))
 				{
 					throw new ArgumentNullException("TreatmentCode && HisCode");
 				}
 				try
 				{
-					CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = string.Format("{0:00}", CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = string.Format("{0:00}", CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 				}
 				catch (Exception ex)
 				{
-					CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = ((CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode.Length == 1) ? ("0" + CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode) : CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = ((CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode.Length == 1) ? ("0" + CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode) : CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 					LogSystem.Warn(ex);
 				}
 				InitUri();
 				InputADO inputADO = new InputADO();
 				inputADO.Treatment = new TreatmentDTO();
-				inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode;
+				inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode;
 				if (CheckLogin())
 				{
 					Verify.VerifyTreatmentCode(inputADO, ref signToken);
-					EMR_DOCUMENT_TYPE byCode = new EmrDocumentType().GetByCode(CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					EMR_DOCUMENT_TYPE byCode = new EmrDocumentType().GetByCode(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 					if (byCode != null)
 					{
 						base64FileGigned = "";
-						inputADO.DocumentTypeCode = CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode;
-						inputADO.HisCode = CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode;
+						inputADO.DocumentTypeCode = CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode;
+						inputADO.HisCode = CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode;
 						V_EMR_DOCUMENT documentData = null;
 						Verify.VerifyHisCode(inputADO, false, ref base64FileGigned, ref documentData);
 						if (!string.IsNullOrEmpty(base64FileGigned))
 						{
-							CS_0024_003C_003E8__locals29.isSigned = true;
+							CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned = true;
 							documentCode = ((documentData != null) ? documentData.DOCUMENT_CODE : "");
 						}
 						else
 						{
 							MessageManager.Show(MessageUitl.GetMessage("KhongTimThayDuLieuDaKyCuaHoSo"));
-							CS_0024_003C_003E8__locals29.isSigned = false;
+							CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned = false;
 						}
 					}
 					else
 					{
 						MessageManager.Show(MessageUitl.GetMessage("DuLieuKhongHopLe"));
 					}
-					LogSystem.Debug("IsDocumentSigned. Kiem tra van ban da ky chua____Input" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => CS_0024_003C_003E8__locals29.isSigned)), (object)CS_0024_003C_003E8__locals29.isSigned));
+					LogSystem.Debug("IsDocumentSigned. Kiem tra van ban da ky chua____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned));
 				}
 				else
 				{
-					LogSystem.Debug("IsDocumentSigned - Kiem tra trang thai van ban da ky chua. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>(Expression.Lambda<Func<bool>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals29, typeof(_003C_003Ec__DisplayClass9_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals29.isSigned));
+					LogSystem.Debug("IsDocumentSigned - Kiem tra trang thai van ban da ky chua. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<bool>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals30), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned));
 				}
 			}
 			catch (Exception ex2)
 			{
 				MessageManager.Show(MessageUitl.GetMessage("DuLieuKhongHopLe"));
-				LogSystem.Debug("Loai van ban truyen vao khong hop le____" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO), ex2);
+				LogSystem.Debug("Loai van ban truyen vao khong hop le____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), ex2);
 			}
-			return CS_0024_003C_003E8__locals29.isSigned;
+			return CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned;
 		}
 
 		public bool IsDocumentSigned(DocumentSignedDTO documentSignedDTO, ref string base64FileGigned, ref string documentCode, ref InputADO inputADO)
 		{
-			_003C_003Ec__DisplayClass10_0 CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass10_0();
-			CS_0024_003C_003E8__locals29.documentSignedDTO = documentSignedDTO;
-			CS_0024_003C_003E8__locals29.isSigned = false;
+			_003C_003Ec__DisplayClass8 CS_0024_003C_003E8__locals30 = new _003C_003Ec__DisplayClass8();
+			CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29 = new _003C_003Ec__DisplayClass10_0();
+			CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO = documentSignedDTO;
+			CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned = false;
 			try
 			{
-				if (CS_0024_003C_003E8__locals29.documentSignedDTO == null)
+				if (CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO == null)
 				{
 					throw new ArgumentNullException("documentSignedDTO");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode))
 				{
 					throw new ArgumentNullException("DocumentTypeCode");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode) && string.IsNullOrEmpty(CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode) && string.IsNullOrEmpty(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode))
 				{
 					throw new ArgumentNullException("TreatmentCode && HisCode");
 				}
 				try
 				{
-					CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = string.Format("{0:00}", CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = string.Format("{0:00}", CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 				}
 				catch (Exception ex)
 				{
-					CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = ((CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode.Length == 1) ? ("0" + CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode) : CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode = ((CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode.Length == 1) ? ("0" + CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode) : CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 					LogSystem.Warn(ex);
 				}
 				InitUri();
 				inputADO.Treatment = new TreatmentDTO();
-				inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode;
+				inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.TreatmentCode;
 				if (CheckLogin())
 				{
 					Verify.VerifyTreatmentCode(inputADO, ref signToken);
-					EMR_DOCUMENT_TYPE byCode = new EmrDocumentType().GetByCode(CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
+					EMR_DOCUMENT_TYPE byCode = new EmrDocumentType().GetByCode(CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode);
 					if (byCode != null)
 					{
 						base64FileGigned = "";
-						inputADO.DocumentTypeCode = CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode;
-						inputADO.HisCode = CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode;
+						inputADO.DocumentTypeCode = CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.DocumentTypeCode;
+						inputADO.HisCode = CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO.HisCode;
 						V_EMR_DOCUMENT documentData = null;
 						Verify.VerifyHisCode(inputADO, false, ref base64FileGigned, ref documentData);
 						if (!string.IsNullOrEmpty(base64FileGigned))
 						{
-							CS_0024_003C_003E8__locals29.isSigned = true;
+							CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned = true;
 							documentCode = ((documentData != null) ? documentData.DOCUMENT_CODE : "");
 							if (documentData.WIDTH.HasValue && documentData.HEIGHT.HasValue && documentData.RAW_KIND.HasValue)
 							{
@@ -365,26 +401,26 @@ namespace Inventec.Common.SignLibrary
 						else
 						{
 							MessageManager.Show(MessageUitl.GetMessage("KhongTimThayDuLieuDaKyCuaHoSo"));
-							CS_0024_003C_003E8__locals29.isSigned = false;
+							CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned = false;
 						}
 					}
 					else
 					{
 						MessageManager.Show(MessageUitl.GetMessage("DuLieuKhongHopLe"));
 					}
-					LogSystem.Debug("IsDocumentSigned. Kiem tra van ban da ky chua____Input" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => CS_0024_003C_003E8__locals29.isSigned)), (object)CS_0024_003C_003E8__locals29.isSigned));
+					LogSystem.Debug("IsDocumentSigned. Kiem tra van ban da ky chua____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned));
 				}
 				else
 				{
-					LogSystem.Debug("IsDocumentSigned - Kiem tra trang thai van ban da ky chua. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>(Expression.Lambda<Func<bool>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals29, typeof(_003C_003Ec__DisplayClass10_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals29.isSigned));
+					LogSystem.Debug("IsDocumentSigned - Kiem tra trang thai van ban da ky chua. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO) + "____output____" + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<bool>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals30), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned));
 				}
 			}
 			catch (Exception ex2)
 			{
 				MessageManager.Show(MessageUitl.GetMessage("DuLieuKhongHopLe"));
-				LogSystem.Debug("Loai van ban truyen vao khong hop le____" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => CS_0024_003C_003E8__locals29.documentSignedDTO)), (object)CS_0024_003C_003E8__locals29.documentSignedDTO), ex2);
+				LogSystem.Debug("Loai van ban truyen vao khong hop le____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.documentSignedDTO), ex2);
 			}
-			return CS_0024_003C_003E8__locals29.isSigned;
+			return CS_0024_003C_003E8__locals30.CS_0024_003C_003E8__locals29.isSigned;
 		}
 
 		internal bool CheckLogin()
@@ -484,10 +520,10 @@ namespace Inventec.Common.SignLibrary
 				if (emrConfigs != null && emrConfigs.Count > 0)
 				{
 					IEnumerable<EMR_CONFIG> enumerable = emrConfigs.Where((EMR_CONFIG o) => o.KEY == "EMR.IS_NOT_SHOWING_SIGN_INFORMATION");
-					EMR_CONFIG val = ((enumerable != null) ? enumerable.FirstOrDefault() : null);
-					if (val != null)
+					EMR_CONFIG eMR_CONFIG = ((enumerable != null) ? enumerable.FirstOrDefault() : null);
+					if (eMR_CONFIG != null)
 					{
-						string text = ((!string.IsNullOrEmpty(val.VALUE)) ? val.VALUE : val.DEFAULT_VALUE);
+						string text = ((!string.IsNullOrEmpty(eMR_CONFIG.VALUE)) ? eMR_CONFIG.VALUE : eMR_CONFIG.DEFAULT_VALUE);
 						if (!string.IsNullOrEmpty(text))
 						{
 							inputADO.IsPrintOnlyContent = text == "1";
@@ -536,10 +572,10 @@ namespace Inventec.Common.SignLibrary
 					if (emrConfigs != null && emrConfigs.Count > 0)
 					{
 						IEnumerable<EMR_CONFIG> enumerable = emrConfigs.Where((EMR_CONFIG o) => o.KEY == "EMR.IS_NOT_SHOWING_SIGN_INFORMATION");
-						EMR_CONFIG val = ((enumerable != null) ? enumerable.FirstOrDefault() : null);
-						if (val != null)
+						EMR_CONFIG eMR_CONFIG = ((enumerable != null) ? enumerable.FirstOrDefault() : null);
+						if (eMR_CONFIG != null)
 						{
-							string text = ((!string.IsNullOrEmpty(val.VALUE)) ? val.VALUE : val.DEFAULT_VALUE);
+							string text = ((!string.IsNullOrEmpty(eMR_CONFIG.VALUE)) ? eMR_CONFIG.VALUE : eMR_CONFIG.DEFAULT_VALUE);
 							if (!string.IsNullOrEmpty(text))
 							{
 								inputADO.IsPrintOnlyContent = text == "1";
@@ -556,7 +592,7 @@ namespace Inventec.Common.SignLibrary
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn("Xem lai file da ky that bai____" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedDTO>((Expression<Func<DocumentSignedDTO>>)(() => documentSignedDTO)), (object)documentSignedDTO), ex);
+				LogSystem.Warn("Xem lai file da ky that bai____" + LogUtil.TraceData(LogUtil.GetMemberName(() => documentSignedDTO), documentSignedDTO), ex);
 				MessageManager.Show(MessageUitl.GetMessage("CoSuCoXayRaVuiLongKiemTraLaiHoacLienHeVoiQuanTriHeThongDeDuocHoTro"));
 			}
 			return null;
@@ -617,7 +653,7 @@ namespace Inventec.Common.SignLibrary
 					outPdfByte = documentByMergeCode;
 					return;
 				}
-				LogSystem.Warn("Khong tim thay van ban nao theo mergecode truyen vao____" + LogUtil.TraceData(LogUtil.GetMemberName<V_EMR_DOCUMENT>((Expression<Func<V_EMR_DOCUMENT>>)(() => document)), (object)document));
+				LogSystem.Warn("Khong tim thay van ban nao theo mergecode truyen vao____" + LogUtil.TraceData(LogUtil.GetMemberName(() => document), document));
 			}
 			catch (Exception ex)
 			{
@@ -638,7 +674,7 @@ namespace Inventec.Common.SignLibrary
 				}
 				else
 				{
-					LogSystem.Warn("Khong tim thay van ban nao theo mergecode truyen vao____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => mergeCode)), (object)mergeCode));
+					LogSystem.Warn("Khong tim thay van ban nao theo mergecode truyen vao____" + LogUtil.TraceData(LogUtil.GetMemberName(() => mergeCode), mergeCode));
 				}
 			}
 			catch (Exception ex)
@@ -650,12 +686,14 @@ namespace Inventec.Common.SignLibrary
 
 		public UserControl GetUcDocumentMerge(decimal oginalHeight, string treatmentCode, string mergeCode, ref string outPdfFile)
 		{
-			_003C_003Ec__DisplayClass21_0 CS_0024_003C_003E8__locals14 = new _003C_003Ec__DisplayClass21_0();
-			CS_0024_003C_003E8__locals14.mergeCode = mergeCode;
-			CS_0024_003C_003E8__locals14.oginalHeight = oginalHeight;
+			_003C_003Ec__DisplayClass16 CS_0024_003C_003E8__locals12 = new _003C_003Ec__DisplayClass16();
+			CS_0024_003C_003E8__locals12.oginalHeight = oginalHeight;
+			CS_0024_003C_003E8__locals12.mergeCode = mergeCode;
+			string mergeCode2 = CS_0024_003C_003E8__locals12.mergeCode;
+			decimal oginalHeight2 = CS_0024_003C_003E8__locals12.oginalHeight;
 			try
 			{
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals14.mergeCode))
+				if (string.IsNullOrEmpty(mergeCode2))
 				{
 					throw new ArgumentNullException("mergeCode");
 				}
@@ -663,14 +701,14 @@ namespace Inventec.Common.SignLibrary
 				{
 					throw new ArgumentNullException("treatmentCode");
 				}
-				if (CS_0024_003C_003E8__locals14.oginalHeight < 0m)
+				if (oginalHeight2 < 0m)
 				{
 					throw new ArgumentNullException("oginalHeight");
 				}
 				InitUri();
 				if (CheckLogin())
 				{
-					outPdfFile = GetFileDocumentMerge(CS_0024_003C_003E8__locals14.oginalHeight, treatmentCode, CS_0024_003C_003E8__locals14.mergeCode);
+					outPdfFile = GetFileDocumentMerge(oginalHeight2, treatmentCode, mergeCode2);
 					if (!string.IsNullOrEmpty(outPdfFile) && File.Exists(outPdfFile))
 					{
 						InputADO inputADO = new InputADO();
@@ -686,12 +724,12 @@ namespace Inventec.Common.SignLibrary
 				}
 				else
 				{
-					LogSystem.Debug("GetUcDocumentMerge - Xem van ban gop theo mergeCode that bai. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals14.mergeCode)), (object)CS_0024_003C_003E8__locals14.mergeCode) + LogUtil.TraceData(LogUtil.GetMemberName<decimal>(Expression.Lambda<Func<decimal>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals14, typeof(_003C_003Ec__DisplayClass21_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals14.oginalHeight));
+					LogSystem.Debug("GetUcDocumentMerge - Xem van ban gop theo mergeCode that bai. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals12.mergeCode), CS_0024_003C_003E8__locals12.mergeCode) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<decimal>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals12), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals12.oginalHeight));
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn("Xem van ban gop theo mergeCode that bai____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals14.mergeCode)), (object)CS_0024_003C_003E8__locals14.mergeCode) + LogUtil.TraceData(LogUtil.GetMemberName<decimal>(Expression.Lambda<Func<decimal>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals14, typeof(_003C_003Ec__DisplayClass21_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals14.oginalHeight), ex);
+				LogSystem.Warn("Xem van ban gop theo mergeCode that bai____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals12.mergeCode), CS_0024_003C_003E8__locals12.mergeCode) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<decimal>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals12), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals12.oginalHeight), ex);
 				MessageManager.Show(MessageUitl.GetMessage("CoSuCoXayRaVuiLongKiemTraLaiHoacLienHeVoiQuanTriHeThongDeDuocHoTro"));
 			}
 			return null;
@@ -699,52 +737,53 @@ namespace Inventec.Common.SignLibrary
 
 		public UserControl GetUcDocumentMerge(V_EMR_DOCUMENT document, ref string outPdfFile, bool IsMergeByName = false)
 		{
-			_003C_003Ec__DisplayClass22_0 CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass22_0();
-			CS_0024_003C_003E8__locals23.document = document;
+			_003C_003Ec__DisplayClass18 CS_0024_003C_003E8__locals24 = new _003C_003Ec__DisplayClass18();
+			CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass22_0();
+			CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document = document;
 			try
 			{
-				if (CS_0024_003C_003E8__locals23.document == null)
+				if (CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document == null)
 				{
 					throw new ArgumentNullException("document");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals23.document.MERGE_CODE))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.MERGE_CODE))
 				{
 					throw new ArgumentNullException("mergeCode");
 				}
-				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals23.document.TREATMENT_CODE))
+				if (string.IsNullOrEmpty(CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.TREATMENT_CODE))
 				{
 					throw new ArgumentNullException("treatmentCode");
 				}
 				InitUri();
 				if (CheckLogin())
 				{
-					outPdfFile = GetFileDocumentMerge(CS_0024_003C_003E8__locals23.document.ORIGINAL_HIGH.GetValueOrDefault(), CS_0024_003C_003E8__locals23.document.TREATMENT_CODE, CS_0024_003C_003E8__locals23.document.MERGE_CODE, IsMergeByName ? CS_0024_003C_003E8__locals23.document.DOCUMENT_NAME : "");
+					outPdfFile = GetFileDocumentMerge(CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.ORIGINAL_HIGH.GetValueOrDefault(), CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.TREATMENT_CODE, CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.MERGE_CODE, IsMergeByName ? CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.DOCUMENT_NAME : "");
 					if (!string.IsNullOrEmpty(outPdfFile) && File.Exists(outPdfFile))
 					{
 						InputADO inputADO = new InputADO();
 						inputADO.Treatment = new TreatmentDTO();
-						inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals23.document.TREATMENT_CODE;
+						inputADO.Treatment.TREATMENT_CODE = CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.TREATMENT_CODE;
 						inputADO.DocumentTypeCode = "";
 						inputADO.HisCode = "";
 						inputADO.IsPrint = true;
 						inputADO.IsPrintOnlyContent = true;
 						inputADO.IsSignConfig = false;
-						if (!string.IsNullOrEmpty(CS_0024_003C_003E8__locals23.document.PAPER_NAME) && CS_0024_003C_003E8__locals23.document.RAW_KIND.HasValue && CS_0024_003C_003E8__locals23.document.WIDTH.HasValue && CS_0024_003C_003E8__locals23.document.HEIGHT.HasValue)
+						if (!string.IsNullOrEmpty(CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.PAPER_NAME) && CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.RAW_KIND.HasValue && CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.WIDTH.HasValue && CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.HEIGHT.HasValue)
 						{
-							inputADO.PaperSizeDefault = new PaperSize(CS_0024_003C_003E8__locals23.document.PAPER_NAME, (int)CS_0024_003C_003E8__locals23.document.WIDTH.Value, (int)CS_0024_003C_003E8__locals23.document.HEIGHT.Value);
-							inputADO.PaperSizeDefault.RawKind = CS_0024_003C_003E8__locals23.document.RAW_KIND.Value;
+							inputADO.PaperSizeDefault = new PaperSize(CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.PAPER_NAME, (int)CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.WIDTH.Value, (int)CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.HEIGHT.Value);
+							inputADO.PaperSizeDefault.RawKind = CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.RAW_KIND.Value;
 						}
 						return new UCViewer(outPdfFile, inputADO, GetSignerData(), GetTreatmentData(), GetTokenCodeData());
 					}
 				}
 				else
 				{
-					LogSystem.Debug("GetUcDocumentMerge - Xem van ban gop theo mergeCode that bai. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals23.document.MERGE_CODE)), (object)CS_0024_003C_003E8__locals23.document.MERGE_CODE) + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Property(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass22_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), (MethodInfo)MethodBase.GetMethodFromHandle((RuntimeMethodHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.document.TREATMENT_CODE));
+					LogSystem.Debug("GetUcDocumentMerge - Xem van ban gop theo mergeCode that bai. Kiem tra thong tin dang nhap - token phien lam viec that bai. ____Input" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.MERGE_CODE), CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.MERGE_CODE) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<string>>(Expression.Property(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals24), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), (MethodInfo)MethodBase.GetMethodFromHandle((RuntimeMethodHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document.TREATMENT_CODE));
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn("Xem van ban gop theo mergeCode that bai____" + LogUtil.TraceData(LogUtil.GetMemberName<V_EMR_DOCUMENT>((Expression<Func<V_EMR_DOCUMENT>>)(() => CS_0024_003C_003E8__locals23.document)), (object)CS_0024_003C_003E8__locals23.document), ex);
+				LogSystem.Warn("Xem van ban gop theo mergeCode that bai____" + LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document), CS_0024_003C_003E8__locals24.CS_0024_003C_003E8__locals23.document), ex);
 				MessageManager.Show(MessageUitl.GetMessage("CoSuCoXayRaVuiLongKiemTraLaiHoacLienHeVoiQuanTriHeThongDeDuocHoTro"));
 			}
 			return null;
@@ -772,7 +811,7 @@ namespace Inventec.Common.SignLibrary
 			{
 				GlobalStore.IsUseSendDTI = true;
 			}
-			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => ConstanIG.ACS_BASE_URI)), (object)ConstanIG.ACS_BASE_URI) + "__" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => GlobalStore.EMR_BASE_URI)), (object)GlobalStore.EMR_BASE_URI) + "__" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => FssConstant.BASE_URI)), (object)FssConstant.BASE_URI));
+			LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => ConstanIG.ACS_BASE_URI), ConstanIG.ACS_BASE_URI) + "__" + LogUtil.TraceData(LogUtil.GetMemberName(() => GlobalStore.EMR_BASE_URI), GlobalStore.EMR_BASE_URI) + "__" + LogUtil.TraceData(LogUtil.GetMemberName(() => FssConstant.BASE_URI), FssConstant.BASE_URI));
 		}
 	}
 }

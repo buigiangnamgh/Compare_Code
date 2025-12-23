@@ -34,7 +34,7 @@ namespace Inventec.Common.SignLibrary
 
 		private static string splitPdfContentKey;
 
-		internal static string PrintUsingWaterMark = "";
+		internal static bool PrintUsingWaterMark = true;
 
 		public static bool IsSignUsingUsbTokenDevice = true;
 
@@ -234,24 +234,22 @@ namespace Inventec.Common.SignLibrary
 
 		public static EMR_SIGNER GetByLoginName(string loginName)
 		{
-			//IL_0018: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001e: Expected O, but got Unknown
-			EMR_SIGNER val = null;
+			EMR_SIGNER eMR_SIGNER = null;
 			try
 			{
 				if (!string.IsNullOrWhiteSpace(loginName))
 				{
 					CommonParam paramCommon = new CommonParam();
-					EmrSignerFilter val2 = new EmrSignerFilter();
-					val2.LOGINNAMEs = new List<string>
+					EmrSignerFilter emrSignerFilter = new EmrSignerFilter();
+					emrSignerFilter.LOGINNAMEs = new List<string>
 					{
 						loginName,
 						loginName.ToLower(),
 						loginName.ToUpper()
 					};
-					List<EMR_SIGNER> list = new EmrSigner().Get(ref paramCommon, val2);
-					val = ((list != null) ? list.FirstOrDefault() : null);
-					if (val == null)
+					List<EMR_SIGNER> list = new EmrSigner().Get(ref paramCommon, emrSignerFilter);
+					eMR_SIGNER = ((list != null) ? list.FirstOrDefault() : null);
+					if (eMR_SIGNER == null)
 					{
 						MessageManager.Show(paramCommon, false);
 					}
@@ -260,9 +258,9 @@ namespace Inventec.Common.SignLibrary
 			catch (Exception ex)
 			{
 				LogSystem.Warn(ex);
-				val = null;
+				eMR_SIGNER = null;
 			}
-			return val;
+			return eMR_SIGNER;
 		}
 
 		public static ApiConsumer GetSetDicConsumer(string tokenCode)

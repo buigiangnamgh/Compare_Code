@@ -40,6 +40,24 @@ namespace Inventec.Common.SignLibrary.Api
 			public CommonParam paramCommon;
 		}
 
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass0
+		{
+			public _003C_003Ec__DisplayClass2_0 CS_0024_003C_003E8__locals8;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass2
+		{
+			public _003C_003Ec__DisplayClass3_0 CS_0024_003C_003E8__locals12;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass28
+		{
+			public _003C_003Ec__DisplayClass14_0 CS_0024_003C_003E8__locals9;
+		}
+
 		internal EmrDocument()
 		{
 		}
@@ -51,35 +69,37 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_DOCUMENT> Get(EmrDocumentFilter filter, CommonParam paramCommon)
 		{
-			_003C_003Ec__DisplayClass2_0 CS_0024_003C_003E8__locals8 = new _003C_003Ec__DisplayClass2_0();
-			CS_0024_003C_003E8__locals8.filter = filter;
-			CS_0024_003C_003E8__locals8.paramCommon = paramCommon;
+			_003C_003Ec__DisplayClass0 CS_0024_003C_003E8__locals9 = new _003C_003Ec__DisplayClass0();
+			CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8 = new _003C_003Ec__DisplayClass2_0();
+			CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.filter = filter;
+			CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.paramCommon = paramCommon;
 			List<EMR_DOCUMENT> list = null;
 			try
 			{
-				return GlobalStore.EmrConsumer.Get<List<EMR_DOCUMENT>>("api/EmrDocument/Get", CS_0024_003C_003E8__locals8.paramCommon, CS_0024_003C_003E8__locals8.filter, new object[0]);
+				return GlobalStore.EmrConsumer.Get<List<EMR_DOCUMENT>>("api/EmrDocument/Get", CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.paramCommon, CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.filter, new object[0]);
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<EmrDocumentFilter>((Expression<Func<EmrDocumentFilter>>)(() => CS_0024_003C_003E8__locals8.filter)), (object)CS_0024_003C_003E8__locals8.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals8, typeof(_003C_003Ec__DisplayClass2_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals8.paramCommon), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.filter), CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals9), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals9.CS_0024_003C_003E8__locals8.paramCommon), ex);
 				return null;
 			}
 		}
 
 		internal List<V_EMR_DOCUMENT> GetView(EmrDocumentViewFilter filter, CommonParam paramCommon)
 		{
-			_003C_003Ec__DisplayClass3_0 CS_0024_003C_003E8__locals12 = new _003C_003Ec__DisplayClass3_0();
-			CS_0024_003C_003E8__locals12.filter = filter;
-			CS_0024_003C_003E8__locals12.paramCommon = paramCommon;
+			_003C_003Ec__DisplayClass2 CS_0024_003C_003E8__locals13 = new _003C_003Ec__DisplayClass2();
+			CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12 = new _003C_003Ec__DisplayClass3_0();
+			CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.filter = filter;
+			CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.paramCommon = paramCommon;
 			List<V_EMR_DOCUMENT> list = null;
 			try
 			{
-				list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", CS_0024_003C_003E8__locals12.paramCommon, CS_0024_003C_003E8__locals12.filter, new object[0]);
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<EmrDocumentViewFilter>((Expression<Func<EmrDocumentViewFilter>>)(() => CS_0024_003C_003E8__locals12.filter)), (object)CS_0024_003C_003E8__locals12.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals12, typeof(_003C_003Ec__DisplayClass3_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals12.paramCommon) + "____" + GlobalStore.EmrConsumer.GetBaseUri());
+				list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.paramCommon, CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.filter, new object[0]);
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.filter), CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals13), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.paramCommon) + "____" + GlobalStore.EmrConsumer.GetBaseUri());
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<EmrDocumentViewFilter>((Expression<Func<EmrDocumentViewFilter>>)(() => CS_0024_003C_003E8__locals12.filter)), (object)CS_0024_003C_003E8__locals12.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals12, typeof(_003C_003Ec__DisplayClass3_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals12.paramCommon), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.filter), CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals13), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals13.CS_0024_003C_003E8__locals12.paramCommon), ex);
 				list = null;
 			}
 			return list;
@@ -87,23 +107,21 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal EMR_DOCUMENT GetByCode(string code)
 		{
-			//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Expected O, but got Unknown
 			EMR_DOCUMENT result = null;
 			try
 			{
 				if (!string.IsNullOrWhiteSpace(code))
 				{
 					CommonParam commonParam = new CommonParam();
-					EmrDocumentFilter val = new EmrDocumentFilter();
-					val.DOCUMENT_CODE__EXACT = code;
-					List<EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<EMR_DOCUMENT>>("api/EmrDocument/Get", commonParam, val, new object[0]);
+					EmrDocumentFilter emrDocumentFilter = new EmrDocumentFilter();
+					emrDocumentFilter.DOCUMENT_CODE__EXACT = code;
+					List<EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<EMR_DOCUMENT>>("api/EmrDocument/Get", commonParam, emrDocumentFilter, new object[0]);
 					result = ((list != null) ? list.FirstOrDefault((EMR_DOCUMENT o) => o.DOCUMENT_CODE == code) : null);
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => code)), (object)code), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => code), code), ex);
 				result = null;
 			}
 			return result;
@@ -111,22 +129,20 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_DOCUMENT> GetByMergeCode(string mergeCode)
 		{
-			//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Expected O, but got Unknown
 			List<EMR_DOCUMENT> result = null;
 			try
 			{
 				if (!string.IsNullOrWhiteSpace(mergeCode))
 				{
 					CommonParam commonParam = new CommonParam();
-					EmrDocumentFilter val = new EmrDocumentFilter();
-					val.MERGE_CODE__EXACT = mergeCode;
-					result = GlobalStore.EmrConsumer.Get<List<EMR_DOCUMENT>>("api/EmrDocument/Get", commonParam, val, new object[0]);
+					EmrDocumentFilter emrDocumentFilter = new EmrDocumentFilter();
+					emrDocumentFilter.MERGE_CODE__EXACT = mergeCode;
+					result = GlobalStore.EmrConsumer.Get<List<EMR_DOCUMENT>>("api/EmrDocument/Get", commonParam, emrDocumentFilter, new object[0]);
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => mergeCode)), (object)mergeCode), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => mergeCode), mergeCode), ex);
 				result = null;
 			}
 			return result;
@@ -134,25 +150,23 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal byte[] GetDocumentByMergeCode(string mergeCode, string documentName, List<long> documentIds = null)
 		{
-			//IL_002d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0034: Expected O, but got Unknown
 			byte[] result = null;
 			try
 			{
 				if (!string.IsNullOrWhiteSpace(mergeCode))
 				{
 					CommonParam commonParam = new CommonParam();
-					DocumentMergeSDO val = new DocumentMergeSDO();
-					val.MergeCode = mergeCode;
+					DocumentMergeSDO documentMergeSDO = new DocumentMergeSDO();
+					documentMergeSDO.MergeCode = mergeCode;
 					if (documentIds != null && documentIds.Count > 0)
 					{
-						val.DocumentIds = documentIds;
+						documentMergeSDO.DocumentIds = documentIds;
 					}
 					if (!string.IsNullOrEmpty(documentName))
 					{
-						val.DocumentName = documentName;
+						documentMergeSDO.DocumentName = documentName;
 					}
-					string text = GlobalStore.EmrConsumer.Post<string>("api/EmrDocument/MakeDocumentMergeBySdo", commonParam, val, new object[0]);
+					string text = GlobalStore.EmrConsumer.Post<string>("api/EmrDocument/MakeDocumentMergeBySdo", commonParam, documentMergeSDO, new object[0]);
 					if (!string.IsNullOrEmpty(text))
 					{
 						result = Convert.FromBase64String(text);
@@ -161,7 +175,7 @@ namespace Inventec.Common.SignLibrary.Api
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => mergeCode)), (object)mergeCode), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => mergeCode), mergeCode), ex);
 				result = null;
 			}
 			return result;
@@ -169,23 +183,21 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal V_EMR_DOCUMENT GetViewByCode(string code)
 		{
-			//IL_002a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Expected O, but got Unknown
 			V_EMR_DOCUMENT result = null;
 			try
 			{
 				if (!string.IsNullOrWhiteSpace(code))
 				{
 					CommonParam commonParam = new CommonParam();
-					EmrDocumentViewFilter val = new EmrDocumentViewFilter();
-					val.DOCUMENT_CODE__EXACT = code;
-					List<V_EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, val, new object[0]);
+					EmrDocumentViewFilter emrDocumentViewFilter = new EmrDocumentViewFilter();
+					emrDocumentViewFilter.DOCUMENT_CODE__EXACT = code;
+					List<V_EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, emrDocumentViewFilter, new object[0]);
 					result = ((list != null) ? list.FirstOrDefault((V_EMR_DOCUMENT o) => o.DOCUMENT_CODE == code) : null);
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => code)), (object)code), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => code), code), ex);
 				result = null;
 			}
 			return result;
@@ -198,9 +210,9 @@ namespace Inventec.Common.SignLibrary.Api
 			try
 			{
 				ApiConsumer setDicConsumer = GlobalStore.GetSetDicConsumer(TokenCode);
-				LogSystem.Info("dataDoc " + LogUtil.TraceData("EMR.URI.EmrDocument.CREATE_BY_TDO ", (object)dataDoc));
+				LogSystem.Info("dataDoc " + LogUtil.TraceData("EMR.URI.EmrDocument.CREATE_BY_TDO ", dataDoc));
 				ApiResultObject<DocumentTDO> rs = setDicConsumer.PostRO<ApiResultObject<DocumentTDO>>("api/EmrDocument/CreateByTdo", paramCommon, dataDoc, new object[0]);
-				LogSystem.Info("rs " + LogUtil.TraceData("EmrConsumer.c ", (object)rs));
+				LogSystem.Info("rs " + LogUtil.TraceData("EmrConsumer.c ", rs));
 				if (rs != null)
 				{
 					result = rs.Data;
@@ -212,12 +224,12 @@ namespace Inventec.Common.SignLibrary.Api
 				}
 				else
 				{
-					LogSystem.Error("Call api api/EmrDocument/CreateByTdo return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => TokenCode)), (object)TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", (object)GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName<ApiResultObject<DocumentTDO>>((Expression<Func<ApiResultObject<DocumentTDO>>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon));
+					LogSystem.Error("Call api api/EmrDocument/CreateByTdo return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName(() => TokenCode), TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon));
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<DocumentTDO>((Expression<Func<DocumentTDO>>)(() => dataDoc)), (object)dataDoc), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => dataDoc), dataDoc), ex);
 				result = null;
 			}
 			return result;
@@ -248,7 +260,7 @@ namespace Inventec.Common.SignLibrary.Api
 				}
 				else
 				{
-					LogSystem.Error("Call api api/EmrDocument/CreateAndSignHsm return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => TokenCode)), (object)TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", (object)GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName<ApiResultObject<HsmSignCreateTDO>>((Expression<Func<ApiResultObject<HsmSignCreateTDO>>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon));
+					LogSystem.Error("Call api api/EmrDocument/CreateAndSignHsm return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName(() => TokenCode), TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon));
 				}
 			}
 			catch (Exception ex)
@@ -284,7 +296,7 @@ namespace Inventec.Common.SignLibrary.Api
 				}
 				else
 				{
-					LogSystem.Error("Call api api/EmrSign/SignPdfHsm return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => TokenCode)), (object)TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", (object)GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName<ApiResultObject<EmrSignResultSDO>>((Expression<Func<ApiResultObject<EmrSignResultSDO>>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon));
+					LogSystem.Error("Call api api/EmrSign/SignPdfHsm return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName(() => TokenCode), TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon));
 				}
 			}
 			catch (Exception ex)
@@ -320,7 +332,7 @@ namespace Inventec.Common.SignLibrary.Api
 				}
 				else
 				{
-					LogSystem.Error("Call api api/EmrSign/SignPdfHsm return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => TokenCode)), (object)TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", (object)GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName<ApiResultObject<EmrSignResultSDO>>((Expression<Func<ApiResultObject<EmrSignResultSDO>>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon));
+					LogSystem.Error("Call api api/EmrSign/SignPdfHsm return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName(() => TokenCode), TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon));
 				}
 			}
 			catch (Exception ex)
@@ -350,7 +362,7 @@ namespace Inventec.Common.SignLibrary.Api
 				}
 				else
 				{
-					LogSystem.Error("Call api api/EmrDocument/CreateAndSignUsb return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => TokenCode)), (object)TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", (object)GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName<ApiResultObject<UsbSignCreateTDO>>((Expression<Func<ApiResultObject<UsbSignCreateTDO>>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon));
+					LogSystem.Error("Call api api/EmrDocument/CreateAndSignUsb return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName(() => TokenCode), TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon));
 				}
 			}
 			catch (Exception ex)
@@ -380,7 +392,7 @@ namespace Inventec.Common.SignLibrary.Api
 				}
 				else
 				{
-					LogSystem.Error("Call api api/EmrSign/SignPdfUsb return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => TokenCode)), (object)TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", (object)GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName<ApiResultObject<EmrSignResultSDO>>((Expression<Func<ApiResultObject<EmrSignResultSDO>>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon));
+					LogSystem.Error("Call api api/EmrSign/SignPdfUsb return fail ____" + LogUtil.TraceData(LogUtil.GetMemberName(() => TokenCode), TokenCode) + LogUtil.TraceData("GlobalStore.GetDicEmrConsumer", GlobalStore.GetDicEmrConsumer()) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon));
 				}
 			}
 			catch (Exception ex)
@@ -393,31 +405,30 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<V_EMR_DOCUMENT> GetDocumentDependent(string dependentCode, string treatmentCode, string signer)
 		{
-			//IL_0034: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003b: Expected O, but got Unknown
-			_003C_003Ec__DisplayClass14_0 CS_0024_003C_003E8__locals9 = new _003C_003Ec__DisplayClass14_0();
-			CS_0024_003C_003E8__locals9.dependentCode = dependentCode;
-			CS_0024_003C_003E8__locals9.treatmentCode = treatmentCode;
+			_003C_003Ec__DisplayClass28 CS_0024_003C_003E8__locals10 = new _003C_003Ec__DisplayClass28();
+			CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9 = new _003C_003Ec__DisplayClass14_0();
+			CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.dependentCode = dependentCode;
+			CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.treatmentCode = treatmentCode;
 			List<V_EMR_DOCUMENT> result = null;
 			try
 			{
-				if (!string.IsNullOrWhiteSpace(CS_0024_003C_003E8__locals9.dependentCode))
+				if (!string.IsNullOrWhiteSpace(CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.dependentCode))
 				{
 					CommonParam commonParam = new CommonParam();
-					EmrDocumentViewFilter val = new EmrDocumentViewFilter();
-					val.PARENT_DEPENDENT_CODE__EXACT = CS_0024_003C_003E8__locals9.dependentCode;
-					val.IS_DELETE = false;
-					val.HAS_REJECTER = false;
-					val.TREATMENT_CODE__EXACT = CS_0024_003C_003E8__locals9.treatmentCode;
-					val.HAS_RESIGN_FAILED = false;
-					val.HAS_NEXT_SIGNER = true;
-					val.NEXT_SIGNER__EXACT = signer;
-					result = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, val, new object[0]);
+					EmrDocumentViewFilter emrDocumentViewFilter = new EmrDocumentViewFilter();
+					emrDocumentViewFilter.PARENT_DEPENDENT_CODE__EXACT = CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.dependentCode;
+					emrDocumentViewFilter.IS_DELETE = false;
+					emrDocumentViewFilter.HAS_REJECTER = false;
+					emrDocumentViewFilter.TREATMENT_CODE__EXACT = CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.treatmentCode;
+					emrDocumentViewFilter.HAS_RESIGN_FAILED = false;
+					emrDocumentViewFilter.HAS_NEXT_SIGNER = true;
+					emrDocumentViewFilter.NEXT_SIGNER__EXACT = signer;
+					result = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, emrDocumentViewFilter, new object[0]);
 				}
 			}
 			catch (Exception ex)
 			{
-				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals9.dependentCode)), (object)CS_0024_003C_003E8__locals9.dependentCode) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>(Expression.Lambda<Func<string>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals9, typeof(_003C_003Ec__DisplayClass14_0)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals9.treatmentCode), ex);
+				LogSystem.Warn(LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.dependentCode), CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.dependentCode) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<string>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals10), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), CS_0024_003C_003E8__locals10.CS_0024_003C_003E8__locals9.treatmentCode), ex);
 				result = null;
 			}
 			return result;

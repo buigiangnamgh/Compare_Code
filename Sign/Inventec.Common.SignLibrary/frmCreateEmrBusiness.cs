@@ -172,8 +172,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void LoadGrid()
 		{
-			//IL_01f0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0200: Expected O, but got Unknown
 			try
 			{
 				if (listSign == null || listSign.Count <= 0)
@@ -184,7 +182,8 @@ namespace Inventec.Common.SignLibrary
 					group o by o.FlowId).ToList();
 				foreach (IGrouping<long?, SignTDO> item in list)
 				{
-					if (!(item.Key > 0) || !AddKey(item.Key.GetValueOrDefault()))
+					long? key = item.Key;
+					if (key.GetValueOrDefault() <= 0 || !key.HasValue || !AddKey(item.Key.GetValueOrDefault()))
 					{
 						continue;
 					}
@@ -194,10 +193,12 @@ namespace Inventec.Common.SignLibrary
 					List<EMR_SIGNER> list2 = new List<EMR_SIGNER>();
 					foreach (string em in signer)
 					{
-						EMR_SIGNER val = emrSigner.FirstOrDefault((EMR_SIGNER o) => o.LOGINNAME == em);
-						if (val != null)
+						List<EMR_SIGNER> source = emrSigner;
+						Func<EMR_SIGNER, bool> predicate = (EMR_SIGNER o) => o.LOGINNAME == em;
+						EMR_SIGNER eMR_SIGNER = source.FirstOrDefault(predicate);
+						if (eMR_SIGNER != null)
 						{
-							list2.Add(val);
+							list2.Add(eMR_SIGNER);
 						}
 					}
 					list2.Sort((EMR_SIGNER x, EMR_SIGNER y) => signer.IndexOf(x.LOGINNAME).CompareTo(signer.IndexOf(y.LOGINNAME)));
@@ -272,8 +273,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void LoadSignerFlow()
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0012: Expected O, but got Unknown
 			try
 			{
 				emrSignerFlow = new EmrSignerFlow().Get(new EmrSignerFlowFilter());
@@ -298,9 +297,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void LoadSigner()
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001f: Expected O, but got Unknown
 			try
 			{
 				emrSigner = new EmrSigner().Get(new EmrSignerFilter
@@ -316,8 +312,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void LoadFlow()
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0012: Expected O, but got Unknown
 			try
 			{
 				emrFlowAll = new EmrFlow().Get(new EmrFlowFilter()).ToList();
@@ -334,19 +328,13 @@ namespace Inventec.Common.SignLibrary
 
 		private void LoadComboSampleBusiness()
 		{
-			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Expected O, but got Unknown
-			//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003c: Expected O, but got Unknown
-			//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0054: Expected O, but got Unknown
 			try
 			{
 				List<ColumnInfo> list = new List<ColumnInfo>();
 				list.Add(new ColumnInfo("BUSINESS_CODE", "", 100, 1));
 				list.Add(new ColumnInfo("BUSINESS_NAME", "", 300, 2));
-				ControlEditorADO val = new ControlEditorADO("BUSINESS_NAME", "ID", list, false, 400);
-				ControlEditorLoader.Load((object)cboSample, (object)emrBusiness, val);
+				ControlEditorADO controlEditorADO = new ControlEditorADO("BUSINESS_NAME", "ID", list, false, 400);
+				ControlEditorLoader.Load(cboSample, emrBusiness, controlEditorADO);
 				cboSample.Properties.ImmediatePopup = true;
 			}
 			catch (Exception ex)
@@ -357,21 +345,15 @@ namespace Inventec.Common.SignLibrary
 
 		private void LoadComboSigner(List<EMR_SIGNER> data)
 		{
-			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0020: Expected O, but got Unknown
-			//IL_0032: Unknown result type (might be due to invalid IL or missing references)
-			//IL_003c: Expected O, but got Unknown
-			//IL_004e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0054: Expected O, but got Unknown
 			try
 			{
 				List<ColumnInfo> list = new List<ColumnInfo>();
 				list.Add(new ColumnInfo("LOGINNAME", "", 100, 1));
 				list.Add(new ColumnInfo("USERNAME", "", 300, 2));
-				ControlEditorADO val = new ControlEditorADO("USERNAME", "ID", list, false, 400);
-				ControlEditorLoader.Load((object)cboLoginName, (object)data, val);
+				ControlEditorADO controlEditorADO = new ControlEditorADO("USERNAME", "ID", list, false, 400);
+				ControlEditorLoader.Load(cboLoginName, data, controlEditorADO);
 				cboLoginName.Properties.ImmediatePopup = true;
-				ControlEditorLoader.Load((object)repSigner, (object)data, val);
+				ControlEditorLoader.Load(repSigner, data, controlEditorADO);
 				repSigner.ImmediatePopup = true;
 			}
 			catch (Exception ex)
@@ -382,16 +364,14 @@ namespace Inventec.Common.SignLibrary
 
 		public void ValidationSingleControlWithMaxLength(Control control, bool isRequired, int? maxLength)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Expected O, but got Unknown
 			try
 			{
-				ControlMaxLengthValidationRule val = new ControlMaxLengthValidationRule();
-				val.editor = control;
-				val.maxLength = maxLength;
-				val.IsRequired = isRequired;
-				((ValidationRuleBase)(object)val).ErrorType = ErrorType.Warning;
-				dxValidationProvider1.SetValidationRule(control, (ValidationRuleBase)(object)val);
+				ControlMaxLengthValidationRule controlMaxLengthValidationRule = new ControlMaxLengthValidationRule();
+				controlMaxLengthValidationRule.editor = control;
+				controlMaxLengthValidationRule.maxLength = maxLength;
+				controlMaxLengthValidationRule.IsRequired = isRequired;
+				controlMaxLengthValidationRule.ErrorType = ErrorType.Warning;
+				dxValidationProvider1.SetValidationRule(control, controlMaxLengthValidationRule);
 			}
 			catch (Exception ex)
 			{
@@ -440,8 +420,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void AddSignerFlow(List<EMR_SIGNER_FLOW> emrSignerIds)
 		{
-			//IL_00aa: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00ba: Expected O, but got Unknown
 			try
 			{
 				if (!AddKey(emrSignerIds.First().FLOW_ID))
@@ -466,8 +444,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void cboSample_Closed(object sender, ClosedEventArgs e)
 		{
-			//IL_00e9: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f9: Expected O, but got Unknown
 			try
 			{
 				if (cboSample.EditValue == null)
@@ -482,7 +458,9 @@ namespace Inventec.Common.SignLibrary
 				LoadDataTree();
 				foreach (EMR_FLOW flow in list)
 				{
-					List<EMR_SIGNER_FLOW> list2 = emrSignerFlow.Where((EMR_SIGNER_FLOW o) => o.FLOW_ID == flow.ID).ToList();
+					List<EMR_SIGNER_FLOW> source = emrSignerFlow;
+					Func<EMR_SIGNER_FLOW, bool> predicate = (EMR_SIGNER_FLOW o) => o.FLOW_ID == flow.ID;
+					List<EMR_SIGNER_FLOW> list2 = source.Where(predicate).ToList();
 					if (list2 != null && list2.Count > 0)
 					{
 						AddSignerFlow(list2);
@@ -567,11 +545,11 @@ namespace Inventec.Common.SignLibrary
 					List<EMR_SIGNER> list = cboLoginName.Properties.DataSource as List<EMR_SIGNER>;
 					if (list != null && list.Count > 0)
 					{
-						EMR_SIGNER val = list.FirstOrDefault((EMR_SIGNER o) => o.LOGINNAME.Equals(txtLoginName.Text.Trim()));
-						if (val != null)
+						EMR_SIGNER eMR_SIGNER = list.FirstOrDefault((EMR_SIGNER o) => o.LOGINNAME.Equals(txtLoginName.Text.Trim()));
+						if (eMR_SIGNER != null)
 						{
 							cboLoginName.Focus();
-							cboLoginName.EditValue = val.ID;
+							cboLoginName.EditValue = eMR_SIGNER.ID;
 							return;
 						}
 					}
@@ -599,16 +577,16 @@ namespace Inventec.Common.SignLibrary
 					MessageManager.Show(string.Format("Danh sách thiết lập ký đã có vai trò {0}.", emrBusinessADO.FLOW_NAME));
 					return false;
 				}
-				EMR_FLOW val = emrFlow.FirstOrDefault((EMR_FLOW o) => o.ID == flowId);
+				EMR_FLOW eMR_FLOW = emrFlow.FirstOrDefault((EMR_FLOW o) => o.ID == flowId);
 				EmrBusinessADO emrBusinessADO2 = new EmrBusinessADO();
-				emrBusinessADO2.CONCRETE_ID__IN_SETY = val.ID.ToString();
-				emrBusinessADO2.USER_NAME = val.FLOW_NAME;
-				emrBusinessADO2.FLOW_ID = val.ID;
-				emrBusinessADO2.FLOW_CODE = val.FLOW_CODE;
-				emrBusinessADO2.FLOW_NAME = val.FLOW_NAME;
-				emrBusinessADO2.ROOM_CODE = val.ROOM_CODE;
-				emrBusinessADO2.ROOM_NAME = val.ROOM_NAME;
-				emrBusinessADO2.ROOM_TYPE_CODE = val.ROOM_TYPE_CODE;
+				emrBusinessADO2.CONCRETE_ID__IN_SETY = eMR_FLOW.ID.ToString();
+				emrBusinessADO2.USER_NAME = eMR_FLOW.FLOW_NAME;
+				emrBusinessADO2.FLOW_ID = eMR_FLOW.ID;
+				emrBusinessADO2.FLOW_CODE = eMR_FLOW.FLOW_CODE;
+				emrBusinessADO2.FLOW_NAME = eMR_FLOW.FLOW_NAME;
+				emrBusinessADO2.ROOM_CODE = eMR_FLOW.ROOM_CODE;
+				emrBusinessADO2.ROOM_NAME = eMR_FLOW.ROOM_NAME;
+				emrBusinessADO2.ROOM_TYPE_CODE = eMR_FLOW.ROOM_TYPE_CODE;
 				if (lstEmrBusiness.Count == 0)
 				{
 					emrBusinessADO2.NUM_ORDER = 1L;
@@ -679,8 +657,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnLoginName_Click(object sender, EventArgs e)
 		{
-			//IL_00bb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c2: Expected O, but got Unknown
 			try
 			{
 				if (lstEmrBusiness == null || lstEmrBusiness.Count <= 0)
@@ -695,16 +671,16 @@ namespace Inventec.Common.SignLibrary
 				rowFocus = treeList1.GetVisibleIndexByNode(treeList1.FocusedNode);
 				EMR_SIGNER singer = (cboLoginName.Properties.DataSource as List<EMR_SIGNER>).FirstOrDefault((EMR_SIGNER o) => o.ID == long.Parse(cboLoginName.EditValue.ToString()));
 				EmrBusinessADO node = dataRecordByNode as EmrBusinessADO;
-				EMR_FLOW val = new EMR_FLOW();
+				EMR_FLOW eMR_FLOW = new EMR_FLOW();
 				if (!node.IS_LEAF)
 				{
-					val = emrFlow.FirstOrDefault((EMR_FLOW o) => o.ID == node.FLOW_ID);
-					AddChild(val, singer, rowFocus);
+					eMR_FLOW = emrFlow.FirstOrDefault((EMR_FLOW o) => o.ID == node.FLOW_ID);
+					AddChild(eMR_FLOW, singer, rowFocus);
 				}
 				else
 				{
-					val = emrFlow.FirstOrDefault((EMR_FLOW o) => o.ID == lstEmrBusiness.FirstOrDefault((EmrBusinessADO p) => p.CONCRETE_ID__IN_SETY == node.PARENT_ID__IN_SETY).FLOW_ID);
-					AddChild(val, singer, rowFocus);
+					eMR_FLOW = emrFlow.FirstOrDefault((EMR_FLOW o) => o.ID == lstEmrBusiness.FirstOrDefault((EmrBusinessADO p) => p.CONCRETE_ID__IN_SETY == node.PARENT_ID__IN_SETY).FLOW_ID);
+					AddChild(eMR_FLOW, singer, rowFocus);
 				}
 				LoadDataTree();
 				treeList1.SetFocusedNode(treeList1.GetNodeByVisibleIndex(rowFocus));
@@ -897,7 +873,7 @@ namespace Inventec.Common.SignLibrary
 					EmrBusinessADO item = lstEmrBusiness[num];
 					if (!item.IS_LEAF && item.CONCRETE_ID__IN_SETY == emrBusinessADO.CONCRETE_ID__IN_SETY)
 					{
-						item.NUM_ORDER -= 1;
+						item.NUM_ORDER--;
 						lstEmrBusiness.FirstOrDefault((EmrBusinessADO o) => !o.IS_LEAF && o.NUM_ORDER == item.NUM_ORDER).NUM_ORDER = item.NUM_ORDER + 1;
 						break;
 					}
@@ -935,8 +911,6 @@ namespace Inventec.Common.SignLibrary
 
 		private List<SignTDO> GetListSignTDO()
 		{
-			//IL_007c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0083: Expected O, but got Unknown
 			List<SignTDO> list = new List<SignTDO>();
 			try
 			{
@@ -945,15 +919,17 @@ namespace Inventec.Common.SignLibrary
 					List<EmrBusinessADO> list2 = lstEmrBusiness.Where((EmrBusinessADO o) => !o.IS_LEAF).ToList();
 					foreach (EmrBusinessADO item in list2)
 					{
-						SignTDO val = new SignTDO();
-						val.FlowId = item.FLOW_ID;
-						val.NumOrder = item.NUM_ORDER;
-						List<EmrBusinessADO> list3 = lstEmrBusiness.Where((EmrBusinessADO o) => o.PARENT_ID__IN_SETY == item.CONCRETE_ID__IN_SETY && !o.IS_ROW_EMPTY).ToList();
+						SignTDO signTDO = new SignTDO();
+						signTDO.FlowId = item.FLOW_ID;
+						signTDO.NumOrder = item.NUM_ORDER;
+						List<EmrBusinessADO> source = lstEmrBusiness;
+						Func<EmrBusinessADO, bool> predicate = (EmrBusinessADO o) => o.PARENT_ID__IN_SETY == item.CONCRETE_ID__IN_SETY && !o.IS_ROW_EMPTY;
+						List<EmrBusinessADO> list3 = source.Where(predicate).ToList();
 						if (list3 != null && list3.Count > 0)
 						{
-							val.UnSigners = string.Join(",", list3.Select((EmrBusinessADO o) => o.LOGINNAME).ToList());
+							signTDO.UnSigners = string.Join(",", list3.Select((EmrBusinessADO o) => o.LOGINNAME).ToList());
 						}
-						list.Add(val);
+						list.Add(signTDO);
 					}
 				}
 			}
@@ -970,8 +946,8 @@ namespace Inventec.Common.SignLibrary
 			{
 				if (cboLoginName.EditValue != null)
 				{
-					EMR_SIGNER val = (cboLoginName.Properties.DataSource as List<EMR_SIGNER>).FirstOrDefault((EMR_SIGNER o) => o.ID == long.Parse(cboLoginName.EditValue.ToString()));
-					txtLoginName.Text = val.LOGINNAME;
+					EMR_SIGNER eMR_SIGNER = (cboLoginName.Properties.DataSource as List<EMR_SIGNER>).FirstOrDefault((EMR_SIGNER o) => o.ID == long.Parse(cboLoginName.EditValue.ToString()));
+					txtLoginName.Text = eMR_SIGNER.LOGINNAME;
 				}
 			}
 			catch (Exception ex)
@@ -1014,8 +990,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void ClickAddNewRow(EMR_FLOW flow, EMR_SIGNER singer, int index, bool IsRowEmpty = false)
 		{
-			//IL_0003: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Expected O, but got Unknown
 			AddChild(flow, new EMR_SIGNER(), index, true);
 			LoadDataTree();
 			treeList1.SetFocusedNode(treeList1.FocusedNode);
@@ -1023,8 +997,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void repAdd_ButtonClick(object sender, ButtonPressedEventArgs e)
 		{
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0072: Expected O, but got Unknown
 			try
 			{
 				object dataRecordByNode = treeList1.GetDataRecordByNode(treeList1.FocusedNode);
@@ -1043,8 +1015,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void repSigner_Closed(object sender, ClosedEventArgs e)
 		{
-			//IL_0128: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0142: Expected O, but got Unknown
 			try
 			{
 				object dataRecordByNode = treeList1.GetDataRecordByNode(treeList1.FocusedNode);

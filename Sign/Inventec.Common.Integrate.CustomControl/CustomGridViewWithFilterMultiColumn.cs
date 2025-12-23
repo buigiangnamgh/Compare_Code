@@ -87,7 +87,8 @@ namespace Inventec.Common.Integrate.CustomControl
 		{
 			List<CriteriaOperator> list = new List<CriteriaOperator>();
 			string[] array = text.Split(' ');
-			foreach (string autoFilterText in array)
+			string[] array2 = array;
+			foreach (string autoFilterText in array2)
 			{
 				string value = LikeData.CreateContainsPattern(autoFilterText);
 				List<CriteriaOperator> list2 = new List<CriteriaOperator>();

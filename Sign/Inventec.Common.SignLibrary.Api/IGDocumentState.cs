@@ -1,5 +1,4 @@
 using System;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using EMR.SDO;
 using Inventec.Common.Integrate;
@@ -30,7 +29,7 @@ namespace Inventec.Common.SignLibrary.Api
 				{
 					success = true;
 				}
-				LogSystem.Debug("SendSignedInfoToIGSys:" + LogUtil.TraceData(LogUtil.GetMemberName<DocumentSignedUpdateIGSysResultDTO>((Expression<Func<DocumentSignedUpdateIGSysResultDTO>>)(() => dataSigned)), (object)dataSigned) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => GlobalStore.INTERGRATE_SYS_BASE_URI)), (object)GlobalStore.INTERGRATE_SYS_BASE_URI) + "____" + LogUtil.TraceData("GetBaseUri()", (object)GlobalStore.IntegrateConsumer.GetBaseUri()) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => GlobalStore.INTERGRATE_SYS_API)), (object)GlobalStore.INTERGRATE_SYS_API) + LogUtil.TraceData(LogUtil.GetMemberName<EmrSignResultSDO>((Expression<Func<EmrSignResultSDO>>)(() => rs)), (object)rs) + "____" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => success)), (object)success));
+				LogSystem.Debug("SendSignedInfoToIGSys:" + LogUtil.TraceData(LogUtil.GetMemberName(() => dataSigned), dataSigned) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(() => GlobalStore.INTERGRATE_SYS_BASE_URI), GlobalStore.INTERGRATE_SYS_BASE_URI) + "____" + LogUtil.TraceData("GetBaseUri()", GlobalStore.IntegrateConsumer.GetBaseUri()) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(() => GlobalStore.INTERGRATE_SYS_API), GlobalStore.INTERGRATE_SYS_API) + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + "____" + LogUtil.TraceData(LogUtil.GetMemberName(() => success), success));
 			}
 			catch (Exception ex)
 			{

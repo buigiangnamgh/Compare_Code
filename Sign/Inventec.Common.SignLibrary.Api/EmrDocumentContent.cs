@@ -35,8 +35,6 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_DOCUMENT_CONTENT> Get()
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000a: Expected O, but got Unknown
 			List<EMR_DOCUMENT_CONTENT> list = null;
 			try
 			{

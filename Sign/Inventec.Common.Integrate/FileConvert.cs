@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using Aspose.Cells;
 using DevExpress.Spreadsheet;
@@ -41,7 +40,7 @@ namespace Inventec.Common.Integrate
 			bool result = false;
 			try
 			{
-				if ((inputStream == null || inputStream.Length == 0L) && string.IsNullOrEmpty(inputFile))
+				if ((inputStream == null || inputStream.Length == 0) && string.IsNullOrEmpty(inputFile))
 				{
 					throw new ArgumentNullException("inStream & inFile is null");
 				}
@@ -140,20 +139,18 @@ namespace Inventec.Common.Integrate
 
 		public static bool ExportExcelToPdfUsingApose(MemoryStream sourceFile, string pdfFile)
 		{
-			//IL_002f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0035: Expected O, but got Unknown
 			try
 			{
-				if (sourceFile == null || sourceFile.Length == 0L || string.IsNullOrEmpty(pdfFile))
+				if (sourceFile == null || sourceFile.Length == 0 || string.IsNullOrEmpty(pdfFile))
 				{
 					return false;
 				}
 				LicenceProcess.SetLicenseForAsposeCell();
-				Workbook val = new Workbook((Stream)sourceFile);
+				Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook(sourceFile);
 				string saveExcelFile = Utils.GenerateTempFileWithin(".xlsx");
-				val.Save(saveExcelFile, (SaveFormat)6);
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => saveExcelFile)), (object)saveExcelFile));
-				val.Save(pdfFile, (SaveFormat)13);
+				workbook.Save(saveExcelFile, SaveFormat.Xlsx);
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => saveExcelFile), saveExcelFile));
+				workbook.Save(pdfFile, SaveFormat.Pdf);
 			}
 			catch (Exception ex)
 			{
@@ -164,8 +161,6 @@ namespace Inventec.Common.Integrate
 
 		public static bool ExportExcelToPdfUsingApose(string sourceFile, string pdfFile)
 		{
-			//IL_0026: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002c: Expected O, but got Unknown
 			try
 			{
 				if (sourceFile == null || sourceFile.Length == 0 || string.IsNullOrEmpty(pdfFile))
@@ -173,8 +168,8 @@ namespace Inventec.Common.Integrate
 					return false;
 				}
 				LicenceProcess.SetLicenseForAsposeCell();
-				Workbook val = new Workbook(sourceFile);
-				val.Save(pdfFile, (SaveFormat)13);
+				Aspose.Cells.Workbook workbook = new Aspose.Cells.Workbook(sourceFile);
+				workbook.Save(pdfFile, SaveFormat.Pdf);
 			}
 			catch (Exception ex)
 			{
@@ -185,21 +180,17 @@ namespace Inventec.Common.Integrate
 
 		public static bool CombineMultiExcelFile(List<string> sourceFiles, string combineFile)
 		{
-			//IL_00ca: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d0: Expected O, but got Unknown
-			//IL_0160: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0167: Expected O, but got Unknown
 			try
 			{
 				if (sourceFiles == null || sourceFiles.Count == 0 || string.IsNullOrEmpty(combineFile))
 				{
 					return false;
 				}
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<List<string>>((Expression<Func<List<string>>>)(() => sourceFiles)), (object)sourceFiles));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => sourceFiles), sourceFiles));
 				LicenceProcess.SetLicenseForAsposeCell();
-				Workbook val = null;
-				Worksheet val2 = null;
-				Range val3 = null;
+				Aspose.Cells.Workbook workbook = null;
+				Aspose.Cells.Worksheet worksheet = null;
+				Aspose.Cells.Range range = null;
 				int num = 0;
 				int num2 = 0;
 				string text = "";
@@ -208,12 +199,12 @@ namespace Inventec.Common.Integrate
 				{
 					if (num == 0)
 					{
-						val = new Workbook(sourceFile);
-						val2 = val.Worksheets[0];
-						val3 = val2.Cells.MaxDisplayRange;
-						num2 = val3.RowCount;
-						PageSetup pageSetup = val2.PageSetup;
-						LogSystem.Debug(LogUtil.TraceData("pageSetup1.PrintArea", (object)pageSetup.PrintArea));
+						workbook = new Aspose.Cells.Workbook(sourceFile);
+						worksheet = workbook.Worksheets[0];
+						range = worksheet.Cells.MaxDisplayRange;
+						num2 = range.RowCount;
+						PageSetup pageSetup = worksheet.PageSetup;
+						LogSystem.Debug(LogUtil.TraceData("pageSetup1.PrintArea", pageSetup.PrintArea));
 						string[] array = pageSetup.PrintArea.Split(new string[1] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 						if (array != null && array.Length != 0)
 						{
@@ -223,10 +214,10 @@ namespace Inventec.Common.Integrate
 					}
 					if (num > 0)
 					{
-						Workbook val4 = new Workbook(sourceFile);
-						Worksheet val5 = val4.Worksheets[0];
-						Range maxDisplayRange = val5.Cells.MaxDisplayRange;
-						PageSetup pageSetup2 = val5.PageSetup;
+						Aspose.Cells.Workbook workbook2 = new Aspose.Cells.Workbook(sourceFile);
+						Aspose.Cells.Worksheet worksheet2 = workbook2.Worksheets[0];
+						Aspose.Cells.Range maxDisplayRange = worksheet2.Cells.MaxDisplayRange;
+						PageSetup pageSetup2 = worksheet2.PageSetup;
 						string[] array2 = pageSetup2.PrintArea.Split(new string[1] { ":" }, StringSplitOptions.RemoveEmptyEntries);
 						if (array2 != null && array2.Length != 0)
 						{
@@ -241,15 +232,15 @@ namespace Inventec.Common.Integrate
 								strA = array2[1];
 							}
 						}
-						Range val6 = val2.Cells.CreateRange(val3.FirstRow + num2, maxDisplayRange.FirstColumn, maxDisplayRange.RowCount, maxDisplayRange.ColumnCount);
-						val6.Copy(maxDisplayRange);
+						Aspose.Cells.Range range2 = worksheet.Cells.CreateRange(range.FirstRow + num2, maxDisplayRange.FirstColumn, maxDisplayRange.RowCount, maxDisplayRange.ColumnCount);
+						range2.Copy(maxDisplayRange);
 						num2 = maxDisplayRange.RowCount + num2;
 					}
 					num++;
 				}
-				PageSetup pageSetup3 = val2.PageSetup;
-				Range maxDisplayRange2 = val2.Cells.MaxDisplayRange;
-				string[] array3 = ((object)maxDisplayRange2).ToString().Split(new string[2] { "!", "]" }, StringSplitOptions.RemoveEmptyEntries);
+				PageSetup pageSetup3 = worksheet.PageSetup;
+				Aspose.Cells.Range maxDisplayRange2 = worksheet.Cells.MaxDisplayRange;
+				string[] array3 = maxDisplayRange2.ToString().Split(new string[2] { "!", "]" }, StringSplitOptions.RemoveEmptyEntries);
 				if (array3 != null && array3.Length != 0)
 				{
 					string[] array4 = array3[1].Trim().Replace(" ", "").Split(new string[1] { ":" }, StringSplitOptions.RemoveEmptyEntries);
@@ -258,7 +249,7 @@ namespace Inventec.Common.Integrate
 						pageSetup3.PrintArea = text + ":";
 					}
 				}
-				val.Save(combineFile);
+				workbook.Save(combineFile);
 			}
 			catch (Exception ex)
 			{
@@ -281,10 +272,6 @@ namespace Inventec.Common.Integrate
 
 		public static bool CombineMultiExcelFile(List<MemoryStream> sourceStreams, MemoryStream combineFile)
 		{
-			//IL_004b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0051: Expected O, but got Unknown
-			//IL_005e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0065: Expected O, but got Unknown
 			try
 			{
 				if (sourceStreams == null || sourceStreams.Count == 0 || combineFile == null)
@@ -292,21 +279,21 @@ namespace Inventec.Common.Integrate
 					return false;
 				}
 				LicenceProcess.SetLicenseForAsposeCell();
-				Workbook val = null;
+				Aspose.Cells.Workbook workbook = null;
 				int num = 0;
 				foreach (MemoryStream sourceStream in sourceStreams)
 				{
 					if (num == 0)
 					{
-						val = new Workbook((Stream)sourceStream);
+						workbook = new Aspose.Cells.Workbook(sourceStream);
 					}
 					if (num > 0)
 					{
-						Workbook val2 = new Workbook((Stream)sourceStream);
-						val.Combine(val2);
+						Aspose.Cells.Workbook secondWorkbook = new Aspose.Cells.Workbook(sourceStream);
+						workbook.Combine(secondWorkbook);
 					}
 				}
-				val.Save((Stream)combineFile, (SaveFormat)0);
+				workbook.Save(combineFile, SaveFormat.Auto);
 			}
 			catch (Exception ex)
 			{
@@ -320,7 +307,7 @@ namespace Inventec.Common.Integrate
 			bool result = false;
 			try
 			{
-				if ((inputStream == null || inputStream.Length == 0L) && (inputByte == null || inputByte.Length == 0) && string.IsNullOrEmpty(inputFile))
+				if ((inputStream == null || inputStream.Length == 0) && (inputByte == null || inputByte.Length == 0) && string.IsNullOrEmpty(inputFile))
 				{
 					throw new ArgumentNullException("inStream & inFile is null");
 				}
@@ -418,7 +405,7 @@ namespace Inventec.Common.Integrate
 			bool result = false;
 			try
 			{
-				if ((inputStream == null || inputStream.Length == 0L) && string.IsNullOrEmpty(inputFile))
+				if ((inputStream == null || inputStream.Length == 0) && string.IsNullOrEmpty(inputFile))
 				{
 					throw new ArgumentNullException("inStream & inFile is null");
 				}
@@ -459,7 +446,7 @@ namespace Inventec.Common.Integrate
 				else
 				{
 					ext = extension;
-					LogSystem.Debug("DocToPdf____" + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => ext)), (object)ext));
+					LogSystem.Debug("DocToPdf____" + LogUtil.TraceData(LogUtil.GetMemberName(() => ext), ext));
 					if (ext == ".doc")
 					{
 						richEditDocumentServer.LoadDocument(inputStream, DevExpress.XtraRichEdit.DocumentFormat.Doc);

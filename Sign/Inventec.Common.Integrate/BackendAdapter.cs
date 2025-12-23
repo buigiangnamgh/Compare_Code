@@ -95,6 +95,48 @@ namespace Inventec.Common.Integrate
 			public int userTimeout;
 		}
 
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass0<T>
+		{
+			public _003C_003Ec__DisplayClass15_0<T> CS_0024_003C_003E8__locals23;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass18<T>
+		{
+			public _003C_003Ec__DisplayClass21_0<T> CS_0024_003C_003E8__locals23;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass21<T>
+		{
+			public _003C_003Ec__DisplayClass22_0<T> CS_0024_003C_003E8__locals23;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass29<T>
+		{
+			public _003C_003Ec__DisplayClass28_0<T> CS_0024_003C_003E8__locals23;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass2d<T>
+		{
+			public _003C_003Ec__DisplayClass34_0<T> CS_0024_003C_003E8__locals23;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass31<T>
+		{
+			public _003C_003Ec__DisplayClass40_0<T> CS_0024_003C_003E8__locals23;
+		}
+
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClass49<T>
+		{
+			public _003C_003Ec__DisplayClass46_0<T> CS_0024_003C_003E8__locals23;
+		}
+
 		private string errorFormat = "Call API \"{0}/{1}\":";
 
 		private static string STR_CANNOT_CONNECT_TO_SERVER = "Không kết nối được máy chủ";
@@ -197,20 +239,21 @@ namespace Inventec.Common.Integrate
 
 		public T Get<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object filter, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass15_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass15_0<T>();
-			CS_0024_003C_003E8__locals23.filter = filter;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass0<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass15_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter = filter;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			T val = default(T);
 			try
 			{
 				ApiResultObject<T> apiResultObject = null;
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				apiResultObject = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam));
+				apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam));
 				if (apiResultObject != null)
 				{
 					if (apiResultObject.Param != null)
@@ -222,16 +265,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (apiResultObject == null || !apiResultObject.Success || val == null)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.filter)), CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass15_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass15_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass15_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass15_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass15_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass15_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass0<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass15_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass0<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass15_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass0<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass15_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)apiResultObject), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(apiResultObject), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass0<T> _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -248,7 +292,7 @@ namespace Inventec.Common.Integrate
 			}
 			catch (AggregateException ex4)
 			{
-				LogSystem.Error((Exception)ex4);
+				LogSystem.Error(ex4);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex5)
@@ -340,19 +384,21 @@ namespace Inventec.Common.Integrate
 
 		public async Task<T> GetAsync<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object filter, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass21_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass21_0<T>();
-			CS_0024_003C_003E8__locals23.filter = filter;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass18<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass18<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass21_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter = filter;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			T result = default(T);
 			try
 			{
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				ApiResultObject<T> rs = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, new object[0]).ConfigureAwait(false)) : (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam).ConfigureAwait(false)));
+				ApiResultObject<T> apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0]).ConfigureAwait(false)) : (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam).ConfigureAwait(false)));
+				ApiResultObject<T> rs = apiResultObject;
 				if (rs != null)
 				{
 					if (rs.Param != null)
@@ -364,16 +410,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (rs == null || !rs.Success || result == null)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.filter)), CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass21_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass21_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass21_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass18<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass18<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass18<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)rs), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(rs), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass18<T> _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -391,7 +438,7 @@ namespace Inventec.Common.Integrate
 			catch (AggregateException ex4)
 			{
 				AggregateException ex5 = ex4;
-				LogSystem.Error((Exception)ex5);
+				LogSystem.Error(ex5);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex6)
@@ -404,19 +451,21 @@ namespace Inventec.Common.Integrate
 
 		public async Task<ApiResultObject<T>> GetAsyncRO<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object filter, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass22_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass22_0<T>();
-			CS_0024_003C_003E8__locals23.filter = filter;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass21<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass21<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass22_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter = filter;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			ApiResultObject<T> rs = null;
 			try
 			{
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				rs = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, new object[0]).ConfigureAwait(false)) : (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam).ConfigureAwait(false)));
+				ApiResultObject<T> apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0]).ConfigureAwait(false)) : (await consumer.GetAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam).ConfigureAwait(false)));
+				rs = apiResultObject;
 				if (rs != null && rs.Param != null)
 				{
 					param.Messages.AddRange(rs.Param.Messages);
@@ -424,16 +473,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (rs == null || !rs.Success)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.filter)), CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass22_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass22_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass22_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass22_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass22_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass22_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass22_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass22_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass21<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass22_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)rs), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(rs), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass21<T> _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -451,7 +501,7 @@ namespace Inventec.Common.Integrate
 			catch (AggregateException ex4)
 			{
 				AggregateException ex5 = ex4;
-				LogSystem.Error((Exception)ex5);
+				LogSystem.Error(ex5);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex6)
@@ -539,19 +589,20 @@ namespace Inventec.Common.Integrate
 
 		public ApiResultObject<T> GetRO<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object filter, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass28_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass28_0<T>();
-			CS_0024_003C_003E8__locals23.filter = filter;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass29<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass29<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass28_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter = filter;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			ApiResultObject<T> apiResultObject = null;
 			try
 			{
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				apiResultObject = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam));
+				apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Get<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam));
 				if (apiResultObject != null && apiResultObject.Param != null)
 				{
 					param.Messages.AddRange(apiResultObject.Param.Messages);
@@ -559,16 +610,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (apiResultObject == null || !apiResultObject.Success || apiResultObject.Data == null)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.filter)), CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass28_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass28_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass28_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass28_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass28_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass28_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.filter) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass29<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass28_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass29<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass28_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass29<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass28_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)apiResultObject), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(apiResultObject), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass29<T> _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -585,7 +637,7 @@ namespace Inventec.Common.Integrate
 			}
 			catch (AggregateException ex4)
 			{
-				LogSystem.Error((Exception)ex4);
+				LogSystem.Error(ex4);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex5)
@@ -677,20 +729,21 @@ namespace Inventec.Common.Integrate
 
 		public T Post<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object data, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass34_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass34_0<T>();
-			CS_0024_003C_003E8__locals23.data = data;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass2d<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass2d<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass34_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data = data;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			T val = default(T);
 			try
 			{
 				ApiResultObject<T> apiResultObject = null;
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				apiResultObject = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam));
+				apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam));
 				if (apiResultObject != null)
 				{
 					if (apiResultObject.Param != null)
@@ -702,16 +755,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (apiResultObject == null || !apiResultObject.Success || val == null)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.data)), CS_0024_003C_003E8__locals23.data) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass34_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass34_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass34_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass34_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass34_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass34_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass2d<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass34_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass2d<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass34_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass2d<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass34_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)apiResultObject), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(apiResultObject), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass2d<T> _003C_003Ec__DisplayClass2d = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -728,7 +782,7 @@ namespace Inventec.Common.Integrate
 			}
 			catch (AggregateException ex4)
 			{
-				LogSystem.Error((Exception)ex4);
+				LogSystem.Error(ex4);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex5)
@@ -815,19 +869,20 @@ namespace Inventec.Common.Integrate
 
 		public ApiResultObject<T> PostRO<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object data, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass40_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass40_0<T>();
-			CS_0024_003C_003E8__locals23.data = data;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass31<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass31<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass40_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data = data;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			ApiResultObject<T> apiResultObject = null;
 			try
 			{
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				apiResultObject = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam));
+				apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0]) : consumer.Post<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam));
 				if (apiResultObject != null && apiResultObject.Param != null)
 				{
 					param.Messages.AddRange(apiResultObject.Param.Messages);
@@ -835,16 +890,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (apiResultObject == null || !apiResultObject.Success || apiResultObject.Data == null)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.data)), CS_0024_003C_003E8__locals23.data) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass40_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass40_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass40_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass40_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass40_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass40_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass31<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass40_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass31<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass40_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass31<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass40_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)apiResultObject), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(apiResultObject), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass31<T> _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -861,7 +917,7 @@ namespace Inventec.Common.Integrate
 			}
 			catch (AggregateException ex4)
 			{
-				LogSystem.Error((Exception)ex4);
+				LogSystem.Error(ex4);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex5)
@@ -953,19 +1009,21 @@ namespace Inventec.Common.Integrate
 
 		public async Task<T> PostAsync<T>(string requestUri, ApiConsumer consumer, CommonParam commonParam, object data, int userTimeout, Action action, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass46_0<T> CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass46_0<T>();
-			CS_0024_003C_003E8__locals23.data = data;
-			CS_0024_003C_003E8__locals23.commonParam = commonParam;
-			CS_0024_003C_003E8__locals23.listParam = listParam;
-			CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
+			_003C_003Ec__DisplayClass49<T> CS_0024_003C_003E8__locals25 = new _003C_003Ec__DisplayClass49<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23 = new _003C_003Ec__DisplayClass46_0<T>();
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data = data;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam = commonParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam = listParam;
+			CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout = userTimeout;
 			T result = default(T);
 			try
 			{
-				if (CS_0024_003C_003E8__locals23.commonParam != null)
+				if (CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam != null)
 				{
-					CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
+					CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam.LanguageCode = LanguageCode;
 				}
-				ApiResultObject<T> rs = ((CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals23.listParam.Length == 0) ? (await consumer.PostAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals23.userTimeout, new object[0])) : (await consumer.PostAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals23.listParam)));
+				ApiResultObject<T> apiResultObject = ((CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam == null || CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam.Length == 0) ? (await consumer.PostAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, new object[0])) : (await consumer.PostAsync<ApiResultObject<T>>(requestUri, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout, CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam)));
+				ApiResultObject<T> rs = apiResultObject;
 				if (rs != null)
 				{
 					if (rs.Param != null)
@@ -977,16 +1035,17 @@ namespace Inventec.Common.Integrate
 				}
 				if (rs == null || !rs.Success || result == null)
 				{
-					base.Input = LogUtil.TraceData(LogUtil.GetMemberName<object>((Expression<Func<object>>)(() => CS_0024_003C_003E8__locals23.data)), CS_0024_003C_003E8__locals23.data) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass46_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass46_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName<object[]>(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass46_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass46_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName<int>(Expression.Lambda<Func<int>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals23, typeof(_003C_003Ec__DisplayClass46_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass46_0<T>).TypeHandle)), new ParameterExpression[0])), (object)CS_0024_003C_003E8__locals23.userTimeout);
+					base.Input = LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.data) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<CommonParam>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass49<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass46_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.commonParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object[]>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass49<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass46_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.listParam) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<int>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals25), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass49<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass46_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals25.CS_0024_003C_003E8__locals23.userTimeout);
 					base.ErrorFormat = string.Format(errorFormat, consumer.GetBaseUri(), requestUri);
-					LogInOut(JsonConvert.SerializeObject((object)result), LogType.Error);
+					LogInOut(JsonConvert.SerializeObject(result), LogType.Error);
 				}
 			}
 			catch (ApiException ex)
 			{
+				_003C_003Ec__DisplayClass49<T> _003C_003Ec__DisplayClass = CS_0024_003C_003E8__locals25;
 				ApiException ex2 = ex;
 				ApiException ex3 = ex2;
-				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName<HttpStatusCode>((Expression<Func<HttpStatusCode>>)(() => ex3.StatusCode)), (object)ex3.StatusCode));
+				LogSystem.Info(LogUtil.TraceData(LogUtil.GetMemberName(() => ex3.StatusCode), ex3.StatusCode));
 				if (ex3.StatusCode == HttpStatusCode.NotFound)
 				{
 					param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
@@ -1004,7 +1063,7 @@ namespace Inventec.Common.Integrate
 			catch (AggregateException ex4)
 			{
 				AggregateException ex5 = ex4;
-				LogSystem.Error((Exception)ex5);
+				LogSystem.Error(ex5);
 				param.Messages.Add(STR_CANNOT_CONNECT_TO_SERVER);
 			}
 			catch (Exception ex6)

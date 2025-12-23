@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq.Expressions;
 using System.Windows.Forms;
 using Inventec.Common.Integrate;
 using Inventec.Common.Logging;
@@ -52,21 +51,17 @@ namespace Inventec.Common.SignLibrary.FingerPrint
 						}
 					}
 					ProcessStartInfo processStartInfo = new ProcessStartInfo();
-					processStartInfo.FileName = Application.StartupPath + "\\Integrate\\Inventec.FingerPrintManager\\Inventec.FingerPrintManager.exe";
-					if (!string.IsNullOrEmpty(deviceSignPadName))
-					{
-						processStartInfo.Arguments = deviceSignPadName;
-					}
+					processStartInfo.FileName = Application.StartupPath + "\\Integrate\\Inventec.FingerPrintManager.exe";
 					Process.Start(processStartInfo);
 				}
 				while (IsProcessOpen("Inventec.FingerPrintManager"))
 				{
 				}
 				LogSystem.Debug("IFingerPrint.Run.2");
-				string path2 = Path.Combine(Application.StartupPath + "\\Integrate\\Inventec.FingerPrintManager\\temp", DateTime.Now.ToString("ddMMyyyy"), "STFingerPrintFile");
+				string path2 = Path.Combine(Path.Combine(Application.StartupPath, "temp"), DateTime.Now.ToString("ddMMyyyy"), "STFingerPrintFile");
 				DirectoryInfo dicInfo = new DirectoryInfo(path2);
 				string[] fileImage = Directory.GetFiles(dicInfo.FullName, "*");
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string[]>((Expression<Func<string[]>>)(() => fileImage)), (object)fileImage) + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => dicInfo.FullName)), (object)dicInfo.FullName));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => fileImage), fileImage) + LogUtil.TraceData(LogUtil.GetMemberName(() => dicInfo.FullName), dicInfo.FullName));
 				if (fileImage != null && fileImage.Length != 0)
 				{
 					SignPadImageData = Utils.FileToByte(fileImage[0]);
@@ -111,7 +106,8 @@ namespace Inventec.Common.SignLibrary.FingerPrint
 			try
 			{
 				Process[] processes = Process.GetProcesses();
-				foreach (Process process in processes)
+				Process[] array = processes;
+				foreach (Process process in array)
 				{
 					if (process.ProcessName == name || process.ProcessName == string.Format("{0}.exe", name) || process.ProcessName == string.Format("{0} (32 bit)", name) || process.ProcessName == string.Format("{0}.exe (32 bit)", name))
 					{

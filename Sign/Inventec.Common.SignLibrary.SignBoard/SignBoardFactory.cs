@@ -1,5 +1,4 @@
 using System;
-using System.Linq.Expressions;
 using Inventec.Common.Integrate;
 using Inventec.Common.Logging;
 using Inventec.Common.SignLibrary.ADO;
@@ -29,7 +28,7 @@ namespace Inventec.Common.SignLibrary.SignBoard
 			}
 			catch (NullReferenceException ex)
 			{
-				LogSystem.Error("Factory khong khoi tao duoc doi tuong." + LogUtil.TraceData(LogUtil.GetMemberName<SignBoardOption>((Expression<Func<SignBoardOption>>)(() => signBoardOption)), (object)signBoardOption), (Exception)ex);
+				LogSystem.Error("Factory khong khoi tao duoc doi tuong." + LogUtil.TraceData(LogUtil.GetMemberName(() => signBoardOption), signBoardOption), ex);
 				signBoard = null;
 			}
 			catch (Exception ex2)

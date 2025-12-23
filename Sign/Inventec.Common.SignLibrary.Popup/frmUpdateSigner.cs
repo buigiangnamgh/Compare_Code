@@ -89,8 +89,6 @@ namespace Inventec.Common.SignLibrary.Popup
 
 		private void simpleButton1_Click(object sender, EventArgs e)
 		{
-			//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0048: Expected O, but got Unknown
 			try
 			{
 				positionHandle = -1;
@@ -99,20 +97,20 @@ namespace Inventec.Common.SignLibrary.Popup
 					return;
 				}
 				EditData.HSM_USER_CODE = txtHsmUserCode.Text.Trim();
-				EmrSignerSDO val = new EmrSignerSDO();
-				val.EmrSigner = EditData;
+				EmrSignerSDO emrSignerSDO = new EmrSignerSDO();
+				emrSignerSDO.EmrSigner = EditData;
 				if (EditData.SIGN_IMAGE != null)
 				{
-					val.ImgBase64Data = Convert.ToBase64String(EditData.SIGN_IMAGE);
+					emrSignerSDO.ImgBase64Data = Convert.ToBase64String(EditData.SIGN_IMAGE);
 				}
 				CommonParam paramCommon = new CommonParam();
-				EMR_SIGNER val2 = GlobalStore.EmrConsumer.Post<EMR_SIGNER>("api/EmrSigner/Update", paramCommon, val, new object[0]);
-				if (val2 != null)
+				EMR_SIGNER eMR_SIGNER = GlobalStore.EmrConsumer.Post<EMR_SIGNER>("api/EmrSigner/Update", paramCommon, emrSignerSDO, new object[0]);
+				if (eMR_SIGNER != null)
 				{
 					Close();
 					return;
 				}
-				LogSystem.Error(LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => paramCommon)), (object)paramCommon) + LogUtil.TraceData(LogUtil.GetMemberName<EMR_SIGNER>(Expression.Lambda<Func<EMR_SIGNER>>(Expression.Field(Expression.Constant(this, typeof(frmUpdateSigner)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), (object)EditData));
+				LogSystem.Error(LogUtil.TraceData(LogUtil.GetMemberName(() => paramCommon), paramCommon) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<EMR_SIGNER>>(Expression.Field(Expression.Constant(this, typeof(frmUpdateSigner)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/)), new ParameterExpression[0])), EditData));
 			}
 			catch (Exception ex)
 			{

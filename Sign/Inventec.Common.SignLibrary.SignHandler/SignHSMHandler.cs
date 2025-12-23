@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq.Expressions;
 using EMR.EFMODEL.DataModels;
 using EMR.SDO;
 using EMR.TDO;
@@ -44,30 +43,26 @@ namespace Inventec.Common.SignLibrary.SignHandler
 
 		internal bool SignWithCreateDoc(string outputFile, ref DocumentTDO document, string documentName, string treatmentCode, List<SignTDO> signStrategys, List<SignTDO> signTemps, string GetBase64OriginalFileData, string GetBase64HeaderFileData, PointSignTDO pointSignTDO, string signDescription, bool isPatientSignOrHomeRelativeSign, long? documentTypeId, bool isMultiSign, string hisCode, bool isCardAnonymous, ref Stream output, EMR_SIGN _signSelected, string mergeCode = "", double oginalHeight = 0.0, byte[] signedImageData = null)
 		{
-			//IL_0039: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0040: Expected O, but got Unknown
-			//IL_02ce: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02d8: Expected O, but got Unknown
 			bool result = false;
 			if (ValidSignBoard(signedImageData))
 			{
 				LogSystem.Info("SignWithCreateDoc => 1");
-				HsmSignCreateTDO val = new HsmSignCreateTDO();
-				((DocumentTDO)val).IsOutsideTreatment = base.inputADOWorking.IsOutsideTreatment == 1;
-				((DocumentTDO)val).MediOrgCode = base.inputADOWorking.MediOrgCode;
-				((DocumentTDO)val).Signs = (string.IsNullOrEmpty(base.inputADOWorking.BusinessCode) ? signTemps : null);
+				HsmSignCreateTDO hsmSignCreateTDO = new HsmSignCreateTDO();
+				hsmSignCreateTDO.IsOutsideTreatment = base.inputADOWorking.IsOutsideTreatment == 1;
+				hsmSignCreateTDO.MediOrgCode = base.inputADOWorking.MediOrgCode;
+				hsmSignCreateTDO.Signs = (string.IsNullOrEmpty(base.inputADOWorking.BusinessCode) ? signTemps : null);
 				if (string.IsNullOrEmpty(base.inputADOWorking.BusinessCode) && signStrategys != null && signStrategys.Count > 0)
 				{
-					if (((DocumentTDO)val).Signs == null)
+					if (hsmSignCreateTDO.Signs == null)
 					{
-						((DocumentTDO)val).Signs = new List<SignTDO>();
+						hsmSignCreateTDO.Signs = new List<SignTDO>();
 					}
-					((DocumentTDO)val).Signs.AddRange(signStrategys);
+					hsmSignCreateTDO.Signs.AddRange(signStrategys);
 				}
 				LogSystem.Info("SignWithCreateDoc => 1.1");
-				if (((DocumentTDO)val).Signs != null)
+				if (hsmSignCreateTDO.Signs != null)
 				{
-					foreach (SignTDO sign in ((DocumentTDO)val).Signs)
+					foreach (SignTDO sign in hsmSignCreateTDO.Signs)
 					{
 						if (!string.IsNullOrEmpty(sign.PatientCode))
 						{
@@ -86,96 +81,96 @@ namespace Inventec.Common.SignLibrary.SignHandler
 				LogSystem.Info("SignWithCreateDoc => 1.2");
 				if (isCardAnonymous)
 				{
-					val.IsSignElectronic = true;
+					hsmSignCreateTDO.IsSignElectronic = true;
 				}
-				((DocumentTDO)val).DependentCode = base.inputADOWorking.DependentCode;
-				((DocumentTDO)val).ParentDependentCode = base.inputADOWorking.ParentDependentCode;
-				val.RoomCode = base.inputADOWorking.RoomCode;
-				val.RoomTypeCode = base.inputADOWorking.RoomTypeCode;
-				val.WorkingDepartmentName = base.inputADOWorking.DepartmentName;
-				((DocumentTDO)val).IsSignParallel = base.IsSignParanel;
-				((DocumentTDO)val).MergeCode = mergeCode;
-				((DocumentTDO)val).Base64Header = GetBase64HeaderFileData;
+				hsmSignCreateTDO.DependentCode = base.inputADOWorking.DependentCode;
+				hsmSignCreateTDO.ParentDependentCode = base.inputADOWorking.ParentDependentCode;
+				hsmSignCreateTDO.RoomCode = base.inputADOWorking.RoomCode;
+				hsmSignCreateTDO.RoomTypeCode = base.inputADOWorking.RoomTypeCode;
+				hsmSignCreateTDO.WorkingDepartmentName = base.inputADOWorking.DepartmentName;
+				hsmSignCreateTDO.IsSignParallel = base.IsSignParanel;
+				hsmSignCreateTDO.MergeCode = mergeCode;
+				hsmSignCreateTDO.Base64Header = GetBase64HeaderFileData;
 				if (oginalHeight > 0.0)
 				{
-					((DocumentTDO)val).OriginalHigh = (decimal)oginalHeight;
+					hsmSignCreateTDO.OriginalHigh = (decimal)oginalHeight;
 				}
-				val.PointSign = pointSignTDO;
-				val.Description = signDescription;
-				((DocumentTDO)val).HisOrder = base.inputADOWorking.HisOrder;
-				((DocumentTDO)val).OriginalVersion = new VersionTDO();
+				hsmSignCreateTDO.PointSign = pointSignTDO;
+				hsmSignCreateTDO.Description = signDescription;
+				hsmSignCreateTDO.HisOrder = base.inputADOWorking.HisOrder;
+				hsmSignCreateTDO.OriginalVersion = new VersionTDO();
 				LogSystem.Info("SignWithCreateDoc => 1.3");
 				if (document != null && !string.IsNullOrEmpty(document.DocumentCode))
 				{
-					((DocumentTDO)val).DocumentCode = document.DocumentCode;
-					((DocumentTDO)val).DocumentName = document.DocumentName;
+					hsmSignCreateTDO.DocumentCode = document.DocumentCode;
+					hsmSignCreateTDO.DocumentName = document.DocumentName;
 					if (document.DocumentTypeId.HasValue && document.DocumentTypeId.Value > 0)
 					{
-						((DocumentTDO)val).DocumentTypeId = document.DocumentTypeId;
+						hsmSignCreateTDO.DocumentTypeId = document.DocumentTypeId;
 					}
-					((DocumentTDO)val).OriginalVersion.DocumentCode = document.DocumentCode;
-					((DocumentTDO)val).HisCode = document.HisCode;
+					hsmSignCreateTDO.OriginalVersion.DocumentCode = document.DocumentCode;
+					hsmSignCreateTDO.HisCode = document.HisCode;
 				}
 				else
 				{
-					((DocumentTDO)val).DocumentName = (string.IsNullOrEmpty(documentName) ? ("Ký điện tử cho hồ sơ có mã " + treatmentCode + " ngày " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")) : documentName);
+					hsmSignCreateTDO.DocumentName = (string.IsNullOrEmpty(documentName) ? ("Ký điện tử cho hồ sơ có mã " + treatmentCode + " ngày " + DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss")) : documentName);
 					if (documentTypeId.HasValue && documentTypeId.Value > 0)
 					{
-						((DocumentTDO)val).DocumentTypeId = documentTypeId;
+						hsmSignCreateTDO.DocumentTypeId = documentTypeId;
 					}
-					((DocumentTDO)val).HisCode = hisCode;
+					hsmSignCreateTDO.HisCode = hisCode;
 					if (base.inputADOWorking.DocumentTime.HasValue && base.inputADOWorking.DocumentTime.Value != DateTime.MinValue)
 					{
-						((DocumentTDO)val).DocumentTime = DateTimeConvert.SystemDateTimeToTimeNumber(base.inputADOWorking.DocumentTime);
+						hsmSignCreateTDO.DocumentTime = DateTimeConvert.SystemDateTimeToTimeNumber(base.inputADOWorking.DocumentTime);
 					}
 				}
 				LogSystem.Info("SignWithCreateDoc => 1.4");
 				if (!string.IsNullOrEmpty(base.inputADOWorking.DocumentGroupCode))
 				{
 					EMR_DOCUMENT_GROUP byCode = new EmrDocumentGroup().GetByCode(base.inputADOWorking.DocumentGroupCode);
-					((DocumentTDO)val).DocumentGroupId = ((byCode != null) ? new long?(byCode.ID) : ((long?)null));
+					hsmSignCreateTDO.DocumentGroupId = ((byCode != null) ? new long?(byCode.ID) : ((long?)null));
 				}
-				val.IsFinishSign = !isMultiSign;
-				val.IsSigning = isMultiSign;
-				((DocumentTDO)val).TreatmentCode = treatmentCode;
+				hsmSignCreateTDO.IsFinishSign = !isMultiSign;
+				hsmSignCreateTDO.IsSigning = isMultiSign;
+				hsmSignCreateTDO.TreatmentCode = treatmentCode;
 				if (document != null && document.OriginalVersion != null && !string.IsNullOrEmpty(document.OriginalVersion.Base64Data))
 				{
-					((DocumentTDO)val).OriginalVersion.Base64Data = document.OriginalVersion.Base64Data;
-					((DocumentTDO)val).OriginalVersion.Base64DataJson = document.OriginalVersion.Base64DataJson;
-					((DocumentTDO)val).OriginalVersion.Base64DataXml = document.OriginalVersion.Base64DataXml;
+					hsmSignCreateTDO.OriginalVersion.Base64Data = document.OriginalVersion.Base64Data;
+					hsmSignCreateTDO.OriginalVersion.Base64DataJson = document.OriginalVersion.Base64DataJson;
+					hsmSignCreateTDO.OriginalVersion.Base64DataXml = document.OriginalVersion.Base64DataXml;
 				}
 				else
 				{
-					((DocumentTDO)val).OriginalVersion.Base64Data = GetBase64OriginalFileData;
+					hsmSignCreateTDO.OriginalVersion.Base64Data = GetBase64OriginalFileData;
 				}
-				((DocumentTDO)val).BusinessCode = base.inputADOWorking.BusinessCode;
+				hsmSignCreateTDO.BusinessCode = base.inputADOWorking.BusinessCode;
 				LogSystem.Info("SignWithCreateDoc => 1.5");
 				if (base.FileType == FileType.Xml)
 				{
-					((DocumentTDO)val).FileType = (FileType)1;
+					hsmSignCreateTDO.FileType = EMR.TDO.FileType.XML;
 				}
 				else if (base.FileType == FileType.Json)
 				{
-					((DocumentTDO)val).FileType = (FileType)2;
+					hsmSignCreateTDO.FileType = EMR.TDO.FileType.JSON;
 				}
 				else
 				{
-					((DocumentTDO)val).FileType = (FileType)0;
+					hsmSignCreateTDO.FileType = EMR.TDO.FileType.PDF;
 				}
 				LogSystem.Info("SignWithCreateDoc => 1.6");
 				if (base.inputADOWorking.PaperSizeDefault != null)
 				{
-					((DocumentTDO)val).PaperName = base.inputADOWorking.PaperSizeDefault.PaperName;
-					if (string.IsNullOrEmpty(((DocumentTDO)val).PaperName))
+					hsmSignCreateTDO.PaperName = base.inputADOWorking.PaperSizeDefault.PaperName;
+					if (string.IsNullOrEmpty(hsmSignCreateTDO.PaperName))
 					{
-						((DocumentTDO)val).PaperName = base.inputADOWorking.PaperSizeDefault.Kind.ToString();
+						hsmSignCreateTDO.PaperName = base.inputADOWorking.PaperSizeDefault.Kind.ToString();
 					}
-					((DocumentTDO)val).Width = base.inputADOWorking.PaperSizeDefault.Width;
-					((DocumentTDO)val).Height = base.inputADOWorking.PaperSizeDefault.Height;
-					((DocumentTDO)val).RawKind = base.inputADOWorking.PaperSizeDefault.RawKind;
+					hsmSignCreateTDO.Width = base.inputADOWorking.PaperSizeDefault.Width;
+					hsmSignCreateTDO.Height = base.inputADOWorking.PaperSizeDefault.Height;
+					hsmSignCreateTDO.RawKind = base.inputADOWorking.PaperSizeDefault.RawKind;
 				}
 				LogSystem.Info("SignWithCreateDoc => 1.7");
-				if (!VerifyDataPreCallApi(val))
+				if (!VerifyDataPreCallApi(hsmSignCreateTDO))
 				{
 					base.param.Messages.Add(MessageUitl.GetMessage("DuLieuKhongHopLe"));
 					MessageManager.Show(base.param, false);
@@ -183,26 +178,26 @@ namespace Inventec.Common.SignLibrary.SignHandler
 				}
 				LogSystem.Info("SignWithCreateDoc => 2");
 				CommonParam commonParam = new CommonParam();
-				HsmSignCreateTDO rs = new EmrDocument(commonParam).CreateAndSignHsm(base.TokenCode, val);
+				HsmSignCreateTDO rs = new EmrDocument(commonParam).CreateAndSignHsm(base.TokenCode, hsmSignCreateTDO);
 				if (rs != null)
 				{
 					LogSystem.Info("SignWithCreateDoc => 3");
 					result = true;
-					document.DocumentCode = ((DocumentTDO)rs).DocumentCode;
-					document.DocumentName = ((DocumentTDO)rs).DocumentName;
-					document.DocumentTypeId = ((DocumentTDO)rs).DocumentTypeId;
-					document.MergeCode = ((DocumentTDO)rs).MergeCode;
-					document.TreatmentCode = ((DocumentTDO)rs).TreatmentCode;
-					document.DependentCode = ((DocumentTDO)rs).DependentCode;
-					document.ParentDependentCode = ((DocumentTDO)rs).ParentDependentCode;
-					document.OriginalVersion = ((DocumentTDO)rs).OriginalVersion;
-					document.PaperName = ((DocumentTDO)rs).PaperName;
-					document.Width = ((DocumentTDO)rs).Width;
-					document.Height = ((DocumentTDO)rs).Height;
-					document.RawKind = ((DocumentTDO)rs).RawKind;
-					if (((DocumentTDO)rs).Signs != null && ((DocumentTDO)rs).Signs.Count > 0)
+					document.DocumentCode = rs.DocumentCode;
+					document.DocumentName = rs.DocumentName;
+					document.DocumentTypeId = rs.DocumentTypeId;
+					document.MergeCode = rs.MergeCode;
+					document.TreatmentCode = rs.TreatmentCode;
+					document.DependentCode = rs.DependentCode;
+					document.ParentDependentCode = rs.ParentDependentCode;
+					document.OriginalVersion = rs.OriginalVersion;
+					document.PaperName = rs.PaperName;
+					document.Width = rs.Width;
+					document.Height = rs.Height;
+					document.RawKind = rs.RawKind;
+					if (rs.Signs != null && rs.Signs.Count > 0)
 					{
-						foreach (SignTDO sign2 in ((DocumentTDO)rs).Signs)
+						foreach (SignTDO sign2 in rs.Signs)
 						{
 							if (sign2 != null && sign2.Version != null && !string.IsNullOrEmpty(sign2.Version.Url))
 							{
@@ -223,7 +218,7 @@ namespace Inventec.Common.SignLibrary.SignHandler
 					{
 						base.param.BugCodes.AddRange(commonParam.BugCodes);
 					}
-					LogSystem.Info("SignWithCreateDoc => 5____" + LogUtil.TraceData(LogUtil.GetMemberName<HsmSignCreateTDO>((Expression<Func<HsmSignCreateTDO>>)(() => rs)), (object)rs) + LogUtil.TraceData(LogUtil.GetMemberName<CommonParam>((Expression<Func<CommonParam>>)(() => param)), (object)base.param) + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => isCardAnonymous)), (object)isCardAnonymous));
+					LogSystem.Info("SignWithCreateDoc => 5____" + LogUtil.TraceData(LogUtil.GetMemberName(() => rs), rs) + LogUtil.TraceData(LogUtil.GetMemberName(() => param), base.param) + LogUtil.TraceData(LogUtil.GetMemberName(() => isCardAnonymous), isCardAnonymous));
 				}
 			}
 			return result;
@@ -231,25 +226,6 @@ namespace Inventec.Common.SignLibrary.SignHandler
 
 		internal bool SignOnly(ref DocumentTDO document, List<SignTDO> signStrategys, List<SignTDO> signTemps, PointSignTDO pointSignTDO, string signDescription, bool isPatientSignOrHomeRelativeSign, bool isMultiSign, string cmnd, string cardCode, string serviceCode, bool isCardAnonymous, long? relationId, string relationName, string relationPeopleName, ref Stream outputStream, EMR_SIGN _signSelected, string mergeCode = "", string linkCode = "", byte[] signedImageData = null)
 		{
-			//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Expected O, but got Unknown
-			//IL_0173: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0178: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0186: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0194: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01a2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01b0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01be: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01cc: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01da: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01e8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01f6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0204: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0212: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0220: Unknown result type (might be due to invalid IL or missing references)
-			//IL_022e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_023c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_024f: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
@@ -271,10 +247,10 @@ namespace Inventec.Common.SignLibrary.SignHandler
 					emrSignHsmSDO.RelationPeopleName = relationPeopleName;
 					emrSignHsmSDO.RelationId = relationId;
 					emrSignHsmSDO.LinkCode = linkCode;
-					EMR_SIGN val = ((_signSelected != null) ? _signSelected : new EmrSign().GetSignDocumentFirst(viewByCode, isPatientSignOrHomeRelativeSign ? null : base.Signer, base.Treatment, true));
-					if (val != null && val.ID > 0)
+					EMR_SIGN eMR_SIGN = ((_signSelected != null) ? _signSelected : new EmrSign().GetSignDocumentFirst(viewByCode, isPatientSignOrHomeRelativeSign ? null : base.Signer, base.Treatment, true));
+					if (eMR_SIGN != null && eMR_SIGN.ID > 0)
 					{
-						emrSignHsmSDO.EmrSignId = val.ID;
+						emrSignHsmSDO.EmrSignId = eMR_SIGN.ID;
 					}
 					emrSignHsmSDO.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
 					emrSignHsmSDO.PointSign = new EmrPointSignSDO
@@ -301,19 +277,19 @@ namespace Inventec.Common.SignLibrary.SignHandler
 					emrSignHsmSDO.WorkingDepartmentName = base.inputADOWorking.DepartmentName;
 					emrSignHsmSDO.SignedImageData = (base.IsUsingSignPad ? base.SignPadImageData : signedImageData);
 					CommonParam commonParam = new CommonParam();
-					LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<EmrSignHsmSDO>((Expression<Func<EmrSignHsmSDO>>)(() => emrSignHsmSDO)), (object)emrSignHsmSDO));
-					EmrSignResultSDO val2 = new EmrDocument(commonParam).SignHsm(base.TokenCode, emrSignHsmSDO);
-					if (val2 != null)
+					LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => emrSignHsmSDO), emrSignHsmSDO));
+					EmrSignResultSDO emrSignResultSDO = new EmrDocument(commonParam).SignHsm(base.TokenCode, emrSignHsmSDO);
+					if (emrSignResultSDO != null)
 					{
 						result = true;
-						if (val2.EmrVersion != null && val2.EmrSign != null && !string.IsNullOrEmpty(val2.EmrVersion.URL))
+						if (emrSignResultSDO.EmrVersion != null && emrSignResultSDO.EmrSign != null && !string.IsNullOrEmpty(emrSignResultSDO.EmrVersion.URL))
 						{
-							outputStream = FssFileDownload.GetFile(val2.EmrVersion.URL);
+							outputStream = FssFileDownload.GetFile(emrSignResultSDO.EmrVersion.URL);
 						}
 					}
 					else
 					{
-						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<EmrSignHsmSDO>((Expression<Func<EmrSignHsmSDO>>)(() => emrSignHsmSDO)), (object)emrSignHsmSDO));
+						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => emrSignHsmSDO), emrSignHsmSDO));
 						if (commonParam.Messages != null && commonParam.Messages.Count > 0)
 						{
 							base.param.Messages.AddRange(commonParam.Messages);
@@ -336,25 +312,6 @@ namespace Inventec.Common.SignLibrary.SignHandler
 
 		internal bool PatientOrHomeRelativeSignOnly(ref DocumentTDO document, List<SignTDO> signStrategys, List<SignTDO> signTemps, PointSignTDO pointSignTDO, string signDescription, bool isPatientSign, bool isHomeRelativeSign, bool isMultiSign, string cmnd, string cardCode, string serviceCode, bool isCardAnonymous, long? relationId, string relationName, string relationPeopleName, ref Stream outputStream, EMR_SIGN _signSelected, string mergeCode = "", string linkCode = "", byte[] signedImageData = null, bool IsHasBusinessCode = false)
 		{
-			//IL_001b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0025: Expected O, but got Unknown
-			//IL_0189: Unknown result type (might be due to invalid IL or missing references)
-			//IL_018e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_019c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01aa: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01b8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01c6: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01d4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01e2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01f0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01fe: Unknown result type (might be due to invalid IL or missing references)
-			//IL_020c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_021a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0228: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0236: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0244: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0252: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0265: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
@@ -376,10 +333,10 @@ namespace Inventec.Common.SignLibrary.SignHandler
 					emrSignHsmSDO.RelationPeopleName = relationPeopleName;
 					emrSignHsmSDO.RelationId = relationId;
 					emrSignHsmSDO.LinkCode = linkCode;
-					EMR_SIGN val = ((_signSelected != null) ? _signSelected : new EmrSign().GetSignDocumentFirst(viewByCode, (isPatientSign || isHomeRelativeSign) ? null : base.Signer, base.Treatment, true));
-					if (val != null && val.ID > 0 && ((_signSelected == null && !IsHasBusinessCode) || (_signSelected != null && IsHasBusinessCode)))
+					EMR_SIGN eMR_SIGN = ((_signSelected != null) ? _signSelected : new EmrSign().GetSignDocumentFirst(viewByCode, (isPatientSign || isHomeRelativeSign) ? null : base.Signer, base.Treatment, true));
+					if (eMR_SIGN != null && eMR_SIGN.ID > 0 && ((_signSelected == null && !IsHasBusinessCode) || (_signSelected != null && IsHasBusinessCode)))
 					{
-						emrSignHsmSDO.EmrSignId = val.ID;
+						emrSignHsmSDO.EmrSignId = eMR_SIGN.ID;
 					}
 					emrSignHsmSDO.SignTime = long.Parse(DateTime.Now.ToString("yyyyMMddHHmmss"));
 					emrSignHsmSDO.PointSign = new EmrPointSignSDO
@@ -406,18 +363,18 @@ namespace Inventec.Common.SignLibrary.SignHandler
 					emrSignHsmSDO.WorkingDepartmentName = base.inputADOWorking.DepartmentName;
 					emrSignHsmSDO.SignedImageData = (base.IsUsingSignPad ? base.SignPadImageData : signedImageData);
 					CommonParam commonParam = new CommonParam();
-					EmrSignResultSDO val2 = new EmrDocument(commonParam).PatientOrHomeRelativeSignHsm(base.TokenCode, emrSignHsmSDO);
-					if (val2 != null)
+					EmrSignResultSDO emrSignResultSDO = new EmrDocument(commonParam).PatientOrHomeRelativeSignHsm(base.TokenCode, emrSignHsmSDO);
+					if (emrSignResultSDO != null)
 					{
 						result = true;
-						if (val2.EmrVersion != null && val2.EmrSign != null && !string.IsNullOrEmpty(val2.EmrVersion.URL))
+						if (emrSignResultSDO.EmrVersion != null && emrSignResultSDO.EmrSign != null && !string.IsNullOrEmpty(emrSignResultSDO.EmrVersion.URL))
 						{
-							outputStream = FssFileDownload.GetFile(val2.EmrVersion.URL);
+							outputStream = FssFileDownload.GetFile(emrSignResultSDO.EmrVersion.URL);
 						}
 					}
 					else
 					{
-						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<EmrSignHsmSDO>((Expression<Func<EmrSignHsmSDO>>)(() => emrSignHsmSDO)), (object)emrSignHsmSDO));
+						LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => emrSignHsmSDO), emrSignHsmSDO));
 						if (commonParam.Messages != null && commonParam.Messages.Count > 0)
 						{
 							base.param.Messages.AddRange(commonParam.Messages);
@@ -450,7 +407,7 @@ namespace Inventec.Common.SignLibrary.SignHandler
 						base.SignPadImageData = signedImageData;
 						return result;
 					}
-					if (GlobalStore.EMR_EMR_SIGN_CONNECT_DEVICE_TYPE_OPTION == "2")
+					if (EmrConfigKeys.EMR_EMR_SIGN_CONNECT_DEVICE_TYPE_OPTION == "2")
 					{
 						IFingerPrint fingerPrint = FingerPrintFactory.MakeISignBoard(base.param, base.inputADOWorking, SignBoardOption.Use);
 						base.SignPadImageData = ((fingerPrint != null) ? fingerPrint.Run() : null);
@@ -500,7 +457,7 @@ namespace Inventec.Common.SignLibrary.SignHandler
 
 		private bool VerifyDataPreCallApi(HsmSignCreateTDO doc)
 		{
-			return true && doc != null && ((DocumentTDO)doc).OriginalVersion != null && ((DocumentTDO)doc).TreatmentCode != null;
+			return doc != null && doc.OriginalVersion != null && doc.TreatmentCode != null;
 		}
 
 		private string GetBase64FileData(string outFile)

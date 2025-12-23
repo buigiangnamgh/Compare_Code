@@ -5,8 +5,8 @@ using EMR.WCF.DCO;
 
 namespace Inventec.Common.SignLibrary.ServiceSign
 {
-	[GeneratedCode("System.ServiceModel", "4.0.0.0")]
 	[ServiceContract(ConfigurationName = "ServiceSign.ISignProcessor", SessionMode = SessionMode.Required)]
+	[GeneratedCode("System.ServiceModel", "4.0.0.0")]
 	public interface ISignProcessor
 	{
 		[OperationContract(Action = "http://tempuri.org/ISignProcessor/SignExecute", ReplyAction = "http://tempuri.org/ISignProcessor/SignExecuteResponse")]

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -17,25 +16,6 @@ namespace Inventec.Common.SignLibrary.SignHandler
 	{
 		internal void SplitPdfFileWithKey(Stream stream, ref Stream splitFileHeaderStream, ref Stream splitFileContentStream, ref double oginalHeight, bool? isSplitHeaderKey = true, bool? isSplitContentKey = true)
 		{
-			//IL_05ab: Unknown result type (might be due to invalid IL or missing references)
-			//IL_05b2: Expected O, but got Unknown
-			//IL_00b1: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00b8: Expected O, but got Unknown
-			//IL_00ff: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0106: Expected O, but got Unknown
-			//IL_01a5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01af: Expected O, but got Unknown
-			//IL_055f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0566: Expected O, but got Unknown
-			//IL_038b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_039b: Expected O, but got Unknown
-			//IL_0394: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0524: Unknown result type (might be due to invalid IL or missing references)
-			//IL_052e: Expected O, but got Unknown
-			//IL_049e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_04a8: Expected O, but got Unknown
-			//IL_04ec: Unknown result type (might be due to invalid IL or missing references)
-			//IL_04f6: Expected O, but got Unknown
 			try
 			{
 				List<SignPositionADO> positionHeaders = ((isSplitHeaderKey ?? true) ? PdfDocumentProcess.GetPositionBySearchKey(stream, GlobalStore.SplitPdfHeaderKey) : null);
@@ -46,133 +26,108 @@ namespace Inventec.Common.SignLibrary.SignHandler
 				{
 					LicenceProcess.SetLicenseForAspose();
 					double num = 0.0;
-					Document val = new Document(stream);
-					try
+					using (Aspose.Pdf.Document document = new Aspose.Pdf.Document(stream))
 					{
-						string text = Utils.GenerateTempFileWithin();
-						val.Save(text);
+						string outputFileName = Utils.GenerateTempFileWithin();
+						document.Save(outputFileName);
 						double height;
 						if ((isSplitHeaderKey ?? true) && positionHeaders != null && positionHeaders.Count > 0)
 						{
-							Document val2 = new Document();
-							try
+							using (Aspose.Pdf.Document document2 = new Aspose.Pdf.Document())
 							{
-								val2.Pages.Add((from Page o in (IEnumerable)val.Pages
+								document2.Pages.Add((from Page o in document.Pages
 									where o.Number <= positionHeaders[0].PageNUm
 									select o).ToArray());
-								Page val3 = val2.Pages[positionHeaders[0].PageNUm];
-								height = val3.GetPageRect(false).Height;
-								num = val3.GetPageRect(false).Width;
-								oginalHeight = val3.GetPageRect(false).Height;
-								val3.CropBox = new Rectangle(0.0, (double)positionHeaders[0].Reactanle.Top, num, height);
-								string text2 = Utils.GenerateTempFileWithin();
-								val2.Save(splitFileHeaderStream);
-								val2.Save(text2);
+								Page page = document2.Pages[positionHeaders[0].PageNUm];
+								height = page.GetPageRect(false).Height;
+								num = page.GetPageRect(false).Width;
+								oginalHeight = page.GetPageRect(false).Height;
+								page.CropBox = new Aspose.Pdf.Rectangle(0.0, positionHeaders[0].Reactanle.Top, num, height);
+								string outputFileName2 = Utils.GenerateTempFileWithin();
+								document2.Save(splitFileHeaderStream);
+								document2.Save(outputFileName2);
 								splitFileHeaderStream.Position = 0L;
 							}
-							finally
-							{
-								if (val2 != null)
-								{
-									((IDisposable)val2).Dispose();
-								}
-							}
 						}
-						if (!(isSplitContentKey ?? true))
+						if ((!isSplitContentKey) ?? false)
 						{
 							return;
 						}
-						string text3 = Utils.GenerateTempFileWithin();
-						Page val4 = val.Pages[1];
-						height = val4.GetPageRect(false).Height;
-						num = val4.GetPageRect(false).Width;
-						oginalHeight = val4.GetPageRect(false).Height;
+						string text = Utils.GenerateTempFileWithin();
+						Page page2 = document.Pages[1];
+						height = page2.GetPageRect(false).Height;
+						num = page2.GetPageRect(false).Width;
+						oginalHeight = page2.GetPageRect(false).Height;
 						bool flag = false;
 						double num2 = 0.0;
-						double num3;
-						double num4;
-						double num5;
+						double llx;
+						double lly;
+						double urx;
 						Page[] array;
 						if (positionContents != null && positionContents.Count > 0)
 						{
-							num3 = 0.0;
-							num4 = positionContents[0].Reactanle.Top;
-							num5 = num;
+							llx = 0.0;
+							lly = positionContents[0].Reactanle.Top;
+							urx = num;
 							num2 = positionHeaders[0].Reactanle.Top;
-							List<int> list = (from Page o in (IEnumerable)val.Pages
+							List<int> list = (from Page o in document.Pages
 								select o.Number).ToList();
-							array = (from Page o in (IEnumerable)val.Pages
+							array = (from Page o in document.Pages
 								where o.Number <= positionContents[0].PageNUm
 								select o).ToArray();
 						}
 						else
 						{
-							num3 = 0.0;
-							num4 = 0.0;
-							num5 = num;
+							llx = 0.0;
+							lly = 0.0;
+							urx = num;
 							num2 = positionHeaders[0].Reactanle.Top;
-							array = (from Page o in (IEnumerable)val.Pages
+							array = (from Page o in document.Pages
 								where o.Number >= positionHeaders[0].PageNUm
 								select o).ToArray();
 						}
 						bool flag2 = false;
-						int num6 = array.Count();
-						while (num6 > 0)
+						int num3 = array.Count();
+						while (num3 > 0)
 						{
-							Document val5 = ((flag && File.Exists(text3)) ? new Document(text3) : new Document());
-							try
+							using (Aspose.Pdf.Document document3 = ((flag && File.Exists(text)) ? new Aspose.Pdf.Document(text) : new Aspose.Pdf.Document()))
 							{
-								if (num6 < 4)
+								if (num3 < 4)
 								{
-									val5.Pages.Add(array);
-									num6 = 0;
+									document3.Pages.Add(array);
+									num3 = 0;
 									flag = false;
 								}
 								else
 								{
-									val5.Pages.Add(array.Skip(0).Take(3).ToArray());
+									document3.Pages.Add(array.Skip(0).Take(3).ToArray());
 									array = array.Skip(3).ToArray();
-									num6 = array.Count();
+									num3 = array.Count();
 									flag = true;
 								}
 								if (!flag2)
 								{
 									if (positionHeaders != null && positionHeaders.Count > 0 && positionHeaders[0].PageNUm < positionContents[0].PageNUm)
 									{
-										Page val6 = val5.Pages[positionHeaders[0].PageNUm];
-										val6.CropBox = new Rectangle(0.0, 0.0, num, (double)positionHeaders[0].Reactanle.Top);
-										Page val7 = val5.Pages[positionContents[0].PageNUm];
-										val7.CropBox = new Rectangle(0.0, (double)positionContents[0].Reactanle.Top, num, height);
+										Page page3 = document3.Pages[positionHeaders[0].PageNUm];
+										page3.CropBox = new Aspose.Pdf.Rectangle(0.0, 0.0, num, positionHeaders[0].Reactanle.Top);
+										Page page4 = document3.Pages[positionContents[0].PageNUm];
+										page4.CropBox = new Aspose.Pdf.Rectangle(0.0, positionContents[0].Reactanle.Top, num, height);
 									}
 									else
 									{
-										Page val8 = val5.Pages[positionContents[0].PageNUm];
-										val8.CropBox = new Rectangle(num3, num4, num5, num2);
+										Page page5 = document3.Pages[positionContents[0].PageNUm];
+										page5.CropBox = new Aspose.Pdf.Rectangle(llx, lly, urx, num2);
 									}
 									flag2 = true;
 								}
-								val5.Save(text3);
-							}
-							finally
-							{
-								if (val5 != null)
-								{
-									((IDisposable)val5).Dispose();
-								}
+								document3.Save(text);
 							}
 						}
-						Document val9 = new Document(text3);
-						try
+						using (Aspose.Pdf.Document document4 = new Aspose.Pdf.Document(text))
 						{
-							val9.Save(splitFileContentStream);
+							document4.Save(splitFileContentStream);
 							splitFileContentStream.Position = 0L;
-						}
-						finally
-						{
-							if (val9 != null)
-							{
-								((IDisposable)val9).Dispose();
-							}
 						}
 						try
 						{
@@ -183,26 +138,11 @@ namespace Inventec.Common.SignLibrary.SignHandler
 							return;
 						}
 					}
-					finally
-					{
-						if (val != null)
-						{
-							((IDisposable)val).Dispose();
-						}
-					}
 				}
-				Document val10 = new Document(stream);
-				try
+				using (Aspose.Pdf.Document document5 = new Aspose.Pdf.Document(stream))
 				{
-					Page val11 = val10.Pages[1];
-					oginalHeight = val11.GetPageRect(false).Height;
-				}
-				finally
-				{
-					if (val10 != null)
-					{
-						((IDisposable)val10).Dispose();
-					}
+					Page page6 = document5.Pages[1];
+					oginalHeight = page6.GetPageRect(false).Height;
 				}
 			}
 			catch (Exception ex)
@@ -213,60 +153,48 @@ namespace Inventec.Common.SignLibrary.SignHandler
 
 		private void splitIntoHalfPages(string sourceFile)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Expected O, but got Unknown
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Expected O, but got Unknown
-			//IL_0017: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001d: Expected O, but got Unknown
-			//IL_008e: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0095: Expected O, but got Unknown
-			//IL_00db: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e2: Expected O, but got Unknown
-			PdfReader val = new PdfReader(sourceFile);
+			PdfReader pdfReader = new PdfReader(sourceFile);
 			try
 			{
-				MemoryStream memoryStream = new MemoryStream();
-				Document val2 = new Document();
-				PdfCopy val3 = new PdfCopy(val2, (Stream)memoryStream);
-				val2.Open();
-				for (int i = 1; i <= val.NumberOfPages; i++)
+				MemoryStream os = new MemoryStream();
+				iTextSharp.text.Document document = new iTextSharp.text.Document();
+				PdfCopy pdfCopy = new PdfCopy(document, os);
+				document.Open();
+				for (int i = 1; i <= pdfReader.NumberOfPages; i++)
 				{
-					float num = 1f;
-					PdfDictionary pageN = val.GetPageN(i);
-					Rectangle cropBox = val.GetCropBox(i);
-					PdfArray val4 = new PdfArray(new float[4]
+					float margin = 1f;
+					PdfDictionary pageN = pdfReader.GetPageN(i);
+					iTextSharp.text.Rectangle cropBox = pdfReader.GetCropBox(i);
+					PdfArray value = new PdfArray(new float[4]
 					{
-						cropBox.GetLeft(num),
-						cropBox.GetBottom(num),
-						(cropBox.GetLeft(num) + cropBox.GetRight(num)) / 2f,
-						cropBox.GetTop(num)
+						cropBox.GetLeft(margin),
+						cropBox.GetBottom(margin),
+						(cropBox.GetLeft(margin) + cropBox.GetRight(margin)) / 2f,
+						cropBox.GetTop(margin)
 					});
-					PdfArray val5 = new PdfArray(new float[4]
+					PdfArray value2 = new PdfArray(new float[4]
 					{
-						(cropBox.GetLeft(num) + cropBox.GetRight(num)) / 2f,
-						cropBox.GetBottom(num),
-						cropBox.GetRight(num),
-						cropBox.GetTop(num)
+						(cropBox.GetLeft(margin) + cropBox.GetRight(margin)) / 2f,
+						cropBox.GetBottom(margin),
+						cropBox.GetRight(margin),
+						cropBox.GetTop(margin)
 					});
-					PdfImportedPage importedPage = ((PdfWriter)val3).GetImportedPage(val, i);
-					pageN.Put(PdfName.CROPBOX, (PdfObject)(object)val4);
-					val3.AddPage(importedPage);
-					pageN.Put(PdfName.CROPBOX, (PdfObject)(object)val5);
-					val3.AddPage(importedPage);
+					PdfImportedPage importedPage = pdfCopy.GetImportedPage(pdfReader, i);
+					pageN.Put(PdfName.CROPBOX, value);
+					pdfCopy.AddPage(importedPage);
+					pageN.Put(PdfName.CROPBOX, value2);
+					pdfCopy.AddPage(importedPage);
 				}
-				val2.Close();
+				document.Close();
 			}
 			finally
 			{
-				val.Close();
+				pdfReader.Close();
 			}
 		}
 
 		public void JoinPartialPdfFile(decimal oginalHeight, FileDataDTO headerData, List<FileDataDTO> contentDatas, ref string outputPdfFile)
 		{
-			//IL_008b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0092: Expected O, but got Unknown
 			try
 			{
 				string text = Utils.GenerateTempFileWithin();
@@ -283,8 +211,7 @@ namespace Inventec.Common.SignLibrary.SignHandler
 					SplitPdfFileWithKey(headerData.Stream, ref splitFileHeaderStream, ref splitFileContentStream, ref oginalHeight2, true, false);
 				}
 				List<Stream> list2 = new List<Stream>();
-				Document val = new Document();
-				try
+				using (new Aspose.Pdf.Document())
 				{
 					for (int i = 0; i < contentDatas.Count; i++)
 					{
@@ -301,13 +228,6 @@ namespace Inventec.Common.SignLibrary.SignHandler
 							contentDatas[i].Stream.Position = 0L;
 							list2.Add(contentDatas[i].Stream);
 						}
-					}
-				}
-				finally
-				{
-					if (val != null)
-					{
-						((IDisposable)val).Dispose();
 					}
 				}
 				oginalHeight = (decimal)oginalHeight2;

@@ -135,8 +135,6 @@ namespace Inventec.Common.SignLibrary.ADO
 
 		public Action reload { get; set; }
 
-		public Action DelegateIssuanceCer { get; set; }
-
 		public InputADO()
 		{
 		}

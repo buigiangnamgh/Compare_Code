@@ -13,18 +13,14 @@ namespace Inventec.Common.SignLibrary
 
 		public List<string> ReadPdfFile(string fileName, string searthText)
 		{
-			//IL_0016: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001c: Expected O, but got Unknown
-			//IL_0024: Unknown result type (might be due to invalid IL or missing references)
-			//IL_002b: Expected O, but got Unknown
 			List<string> list = new List<string>();
 			if (File.Exists(fileName))
 			{
-				PdfReader val = new PdfReader(fileName);
-				for (int i = 1; i <= val.NumberOfPages; i++)
+				PdfReader pdfReader = new PdfReader(fileName);
+				for (int i = 1; i <= pdfReader.NumberOfPages; i++)
 				{
-					ITextExtractionStrategy val2 = (ITextExtractionStrategy)new SimpleTextExtractionStrategy();
-					string textFromPage = PdfTextExtractor.GetTextFromPage(val, i, val2);
+					ITextExtractionStrategy strategy = new SimpleTextExtractionStrategy();
+					string textFromPage = PdfTextExtractor.GetTextFromPage(pdfReader, i, strategy);
 					string text = "< S I N G L E _ K E Y _ _ C O M M E N T _ S I G N _ _";
 					if (textFromPage.Contains(searthText))
 					{
@@ -34,7 +30,8 @@ namespace Inventec.Common.SignLibrary
 							continue;
 						}
 						string[] array2 = array;
-						foreach (string text2 in array2)
+						string[] array3 = array2;
+						foreach (string text2 in array3)
 						{
 							if (!text2.Contains("<SINGLE_KEY__COMMENT_SIGN__"))
 							{
@@ -60,13 +57,14 @@ namespace Inventec.Common.SignLibrary
 						{
 							continue;
 						}
-						string[] array3 = textFromPage.Replace(" ", "").Split('\n');
-						if (array3 == null || array3.Length == 0)
+						string[] array4 = textFromPage.Replace(" ", "").Split('\n');
+						if (array4 == null || array4.Length == 0)
 						{
 							continue;
 						}
-						string[] array4 = array3;
-						foreach (string text4 in array4)
+						string[] array5 = array4;
+						string[] array3 = array5;
+						foreach (string text4 in array3)
 						{
 							if (!text4.Contains(searthText))
 							{
@@ -88,27 +86,25 @@ namespace Inventec.Common.SignLibrary
 						}
 					}
 				}
-				val.Close();
+				pdfReader.Close();
 			}
 			return list;
 		}
 
 		public List<string> ExtractText(string inFileName)
 		{
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000f: Expected O, but got Unknown
 			List<string> list = new List<string>();
 			try
 			{
-				PdfReader val = new PdfReader(inFileName);
+				PdfReader pdfReader = new PdfReader(inFileName);
 				Console.Write("Processing: ");
 				int num = 68;
-				float num2 = (float)num / (float)val.NumberOfPages;
+				float num2 = (float)num / (float)pdfReader.NumberOfPages;
 				int num3 = 0;
 				float num4 = 0f;
-				for (int i = 1; i <= val.NumberOfPages; i++)
+				for (int i = 1; i <= pdfReader.NumberOfPages; i++)
 				{
-					list.Add(ExtractTextFromPDFBytes(val.GetPageContent(i)) + " ");
+					list.Add(ExtractTextFromPDFBytes(pdfReader.GetPageContent(i)) + " ");
 					if (num2 >= 1f)
 					{
 						for (int j = 0; j < (int)num2; j++)
@@ -136,7 +132,7 @@ namespace Inventec.Common.SignLibrary
 						Console.Write("#");
 					}
 				}
-				val.Close();
+				pdfReader.Close();
 				return list;
 			}
 			catch

@@ -5,7 +5,6 @@ using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Windows.Forms;
 using Aspose.Pdf;
 using Aspose.Pdf.Facades;
@@ -32,43 +31,37 @@ namespace Inventec.Common.SignLibrary
 
 		internal static bool SimplePrint(string inputFile, int copyCount = 1, string printerName = "", PaperSize paperSize = null)
 		{
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001b: Expected O, but got Unknown
-			//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0056: Expected O, but got Unknown
-			//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f5: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
 				LogSystem.Info("SimplePrint.1");
 				LicenceProcess.SetLicenseForAspose();
-				PdfViewer val = new PdfViewer();
-				val.BindPdf(inputFile);
-				val.AutoResize = true;
-				val.AutoRotate = true;
-				val.PrintPageDialog = true;
+				Aspose.Pdf.Facades.PdfViewer pdfViewer = new Aspose.Pdf.Facades.PdfViewer();
+				pdfViewer.BindPdf(inputFile);
+				pdfViewer.AutoResize = true;
+				pdfViewer.AutoRotate = true;
+				pdfViewer.PrintPageDialog = true;
 				PrinterSettings printerSettings = new PrinterSettings();
 				PageSettings pageSettings = new PageSettings();
 				PrintDocument printDocument = new PrintDocument();
-				Document val2 = new Document(inputFile);
+				Document document = new Document(inputFile);
 				PrintDialog printDialog = new PrintDialog();
 				printDialog.AllowSomePages = true;
 				printDialog.PrinterSettings.MinimumPage = 1;
-				printDialog.PrinterSettings.MaximumPage = val.PageCount;
+				printDialog.PrinterSettings.MaximumPage = pdfViewer.PageCount;
 				printDialog.PrinterSettings.FromPage = 1;
-				printDialog.PrinterSettings.ToPage = val.PageCount;
+				printDialog.PrinterSettings.ToPage = pdfViewer.PageCount;
 				printDialog.PrinterSettings.Copies = (short)((copyCount <= 0) ? 1 : ((short)copyCount));
 				if (!string.IsNullOrEmpty(printerName))
 				{
 					printDialog.PrinterSettings.PrinterName = printerName;
 				}
-				PageCollection pages = val2.Pages;
-				Page val3 = pages[1];
-				PdfPageEditor val4 = new PdfPageEditor();
-				((Facade)val4).BindPdf(inputFile);
-				int num = (int)Math.Round(val3.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				int num2 = (int)Math.Round(val3.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				PageCollection pages = document.Pages;
+				Page page = pages[1];
+				PdfPageEditor pdfPageEditor = new PdfPageEditor();
+				pdfPageEditor.BindPdf(inputFile);
+				int num = (int)Math.Round(page.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				int num2 = (int)Math.Round(page.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
 				if (paperSize != null)
 				{
 					if (string.IsNullOrEmpty(paperSize.PaperName))
@@ -83,17 +76,17 @@ namespace Inventec.Common.SignLibrary
 					paperSize2.RawKind = 11;
 					printDialog.PrinterSettings.DefaultPageSettings.PaperSize = new PaperSize(paperSize2.Kind.ToString(), num, num2);
 					printDialog.PrinterSettings.DefaultPageSettings.PaperSize.RawKind = paperSize2.RawKind;
-					if (val4.GetPageSize(1).IsLandscape)
+					if (pdfPageEditor.GetPageSize(1).IsLandscape)
 					{
-						val4.Alignment = AlignmentType.Center;
-						val.AutoRotate = false;
-						val.AutoResize = false;
+						pdfPageEditor.Alignment = AlignmentType.Center;
+						pdfViewer.AutoRotate = false;
+						pdfViewer.AutoResize = false;
 					}
 				}
 				if (printDialog.ShowDialog() == DialogResult.OK)
 				{
 					printerSettings = printDialog.PrinterSettings;
-					if (val4.GetPageSize(1).IsLandscape)
+					if (pdfPageEditor.GetPageSize(1).IsLandscape)
 					{
 						pageSettings.Landscape = true;
 					}
@@ -111,26 +104,26 @@ namespace Inventec.Common.SignLibrary
 						paperSize3.RawKind = 11;
 						pageSettings.PaperSize = new PaperSize(paperSize3.Kind.ToString(), num, num2);
 						pageSettings.PaperSize.RawKind = paperSize3.RawKind;
-						if (val4.GetPageSize(1).IsLandscape)
+						if (pdfPageEditor.GetPageSize(1).IsLandscape)
 						{
-							val4.Alignment = AlignmentType.Center;
-							val.AutoRotate = false;
-							val.AutoResize = false;
+							pdfPageEditor.Alignment = AlignmentType.Center;
+							pdfViewer.AutoRotate = false;
+							pdfViewer.AutoResize = false;
 						}
 					}
 					else
 					{
 						pageSettings.PaperSize = new PaperSize("Custom", num, num2);
 					}
-					LogSystem.Info(LogUtil.TraceData("pageEditor.GetPageSize(1)", (object)val4.GetPageSize(1)));
+					LogSystem.Info(LogUtil.TraceData("pageEditor.GetPageSize(1)", pdfPageEditor.GetPageSize(1)));
 					pageSettings.Margins = new Margins(0, 0, 0, 0);
 					printerSettings.DefaultPageSettings.PaperSize = pageSettings.PaperSize;
-					val.PrintDocumentWithSettings(pageSettings, printerSettings);
-					if (val.PrintStatus != null)
+					pdfViewer.PrintDocumentWithSettings(pageSettings, printerSettings);
+					if (pdfViewer.PrintStatus != null)
 					{
-						if (val.PrintStatus is Exception)
+						if (pdfViewer.PrintStatus is Exception)
 						{
-							Exception ex = val.PrintStatus as Exception;
+							Exception ex = pdfViewer.PrintStatus as Exception;
 							LogSystem.Warn("In văn bản lỗi.", ex);
 						}
 					}
@@ -141,7 +134,7 @@ namespace Inventec.Common.SignLibrary
 						result = true;
 					}
 				}
-				val.Close();
+				pdfViewer.Close();
 				LogSystem.Info("SimplePrint.2");
 			}
 			catch (Exception ex2)
@@ -153,33 +146,27 @@ namespace Inventec.Common.SignLibrary
 
 		internal static bool ExecutePrintNowJob(string inputFile, int copyCount, string printerName = "", PaperSize paperSize = null, bool isPrintPageDialog = true)
 		{
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001b: Expected O, but got Unknown
-			//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0057: Expected O, but got Unknown
-			//IL_006a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0071: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
 				LogSystem.Info("ExecutePrintNowJob.1");
 				LicenceProcess.SetLicenseForAspose();
-				PdfViewer val = new PdfViewer();
-				val.BindPdf(inputFile);
-				val.AutoResize = true;
-				val.AutoRotate = true;
-				val.PrintPageDialog = isPrintPageDialog;
+				Aspose.Pdf.Facades.PdfViewer pdfViewer = new Aspose.Pdf.Facades.PdfViewer();
+				pdfViewer.BindPdf(inputFile);
+				pdfViewer.AutoResize = true;
+				pdfViewer.AutoRotate = true;
+				pdfViewer.PrintPageDialog = isPrintPageDialog;
 				PrinterSettings printerSettings = new PrinterSettings();
 				PageSettings pageSettings = new PageSettings();
 				PrintDocument printDocument = new PrintDocument();
-				Document val2 = new Document(inputFile);
-				PageCollection pages = val2.Pages;
-				Page val3 = pages[1];
-				PdfPageEditor val4 = new PdfPageEditor();
-				((Facade)val4).BindPdf(inputFile);
-				int num = (int)Math.Round(val3.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				int num2 = (int)Math.Round(val3.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				if (val4.GetPageSize(1).IsLandscape)
+				Document document = new Document(inputFile);
+				PageCollection pages = document.Pages;
+				Page page = pages[1];
+				PdfPageEditor pdfPageEditor = new PdfPageEditor();
+				pdfPageEditor.BindPdf(inputFile);
+				int num = (int)Math.Round(page.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				int num2 = (int)Math.Round(page.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				if (pdfPageEditor.GetPageSize(1).IsLandscape)
 				{
 					pageSettings.Landscape = true;
 				}
@@ -197,11 +184,11 @@ namespace Inventec.Common.SignLibrary
 					paperSize2.RawKind = 11;
 					pageSettings.PaperSize = new PaperSize(paperSize2.Kind.ToString(), num, num2);
 					pageSettings.PaperSize.RawKind = paperSize2.RawKind;
-					if (val4.GetPageSize(1).IsLandscape)
+					if (pdfPageEditor.GetPageSize(1).IsLandscape)
 					{
-						val4.Alignment = AlignmentType.Center;
-						val.AutoRotate = false;
-						val.AutoResize = false;
+						pdfPageEditor.Alignment = AlignmentType.Center;
+						pdfViewer.AutoRotate = false;
+						pdfViewer.AutoResize = false;
 					}
 				}
 				else
@@ -211,12 +198,12 @@ namespace Inventec.Common.SignLibrary
 				pageSettings.Margins = new Margins(0, 0, 0, 0);
 				printerSettings.DefaultPageSettings.PaperSize = pageSettings.PaperSize;
 				printerSettings.Copies = (short)((copyCount <= 0) ? 1 : ((short)copyCount));
-				val.PrintDocumentWithSettings(pageSettings, printerSettings);
-				if (val.PrintStatus != null)
+				pdfViewer.PrintDocumentWithSettings(pageSettings, printerSettings);
+				if (pdfViewer.PrintStatus != null)
 				{
-					if (val.PrintStatus is Exception)
+					if (pdfViewer.PrintStatus is Exception)
 					{
-						Exception ex = val.PrintStatus as Exception;
+						Exception ex = pdfViewer.PrintStatus as Exception;
 						LogSystem.Warn("In văn bản lỗi.", ex);
 					}
 				}
@@ -226,7 +213,7 @@ namespace Inventec.Common.SignLibrary
 					LogSystem.Debug("printing completed without any issue..");
 					result = true;
 				}
-				val.Close();
+				pdfViewer.Close();
 				LogSystem.Info("ExecutePrintNowJob.2");
 			}
 			catch (Exception ex2)
@@ -238,43 +225,37 @@ namespace Inventec.Common.SignLibrary
 
 		internal static bool SimplePrintDevLib(string inputFile, int copyCount = 1, string printerName = "", PaperSize paperSize = null)
 		{
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001b: Expected O, but got Unknown
-			//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0056: Expected O, but got Unknown
-			//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f5: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
 				LogSystem.Info("SimplePrintDevLib.1");
 				LicenceProcess.SetLicenseForAspose();
-				PdfViewer val = new PdfViewer();
-				val.BindPdf(inputFile);
-				val.AutoResize = true;
-				val.AutoRotate = true;
-				val.PrintPageDialog = true;
+				Aspose.Pdf.Facades.PdfViewer pdfViewer = new Aspose.Pdf.Facades.PdfViewer();
+				pdfViewer.BindPdf(inputFile);
+				pdfViewer.AutoResize = true;
+				pdfViewer.AutoRotate = true;
+				pdfViewer.PrintPageDialog = true;
 				PrinterSettings printerSettings = new PrinterSettings();
 				PageSettings pageSettings = new PageSettings();
 				PrintDocument printDocument = new PrintDocument();
-				Document val2 = new Document(inputFile);
+				Document document = new Document(inputFile);
 				PrintDialog printDialog = new PrintDialog();
 				printDialog.AllowSomePages = true;
 				printDialog.PrinterSettings.MinimumPage = 1;
-				printDialog.PrinterSettings.MaximumPage = val.PageCount;
+				printDialog.PrinterSettings.MaximumPage = pdfViewer.PageCount;
 				printDialog.PrinterSettings.FromPage = 1;
-				printDialog.PrinterSettings.ToPage = val.PageCount;
+				printDialog.PrinterSettings.ToPage = pdfViewer.PageCount;
 				printDialog.PrinterSettings.Copies = (short)((copyCount <= 0) ? 1 : ((short)copyCount));
 				if (!string.IsNullOrEmpty(printerName))
 				{
 					printDialog.PrinterSettings.PrinterName = printerName;
 				}
-				PageCollection pages = val2.Pages;
-				Page val3 = pages[1];
-				PdfPageEditor val4 = new PdfPageEditor();
-				((Facade)val4).BindPdf(inputFile);
-				int num = (int)Math.Round(val3.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				int num2 = (int)Math.Round(val3.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				PageCollection pages = document.Pages;
+				Page page = pages[1];
+				PdfPageEditor pdfPageEditor = new PdfPageEditor();
+				pdfPageEditor.BindPdf(inputFile);
+				int num = (int)Math.Round(page.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				int num2 = (int)Math.Round(page.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
 				if (paperSize != null)
 				{
 					if (string.IsNullOrEmpty(paperSize.PaperName))
@@ -289,17 +270,17 @@ namespace Inventec.Common.SignLibrary
 					paperSize2.RawKind = 11;
 					printDialog.PrinterSettings.DefaultPageSettings.PaperSize = new PaperSize(paperSize2.Kind.ToString(), num, num2);
 					printDialog.PrinterSettings.DefaultPageSettings.PaperSize.RawKind = paperSize2.RawKind;
-					if (val4.GetPageSize(1).IsLandscape)
+					if (pdfPageEditor.GetPageSize(1).IsLandscape)
 					{
-						val4.Alignment = AlignmentType.Center;
-						val.AutoRotate = false;
-						val.AutoResize = false;
+						pdfPageEditor.Alignment = AlignmentType.Center;
+						pdfViewer.AutoRotate = false;
+						pdfViewer.AutoResize = false;
 					}
 				}
 				if (printDialog.ShowDialog() == DialogResult.OK)
 				{
 					printerSettings = printDialog.PrinterSettings;
-					if (val4.GetPageSize(1).IsLandscape)
+					if (pdfPageEditor.GetPageSize(1).IsLandscape)
 					{
 						pageSettings.Landscape = true;
 					}
@@ -317,11 +298,11 @@ namespace Inventec.Common.SignLibrary
 						paperSize3.RawKind = 11;
 						pageSettings.PaperSize = new PaperSize(paperSize3.Kind.ToString(), num, num2);
 						pageSettings.PaperSize.RawKind = paperSize3.RawKind;
-						if (val4.GetPageSize(1).IsLandscape)
+						if (pdfPageEditor.GetPageSize(1).IsLandscape)
 						{
-							val4.Alignment = AlignmentType.Center;
-							val.AutoRotate = false;
-							val.AutoResize = false;
+							pdfPageEditor.Alignment = AlignmentType.Center;
+							pdfViewer.AutoRotate = false;
+							pdfViewer.AutoResize = false;
 						}
 					}
 					else
@@ -330,20 +311,20 @@ namespace Inventec.Common.SignLibrary
 					}
 					pageSettings.Margins = new Margins(0, 0, 0, 0);
 					printerSettings.DefaultPageSettings.PaperSize = pageSettings.PaperSize;
-					PdfViewer pdfViewer = new PdfViewer();
-					pdfViewer.Name = "pdfViewer1";
-					pdfViewer.DetachStreamAfterLoadComplete = true;
-					pdfViewer.LoadDocument(inputFile);
+					DevExpress.XtraPdfViewer.PdfViewer pdfViewer2 = new DevExpress.XtraPdfViewer.PdfViewer();
+					pdfViewer2.Name = "pdfViewer1";
+					pdfViewer2.DetachStreamAfterLoadComplete = true;
+					pdfViewer2.LoadDocument(inputFile);
 					printerSettings.PrintToFile = true;
 					PdfPrinterSettings pdfPrinterSettings = new PdfPrinterSettings(printerSettings);
 					pdfPrinterSettings.ScaleMode = PdfPrintScaleMode.Fit;
 					pdfPrinterSettings.PageOrientation = ((!pageSettings.Landscape) ? PdfPrintPageOrientation.Portrait : PdfPrintPageOrientation.Landscape);
-					pdfViewer.QueryPageSettings += OnQueryPageSettings;
-					pdfViewer.Print(pdfPrinterSettings);
-					pdfViewer.QueryPageSettings -= OnQueryPageSettings;
+					pdfViewer2.QueryPageSettings += OnQueryPageSettings;
+					pdfViewer2.Print(pdfPrinterSettings);
+					pdfViewer2.QueryPageSettings -= OnQueryPageSettings;
 					result = true;
 				}
-				val.Close();
+				pdfViewer.Close();
 				LogSystem.Info("SimplePrintDevLib.2");
 			}
 			catch (Exception ex)
@@ -360,7 +341,7 @@ namespace Inventec.Common.SignLibrary
 			{
 				LogSystem.Info("SimplePrintNowDevLib.1");
 				currentPageSettings = PdfDocumentProcess.GetPaperSize(inputFile);
-				PdfViewer pdfViewer = new PdfViewer();
+				DevExpress.XtraPdfViewer.PdfViewer pdfViewer = new DevExpress.XtraPdfViewer.PdfViewer();
 				pdfViewer.Name = "pdfViewer1";
 				pdfViewer.PageSetupDialogShowing += pdfViewer1_PageSetupDialogShowing;
 				pdfViewer.DetachStreamAfterLoadComplete = true;
@@ -396,7 +377,7 @@ namespace Inventec.Common.SignLibrary
 				pdfPrinterSettings = new PdfPrinterSettings(printerSettings);
 				pdfPrinterSettings.PageOrientation = ((!currentPageSettings.Landscape) ? PdfPrintPageOrientation.Portrait : PdfPrintPageOrientation.Landscape);
 				pdfPrinterSettings.ScaleMode = PdfPrintScaleMode.ActualSize;
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => inputFile)), (object)inputFile));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => inputFile), inputFile));
 				pdfViewer.QueryPageSettings += OnQueryPageSettings;
 				pdfViewer.Print(pdfPrinterSettings);
 				pdfViewer.QueryPageSettings -= OnQueryPageSettings;
@@ -439,20 +420,8 @@ namespace Inventec.Common.SignLibrary
 			{
 				Width_ = (int)e.PageSize.Width;
 				Height_ = (int)e.PageSize.Height;
-				if (currentPageSettings == null)
-				{
-					currentPageSettings = new PageSettings();
-				}
-				if (currentPageSettings.PaperSize == null)
-				{
-					currentPageSettings.PaperSize = new PaperSize("Custom", Width_, Height_);
-				}
-				currentPageSettings.PaperSize.Width = Width_;
-				currentPageSettings.PaperSize.Height = Height_;
-				if (printerSettings == null)
-				{
-					printerSettings = new PrinterSettings();
-				}
+				currentPageSettings.PaperSize.Width = (int)e.PageSize.Width;
+				currentPageSettings.PaperSize.Height = (int)e.PageSize.Height;
 				printerSettings.DefaultPageSettings.PaperSize = currentPageSettings.PaperSize;
 				pdfPrinterSettings = new PdfPrinterSettings(printerSettings);
 				pdfPrinterSettings.PageOrientation = ((!currentPageSettings.Landscape) ? PdfPrintPageOrientation.Portrait : PdfPrintPageOrientation.Landscape);
@@ -466,33 +435,27 @@ namespace Inventec.Common.SignLibrary
 
 		internal static bool ExecutePrintNowJobDevLib(string inputFile, int copyCount, string printerName = "", PaperSize paperSize = null, bool isPrintPageDialog = true)
 		{
-			//IL_0015: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001b: Expected O, but got Unknown
-			//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0057: Expected O, but got Unknown
-			//IL_006a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0071: Expected O, but got Unknown
 			bool result = false;
 			try
 			{
 				LogSystem.Info("ExecutePrintNowJobDevLib.1");
 				LicenceProcess.SetLicenseForAspose();
-				PdfViewer val = new PdfViewer();
-				val.BindPdf(inputFile);
-				val.AutoResize = true;
-				val.AutoRotate = true;
-				val.PrintPageDialog = isPrintPageDialog;
+				Aspose.Pdf.Facades.PdfViewer pdfViewer = new Aspose.Pdf.Facades.PdfViewer();
+				pdfViewer.BindPdf(inputFile);
+				pdfViewer.AutoResize = true;
+				pdfViewer.AutoRotate = true;
+				pdfViewer.PrintPageDialog = isPrintPageDialog;
 				PrinterSettings printerSettings = new PrinterSettings();
 				PageSettings pageSettings = new PageSettings();
 				PrintDocument printDocument = new PrintDocument();
-				Document val2 = new Document(inputFile);
-				PageCollection pages = val2.Pages;
-				Page val3 = pages[1];
-				PdfPageEditor val4 = new PdfPageEditor();
-				((Facade)val4).BindPdf(inputFile);
-				int num = (int)Math.Round(val3.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				int num2 = (int)Math.Round(val3.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
-				if (val4.GetPageSize(1).IsLandscape)
+				Document document = new Document(inputFile);
+				PageCollection pages = document.Pages;
+				Page page = pages[1];
+				PdfPageEditor pdfPageEditor = new PdfPageEditor();
+				pdfPageEditor.BindPdf(inputFile);
+				int num = (int)Math.Round(page.Rect.Width * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				int num2 = (int)Math.Round(page.Rect.Height * 100.0 / 72.0, 0, MidpointRounding.AwayFromZero);
+				if (pdfPageEditor.GetPageSize(1).IsLandscape)
 				{
 					pageSettings.Landscape = true;
 				}
@@ -510,11 +473,11 @@ namespace Inventec.Common.SignLibrary
 					paperSize2.RawKind = 11;
 					pageSettings.PaperSize = new PaperSize(paperSize2.Kind.ToString(), num, num2);
 					pageSettings.PaperSize.RawKind = paperSize2.RawKind;
-					if (val4.GetPageSize(1).IsLandscape)
+					if (pdfPageEditor.GetPageSize(1).IsLandscape)
 					{
-						val4.Alignment = AlignmentType.Center;
-						val.AutoRotate = false;
-						val.AutoResize = false;
+						pdfPageEditor.Alignment = AlignmentType.Center;
+						pdfViewer.AutoRotate = false;
+						pdfViewer.AutoResize = false;
 					}
 				}
 				else
@@ -524,10 +487,10 @@ namespace Inventec.Common.SignLibrary
 				pageSettings.Margins = new Margins(0, 0, 0, 0);
 				printerSettings.DefaultPageSettings.PaperSize = pageSettings.PaperSize;
 				printerSettings.Copies = (short)((copyCount <= 0) ? 1 : ((short)copyCount));
-				PdfViewer pdfViewer = new PdfViewer();
-				pdfViewer.Name = "pdfViewer1";
-				pdfViewer.DetachStreamAfterLoadComplete = true;
-				pdfViewer.LoadDocument(inputFile);
+				DevExpress.XtraPdfViewer.PdfViewer pdfViewer2 = new DevExpress.XtraPdfViewer.PdfViewer();
+				pdfViewer2.Name = "pdfViewer1";
+				pdfViewer2.DetachStreamAfterLoadComplete = true;
+				pdfViewer2.LoadDocument(inputFile);
 				PdfPrinterSettings pdfPrinterSettings = new PdfPrinterSettings(printerSettings);
 				pdfPrinterSettings.PageOrientation = PdfPrintPageOrientation.Auto;
 				if (pageSettings.Landscape)
@@ -535,9 +498,9 @@ namespace Inventec.Common.SignLibrary
 					pdfPrinterSettings.PageOrientation = PdfPrintPageOrientation.Landscape;
 				}
 				pdfPrinterSettings.ScaleMode = PdfPrintScaleMode.Fit;
-				pdfViewer.Print(pdfPrinterSettings);
+				pdfViewer2.Print(pdfPrinterSettings);
 				result = true;
-				val.Close();
+				pdfViewer.Close();
 				LogSystem.Info("ExecutePrintNowJobDevLib.2");
 			}
 			catch (Exception ex)
@@ -554,7 +517,7 @@ namespace Inventec.Common.SignLibrary
 			{
 				string exeServiceFileName = Path.Combine(Application.StartupPath, "Integrate\\PrintService\\HPS.ClientLibrary.exe");
 				valid = !string.IsNullOrEmpty(exeServiceFileName) && File.Exists(exeServiceFileName);
-				LogSystem.Info("ValidExistsExecutePrintCallExeService" + LogUtil.TraceData(LogUtil.GetMemberName<bool>((Expression<Func<bool>>)(() => valid)), (object)valid) + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => exeServiceFileName)), (object)exeServiceFileName));
+				LogSystem.Info("ValidExistsExecutePrintCallExeService" + LogUtil.TraceData(LogUtil.GetMemberName(() => valid), valid) + LogUtil.TraceData(LogUtil.GetMemberName(() => exeServiceFileName), exeServiceFileName));
 			}
 			catch (Exception ex)
 			{

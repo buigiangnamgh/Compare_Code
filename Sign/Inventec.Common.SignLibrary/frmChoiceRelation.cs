@@ -72,13 +72,13 @@ namespace Inventec.Common.SignLibrary
 		{
 			try
 			{
-				EMR_RELATION val = ((cboRelation.EditValue != null) ? relationDatas.Where((EMR_RELATION o) => o.ID == (long)cboRelation.EditValue).FirstOrDefault() : null);
-				if (val == null && !chkIsPatientSign.Checked)
+				EMR_RELATION eMR_RELATION = ((cboRelation.EditValue != null) ? relationDatas.Where((EMR_RELATION o) => o.ID == (long)cboRelation.EditValue).FirstOrDefault() : null);
+				if (eMR_RELATION == null && !chkIsPatientSign.Checked)
 				{
 					MessageManager.Show(MessageUitl.GetMessage("ChuaChonMoiQuanHeVoiBenhNhan"));
 					return;
 				}
-				actChoose(val, chkIsPatientSign.Checked);
+				actChoose(eMR_RELATION, chkIsPatientSign.Checked);
 				Close();
 			}
 			catch (Exception ex)

@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
-using System.Linq.Expressions;
 using System.Windows.Forms;
 using Inventec.Common.Integrate;
 using Inventec.Common.Logging;
@@ -62,7 +61,7 @@ namespace Inventec.Common.SignLibrary.SignBoard
 				string path2 = Path.Combine(Path.Combine(Application.StartupPath, "temp"), DateTime.Now.ToString("ddMMyyyy"), "STPadLibFile");
 				DirectoryInfo dicInfo = new DirectoryInfo(path2);
 				string[] fileImage = Directory.GetFiles(dicInfo.FullName, "*");
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string[]>((Expression<Func<string[]>>)(() => fileImage)), (object)fileImage) + LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => dicInfo.FullName)), (object)dicInfo.FullName));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => fileImage), fileImage) + LogUtil.TraceData(LogUtil.GetMemberName(() => dicInfo.FullName), dicInfo.FullName));
 				if (fileImage != null && fileImage.Length != 0)
 				{
 					SignPadImageData = Utils.FileToByte(fileImage[0]);
@@ -107,7 +106,8 @@ namespace Inventec.Common.SignLibrary.SignBoard
 			try
 			{
 				Process[] processes = Process.GetProcesses();
-				foreach (Process process in processes)
+				Process[] array = processes;
+				foreach (Process process in array)
 				{
 					if (process.ProcessName == name || process.ProcessName == string.Format("{0}.exe", name) || process.ProcessName == string.Format("{0} (32 bit)", name) || process.ProcessName == string.Format("{0}.exe (32 bit)", name))
 					{

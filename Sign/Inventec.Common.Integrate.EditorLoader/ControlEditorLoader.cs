@@ -49,23 +49,21 @@ namespace Inventec.Common.Integrate.EditorLoader
 				{
 					FormatType formatType = FormatType.None;
 					ColumnInfo.FormatType formatType2 = columnInfo.formatType;
-					if (true)
+					bool flag = false;
+					switch (columnInfo.formatType)
 					{
-						switch (columnInfo.formatType)
-						{
-						case ColumnInfo.FormatType.None:
-							formatType = FormatType.None;
-							break;
-						case ColumnInfo.FormatType.Numeric:
-							formatType = FormatType.Numeric;
-							break;
-						case ColumnInfo.FormatType.DateTime:
-							formatType = FormatType.DateTime;
-							break;
-						case ColumnInfo.FormatType.Custom:
-							formatType = FormatType.Custom;
-							break;
-						}
+					case ColumnInfo.FormatType.None:
+						formatType = FormatType.None;
+						break;
+					case ColumnInfo.FormatType.Numeric:
+						formatType = FormatType.Numeric;
+						break;
+					case ColumnInfo.FormatType.DateTime:
+						formatType = FormatType.DateTime;
+						break;
+					case ColumnInfo.FormatType.Custom:
+						formatType = FormatType.Custom;
+						break;
 					}
 					HorzAlignment alignment = HorzAlignment.Default;
 					switch (columnInfo.horzAlignment)
@@ -157,23 +155,21 @@ namespace Inventec.Common.Integrate.EditorLoader
 				{
 					FormatType formatType = FormatType.None;
 					ColumnInfo.FormatType formatType2 = columnInfo.formatType;
-					if (true)
+					bool flag = false;
+					switch (columnInfo.formatType)
 					{
-						switch (columnInfo.formatType)
-						{
-						case ColumnInfo.FormatType.None:
-							formatType = FormatType.None;
-							break;
-						case ColumnInfo.FormatType.Numeric:
-							formatType = FormatType.Numeric;
-							break;
-						case ColumnInfo.FormatType.DateTime:
-							formatType = FormatType.DateTime;
-							break;
-						case ColumnInfo.FormatType.Custom:
-							formatType = FormatType.Custom;
-							break;
-						}
+					case ColumnInfo.FormatType.None:
+						formatType = FormatType.None;
+						break;
+					case ColumnInfo.FormatType.Numeric:
+						formatType = FormatType.Numeric;
+						break;
+					case ColumnInfo.FormatType.DateTime:
+						formatType = FormatType.DateTime;
+						break;
+					case ColumnInfo.FormatType.Custom:
+						formatType = FormatType.Custom;
+						break;
 					}
 					HorzAlignment alignment = HorzAlignment.Default;
 					switch (columnInfo.horzAlignment)
@@ -235,23 +231,21 @@ namespace Inventec.Common.Integrate.EditorLoader
 					GridColumn gridColumn = cboEditor.View.Columns.AddField(columnInfo.fieldName);
 					FormatType formatType = FormatType.None;
 					ColumnInfo.FormatType formatType2 = columnInfo.formatType;
-					if (true)
+					bool flag = false;
+					switch (columnInfo.formatType)
 					{
-						switch (columnInfo.formatType)
-						{
-						case ColumnInfo.FormatType.None:
-							formatType = FormatType.None;
-							break;
-						case ColumnInfo.FormatType.Numeric:
-							formatType = FormatType.Numeric;
-							break;
-						case ColumnInfo.FormatType.DateTime:
-							formatType = FormatType.DateTime;
-							break;
-						case ColumnInfo.FormatType.Custom:
-							formatType = FormatType.Custom;
-							break;
-						}
+					case ColumnInfo.FormatType.None:
+						formatType = FormatType.None;
+						break;
+					case ColumnInfo.FormatType.Numeric:
+						formatType = FormatType.Numeric;
+						break;
+					case ColumnInfo.FormatType.DateTime:
+						formatType = FormatType.DateTime;
+						break;
+					case ColumnInfo.FormatType.Custom:
+						formatType = FormatType.Custom;
+						break;
 					}
 					gridColumn.DisplayFormat.FormatType = formatType;
 					if (!string.IsNullOrEmpty(columnInfo.formatString))

@@ -132,14 +132,12 @@ namespace Inventec.Common.SignLibrary
 
 		private void btnChoose_Click(object sender, EventArgs e)
 		{
-			//IL_000d: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0013: Expected O, but got Unknown
 			try
 			{
-				V_EMR_DOCUMENT val = (V_EMR_DOCUMENT)gridView1.GetFocusedRow();
-				if (val != null)
+				V_EMR_DOCUMENT v_EMR_DOCUMENT = (V_EMR_DOCUMENT)gridView1.GetFocusedRow();
+				if (v_EMR_DOCUMENT != null)
 				{
-					actChoose(val);
+					actChoose(v_EMR_DOCUMENT);
 					Close();
 				}
 			}
@@ -151,16 +149,14 @@ namespace Inventec.Common.SignLibrary
 
 		private void gridView1_CustomUnboundColumnData(object sender, CustomColumnDataEventArgs e)
 		{
-			//IL_003b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0041: Expected O, but got Unknown
 			try
 			{
 				if (e.IsGetData && e.Column.UnboundType != UnboundColumnType.Bound)
 				{
-					V_EMR_DOCUMENT val = (V_EMR_DOCUMENT)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
-					if (val != null && e.Column.FieldName == "CREAT_TIME_DISPLAY")
+					V_EMR_DOCUMENT v_EMR_DOCUMENT = (V_EMR_DOCUMENT)((IList)((BaseView)sender).DataSource)[e.ListSourceRowIndex];
+					if (v_EMR_DOCUMENT != null && e.Column.FieldName == "CREAT_TIME_DISPLAY")
 					{
-						e.Value = DateTimeConvert.TimeNumberToTimeString(val.CREATE_TIME.GetValueOrDefault());
+						e.Value = DateTimeConvert.TimeNumberToTimeString(v_EMR_DOCUMENT.CREATE_TIME.GetValueOrDefault());
 					}
 				}
 			}

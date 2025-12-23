@@ -105,8 +105,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void frmShowAndPrintNow1_Load(object sender, EventArgs e)
 		{
-			//IL_001f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0029: Expected O, but got Unknown
 			try
 			{
 				if (!string.IsNullOrEmpty(outputFile))
@@ -114,7 +112,7 @@ namespace Inventec.Common.SignLibrary
 					readerWorking = new PdfReader(outputFile);
 					int num = 1;
 					num = readerWorking.NumberOfPages;
-					Rectangle pageSizeWithRotation = readerWorking.GetPageSizeWithRotation(readerWorking.NumberOfPages);
+					iTextSharp.text.Rectangle pageSizeWithRotation = readerWorking.GetPageSizeWithRotation(readerWorking.NumberOfPages);
 					int numberOfPages = readerWorking.NumberOfPages;
 					outputPdfPathTemp = Utils.GenerateTempFileWithin();
 					outputPdfPath = "";
@@ -140,16 +138,6 @@ namespace Inventec.Common.SignLibrary
 
 		private void ProcessInsertSignInformationPage(string outputPdfPathTemp, ref string outputPdfPath, ref int pageCount)
 		{
-			//IL_01b2: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01bc: Expected O, but got Unknown
-			//IL_0050: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0056: Expected O, but got Unknown
-			//IL_00d0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d7: Expected O, but got Unknown
-			//IL_011a: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0121: Expected O, but got Unknown
-			//IL_00f5: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00fc: Expected O, but got Unknown
 			try
 			{
 				if (inputADO.IsPrintOnlyContent || verifiers == null || verifiers.Count <= 0)
@@ -157,12 +145,12 @@ namespace Inventec.Common.SignLibrary
 					return;
 				}
 				FileStream fileStream = File.Open(outputPdfPathTemp, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-				Document val = new Document(readerWorking.GetPageSizeWithRotation(readerWorking.NumberOfPages));
-				PdfWriter instance = PdfWriter.GetInstance(val, (Stream)fileStream);
-				val.Open();
-				PdfPTable val2 = AddPdfPTable();
-				val.Add((IElement)(object)val2);
-				val.Close();
+				Document document = new Document(readerWorking.GetPageSizeWithRotation(readerWorking.NumberOfPages));
+				PdfWriter instance = PdfWriter.GetInstance(document, fileStream);
+				document.Open();
+				PdfPTable element = AddPdfPTable();
+				document.Add(element);
+				document.Close();
 				List<int> list = new List<int>();
 				for (int i = 0; i <= readerWorking.NumberOfPages; i++)
 				{
@@ -170,18 +158,18 @@ namespace Inventec.Common.SignLibrary
 				}
 				outputPdfPath = Utils.GenerateTempFileWithin();
 				currentStream = File.Open(outputPdfPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
-				PdfConcatenate val3 = new PdfConcatenate(currentStream);
-				PdfReader val4 = null;
+				PdfConcatenate pdfConcatenate = new PdfConcatenate(currentStream);
+				PdfReader pdfReader = null;
 				if (!string.IsNullOrEmpty(outputFile))
 				{
-					val4 = new PdfReader(outputFile);
+					pdfReader = new PdfReader(outputFile);
 				}
-				val4.SelectPages((ICollection<int>)list);
-				val3.AddPages(val4);
-				val4.Close();
-				val4 = new PdfReader(outputPdfPathTemp);
-				val4.SelectPages((ICollection<int>)new List<int> { 0, 1 });
-				val3.AddPages(val4);
+				pdfReader.SelectPages(list);
+				pdfConcatenate.AddPages(pdfReader);
+				pdfReader.Close();
+				pdfReader = new PdfReader(outputPdfPathTemp);
+				pdfReader.SelectPages(new List<int> { 0, 1 });
+				pdfConcatenate.AddPages(pdfReader);
 				try
 				{
 					fileStream.Close();
@@ -191,14 +179,14 @@ namespace Inventec.Common.SignLibrary
 				}
 				try
 				{
-					val4.Close();
+					pdfReader.Close();
 				}
 				catch
 				{
 				}
 				try
 				{
-					val3.Close();
+					pdfConcatenate.Close();
 				}
 				catch
 				{
@@ -231,134 +219,72 @@ namespace Inventec.Common.SignLibrary
 
 		private PdfPTable AddPdfPTable()
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Expected O, but got Unknown
-			//IL_002b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0031: Expected O, but got Unknown
-			//IL_003c: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0042: Expected O, but got Unknown
-			//IL_0042: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0048: Expected O, but got Unknown
-			//IL_004f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0059: Expected O, but got Unknown
-			//IL_0062: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0069: Expected O, but got Unknown
-			//IL_0071: Unknown result type (might be due to invalid IL or missing references)
-			//IL_007b: Expected O, but got Unknown
-			//IL_0085: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008c: Expected O, but got Unknown
-			//IL_0094: Unknown result type (might be due to invalid IL or missing references)
-			//IL_009e: Expected O, but got Unknown
-			//IL_00a8: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00af: Expected O, but got Unknown
-			//IL_00b7: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00c1: Expected O, but got Unknown
-			//IL_00cb: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00d2: Expected O, but got Unknown
-			//IL_00da: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00e4: Expected O, but got Unknown
-			//IL_00ee: Unknown result type (might be due to invalid IL or missing references)
-			//IL_00f5: Expected O, but got Unknown
-			//IL_00fd: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0107: Expected O, but got Unknown
-			//IL_0111: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0118: Expected O, but got Unknown
-			//IL_0120: Unknown result type (might be due to invalid IL or missing references)
-			//IL_012a: Expected O, but got Unknown
-			//IL_0176: Unknown result type (might be due to invalid IL or missing references)
-			//IL_017d: Expected O, but got Unknown
-			//IL_0187: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0191: Expected O, but got Unknown
-			//IL_019b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01a2: Expected O, but got Unknown
-			//IL_01ac: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01b6: Expected O, but got Unknown
-			//IL_01c0: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01c7: Expected O, but got Unknown
-			//IL_01df: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01e9: Expected O, but got Unknown
-			//IL_01f3: Unknown result type (might be due to invalid IL or missing references)
-			//IL_01fa: Expected O, but got Unknown
-			//IL_0212: Unknown result type (might be due to invalid IL or missing references)
-			//IL_021c: Expected O, but got Unknown
-			//IL_0283: Unknown result type (might be due to invalid IL or missing references)
-			//IL_028a: Expected O, but got Unknown
-			//IL_028f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0299: Expected O, but got Unknown
-			//IL_02a3: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02aa: Expected O, but got Unknown
-			//IL_02af: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02b9: Expected O, but got Unknown
-			//IL_02c3: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02ca: Expected O, but got Unknown
-			//IL_02d4: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02de: Expected O, but got Unknown
-			PdfPTable val = new PdfPTable(7);
-			val.SetTotalWidth(new float[7] { 7f, 20f, 20f, 15f, 30f, 30f, 30f });
-			Font val2 = new Font(Utils.GetBaseFont(), 9f, 0);
-			Font val3 = new Font(Utils.GetBaseFont(), 9f, 1);
-			PdfPCell val4 = new PdfPCell();
-			val4.AddElement((IElement)new Paragraph("STT", val3));
-			val.AddCell(val4);
-			PdfPCell val5 = new PdfPCell();
-			val5.AddElement((IElement)new Paragraph("Người ký", val3));
-			val.AddCell(val5);
-			PdfPCell val6 = new PdfPCell();
-			val6.AddElement((IElement)new Paragraph("Thời gian ký", val3));
-			val.AddCell(val6);
-			PdfPCell val7 = new PdfPCell();
-			val7.AddElement((IElement)new Paragraph("Hạn CT", val3));
-			val.AddCell(val7);
-			PdfPCell val8 = new PdfPCell();
-			val8.AddElement((IElement)new Paragraph("Đơn vị", val3));
-			val.AddCell(val8);
-			PdfPCell val9 = new PdfPCell();
-			val9.AddElement((IElement)new Paragraph("Chức danh", val3));
-			val.AddCell(val9);
-			PdfPCell val10 = new PdfPCell();
-			val10.AddElement((IElement)new Paragraph("Ý kiến của người ký", val3));
-			val.AddCell(val10);
+			PdfPTable pdfPTable = new PdfPTable(7);
+			pdfPTable.SetTotalWidth(new float[7] { 7f, 20f, 20f, 15f, 30f, 30f, 30f });
+			iTextSharp.text.Font font = new iTextSharp.text.Font(Utils.GetBaseFont(), 9f, 0);
+			iTextSharp.text.Font font2 = new iTextSharp.text.Font(Utils.GetBaseFont(), 9f, 1);
+			PdfPCell pdfPCell = new PdfPCell();
+			pdfPCell.AddElement(new Paragraph("STT", font2));
+			pdfPTable.AddCell(pdfPCell);
+			PdfPCell pdfPCell2 = new PdfPCell();
+			pdfPCell2.AddElement(new Paragraph("Người ký 1", font2));
+			pdfPTable.AddCell(pdfPCell2);
+			PdfPCell pdfPCell3 = new PdfPCell();
+			pdfPCell3.AddElement(new Paragraph("Thời gian ký", font2));
+			pdfPTable.AddCell(pdfPCell3);
+			PdfPCell pdfPCell4 = new PdfPCell();
+			pdfPCell4.AddElement(new Paragraph("Hạn CT", font2));
+			pdfPTable.AddCell(pdfPCell4);
+			PdfPCell pdfPCell5 = new PdfPCell();
+			pdfPCell5.AddElement(new Paragraph("Đơn vị", font2));
+			pdfPTable.AddCell(pdfPCell5);
+			PdfPCell pdfPCell6 = new PdfPCell();
+			pdfPCell6.AddElement(new Paragraph("Chức danh 1", font2));
+			pdfPTable.AddCell(pdfPCell6);
+			PdfPCell pdfPCell7 = new PdfPCell();
+			pdfPCell7.AddElement(new Paragraph("Ý kiến của người ký", font2));
+			pdfPTable.AddCell(pdfPCell7);
 			int num = 1;
 			if (verifiers != null && verifiers.Count > 0)
 			{
 				foreach (VerifierADO verifier in verifiers)
 				{
-					PdfPCell val11 = new PdfPCell();
-					val11.AddElement((IElement)new Chunk(num.ToString(), val2));
-					val.AddCell(val11);
-					PdfPCell val12 = new PdfPCell();
-					val12.AddElement((IElement)new Chunk(verifier.SignerName, val2));
-					val.AddCell(val12);
-					PdfPCell val13 = new PdfPCell();
-					val13.AddElement((IElement)new Chunk(verifier.Date.ToString("dd/MM/yyyy HH:mm:ss"), val2));
-					val.AddCell(val13);
-					PdfPCell val14 = new PdfPCell();
-					val14.AddElement((IElement)new Chunk(verifier.NotAfter.ToString("dd/MM/yyyy"), val2));
-					val.AddCell(val14);
-					string text = "";
-					string text2 = "";
+					PdfPCell pdfPCell8 = new PdfPCell();
+					pdfPCell8.AddElement(new Chunk(num.ToString(), font));
+					pdfPTable.AddCell(pdfPCell8);
+					PdfPCell pdfPCell9 = new PdfPCell();
+					pdfPCell9.AddElement(new Chunk(verifier.SignerName, font));
+					pdfPTable.AddCell(pdfPCell9);
+					PdfPCell pdfPCell10 = new PdfPCell();
+					pdfPCell10.AddElement(new Chunk(verifier.Date.ToString("dd/MM/yyyy HH:mm:ss"), font));
+					pdfPTable.AddCell(pdfPCell10);
+					PdfPCell pdfPCell11 = new PdfPCell();
+					pdfPCell11.AddElement(new Chunk(verifier.NotAfter.ToString("dd/MM/yyyy"), font));
+					pdfPTable.AddCell(pdfPCell11);
+					string content = "";
+					string content2 = "";
 					if (!string.IsNullOrEmpty(verifier.Location))
 					{
 						string[] array = verifier.Location.Split(new string[1] { "|" }, StringSplitOptions.None);
 						if (array.Length == 2)
 						{
-							text = array[0];
-							text2 = array[1];
+							content = array[0];
+							content2 = array[1];
 						}
 					}
-					PdfPCell val15 = new PdfPCell();
-					val15.AddElement((IElement)new Chunk(text, val2));
-					val.AddCell(val15);
-					PdfPCell val16 = new PdfPCell();
-					val16.AddElement((IElement)new Chunk(text2, val2));
-					val.AddCell(val16);
-					PdfPCell val17 = new PdfPCell();
-					val17.AddElement((IElement)new Chunk(verifier.Comment, val2));
-					val.AddCell(val17);
+					PdfPCell pdfPCell12 = new PdfPCell();
+					pdfPCell12.AddElement(new Chunk(content, font));
+					pdfPTable.AddCell(pdfPCell12);
+					PdfPCell pdfPCell13 = new PdfPCell();
+					pdfPCell13.AddElement(new Chunk(content2, font));
+					pdfPTable.AddCell(pdfPCell13);
+					PdfPCell pdfPCell14 = new PdfPCell();
+					pdfPCell14.AddElement(new Chunk(verifier.Comment, font));
+					pdfPTable.AddCell(pdfPCell14);
 					num++;
 				}
 			}
-			return val;
+			return pdfPTable;
 		}
 
 		private bool VerifyPdfInputFile(ref string message)

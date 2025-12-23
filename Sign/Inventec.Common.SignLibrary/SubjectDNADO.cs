@@ -36,42 +36,43 @@ namespace Inventec.Common.SignLibrary
 					return;
 				}
 				string[] array2 = array;
-				foreach (string text in array2)
+				string[] array3 = array2;
+				foreach (string text in array3)
 				{
 					if (string.IsNullOrEmpty(text))
 					{
 						continue;
 					}
-					string[] array3 = text.Split(new string[1] { "=" }, StringSplitOptions.None);
-					if (array3 != null && array3.Length > 1)
+					string[] array4 = text.Split(new string[1] { "=" }, StringSplitOptions.None);
+					if (array4 != null && array4.Length > 1)
 					{
-						if (array3[0] == "C")
+						if (array4[0] == "C")
 						{
-							C = array3[1];
+							C = array4[1];
 						}
-						else if (array3[0] == "ST")
+						else if (array4[0] == "ST")
 						{
-							ST = array3[1];
+							ST = array4[1];
 						}
-						else if (array3[0] == "L")
+						else if (array4[0] == "L")
 						{
-							L = array3[1];
+							L = array4[1];
 						}
-						else if (array3[0] == "O")
+						else if (array4[0] == "O")
 						{
-							O = array3[1];
+							O = array4[1];
 						}
-						else if (array3[0] == "CN")
+						else if (array4[0] == "CN")
 						{
-							CN = array3[1];
+							CN = array4[1];
 						}
-						else if (array3[0] == "E")
+						else if (array4[0] == "E")
 						{
-							E = array3[1];
+							E = array4[1];
 						}
-						else if (array3[0] == "OU")
+						else if (array4[0] == "OU")
 						{
-							OU = array3[1];
+							OU = array4[1];
 						}
 					}
 				}

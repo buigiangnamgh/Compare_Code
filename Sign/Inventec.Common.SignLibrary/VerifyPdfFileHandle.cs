@@ -20,55 +20,50 @@ namespace Inventec.Common.SignLibrary
 			AcroFields acroFields = reader.AcroFields;
 			foreach (string signatureName in acroFields.GetSignatureNames())
 			{
-				PdfPKCS7 val = acroFields.VerifySignature(signatureName);
-				DateTime signDate = val.SignDate;
-				X509Certificate[] signCertificateChain = val.SignCertificateChain;
+				PdfPKCS7 pdfPKCS = acroFields.VerifySignature(signatureName);
+				DateTime signDate = pdfPKCS.SignDate;
+				Org.BouncyCastle.X509.X509Certificate[] signCertificateChain = pdfPKCS.SignCertificateChain;
 				if (signCertificateChain == null || signCertificateChain.Length == 0)
 				{
 					return null;
 				}
-				X509Certificate val2 = signCertificateChain[0];
-				X509Certificate2 x509Certificate = new X509Certificate2();
-				x509Certificate.Import(val2.GetEncoded());
-				string nameInfo = x509Certificate.GetNameInfo(X509NameType.DnsName, false);
-				string location = val.Location;
-				VerifierADO verifierADO = new VerifierADO(val2, x509Certificate, nameInfo, signDate, !val.Verify(), location)
+				Org.BouncyCastle.X509.X509Certificate x509Certificate = signCertificateChain[0];
+				X509Certificate2 x509Certificate2 = new X509Certificate2();
+				x509Certificate2.Import(x509Certificate.GetEncoded());
+				string nameInfo = x509Certificate2.GetNameInfo(X509NameType.DnsName, false);
+				string location = pdfPKCS.Location;
+				VerifierADO verifierADO = new VerifierADO(x509Certificate, x509Certificate2, nameInfo, signDate, !pdfPKCS.Verify(), location);
+				verifierADO.Comment = pdfPKCS.Reason;
+				verifierADO.Location = pdfPKCS.Location;
+				verifierADO.SignerSerialNumber = x509Certificate.SerialNumber.ToString(16);
+				verifierADO.SignerDN = x509Certificate.SubjectDN.ToString();
+				verifierADO.IsserDN = x509Certificate.IssuerDN.ToString();
+				verifierADO.NotAfter = x509Certificate.NotAfter;
+				verifierADO.NotBefore = x509Certificate.NotBefore;
+				verifierADO.KeyLength = x509Certificate2.PublicKey.Key.KeySize;
+				VerifierADO verifierADO2 = verifierADO;
+				verifierADO2.SubjectDN = new SubjectDNADO(verifierADO2.SignerDN);
+				if (x509Certificate2.Verify())
 				{
-					Comment = val.Reason,
-					Location = val.Location,
-					SignerSerialNumber = val2.SerialNumber.ToString(16),
-					SignerDN = ((object)val2.SubjectDN).ToString(),
-					IsserDN = ((object)val2.IssuerDN).ToString(),
-					NotAfter = val2.NotAfter,
-					NotBefore = val2.NotBefore,
-					KeyLength = x509Certificate.PublicKey.Key.KeySize
-				};
-				verifierADO.SubjectDN = new SubjectDNADO(verifierADO.SignerDN);
-				if (x509Certificate.Verify())
-				{
-					verifierADO.Valid = true;
+					verifierADO2.Valid = true;
 				}
 				else
 				{
-					verifierADO.Valid = false;
+					verifierADO2.Valid = false;
 				}
-				list.Add(verifierADO);
+				list.Add(verifierADO2);
 			}
 			return list;
 		}
 
 		internal List<VerifierADO> verify(string fileName)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Expected O, but got Unknown
 			PdfReader reader = new PdfReader(fileName);
 			return verify(reader);
 		}
 
 		internal List<VerifierADO> verify(Stream stream)
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0008: Expected O, but got Unknown
 			PdfReader reader = new PdfReader(stream);
 			return verify(reader);
 		}

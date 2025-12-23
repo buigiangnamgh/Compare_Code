@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,17 +15,6 @@ namespace Inventec.Common.SignLibrary
 	{
 		internal void SplitPdfFileWithKey(Stream stream, ref Stream splitFileContentStream, ref double oginalHeight, ref double oginalWidth)
 		{
-			//IL_035b: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0362: Expected O, but got Unknown
-			//IL_0087: Unknown result type (might be due to invalid IL or missing references)
-			//IL_008e: Expected O, but got Unknown
-			//IL_0308: Unknown result type (might be due to invalid IL or missing references)
-			//IL_030f: Expected O, but got Unknown
-			//IL_0237: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0247: Expected O, but got Unknown
-			//IL_0240: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02ce: Unknown result type (might be due to invalid IL or missing references)
-			//IL_02d8: Expected O, but got Unknown
 			try
 			{
 				List<SignPositionADO> positionHeaders = PdfDocumentProcess.GetPositionBySearchKey(stream, "{SignLibrary.SplitPdfHeaderKey}");
@@ -37,97 +25,80 @@ namespace Inventec.Common.SignLibrary
 				{
 					LicenceProcess.SetLicenseForAspose();
 					double num = 0.0;
-					Document val = new Document(stream);
-					try
+					using (Document document = new Document(stream))
 					{
+						string outputFileName = Utils.GenerateTempFileWithin();
+						document.Save(outputFileName);
 						string text = Utils.GenerateTempFileWithin();
-						val.Save(text);
-						string text2 = Utils.GenerateTempFileWithin();
-						Page val2 = val.Pages[1];
-						double height = val2.GetPageRect(false).Height;
-						num = val2.GetPageRect(false).Width;
-						oginalHeight = val2.GetPageRect(false).Height;
-						oginalWidth = val2.GetPageRect(false).Width;
+						Page page = document.Pages[1];
+						double height = page.GetPageRect(false).Height;
+						num = page.GetPageRect(false).Width;
+						oginalHeight = page.GetPageRect(false).Height;
+						oginalWidth = page.GetPageRect(false).Width;
 						bool flag = false;
 						double num2 = 0.0;
-						double num3;
-						double num4;
-						double num5;
+						double llx;
+						double lly;
+						double urx;
 						Page[] array;
 						if (positionContents != null && positionContents.Count > 0)
 						{
-							num3 = 0.0;
-							num4 = positionContents[0].Reactanle.Top;
-							num5 = num;
+							llx = 0.0;
+							lly = positionContents[0].Reactanle.Top;
+							urx = num;
 							num2 = positionHeaders[0].Reactanle.Top;
-							List<int> list = (from Page o in (IEnumerable)val.Pages
+							List<int> list = (from Page o in document.Pages
 								select o.Number).ToList();
-							array = (from Page o in (IEnumerable)val.Pages
+							array = (from Page o in document.Pages
 								where o.Number <= positionContents[0].PageNUm
 								select o).ToArray();
 						}
 						else
 						{
-							num3 = 0.0;
-							num4 = 0.0;
-							num5 = num;
+							llx = 0.0;
+							lly = 0.0;
+							urx = num;
 							num2 = positionHeaders[0].Reactanle.Top;
-							array = (from Page o in (IEnumerable)val.Pages
+							array = (from Page o in document.Pages
 								where o.Number >= positionHeaders[0].PageNUm
 								select o).ToArray();
 						}
 						bool flag2 = false;
-						int num6 = array.Count();
-						while (num6 > 0)
+						int num3 = array.Count();
+						while (num3 > 0)
 						{
-							Document val3 = ((flag && File.Exists(text2)) ? new Document(text2) : new Document());
-							try
+							using (Document document2 = ((flag && File.Exists(text)) ? new Document(text) : new Document()))
 							{
-								if (num6 < 4)
+								if (num3 < 4)
 								{
-									val3.Pages.Add(array);
-									num6 = 0;
+									document2.Pages.Add(array);
+									num3 = 0;
 									flag = false;
 								}
 								else
 								{
-									val3.Pages.Add(array.Skip(0).Take(3).ToArray());
+									document2.Pages.Add(array.Skip(0).Take(3).ToArray());
 									array = array.Skip(3).ToArray();
-									num6 = array.Count();
+									num3 = array.Count();
 									flag = true;
 								}
 								if (!flag2)
 								{
-									Page val4 = val3.Pages[1];
-									val4.CropBox = new Rectangle(num3, num4, num5, num2);
+									Page page2 = document2.Pages[1];
+									page2.CropBox = new Rectangle(llx, lly, urx, num2);
 									flag2 = true;
 								}
-								val3.Save(text2);
-							}
-							finally
-							{
-								if (val3 != null)
-								{
-									((IDisposable)val3).Dispose();
-								}
+								document2.Save(text);
 							}
 						}
-						Document val5 = new Document(text2);
-						try
+						using (Document document3 = new Document(text))
 						{
-							val5.Save(splitFileContentStream);
+							document3.Save(splitFileContentStream);
 							splitFileContentStream.Position = 0L;
 						}
-						finally
-						{
-							if (val5 != null)
-							{
-								((IDisposable)val5).Dispose();
-							}
-						}
 						try
 						{
-							File.Delete(text2);
+							File.Delete(text);
 							return;
 						}
 						catch
@@ -135,27 +106,12 @@ namespace Inventec.Common.SignLibrary
 							return;
 						}
 					}
-					finally
-					{
-						if (val != null)
-						{
-							((IDisposable)val).Dispose();
-						}
-					}
 				}
-				Document val6 = new Document(stream);
-				try
+				using (Document document4 = new Document(stream))
 				{
-					Page val7 = val6.Pages[1];
-					oginalHeight = val7.GetPageRect(false).Height;
-					oginalWidth = val7.GetPageRect(false).Width;
-				}
-				finally
-				{
-					if (val6 != null)
-					{
-						((IDisposable)val6).Dispose();
-					}
+					Page page3 = document4.Pages[1];
+					oginalHeight = page3.GetPageRect(false).Height;
+					oginalWidth = page3.GetPageRect(false).Width;
 				}
 			}
 			catch (Exception ex)
@@ -166,33 +122,27 @@ namespace Inventec.Common.SignLibrary
 
 		internal static List<ImageOfPageDTO> ConvertPdfToImage(string pdf_file)
 		{
-			//IL_000f: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0015: Expected O, but got Unknown
-			//IL_0059: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0060: Expected O, but got Unknown
-			//IL_0064: Unknown result type (might be due to invalid IL or missing references)
-			//IL_006b: Expected O, but got Unknown
 			List<ImageOfPageDTO> list = new List<ImageOfPageDTO>();
 			try
 			{
 				LicenceProcess.SetLicenseForAspose();
-				Document val = new Document(pdf_file);
-				for (int i = 1; i <= val.Pages.Count; i++)
+				Document document = new Document(pdf_file);
+				for (int i = 1; i <= document.Pages.Count; i++)
 				{
 					string filename = string.Format("splitimage{0:d}{1}.jpg", i, DateTime.Now.ToString("yyyyMMddHHmmssfff"));
 					string fullPathFile = Utils.GetFullPathFile(filename);
 					using (FileStream fileStream = new FileStream(fullPathFile, FileMode.Create))
 					{
-						Resolution val2 = new Resolution(300);
-						JpegDevice val3 = new JpegDevice(val2, 100);
-						((PageDevice)val3).Process(val.Pages[i], (Stream)fileStream);
+						Resolution resolution = new Resolution(300);
+						JpegDevice jpegDevice = new JpegDevice(resolution, 100);
+						jpegDevice.Process(document.Pages[i], fileStream);
 						fileStream.Close();
 						list.Add(new ImageOfPageDTO
 						{
 							Path = fullPathFile,
-							PageNumber = val.Pages[i].Number,
-							Width = (float)val.Pages[i].Rect.Width,
-							Height = (float)val.Pages[i].Rect.Height
+							PageNumber = document.Pages[i].Number,
+							Width = (float)document.Pages[i].Rect.Width,
+							Height = (float)document.Pages[i].Rect.Height
 						});
 					}
 				}

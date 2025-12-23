@@ -232,7 +232,7 @@ namespace Inventec.Common.Integrate
 					}
 					else if (method == HttpMethod.Post)
 					{
-						httpResponseMessage = HttpClientExtensions.PostAsJsonAsync<string>(httpClient, requestUri, "").Result;
+						httpResponseMessage = httpClient.PostAsJsonAsync(requestUri, "").Result;
 					}
 				}
 				catch (Exception ex)

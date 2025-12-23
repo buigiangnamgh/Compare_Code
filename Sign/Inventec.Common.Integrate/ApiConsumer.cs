@@ -23,6 +23,12 @@ namespace Inventec.Common.Integrate
 			public object data;
 		}
 
+		[CompilerGenerated]
+		private sealed class _003C_003Ec__DisplayClassb<T>
+		{
+			public _003C_003Ec__DisplayClass17_0<T> CS_0024_003C_003E8__locals11;
+		}
+
 		private const string API_PARAM = "param";
 
 		private int TIME_OUT = int.Parse(ConfigurationManager.AppSettings["Inventec.Common.WebApiClient.Timeout"] ?? "60");
@@ -139,12 +145,11 @@ namespace Inventec.Common.Integrate
 				HttpRequestBuilder(client, uri, ref requestedUrl, userTimeout, listParam);
 				if (filter != null || commonParam != null)
 				{
-					ApiParam apiParam = new ApiParam
-					{
-						CommonParam = commonParam,
-						ApiData = filter
-					};
-					requestedUrl = string.Concat(str1: string.Format("{0}={1}", "param", Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvertUtil.SerializeObject(apiParam)))), str0: requestedUrl);
+					ApiParam apiParam = new ApiParam();
+					apiParam.CommonParam = commonParam;
+					apiParam.ApiData = filter;
+					ApiParam data = apiParam;
+					requestedUrl = string.Concat(str1: string.Format("{0}={1}", "param", Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonConvertUtil.SerializeObject(data)))), str0: requestedUrl);
 				}
 				HttpResponseMessage resp = await client.GetAsync(requestedUrl).ConfigureAwait(false);
 				if (!resp.IsSuccessStatusCode)
@@ -162,27 +167,28 @@ namespace Inventec.Common.Integrate
 
 		public T Post<T>(string uri, CommonParam commonParam, object data, int userTimeout, params object[] listParam)
 		{
-			_003C_003Ec__DisplayClass17_0<T> CS_0024_003C_003E8__locals11 = new _003C_003Ec__DisplayClass17_0<T>();
-			CS_0024_003C_003E8__locals11.uri = uri;
-			CS_0024_003C_003E8__locals11.data = data;
+			_003C_003Ec__DisplayClassb<T> CS_0024_003C_003E8__locals12 = new _003C_003Ec__DisplayClassb<T>();
+			CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11 = new _003C_003Ec__DisplayClass17_0<T>();
+			CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.uri = uri;
+			CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.data = data;
 			T result = default(T);
 			using (HttpClient httpClient = new HttpClient())
 			{
 				LogSystem.Debug("Post.1");
-				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName<string>((Expression<Func<string>>)(() => CS_0024_003C_003E8__locals11.uri)), (object)CS_0024_003C_003E8__locals11.uri) + LogUtil.TraceData(LogUtil.GetMemberName<object>(Expression.Lambda<Func<object>>(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals11, typeof(_003C_003Ec__DisplayClass17_0<T>)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass17_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals11.data));
+				LogSystem.Debug(LogUtil.TraceData(LogUtil.GetMemberName(() => CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.uri), CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.uri) + LogUtil.TraceData(LogUtil.GetMemberName(Expression.Lambda<Func<object>>(Expression.Field(Expression.Field(Expression.Constant(CS_0024_003C_003E8__locals12), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClassb<T>).TypeHandle)), FieldInfo.GetFieldFromHandle((RuntimeFieldHandle)/*OpCode not supported: LdMemberToken*/, typeof(_003C_003Ec__DisplayClass17_0<T>).TypeHandle)), new ParameterExpression[0])), CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.data));
 				string requestedUrl = "";
-				HttpRequestBuilder(httpClient, CS_0024_003C_003E8__locals11.uri, ref requestedUrl, userTimeout, listParam);
+				HttpRequestBuilder(httpClient, CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.uri, ref requestedUrl, userTimeout, listParam);
 				ApiParam apiParam = new ApiParam();
-				if (CS_0024_003C_003E8__locals11.data != null || commonParam != null)
+				if (CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.data != null || commonParam != null)
 				{
 					apiParam.CommonParam = commonParam;
-					apiParam.ApiData = CS_0024_003C_003E8__locals11.data;
+					apiParam.ApiData = CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.data;
 				}
 				LogSystem.Debug("Post.2");
-				HttpResponseMessage result2 = HttpClientExtensions.PostAsJsonAsync<ApiParam>(httpClient, requestedUrl, apiParam).Result;
+				HttpResponseMessage result2 = httpClient.PostAsJsonAsync(requestedUrl, apiParam).Result;
 				if (!result2.IsSuccessStatusCode)
 				{
-					LogSystem.Warn(string.Format("Loi khi goi API: {0}{1}. StatusCode: {2}. Input: {3}.", httpClient.BaseAddress.AbsoluteUri, CS_0024_003C_003E8__locals11.uri, result2.StatusCode.GetHashCode(), JsonConvertUtil.SerializeObject(CS_0024_003C_003E8__locals11.data)));
+					LogSystem.Warn(string.Format("Loi khi goi API: {0}{1}. StatusCode: {2}. Input: {3}.", httpClient.BaseAddress.AbsoluteUri, CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.uri, result2.StatusCode.GetHashCode(), JsonConvertUtil.SerializeObject(CS_0024_003C_003E8__locals12.CS_0024_003C_003E8__locals11.data)));
 				}
 				LogSystem.Debug("Post.3");
 				string result3 = result2.Content.ReadAsStringAsync().Result;
@@ -222,7 +228,7 @@ namespace Inventec.Common.Integrate
 					apiParam.CommonParam = commonParam;
 					apiParam.ApiData = data;
 				}
-				HttpResponseMessage result = HttpClientExtensions.PostAsJsonAsync<ApiParam>(httpClient, requestedUrl, apiParam).Result;
+				HttpResponseMessage result = httpClient.PostAsJsonAsync(requestedUrl, apiParam).Result;
 				if (!result.IsSuccessStatusCode)
 				{
 					LogSystem.Warn(string.Format("Loi khi goi API: {0}{1}. StatusCode: {2}. Input: {3}.", httpClient.BaseAddress.AbsoluteUri, uri, result.StatusCode.GetHashCode(), JsonConvertUtil.SerializeObject(data)));
@@ -242,11 +248,11 @@ namespace Inventec.Common.Integrate
 		public T PostWithouApiParam<T>(string uri, object data, int userTimeout, params object[] listParam)
 		{
 			T val = default(T);
-			using (HttpClient httpClient = new HttpClient())
+			using (HttpClient client = new HttpClient())
 			{
 				string requestedUrl = "";
-				HttpRequestBuilder(httpClient, uri, ref requestedUrl, userTimeout, listParam);
-				HttpResponseMessage result = HttpClientExtensions.PostAsJsonAsync<object>(httpClient, requestedUrl, data).Result;
+				HttpRequestBuilder(client, uri, ref requestedUrl, userTimeout, listParam);
+				HttpResponseMessage result = client.PostAsJsonAsync(requestedUrl, data).Result;
 				if (!result.IsSuccessStatusCode)
 				{
 					LogSystem.Warn(string.Format("Loi khi goi API: {0}{1}. StatusCode: {2}", baseUri, uri, result.StatusCode.GetHashCode()));
@@ -264,12 +270,13 @@ namespace Inventec.Common.Integrate
 			{
 				string requestedUrl = "";
 				HttpRequestBuilder(client, uri, ref requestedUrl, userTimeout, listParam);
-				HttpResponseMessage resp = await HttpClientExtensions.PostAsJsonAsync<object>(client, requestedUrl, data).ConfigureAwait(false);
+				HttpResponseMessage resp = await client.PostAsJsonAsync(requestedUrl, data).ConfigureAwait(false);
 				if (!resp.IsSuccessStatusCode)
 				{
 					LogSystem.Warn(string.Format("Loi khi goi API: {0}{1}. StatusCode: {2}", baseUri, uri, resp.StatusCode.GetHashCode()));
 				}
-				result = JsonConvertUtil.DeserializeObject<T>(await resp.Content.ReadAsStringAsync());
+				T val = JsonConvertUtil.DeserializeObject<T>(await resp.Content.ReadAsStringAsync());
+				result = val;
 			}
 			return result;
 		}
@@ -292,12 +299,13 @@ namespace Inventec.Common.Integrate
 					apiParam.CommonParam = commonParam;
 					apiParam.ApiData = data;
 				}
-				HttpResponseMessage resp = await HttpClientExtensions.PostAsJsonAsync<ApiParam>(client, requestedUrl, apiParam).ConfigureAwait(false);
+				HttpResponseMessage resp = await client.PostAsJsonAsync(requestedUrl, apiParam).ConfigureAwait(false);
 				if (!resp.IsSuccessStatusCode)
 				{
 					LogSystem.Warn(string.Format("Loi khi goi API: {0}{1}. StatusCode: {2}. Input: {3}.", client.BaseAddress.AbsoluteUri, uri, resp.StatusCode.GetHashCode(), JsonConvertUtil.SerializeObject(data)));
 				}
-				result = JsonConvertUtil.DeserializeObject<T>(await resp.Content.ReadAsStringAsync());
+				T val = JsonConvertUtil.DeserializeObject<T>(await resp.Content.ReadAsStringAsync());
+				result = val;
 			}
 			return result;
 		}
@@ -357,11 +365,11 @@ namespace Inventec.Common.Integrate
 				}
 				for (int i = 0; i < listParam.Length; i += 2)
 				{
-					string obj = requestedUrl;
-					object obj2 = listParam[i];
-					string arg = HttpUtility.UrlEncode(((obj2 != null) ? obj2.ToString() : null) ?? "");
-					object obj3 = listParam[i + 1];
-					requestedUrl = obj + string.Format("{0}={1}&", arg, HttpUtility.UrlEncode(((obj3 != null) ? obj3.ToString() : null) ?? ""));
+					string text = requestedUrl;
+					object obj = listParam[i];
+					string arg = HttpUtility.UrlEncode(((obj != null) ? obj.ToString() : null) ?? "");
+					object obj2 = listParam[i + 1];
+					requestedUrl = text + string.Format("{0}={1}&", arg, HttpUtility.UrlEncode(((obj2 != null) ? obj2.ToString() : null) ?? ""));
 				}
 			}
 		}

@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 
 namespace Inventec.Common.SignLibrary.Properties
 {
-	[GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
 	[DebuggerNonUserCode]
 	[CompilerGenerated]
+	[GeneratedCode("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
 	internal class Resources
 	{
 		private static ResourceManager resourceMan;
@@ -21,7 +21,7 @@ namespace Inventec.Common.SignLibrary.Properties
 		{
 			get
 			{
-				if (resourceMan == null)
+				if (object.ReferenceEquals(resourceMan, null))
 				{
 					ResourceManager resourceManager = new ResourceManager("Inventec.Common.SignLibrary.Properties.Resources", typeof(Resources).Assembly);
 					resourceMan = resourceManager;

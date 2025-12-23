@@ -20,8 +20,6 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_CONFIG> Get()
 		{
-			//IL_0002: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000c: Expected O, but got Unknown
 			return Get(new EmrConfigFilter());
 		}
 
@@ -42,16 +40,12 @@ namespace Inventec.Common.SignLibrary.Api
 
 		internal List<EMR_CONFIG> GetByKey(string key)
 		{
-			//IL_0004: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0009: Unknown result type (might be due to invalid IL or missing references)
-			//IL_0012: Expected O, but got Unknown
 			List<EMR_CONFIG> list = null;
 			try
 			{
-				EmrConfigFilter filter = new EmrConfigFilter
-				{
-					KEY__EXACT = key
-				};
+				EmrConfigFilter emrConfigFilter = new EmrConfigFilter();
+				emrConfigFilter.KEY__EXACT = key;
+				EmrConfigFilter filter = emrConfigFilter;
 				CommonParam commonParam = new CommonParam();
 				return GlobalStore.EmrConsumer.Get<List<EMR_CONFIG>>("api/EmrConfig/Get", commonParam, filter, new object[0]);
 			}

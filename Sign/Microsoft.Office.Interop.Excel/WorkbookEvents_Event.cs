@@ -4,8 +4,8 @@ using System.Runtime.InteropServices;
 namespace Microsoft.Office.Interop.Excel
 {
 	[ComImport]
-	[CompilerGenerated]
 	[ComEventInterface(typeof(WorkbookEvents), typeof(WorkbookEvents))]
+	[CompilerGenerated]
 	[TypeIdentifier("00020813-0000-0000-c000-000000000046", "Microsoft.Office.Interop.Excel.WorkbookEvents_Event")]
 	public interface WorkbookEvents_Event
 	{

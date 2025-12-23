@@ -127,14 +127,12 @@ namespace Inventec.Common.SignLibrary
 
 		private void SetDefaultData()
 		{
-			//IL_0008: Unknown result type (might be due to invalid IL or missing references)
-			//IL_000e: Expected O, but got Unknown
 			try
 			{
 				CommonParam commonParam = new CommonParam();
-				EmrDocumentViewFilter val = new EmrDocumentViewFilter();
-				val.DOCUMENT_CODE__EXACT = DocumentCode;
-				List<V_EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, val, new object[0]);
+				EmrDocumentViewFilter emrDocumentViewFilter = new EmrDocumentViewFilter();
+				emrDocumentViewFilter.DOCUMENT_CODE__EXACT = DocumentCode;
+				List<V_EMR_DOCUMENT> list = GlobalStore.EmrConsumer.Get<List<V_EMR_DOCUMENT>>("api/EmrDocument/GetView", commonParam, emrDocumentViewFilter, new object[0]);
 				if (list != null && list.Count > 0)
 				{
 					Document = list.FirstOrDefault();
@@ -148,30 +146,28 @@ namespace Inventec.Common.SignLibrary
 
 		private void FillDataToControl()
 		{
-			//IL_0019: Unknown result type (might be due to invalid IL or missing references)
-			//IL_001f: Expected O, but got Unknown
 			try
 			{
 				WaitingManager.Show();
 				ListDataSign = new List<ListSignConfigADO>();
 				CommonParam commonParam = new CommonParam();
-				EmrSignViewFilter val = new EmrSignViewFilter();
-				val.DOCUMENT_ID = ((Document != null) ? Document.ID : 0);
-				List<V_EMR_SIGN> list = GlobalStore.EmrConsumer.Get<List<V_EMR_SIGN>>("api/EmrSign/GetView", commonParam, val, new object[0]);
+				EmrSignViewFilter emrSignViewFilter = new EmrSignViewFilter();
+				emrSignViewFilter.DOCUMENT_ID = ((Document != null) ? Document.ID : 0);
+				List<V_EMR_SIGN> list = GlobalStore.EmrConsumer.Get<List<V_EMR_SIGN>>("api/EmrSign/GetView", commonParam, emrSignViewFilter, new object[0]);
 				if (list != null && list.Count > 0)
 				{
 					ListDataSign = new List<ListSignConfigADO>();
 					foreach (V_EMR_SIGN item in list)
 					{
 						ListSignConfigADO listSignConfigADO = new ListSignConfigADO(item);
-						listSignConfigADO.IdRow = ((V_EMR_SIGN)listSignConfigADO).NUM_ORDER;
+						listSignConfigADO.IdRow = listSignConfigADO.NUM_ORDER;
 						ListDataSign.Add(listSignConfigADO);
 					}
 					if (ListDataSign != null && ListDataSign.Count > 0)
 					{
 						MaxOrder = ListDataSign.Max((ListSignConfigADO o) => o.IdRow);
 						MinOrder = MaxOrder;
-						List<ListSignConfigADO> list2 = ListDataSign.Where((ListSignConfigADO o) => !((V_EMR_SIGN)o).SIGN_TIME.HasValue && !((V_EMR_SIGN)o).REJECT_TIME.HasValue).ToList();
+						List<ListSignConfigADO> list2 = ListDataSign.Where((ListSignConfigADO o) => !o.SIGN_TIME.HasValue && !o.REJECT_TIME.HasValue).ToList();
 						if (list2 != null && list2.Count > 0)
 						{
 							MinOrder = list2.Min((ListSignConfigADO m) => m.IdRow);
@@ -227,39 +223,7 @@ namespace Inventec.Common.SignLibrary
 
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Inventec.Common.SignLibrary.FormEmrSign));
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject2 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject3 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject4 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject5 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject6 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject7 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject8 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject9 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject10 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject11 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject12 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject13 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject14 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject15 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject16 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject17 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject18 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject19 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject20 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject21 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject22 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject23 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject24 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject25 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject26 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject27 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject28 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject29 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject30 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject31 = new DevExpress.Utils.SerializableAppearanceObject();
-			DevExpress.Utils.SerializableAppearanceObject serializableAppearanceObject32 = new DevExpress.Utils.SerializableAppearanceObject();
+			this.components = new System.ComponentModel.Container();
 			this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
 			this.gridControlSign = new DevExpress.XtraGrid.GridControl();
 			this.gridViewSign = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -279,7 +243,7 @@ namespace Inventec.Common.SignLibrary
 			this.repositoryItemText_Enable = new DevExpress.XtraEditors.Repository.RepositoryItemTextEdit();
 			this.layoutControlGroup1 = new DevExpress.XtraLayout.LayoutControlGroup();
 			this.layoutControlItem2 = new DevExpress.XtraLayout.LayoutControlItem();
-			this.barManager1 = new DevExpress.XtraBars.BarManager();
+			this.barManager1 = new DevExpress.XtraBars.BarManager(this.components);
 			this.bar1 = new DevExpress.XtraBars.Bar();
 			this.barButtonSave = new DevExpress.XtraBars.BarButtonItem();
 			this.barDockControlTop = new DevExpress.XtraBars.BarDockControl();
@@ -299,21 +263,21 @@ namespace Inventec.Common.SignLibrary
 			base.SuspendLayout();
 			this.layoutControl1.Controls.Add(this.gridControlSign);
 			this.layoutControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.layoutControl1.Location = new System.Drawing.Point(0, 36);
+			this.layoutControl1.Location = new System.Drawing.Point(0, 38);
 			this.layoutControl1.Margin = new System.Windows.Forms.Padding(4);
 			this.layoutControl1.Name = "layoutControl1";
 			this.layoutControl1.OptionsCustomizationForm.DesignTimeCustomizationFormPositionAndSize = new System.Drawing.Rectangle(794, 265, 250, 350);
 			this.layoutControl1.Root = this.layoutControlGroup1;
-			this.layoutControl1.Size = new System.Drawing.Size(1320, 534);
+			this.layoutControl1.Size = new System.Drawing.Size(1320, 532);
 			this.layoutControl1.TabIndex = 0;
 			this.layoutControl1.Text = "layoutControl1";
 			this.gridControlSign.EmbeddedNavigator.Margin = new System.Windows.Forms.Padding(4);
-			this.gridControlSign.Location = new System.Drawing.Point(2, 2);
+			this.gridControlSign.Location = new System.Drawing.Point(3, 3);
 			this.gridControlSign.MainView = this.gridViewSign;
 			this.gridControlSign.Margin = new System.Windows.Forms.Padding(4);
 			this.gridControlSign.Name = "gridControlSign";
 			this.gridControlSign.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[3] { this.repositoryItemText, this.repositoryItemCboFlow, this.repositoryItemText_Enable });
-			this.gridControlSign.Size = new System.Drawing.Size(1316, 530);
+			this.gridControlSign.Size = new System.Drawing.Size(1314, 526);
 			this.gridControlSign.TabIndex = 5;
 			this.gridControlSign.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[1] { this.gridViewSign });
 			this.gridViewSign.Columns.AddRange(new DevExpress.XtraGrid.Columns.GridColumn[11]
@@ -425,14 +389,15 @@ namespace Inventec.Common.SignLibrary
 			this.layoutControlGroup1.EnableIndentsWithoutBorders = DevExpress.Utils.DefaultBoolean.True;
 			this.layoutControlGroup1.GroupBordersVisible = false;
 			this.layoutControlGroup1.Items.AddRange(new DevExpress.XtraLayout.BaseLayoutItem[1] { this.layoutControlItem2 });
+			this.layoutControlGroup1.Location = new System.Drawing.Point(0, 0);
 			this.layoutControlGroup1.Name = "Root";
 			this.layoutControlGroup1.Padding = new DevExpress.XtraLayout.Utils.Padding(0, 0, 0, 0);
-			this.layoutControlGroup1.Size = new System.Drawing.Size(1320, 534);
+			this.layoutControlGroup1.Size = new System.Drawing.Size(1320, 532);
 			this.layoutControlGroup1.TextVisible = false;
 			this.layoutControlItem2.Control = this.gridControlSign;
 			this.layoutControlItem2.Location = new System.Drawing.Point(0, 0);
 			this.layoutControlItem2.Name = "layoutControlItem2";
-			this.layoutControlItem2.Size = new System.Drawing.Size(1320, 534);
+			this.layoutControlItem2.Size = new System.Drawing.Size(1320, 532);
 			this.layoutControlItem2.TextSize = new System.Drawing.Size(0, 0);
 			this.layoutControlItem2.TextVisible = false;
 			this.barManager1.Bars.AddRange(new DevExpress.XtraBars.Bar[1] { this.bar1 });
@@ -461,7 +426,7 @@ namespace Inventec.Common.SignLibrary
 			this.barDockControlTop.Dock = System.Windows.Forms.DockStyle.Top;
 			this.barDockControlTop.Location = new System.Drawing.Point(0, 0);
 			this.barDockControlTop.Margin = new System.Windows.Forms.Padding(4);
-			this.barDockControlTop.Size = new System.Drawing.Size(1320, 36);
+			this.barDockControlTop.Size = new System.Drawing.Size(1320, 38);
 			this.barDockControlBottom.CausesValidation = false;
 			this.barDockControlBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.barDockControlBottom.Location = new System.Drawing.Point(0, 570);
@@ -469,14 +434,14 @@ namespace Inventec.Common.SignLibrary
 			this.barDockControlBottom.Size = new System.Drawing.Size(1320, 0);
 			this.barDockControlLeft.CausesValidation = false;
 			this.barDockControlLeft.Dock = System.Windows.Forms.DockStyle.Left;
-			this.barDockControlLeft.Location = new System.Drawing.Point(0, 36);
+			this.barDockControlLeft.Location = new System.Drawing.Point(0, 38);
 			this.barDockControlLeft.Margin = new System.Windows.Forms.Padding(4);
-			this.barDockControlLeft.Size = new System.Drawing.Size(0, 534);
+			this.barDockControlLeft.Size = new System.Drawing.Size(0, 532);
 			this.barDockControlRight.CausesValidation = false;
 			this.barDockControlRight.Dock = System.Windows.Forms.DockStyle.Right;
-			this.barDockControlRight.Location = new System.Drawing.Point(1320, 36);
+			this.barDockControlRight.Location = new System.Drawing.Point(1320, 38);
 			this.barDockControlRight.Margin = new System.Windows.Forms.Padding(4);
-			this.barDockControlRight.Size = new System.Drawing.Size(0, 534);
+			this.barDockControlRight.Size = new System.Drawing.Size(0, 532);
 			base.AutoScaleDimensions = new System.Drawing.SizeF(8f, 16f);
 			base.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			base.ClientSize = new System.Drawing.Size(1320, 570);
