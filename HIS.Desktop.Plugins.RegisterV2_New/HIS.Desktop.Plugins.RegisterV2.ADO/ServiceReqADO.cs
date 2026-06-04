@@ -1,0 +1,15 @@
+namespace HIS.Desktop.Plugins.RegisterV2.ADO
+{
+	public class ServiceReqADO
+	{
+		public long? NUMBER_ORDER { get; set; }
+
+		public string EXCUTE_ROOM_NAME { get; set; }
+
+		public string SERVICE_NAME { get; set; }
+
+		public string INTRUCTION_DATE { get; set; }
+
+		public string INTRUCTION_TIME { get; set; }
+	}
+}
